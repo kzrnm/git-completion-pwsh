@@ -9,7 +9,7 @@
 @{
 
     # Script module or binary module file associated with this manifest.
-    RootModule = 'git-completion.psm1'
+    RootModule        = 'git-completion.psm1'
 
     # Version number of this module.
     ModuleVersion     = '1.0.0'
@@ -30,7 +30,7 @@
     Copyright         = '(c) kzrnm. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description = 'Tab Completion for Git command'
+    Description       = 'Tab Completion for Git command'
 
     # Minimum version of the PowerShell engine required by this module
     PowerShellVersion = '7.0'
@@ -69,13 +69,13 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @()
+    FunctionsToExport = @('GitArgumentCompleter')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport   = @()
 
     # Variables to export from this module
-    VariablesToExport = '*'
+    VariablesToExport = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport   = @()
@@ -95,7 +95,7 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags = @("git", "completion", "tab-completion")
+            Tags         = @("git", "completion", "tab-completion")
 
             # A URL to the license for this module.
             LicenseUri   = 'https://github.com/kzrnm/git-completion-pwsh/blob/master/LICENSE'

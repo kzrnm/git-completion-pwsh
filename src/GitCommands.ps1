@@ -1,0 +1,347 @@
+function __git {
+    param(
+        $GitDirOverride = $null
+    )
+
+    if ($GitDirOverride) {
+        $gitDirOption = "--git-dir=$GitDirOverride"
+    }
+    elseif ($gitDir) {
+        $gitDirOption = "--git-dir=$gitDir"
+    }
+
+    git $gitCArgs $gitDirOption $args
+}
+
+
+$script:__git_merge_strategies = $null
+function gitListMergeStrategies {
+    [OutputType([string[]])]
+    param()
+
+    if ($script:__git_merge_strategies -is [string[]]) {
+        return $script:__git_merge_strategies 
+    }
+
+    try {
+        $LANG = $env:LANG
+        $LC_ALL = $env:LC_ALL
+        $env:LANG = "C"
+        $env:LC_ALL = "C"
+
+        $output = (git merge -s help 2>&1 | Where-Object { $_ -match "[Aa]vailable strategies are: " })
+        $output -match ".*:\s*(.*)\s*\." | Out-Null
+        return $script:__git_merge_strategies = ($Matches[1] -split " ")
+    }
+    finally {
+        $env:LANG = $LANG
+        $env:LC_ALL = $LC_ALL
+    }
+}
+
+
+$script:__git_repo_path = $null
+# Discovers the path to the git repository taking any '--git-dir=<path>' and
+# '-C <path>' options into account and stores it in the $__git_repo_path
+# variable.
+function gitRepoPath {
+    [OutputType([string])]
+    param()
+    if ($script:__git_repo_path) {
+        return $script:__git_repo_path
+    }
+
+    return $script:__git_repo_path = (gitFindRepoPath)
+}
+
+function gitFindRepoPath {
+    if ($gitCArgs) {
+        return (__git rev-parse --absolute-git-dir 2>$null)
+    }
+    elseif ($gitDir) {
+        return "$gitDir"
+    }
+    elseif ($env:GIT_DIR) {
+        return $env:GIT_DIR
+    }
+    elseif (Test-Path -Path ".git" -PathType Container) {
+        return ".git"
+    }
+    else {
+        return (git rev-parse --git-dir 2>$null)
+    }
+}
+
+function gitCompleteRefs {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [string] $Remote = "",
+        [string] $Prefix = "",
+        [string] $Suffix = " ",
+        [ValidateSet('refs', 'heads', 'remote-heads')][string] $Mode = "refs",
+        [switch] $dwim
+    )
+
+
+    switch ($Mode) {
+        'refs' { 
+            $result = (gitRefs -Current $Current -Prefix $Prefix -Suffix $Suffix -Remote $Remote)
+        }
+        'heads' { 
+            $result = (gitHeads -Current $Current -Prefix $Prefix -Suffix $Suffix)
+        }
+        'remote-heads' { 
+            $result = (gitRemoteHeads -Current $Current -Prefix $Prefix -Suffix $Suffix)
+        }
+    }
+    
+    if ($dwim) {
+        $result += (gitDwimRemoteHeads -Current $Current -Prefix $Prefix -Suffix $Suffix)
+    }
+
+    return [string[]]$result
+}
+
+
+# Lists branches from the local repository.
+# 1: A prefix to be added to each listed branch (optional).
+# 2: List only branches matching this word (optional; list all branches if
+#    unset or empty).
+# 3: A suffix to be appended to each listed branch (optional).
+function gitHeads {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Prefix,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Suffix
+    )
+
+    $ForeachPrefix = "$Prefix".Replace('%', '%%')
+    $ignoreCase = $null
+    if ($env:GIT_COMPLETION_IGNORE_CASE) {
+        $ignoreCase = '--ignore-case'
+    }
+
+    __git for-each-ref --format="$ForeachPrefix%(refname:strip=2)$Suffix" `
+        $ignoreCase `
+        "refs/heads/$Current*" "refs/heads/$Current*/**"
+}
+
+# Lists branches from remote repositories.
+# 1: A prefix to be added to each listed branch (optional).
+# 2: List only branches matching this word (optional; list all branches if
+#    unset or empty).
+# 3: A suffix to be appended to each listed branch (optional).
+function gitRemoteHeads {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Prefix,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Suffix
+    )
+
+    $ForeachPrefix = "$Prefix".Replace('%', '%%')
+    $ignoreCase = $null
+    if ($env:GIT_COMPLETION_IGNORE_CASE) {
+        $ignoreCase = '--ignore-case'
+    }
+
+    __git for-each-ref --format="$ForeachPrefix%(refname:strip=2)$Suffix" `
+        $ignoreCase `
+        "refs/remotes/$Current*" "refs/remotes/$Current*/**"
+}
+
+# Lists tags from the local repository.
+# Accepts the same positional parameters as gitHeads() above.
+function gitTags {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Prefix,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Suffix
+    )
+
+    $ForeachPrefix = "$Prefix".Replace('%', '%%')
+    $ignoreCase = $null
+    if ($env:GIT_COMPLETION_IGNORE_CASE) {
+        $ignoreCase = '--ignore-case'
+    }
+
+    __git for-each-ref --format="$ForeachPrefix%(refname:strip=2)$Suffix" `
+        $ignoreCase `
+        "refs/tags/$Current*" "refs/tags/$Current*/**"
+}
+
+# List unique branches from refs/remotes used for 'git checkout' and 'git
+# switch' tracking DWIMery.
+# 1: A prefix to be added to each listed branch (optional)
+# 2: List only branches matching this word (optional; list all branches if
+#    unset or empty).
+# 3: A suffix to be appended to each listed branch (optional).
+function gitDwimRemoteHeads {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Prefix,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Suffix
+    )
+
+    $ForeachPrefix = "$Prefix".Replace('%', '%%')
+    $ignoreCase = $null
+    if ($env:GIT_COMPLETION_IGNORE_CASE) {
+        $ignoreCase = '--ignore-case'
+    }
+
+    __git for-each-ref --format="$ForeachPrefix%(refname:strip=3)$Suffix" `
+        --sort="refname:strip=3" `
+        $ignoreCase `
+        "refs/remotes/*/$Current*" "refs/remotes/*/$Current*/**" | 
+    Group-Object |
+    Where-Object Count -EQ 1 |
+    Select-Object -ExpandProperty Name
+}
+
+
+# Lists refs from the local (by default) or from a remote repository.
+# It accepts 0, 1 or 2 arguments:
+# 1: The remote to list refs from (optional; ignored, if set but empty).
+#    Can be the name of a configured remote, a path, or a URL.
+# 2: In addition to local refs, list unique branches from refs/remotes/ for
+#    'git checkout's tracking DWIMery (optional; ignored, if set but empty).
+# 3: A prefix to be added to each listed ref (optional).
+# 4: List only refs matching this word (optional; list all refs if unset or
+#    empty).
+# 5: A suffix to be appended to each listed ref (optional; ignored, if set
+#    but empty).
+#
+# Use gitCompleteRefs() instead.
+function gitRefs {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Remote,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Prefix,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Suffix,
+        [string] $Track = ""
+    )
+    
+    $listRefsFrom = "path"
+    $match = $Current
+    $umatch = $Current
+    $ForeachPrefix = "$Prefix".Replace('%', '%%')
+    $ignoreCase = $null
+
+    $dir = (gitRepoPath)
+    if (-not $Remote) {
+        if (-not $dir) {
+            return @()
+        }
+    }
+    else {
+        if (gitIsConfiguredRemote) {
+            # configured remote takes precedence over a
+            # local directory with the same name
+            $listRefsFrom = "remote"
+        }
+        elseif (Test-Path -Path "$Remote/.git" -PathType Container) {
+            $dir = "$Remote/.git"
+        }
+        elseif (Test-Path -Path "$Remote" -PathType Container) {
+            $dir = "$Remote"
+        }
+        else {
+            $listRefsFrom = "url"
+        }
+    }
+
+    if ($env:GIT_COMPLETION_IGNORE_CASE -and ($null -ne $env:GIT_COMPLETION_IGNORE_CASE)) {
+        $ignoreCase = '--ignore-case'
+        $umatch = $Current.ToUpperInvariant()
+    }
+
+    if ($listRefsFrom -eq "path") {
+        if ($Current.StartsWith("^")) {
+            $Prefix = "$Prefix^"
+            $ForeachPrefix = "$ForeachPrefix^"
+            $Current = $Current.Substring(1)
+            $match = $match.Substring(1)
+            $umatch = $umatch.Substring(1)
+        }
+
+        if ($Current -match "refs(/.*)?") {
+            $format = "refname"
+            $refs = @("$match*", "$match*/**")
+            $Track = ""
+        }
+        else {
+            foreach ($i in ("HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD", "REBASE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD", "BISECT_HEAD", "AUTO_MERGE")) {
+                if (($i -clike "$match*") -or ($i -clike "$umatch*")) {
+                    if (Test-Path "$dir/$i" -PathType Leaf) {
+                        "$Prefix$i$Suffix"
+                    }
+                }
+            }
+
+            $format = "refname:strip=2"
+            $refs = @("refs/tags/$match*",
+                "refs/tags/$match*/**",
+                "refs/heads/$match*",
+                "refs/heads/$match*/**",
+                "refs/remotes/$match*", 
+                "refs/remotes/$match*/**")
+        }
+        __git -GitDirOverride $dir for-each-ref "--format=$ForeachPrefix%($format)$Suffix" $ignoreCase @refs
+        if ($Track) {
+            gitDwimRemoteHeads -Prefix $Prefix -Current $match -Suffix $Suffix
+        }
+        return
+    }
+    
+    if ($Current -match "refs(/.*)?") {
+        __git ls-remote "$Remote" "$Match*" | 
+        ForEach-Object {
+            $_ -match "(\S+)\s+(\S+)" | Out-Null
+            $i = $Matches[2]
+            if ($i -notlike "*^{}") {
+                "$Prefix$i$Suffix"
+            }
+        }
+    }
+    elseif ($listRefsFrom -eq "remote") {
+        if ("HEAD" -match "$match*") {
+            "${Prefix}HEAD$Suffix"
+        }
+        __git for-each-ref --format="$ForeachPrefix%(refname:strip=3)$Suffix" `
+            $ignoreCase `
+            "refs/remotes/$remote/$match*" "refs/remotes/$remote/$match*/**"
+    }
+    else {
+        $querySymref = $null
+        if ("HEAD" -match "$match*") {
+            $querySymref = 'HEAD'
+        }
+        __git ls-remote "$Remote" $querySymref "refs/tags/$match*" "refs/heads/$match*" "refs/remotes/$match*" |
+        ForEach-Object {
+            $_ -match "(\S+)\s+(\S+)" | Out-Null
+            $i = $Matches[2]
+            if ($i -notlike "*^{}") {
+                if ($i.StartsWith('refs/*')) {
+                    $j = $i.Substring('refs/*'.Length)
+                    "$Prefix$j$Suffix"
+                }
+                else {
+                    "$Prefix$i$Suffix"
+                }
+            }
+        }
+    }
+}
+
+
+# Returns true if $1 matches the name of a configured remote, false otherwise.
+function gitIsConfiguredRemote {
+    [OutputType([bool])]
+    param([Parameter(Mandatory)][string]$Remote)
+    return (__git remote | Where-Object { $_ -eq $Remote })
+}

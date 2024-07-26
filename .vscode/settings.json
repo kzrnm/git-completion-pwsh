@@ -1,0 +1,11 @@
+{
+    "terminal.integrated.env.linux": {
+        "GitCompletionDubugPath": "${workspaceFolder}/debug.log",
+    },
+    "terminal.integrated.env.osx": {
+        "GitCompletionDubugPath": "${workspaceFolder}/debug.log",
+    },
+    "terminal.integrated.env.windows": {
+        "GitCompletionDubugPath": "${workspaceFolder}/debug.log",
+    }
+}
