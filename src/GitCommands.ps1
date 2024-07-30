@@ -1,6 +1,8 @@
 function __git {
+    [CmdletBinding(PositionalBinding = $false)]
     param(
-        $GitDirOverride = $null
+        [Parameter()]$GitDirOverride = $null,
+        [Parameter(ValueFromRemainingArguments)]$OrdinaryArgs
     )
 
     if ($GitDirOverride) {
@@ -9,8 +11,11 @@ function __git {
     elseif ($gitDir) {
         $gitDirOption = "--git-dir=$gitDir"
     }
+    else {
+        $gitDirOption = $null
+    }
 
-    git $gitCArgs $gitDirOption $args
+    git $gitDirOption @gitCArgs @OrdinaryArgs
 }
 
 
@@ -39,22 +44,94 @@ function gitListMergeStrategies {
     }
 }
 
+# -- compute config --
+$script:__git_config_vars = $null
+function gitConfigVars {
+    [OutputType([string[]])] param()
+    if ($script:__git_config_vars) {
+        return $script:__git_config_vars
+    }
+    return $script:__git_config_vars = (git help --config-for-completion)
+}
 
-$script:__git_repo_path = $null
+$script:__git_config_vars_all = $null
+function gitConfigVarsAll {
+    [OutputType([string[]])] param()
+    if ($script:__git_config_vars_all) {
+        return $script:__git_config_vars_all
+    }
+    return $script:__git_config_vars_all = (git --no-pager help --config)
+}
+
+$script:__git_config_sections = $null
+function gitConfigSections {
+    [OutputType([string[]])] param()
+    if ($script:__git_config_sections) {
+        return $script:__git_config_sections
+    }
+    return $script:__git_config_sections = (git help --config-sections-for-completion)
+}
+
+$script:__git_first_level_config_vars_for_section = $null
+function gitFirstLevelConfigVarsForSection {
+    [OutputType([string[]])]
+    param (
+        [Parameter(Position = 0, Mandatory)][string] $section
+    )
+    if (-not $script:__git_first_level_config_vars_for_section) {
+        $script:__git_first_level_config_vars_for_section = @{}
+    }
+
+    if ($script:__git_first_level_config_vars_for_section[$section]) {
+        return $script:__git_first_level_config_vars_for_section[$section]
+    }
+
+    return $script:__git_first_level_config_vars_for_section[$section] = (
+        gitConfigVars | ForEach-Object {
+            $s = $_.Split(".")
+            if (($section -eq $s[0]) -and $s[1]) {
+                return $s[1] 
+            }
+        }
+    )
+}
+
+$script:__git_second_level_config_vars_for_section = $null
+function gitSecondLevelConfigVarsForSection {
+    [OutputType([string[]])]
+    param (
+        [Parameter(Position = 0, Mandatory)][string] $section
+    )
+    if (-not $script:__git_second_level_config_vars_for_section) {
+        $script:__git_second_level_config_vars_for_section = @{}
+    }
+
+    if ($script:__git_second_level_config_vars_for_section[$section]) {
+        return $script:__git_second_level_config_vars_for_section[$section]
+    }
+
+    return $script:__git_second_level_config_vars_for_section[$section] = (
+        gitConfigVarsAll | ForEach-Object {
+            $s = $_.Split(".")
+            if (($section -eq $s[0]) -and $s[2]) {
+                return $s[2] 
+            }
+        }
+    )
+}
+
+function gitAllCommands {
+    [OutputType([string[]])]
+    param()
+    return (__git --list-cmds="main,others,alias,nohelpers" | Sort-Object -CaseSensitive)
+}
+
 # Discovers the path to the git repository taking any '--git-dir=<path>' and
 # '-C <path>' options into account and stores it in the $__git_repo_path
 # variable.
 function gitRepoPath {
     [OutputType([string])]
     param()
-    if ($script:__git_repo_path) {
-        return $script:__git_repo_path
-    }
-
-    return $script:__git_repo_path = (gitFindRepoPath)
-}
-
-function gitFindRepoPath {
     if ($gitCArgs) {
         return (__git rev-parse --absolute-git-dir 2>$null)
     }
@@ -78,7 +155,7 @@ function gitCompleteRefs {
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
         [string] $Remote = "",
         [string] $Prefix = "",
-        [string] $Suffix = " ",
+        [string] $Suffix = "",
         [ValidateSet('refs', 'heads', 'remote-heads')][string] $Mode = "refs",
         [switch] $dwim
     )

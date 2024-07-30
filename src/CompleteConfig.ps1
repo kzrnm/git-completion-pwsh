@@ -1,34 +1,22 @@
 # __git_complete_config_variable_name_and_value
-[System.Management.Automation.CompletionResult]
 function completeConfigVariableNameAndValue {
+    [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
-        [Parameter(Mandatory)][string] $Current
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
     )
-
 
     if ($Current -match '(.*)=(.*)') {
         return (completeConfigVariableValue -VarName $Matches[1] -Current $Matches[2])
     }
     else {
+        return (completeConfigVariableName -Suffix "=" -Current $Current)
     }
-
-    return $null
-    # TODO: 
-    # case "$cur_" in
-    # *=*)
-    # 	__git_complete_config_variable_value \
-    # 		--varname="${cur_%%=*}" --cur="${cur_#*=}"
-    # 	;;
-    # *)
-    # 	__git_complete_config_variable_name --cur="$cur_" --sfx='='
-    # 	;;
-    # esac
 }
 
 
 # __git_complete_config_variable_value
-[System.Management.Automation.CompletionResult[]]
 function completeConfigVariableValue {
+    [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
         [Parameter(Mandatory)][string] $VarName,
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current
@@ -41,8 +29,7 @@ function completeConfigVariableValue {
             [string[]]
             $Candidates
         )
-        $Candidates |
-        Where-Object { $_ -like "$Current*" } |
+        $Candidates -clike "$Current*" |
         ForEach-Object { 
             [System.Management.Automation.CompletionResult]::new(
                 "$VarName=$_",
@@ -54,27 +41,34 @@ function completeConfigVariableValue {
     }
 
     function remote {
-        completeValue (__git remote)
+        $remotes = (__git remote)
+        completeValue @remotes
     }
 
     switch -Wildcard ($VarName.ToLowerInvariant()) {
         "branch.*.remote" {
             remote
+            return
         }
         "branch.*.pushremote" {
             remote
+            return
         }
         "branch.*.pushdefault" {
             remote
+            return
         }
         "branch.*.merge" {
             completeValue (gitCompleteRefs -Current $Current)
+            return
         }
         "branch.*.rebase" {
             completeValue "false", "true", "merges", "interactive"
+            return
         }
         "remote.pushdefault" {
             remote
+            return
         }
         "remote.*.fetch" {
             if ($Current -eq "") {
@@ -102,78 +96,135 @@ function completeConfigVariableValue {
             catch {
                 # not found
             }
+            return
         }
         "remote.*.push" {
             completeValue (__git for-each-ref --format='%(refname):%(refname)' refs/heads)
+            return
         }
         "pull.twohead" {
             completeValue (gitListMergeStrategies)
+            return
         }
         "pull.octopus" {
             completeValue (gitListMergeStrategies)
+            return
         }
         "color.pager" {
             completeValue "false", "true"
+            return
         }
         "color.*.*" {
             completeValue "normal", "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "bold", "dim", "ul", "blink", "reverse"
+            return
         }
         "color.*" {
             completeValue "false", "true", "always", "never", "auto"
+            return
         }
         "diff.submodule" {
             completeValue $gitDiffSubmoduleFormats
+            return
         }
         "help.format" {
             completeValue "man", "info", "web", "html"
+            return
         }
         "log.date" {
             completeValue $gitLogDateFormats
+            return
         }
         "sendemail.aliasfiletype" {
             completeValue "mutt", "mailrc", "pine", "elm", "gnus"
+            return
         }
         "sendemail.confirm" {
             completeValue $gitSendEmailConfirmOptions
+            return
         }
         "sendemail.suppresscc" {
             completeValue $gitSendEmailSuppressccOptions
+            return
         }
         "sendemail.transferencoding" {
             completeValue "7bit", "8bit", "quoted-printable", "base64"
+            return
         }
     }
 }
 
 # __git_complete_config_variable_name
-[System.Management.Automation.CompletionResult]
 function completeConfigVariableName {
+    [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
-        [Parameter(Mandatory)][string] $VarName,
-        [Parameter][string] $Suffix = '-'
-    ) 
-    if ($Current -is [string]) {
-        $cur = $Current
-    }
-    else {
-        $cur = $CurrentWord
-    }
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [string] $Suffix = '='
+    )
 
-    if ($cur -match '(.*)=(.*)') {
-
+    if ($Current -match "(branch|guitool|difftool|man|mergetool|remote|submodule|url)\.(.*)\.([^\.]*)") {
+        $section = $Matches[1]
+        $second = $Matches[2]
+        completeList (gitSecondLevelConfigVarsForSection $section | ForEach-Object {
+                "$section.$second.$_$Suffix"
+            }
+        )
+        return
     }
-    else {
-            
+    if ($Current -match "branch\.(.*)") {
+        $section = 'branch'
+        $second = $Matches[1]
+        completeList (gitHeads -Prefix "$section." -Current $second -Suffix ".")
+        completeList (gitFirstLevelConfigVarsForSection $section | ForEach-Object {
+                "$section.$_$Suffix"
+            }
+        )
+        return
     }
-    return $null
-    # TODO: 
-    # case "$cur_" in
-    # *=*)
-    # 	__git_complete_config_variable_value \
-    # 		--varname="${cur_%%=*}" --cur="${cur_#*=}"
-    # 	;;
-    # *)
-    # 	__git_complete_config_variable_name --cur="$cur_" --sfx='='
-    # 	;;
-    # esac
+    if ($Current -match "pager\.(.*)") {
+        $section = 'pager'
+        $second = $Matches[1]
+        completeList (gitAllCommands | ForEach-Object { "$section.$_$Suffix" })
+        return
+    }
+    if ($Current -match "remote\.(.*)") {
+        $section = 'remote'
+        $second = $Matches[1]
+        completeList (__git remote | Where-Object {
+                $_.StartsWith($second) 
+            } | ForEach-Object {
+                "$section.$_."
+            }
+        )
+        completeList (gitFirstLevelConfigVarsForSection $section | ForEach-Object {
+                "$section.$_$Suffix"
+            }
+        )
+        return
+    }
+    if ($Current -match "submodule\.(.*)") {
+        $section = 'submodule'
+        $second = $Matches[1]
+        $gitTopPath = (__git rev-parse --show-toplevel)
+        
+        completeList (__git config -f "$gitTopPath/.gitmodules" --name-only --list |
+            ForEach-Object {
+                if ($_ -match 'submodule\.(.*)\.path') {
+                    $sub = $Matches[1]
+                    "$section.$sub."
+                }
+            }
+        )
+        completeList (gitFirstLevelConfigVarsForSection $section | ForEach-Object {
+                "$section.$_$Suffix"
+            }
+        )
+        return
+    }
+    if ($Current -match "([^\.]*)\.(.*)") {
+        $section = $Matches[1]
+        completeList (gitConfigVars | ForEach-Object { "$_$Suffix" })
+        return
+    }
+    completeList (gitConfigSections | ForEach-Object { "$_." })
+    return
 }

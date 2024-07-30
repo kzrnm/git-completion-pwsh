@@ -1,5 +1,6 @@
 . $PSScriptRoot/GitCommands.ps1
 . $PSScriptRoot/GitStatics.ps1
+. $PSScriptRoot/CompletionUtil.ps1
 . $PSScriptRoot/CompleteConfig.ps1
 . $PSScriptRoot/CompleteSubCommands.ps1
 
@@ -12,7 +13,8 @@ function WriteLog {
 }
 
 # __git_main
-function Initialize-GitComplete {
+function Complete-Git-Ast {
+    [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
         [System.Management.Automation.Language.CommandAst]
         $CommandAst,
@@ -24,22 +26,16 @@ function Initialize-GitComplete {
         $null > $env:GitCompletionDubugPath
     }
 
-    $script:__git_repo_path = $null
-    $script:CommandAst = $CommandAst
+    $CommandAst = $CommandAst
     $script:CursorPosition = $CursorPosition
     $script:Words = ($CommandAst.CommandElements | Select-Object -ExpandProperty Extent | Select-Object -ExpandProperty Text)
-
-    $script:gitDir = $null
-    $script:gitCArgs = @()
-    $script:command = ''
-    $script:commandIndex = 0
 
     $cw = $CommandAst.CommandElements.Count
     $pr = $script:Words[$script:Words.Count - 1]
     $cr = ''
 
     for ($i = 1; $i -lt $CommandAst.CommandElements.Count; $i++) {
-        $extent = $script:CommandAst.CommandElements[$i].Extent
+        $extent = $CommandAst.CommandElements[$i].Extent
 
         if ($CursorPosition -lt $extent.StartOffset) {
             # The cursor is within whitespace between the previous and current words.
@@ -58,6 +54,47 @@ function Initialize-GitComplete {
     $script:WordPosition = $cw
     $script:CurrentWord = $cr
     $script:PreviousWord = $pr
+
+    WriteLog "CommandAst=$CommandAst"
+    Complete-Git `
+        -CursorPosition $CursorPosition `
+        -Words $Words `
+        -WordPosition $WordPosition `
+        -CurrentWord $CurrentWord `
+        -PreviousWord $PreviousWord
+}
+
+function Complete-Git {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([System.Management.Automation.CompletionResult[]])]
+    param(
+        [int][Parameter(Mandatory)]$CursorPosition,
+        [string[]][AllowEmptyCollection()][AllowEmptyString()][Parameter(Mandatory)]$Words,
+        [int][Parameter(Mandatory)]$WordPosition,
+        [string][AllowEmptyString()][Parameter(Mandatory)]$CurrentWord,
+        [string][AllowEmptyString()][Parameter(Mandatory)]$PreviousWord
+    )
+    
+    WriteLog "CursorPosition=$CursorPosition"
+    WriteLog "Words=$Words"
+    WriteLog "WordPosition=$WordPosition"
+    WriteLog "CurrentWord=$CurrentWord"
+    WriteLog "PreviousWord=$PreviousWord"
+
+    $script:CursorPosition = $CursorPosition
+    $script:Words = $Words
+    $script:gitCArgs = $gitCArgs
+    $script:command = $command
+    $script:commandIndex = $commandIndex
+    $script:WordPosition = $WordPosition
+    $script:CurrentWord = $CurrentWord
+    $script:PreviousWord = $PreviousWord
+    
+    $script:__git_repo_path = $null
+    $script:gitDir = $null
+    $script:gitCArgs = @()
+    $script:command = ''
+    $script:commandIndex = 0
 
     :globalflag for ($i = 1; $i -lt $script:WordPosition; $i++) {
         $s = $script:Words[$i]
@@ -98,22 +135,11 @@ function Initialize-GitComplete {
             }
         }
     }
-
-    WriteLog "CommandAst=$CommandAst"
-    WriteLog "CursorPosition=$CursorPosition"
-    WriteLog "Words=$Words"
+    WriteLog "gitDir=$gitDir"
     WriteLog "gitCArgs=$gitCArgs"
     WriteLog "command=$command"
     WriteLog "commandIndex=$commandIndex"
-    WriteLog "WordPosition=$WordPosition"
-    WriteLog "CurrentWord=$CurrentWord"
-    WriteLog "PreviousWord=$PreviousWord"
-    WriteLog "gitDir=$gitDir"
-}
 
-function GitComplete {
-    [OutputType([System.Management.Automation.CompletionResult[]])]
-    param()
     if ($command) {
         return CompleteSubCommands
     }
@@ -133,6 +159,48 @@ function GitComplete {
         }
     }
 
-    # TODO: 作成中
-    return $null
+    switch -Wildcard ($CurrentWord) {
+        '--*' {
+            $gitGlobalOptions | ForEach-Object { $_.ToLongCompletion($CurrentWord) } | Where-Object { $_ }
+            return
+        }
+        '-' {
+            $gitGlobalOptions | ForEach-Object { $_.ToShortCompletion() } | Where-Object { $_ }
+            return
+        }
+    }
+    # case "$cur" in
+    # --*)
+    #     __gitcomp "
+    #     --paginate
+    #     --no-pager
+    #     --git-dir=
+    #     --bare
+    #     --version
+    #     --exec-path
+    #     --exec-path=
+    #     --html-path
+    #     --man-path
+    #     --info-path
+    #     --work-tree=
+    #     --namespace=
+    #     --no-replace-objects
+    #     --help
+    #     "
+    #     ;;
+    # *)
+    #     if test -n "${GIT_TESTING_PORCELAIN_COMMAND_LIST-}"
+    #     then
+    #         __gitcomp "$GIT_TESTING_PORCELAIN_COMMAND_LIST"
+    #     else
+    #         local list_cmds=list-mainporcelain,others,nohelpers,alias,list-complete,config
+
+    #         if test "${GIT_COMPLETION_SHOW_ALL_COMMANDS-}" = "1"
+    #         then
+    #             list_cmds=builtins,$list_cmds
+    #         fi
+    #         __gitcomp "$(__git --list-cmds=$list_cmds)"
+    #     fi
+    #     ;;
+    # esac
 }

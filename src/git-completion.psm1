@@ -2,7 +2,6 @@
 
 Register-ArgumentCompleter -Native -CommandName git -ScriptBlock {
     param($wordToComplete, $commandAst, $CursorPosition)
-    Initialize-GitComplete -CommandAst $commandAst -CursorPosition $CursorPosition
-    return GitComplete
+    return (Complete-Git-Ast -CommandAst $commandAst -CursorPosition $CursorPosition)
 }
 
