@@ -10,7 +10,7 @@ Describe 'ConfigVariable' {
     BeforeAll {
         Initialize-Home
 
-        mkdir ($rootPath = "TestDrive:/gitRoot")
+        mkdir ($rootPath = "$TestDrive/gitRoot")
         mkdir ($remotePath = "$TestDrive/gitRemote")
 
         Push-Location $remotePath
