@@ -28,15 +28,20 @@ function gitListMergeStrategies {
         return $script:__git_merge_strategies 
     }
 
+    function listMergeStrategies {
+        param ()
+        $ErrorActionPreference = 'Continue'
+        (git merge -s help 2>&1 | Where-Object { $_ -match "[Aa]vailable strategies are: " }) -match ".*:\s*(.*)\s*\." | Out-Null
+        return ($Matches[1] -split " ")
+    }
+
     try {
         $LANG = $env:LANG
         $LC_ALL = $env:LC_ALL
         $env:LANG = "C"
         $env:LC_ALL = "C"
 
-        $output = (git merge -s help 2>&1 | Where-Object { $_ -match "[Aa]vailable strategies are: " })
-        $output -match ".*:\s*(.*)\s*\." | Out-Null
-        return $script:__git_merge_strategies = ($Matches[1] -split " ")
+        return $script:__git_merge_strategies = (listMergeStrategies)
     }
     finally {
         $env:LANG = $LANG
@@ -121,13 +126,15 @@ function gitSecondLevelConfigVarsForSection {
 }
 
 function gitAllCommands {
+    [CmdletBinding()]
     [OutputType([string[]])]
     param(
         [Parameter(Mandatory, ValueFromRemainingArguments)]
         [string[]]
         $Categories
     )
-    return (__git "--list-cmds=$($Categories -join ",")" | Sort-Object -CaseSensitive)
+    $list = ($Categories -join ",")
+    return (__git "--list-cmds=$list" | Sort-Object -CaseSensitive)
 }
 
 # Discovers the path to the git repository taking any '--git-dir=<path>' and

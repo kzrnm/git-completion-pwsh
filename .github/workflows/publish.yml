@@ -5,12 +5,14 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+env:
+  Module: git-completion
 jobs:
   get-version:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get-version.outputs.version }}
+      is-prerelease: ${{ steps.get-version.outputs.is-prerelease }}
       is-new: ${{ steps.is-new-version.outputs.is-new }}
     steps:
       - uses: actions/checkout@v4
@@ -18,10 +20,17 @@ jobs:
         id: get-version
         shell: pwsh
         run: |
-          Import-Module ./src/git-completion.psd1
-          $version = (Get-Module git-completion).Version.ToString()
-          Write-Output $version
-          Write-Output "name=version::$version" >> $GITHUB_OUTPUT
+          Import-Module "./src/${env:Module}.psd1"
+          $m = (Get-Module $env:Module)
+          $version = $m.Version.ToString()
+          $prerelease = $m.PrivateData.PSData.Prerelease
+          if ($prerelease) {
+            Write-Output "is-prerelease=true" | Tee-Object "$env:GITHUB_OUTPUT" -Append
+            $prerelease = "-$prerelease"
+          } else {
+            Write-Output "is-prerelease=false" | Tee-Object "$env:GITHUB_OUTPUT" -Append
+          }
+          Write-Output "version=$version$prerelease" | Tee-Object "$env:GITHUB_OUTPUT" -Append
 
       - name: Check tag
         uses: mukunku/tag-exists-action@v1.6.0
@@ -37,52 +46,71 @@ jobs:
             echo "new version tag project: ${{ steps.get-version.outputs.version }}"
             IS_NEW=true
           fi
-          echo "name=is-new::$IS_NEW" >> $GITHUB_OUTPUT
+          echo "is-new=$IS_NEW" | tee -a "$GITHUB_OUTPUT"
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        shell: [pwsh, powershell]
+        exclude:
+          - os: ubuntu-latest
+            shell: powershell
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - name: Run Pester
+        if: matrix.shell == 'pwsh'
         shell: pwsh
         run: Invoke-Pester -CI
+      - name: Run Pester(Windows PowerShell)
+        if: matrix.shell == 'powershell'
+        shell: powershell
+        run: Invoke-Pester -CI
 
-  # new-version-only:
-  #   runs-on: ubuntu-latest
-  #   needs: [get-version, test]
-  #   if: ${{ needs.get-version.outputs.is-new == 'true' }}
-  #   steps:
-  #     - run: echo "new-version"
+  new-version-only:
+    runs-on: ubuntu-latest
+    needs: [get-version, test]
+    if: ${{ needs.get-version.outputs.is-new == 'true' }}
+    steps:
+      - run: echo "new-version"
 
-  # publish:
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: actions
-  #     url: https://github.com
-  #   needs: [get-version, new-version-only]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Push tag
-  #       id: tag-version
-  #       run: echo "new-tag=v${{ needs.get-version.outputs.version }}" | tee -a "$GITHUB_OUTPUT"
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: actions
+      url: https://github.com
+    needs: [get-version, new-version-only]
+    permissions: 
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Push tag
+        id: tag-version
+        run: |
+          tag="v${{ needs.get-version.outputs.version }}"
+          git tag "$tag"
+          git push origin "$tag"
+          echo "new-tag=$tag" | tee -a "$GITHUB_OUTPUT"
 
-  #     - name: Create release
-  #       uses: ncipollo/release-action@v1
-  #       id: create-release
-  #       with:
-  #         tag: ${{ steps.tag-version.outputs.new_tag }}
-  #         name: Version ${{ needs.get-version.outputs.version }}
-  #         body: https://github.com/${{ github.repository }}/blob/${{ steps.tag-version.outputs.new_tag }}/CHANGELOG.md
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        id: create-release
+        with:
+          tag: ${{ steps.tag-version.outputs.new-tag }}
+          name: Version ${{ needs.get-version.outputs.version }}
+          body: ${{ github.server_url }}/${{ github.repository }}/blob/${{ steps.tag-version.outputs.new_tag }}/CHANGELOG.md
+          prerelease: ${{ needs.get-version.outputs.is-prerelease }}
 
-  #     - name: Install-Module PowerShellGet
-  #       shell: pwsh
-  #       run: |
-  #         Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-  #         Install-Module PowerShellGet -MinimumVersion "3.0.12-beta" -AllowPrerelease -Repository PSGallery -AllowClobber -Force
+      - name: Install-Module PowerShellGet
+        shell: pwsh
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          Install-Module PowerShellGet -MinimumVersion " 3.0.23-beta23" -AllowPrerelease -Repository PSGallery -AllowClobber -Force
 
-  #     - name: Publish
-  #       shell: pwsh
-  #       run: |
-  #         $NUGET_KEY = "${{ secrets.PWSH_NUGET_KEY  }}"
-  #         tools/dist.ps1 -TagName "v${{ needs.get-version.outputs.version }}"
-  #         Import-Module PowerShellGet
-  #         Publish-PSResource -Path ./git-completion -APIKey "$NUGET_KEY" -Repository PSGallery
+      - name: Publish
+        shell: pwsh
+        run: |
+          $NUGET_KEY = "${{ secrets.PWSH_NUGET_KEY  }}"
+          tools/dist.ps1 -TagName "v${{ needs.get-version.outputs.version }}"
+          Import-Module PowerShellGet
+          Publish-PSResource -Path "./$env:Module" -APIKey "$NUGET_KEY" -Repository PSGallery

@@ -313,7 +313,7 @@ function Complete-Git {
         $descriptions[$a.Name] = "[alias] $($a.Value)"
     }
 
-    $commands = (gitAllCommands builtins, list-mainporcelain, others, nohelpers, alias, list-complete, config)
+    $commands = (gitAllCommands builtins list-mainporcelain others nohelpers alias list-complete config)
     $commands -clike "$script:CurrentWord*" | Sort-Object -Unique | ForEach-Object {
         $desc = $descriptions[$_]
         if (-not $desc) {

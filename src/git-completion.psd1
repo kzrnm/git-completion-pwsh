@@ -12,7 +12,7 @@
     RootModule        = 'git-completion.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.0'
+    ModuleVersion     = '0.0.1'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -33,7 +33,7 @@
     Description       = 'Tab Completion for Git command'
 
     # Minimum version of the PowerShell engine required by this module
-    PowerShellVersion = '7.0'
+    PowerShellVersion = '5.0'
 
     # Name of the PowerShell host required by this module
     # PowerShellHostName = ''
@@ -98,7 +98,7 @@
             Tags         = @("git", "completion", "tab-completion")
 
             # A URL to the license for this module.
-            LicenseUri   = 'https://github.com/kzrnm/git-completion-pwsh/blob/master/LICENSE'
+            LicenseUri   = 'https://github.com/kzrnm/git-completion-pwsh/blob/main/LICENSE'
 
             # A URL to the main website for this project.
             ProjectUri   = 'https://github.com/kzrnm/git-completion-pwsh'
@@ -107,10 +107,10 @@
             # IconUri = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = 'https://github.com/kzrnm/git-completion-pwsh/blob/master/CHANGELOG.md'
+            ReleaseNotes = 'https://github.com/kzrnm/git-completion-pwsh/blob/main/CHANGELOG.md'
 
             # Prerelease string of this module
-            # Prerelease = ''
+            Prerelease = 'alpha'
 
             # Flag to indicate whether the module requires explicit user acceptance for install/update/save
             # RequireLicenseAcceptance = $false

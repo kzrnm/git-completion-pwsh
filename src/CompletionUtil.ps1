@@ -41,7 +41,7 @@ function __gitcomp {
         [string]$Current = $null,
         [string]$Prefix = '',
         [string]$Suffix = '',
-        [Parameter(ValueFromRemainingArguments = $true)]
+        [Parameter(ValueFromRemainingArguments)]
         [string[]]
         $Candidates
     )

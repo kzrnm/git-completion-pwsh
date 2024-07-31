@@ -59,11 +59,12 @@ function completeConfigVariableValue {
             return
         }
         "branch.*.merge" {
-            completeValue (gitCompleteRefs -Current $Current)
+            $params = (gitCompleteRefs -Current $Current)
+            completeValue @params
             return
         }
         "branch.*.rebase" {
-            completeValue "false", "true", "merges", "interactive"
+            completeValue "false" "true" "merges" "interactive"
             return
         }
         "remote.pushdefault" {
@@ -99,55 +100,58 @@ function completeConfigVariableValue {
             return
         }
         "remote.*.push" {
-            completeValue (__git for-each-ref --format='%(refname):%(refname)' refs/heads)
+            $params = (__git for-each-ref --format='%(refname):%(refname)' refs/heads)
+            completeValue @params
             return
         }
         "pull.twohead" {
-            completeValue (gitListMergeStrategies)
+            $params = (gitListMergeStrategies)
+            completeValue @params
             return
         }
         "pull.octopus" {
-            completeValue (gitListMergeStrategies)
+            $params = (gitListMergeStrategies)
+            completeValue @params
             return
         }
         "color.pager" {
-            completeValue "false", "true"
+            completeValue "false" "true"
             return
         }
         "color.*.*" {
-            completeValue "normal", "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "bold", "dim", "ul", "blink", "reverse"
+            completeValue "normal" "black" "red" "green" "yellow" "blue" "magenta" "cyan" "white" "bold" "dim" "ul" "blink" "reverse"
             return
         }
         "color.*" {
-            completeValue "false", "true", "always", "never", "auto"
+            completeValue "false" "true" "always" "never" "auto"
             return
         }
         "diff.submodule" {
-            completeValue $gitDiffSubmoduleFormats
+            completeValue @gitDiffSubmoduleFormats
             return
         }
         "help.format" {
-            completeValue "man", "info", "web", "html"
+            completeValue "man" "info" "web" "html"
             return
         }
         "log.date" {
-            completeValue $gitLogDateFormats
+            completeValue @gitLogDateFormats
             return
         }
         "sendemail.aliasfiletype" {
-            completeValue "mutt", "mailrc", "pine", "elm", "gnus"
+            completeValue "mutt" "mailrc" "pine" "elm" "gnus"
             return
         }
         "sendemail.confirm" {
-            completeValue $gitSendEmailConfirmOptions
+            completeValue @gitSendEmailConfirmOptions
             return
         }
         "sendemail.suppresscc" {
-            completeValue $gitSendEmailSuppressccOptions
+            completeValue @gitSendEmailSuppressccOptions
             return
         }
         "sendemail.transferencoding" {
-            completeValue "7bit", "8bit", "quoted-printable", "base64"
+            completeValue "7bit" "8bit" "quoted-printable" "base64"
             return
         }
     }
@@ -164,41 +168,46 @@ function completeConfigVariableName {
     if ($Current -match "(branch|guitool|difftool|man|mergetool|remote|submodule|url)\.(.*)\.([^\.]*)") {
         $section = $Matches[1]
         $second = $Matches[2]
-        completeList (gitSecondLevelConfigVarsForSection $section | ForEach-Object {
+        $params = [string[]](gitSecondLevelConfigVarsForSection $section | ForEach-Object {
                 "$section.$second.$_$Suffix"
             }
         )
+        completeList @params
         return
     }
     if ($Current -match "branch\.(.*)") {
         $section = 'branch'
         $second = $Matches[1]
-        completeList (gitHeads -Prefix "$section." -Current $second -Suffix ".")
-        completeList (gitFirstLevelConfigVarsForSection $section | ForEach-Object {
+        $params1 = [string[]](gitHeads -Prefix "$section." -Current $second -Suffix ".")
+        $params2 = [string[]](gitFirstLevelConfigVarsForSection $section | ForEach-Object {
                 "$section.$_$Suffix"
             }
         )
+        completeList @params1 @params2
         return
     }
     if ($Current -match "pager\.(.*)") {
         $section = 'pager'
         $second = $Matches[1]
-        completeList (gitAllCommands "main", "others", "alias", "nohelpers" | ForEach-Object { "$section.$_$Suffix" })
+        $params = [string[]](gitAllCommands main others alias nohelpers | ForEach-Object { "$section.$_$Suffix" })
+        completeList @params
         return
     }
     if ($Current -match "remote\.(.*)") {
         $section = 'remote'
         $second = $Matches[1]
-        completeList (__git remote | Where-Object {
+        $params1 = [string[]](__git remote | Where-Object {
                 $_.StartsWith($second) 
             } | ForEach-Object {
                 "$section.$_."
             }
         )
-        completeList (gitFirstLevelConfigVarsForSection $section | ForEach-Object {
+        $params2 = [string[]](gitFirstLevelConfigVarsForSection $section | ForEach-Object {
                 "$section.$_$Suffix"
             }
         )
+
+        completeList @params1 @params2
         return
     }
     if ($Current -match "submodule\.(.*)") {
@@ -206,7 +215,7 @@ function completeConfigVariableName {
         $second = $Matches[1]
         $gitTopPath = (__git rev-parse --show-toplevel)
         
-        completeList (__git config -f "$gitTopPath/.gitmodules" --name-only --list |
+        $params1 = [string[]](__git config -f "$gitTopPath/.gitmodules" --name-only --list |
             ForEach-Object {
                 if ($_ -match 'submodule\.(.*)\.path') {
                     $sub = $Matches[1]
@@ -214,17 +223,22 @@ function completeConfigVariableName {
                 }
             }
         )
-        completeList (gitFirstLevelConfigVarsForSection $section | ForEach-Object {
+        $params2 = [string[]](gitFirstLevelConfigVarsForSection $section | ForEach-Object {
                 "$section.$_$Suffix"
             }
         )
+        completeList @params1 @params2
         return
     }
     if ($Current -match "([^\.]*)\.(.*)") {
         $section = $Matches[1]
-        completeList (gitConfigVars | ForEach-Object { "$_$Suffix" })
+        $params = [string[]](gitConfigVars | ForEach-Object { "$_$Suffix" })
+        completeList @params
         return
     }
-    completeList (gitConfigSections | ForEach-Object { "$_." })
+    else {
+        $params = [string[]](gitConfigSections | ForEach-Object { "$_." })
+        completeList @params
+    }
     return
 }

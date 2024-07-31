@@ -5,11 +5,15 @@ param (
     $TagName
 )
 
-$module = "git-completion"
+if (-not $env:Module) {
+    throw 'dist.ps1 requires $env:Module'
+}
+
+$Module = $env:Module
 
 mkdir $module
 
 Copy-Item * -Recurse -Destination $module -Exclude $module, src, tools, .github, .gitignore, .vscode
 Copy-Item src/* -Recurse -Destination $module
 
-(Get-Content "./$module.psd1" -Raw).Replace('blob/master', "blob/$TagName") | Out-File -Encoding utf8NoBOM -FilePath "./$module/$module.psd1"
+(Get-Content "./src/$module.psd1" -Raw).Replace('blob/naub', "blob/$TagName") | Out-File -Encoding utf8NoBOM -FilePath "./$module/$module.psd1"

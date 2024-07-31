@@ -4,9 +4,7 @@ function Initialize-Home {
     $script:envHOMEBak = $env:HOME
     
     mkdir ($env:HOME = "$TestDrive/home")
-    "[user]
-email = Kitazato@example.com
-name = 1000yen" > "$env:HOME/.gitconfig"
+    "[user]`nemail = Kitazato@example.com`nname = 1000yen" | Out-File "$env:HOME/.gitconfig" -Encoding ascii
 }
 function Restore-Home {
     $env:HOME = $script:envHOMEBak
@@ -44,7 +42,7 @@ function Complete-Words {
 }
 
 function Should-BeCompletion {
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope='Function')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope = 'Function')]
     param(
         $ActualValue,
         [hashtable[]] $ExpectedValue,
