@@ -7,25 +7,21 @@ AfterAll {
 }
 
 Describe 'GirGlobal' {
-    # BeforeAll {
-    #     $script:envHOMEBak = $env:HOME
-        
-    #     mkdir ($env:HOME = "$TestDrive/home")
-    #     mkdir ($rootPath = "$TestDrive/gitRoot")
+    BeforeAll {
+        Initialize-Home
 
-    #     "[user]
-    # email = Kitazato@example.com
-    # name = 1000yen" > "$env:HOME/.gitconfig"
+        mkdir ($rootPath = "$TestDrive/gitRoot")
 
-    #     Push-Location $rootPath
-    #     git init --initial-branch=main
-    #     git commit -m "initial" --allow-empty
-    #     Pop-Location
-    # }
+        Push-Location $rootPath
+        git init --initial-branch=main
+        git config alias.sw "switch"
+        git config alias.swf "switch -f"
+    }
 
-    # AfterAll {
-    #     $env:HOME = $script:envHOMEBak
-    # }
+    AfterAll {
+        Restore-Home
+        Pop-Location
+    }
     It '<line>' -ForEach @(
         @{
             Line     = "--ver";
@@ -63,8 +59,55 @@ Describe 'GirGlobal' {
                     ListItemText   = "-h";
                     ResultType     = "ParameterName";
                     ToolTip        = "Prints the helps. If --all is given then all available commands are printed.";
+                },
+                @{
+                    CompletionText = "-C";
+                    ListItemText   = "-C <path>";
+                    ResultType     = "ParameterName";
+                    ToolTip        = "Run as if git was started in <path> instead of the current working directory.";
+                },
+                @{
+                    CompletionText = "-c";
+                    ListItemText   = "-c <name>=<value>";
+                    ResultType     = "ParameterName";
+                    ToolTip        = "Pass a configuration parameter to the command.";
+                },
+                @{
+                    CompletionText = "-p";
+                    ListItemText   = "-p";
+                    ResultType     = "ParameterName";
+                    ToolTip        = 'Pipe all output into less (or if set, $PAGER) if standard output is a terminal.';
+                },
+                @{
+                    CompletionText = "-P";
+                    ListItemText   = "-P";
+                    ResultType     = "ParameterName";
+                    ToolTip        = "Do not pipe Git output into a pager.";
                 }
             )
+        },
+        @{
+            Line     = "sw";
+            Expected = @(
+                @{
+                    CompletionText = "sw";
+                    ListItemText   = "sw";
+                    ResultType     = "Text";
+                    ToolTip        = "[alias] switch";
+                },
+                @{
+                    CompletionText = "swf";
+                    ListItemText   = "swf";
+                    ResultType     = "Text";
+                    ToolTip        = "[alias] switch -f";
+                },
+                @{
+                    CompletionText = "switch";
+                    ListItemText   = "switch";
+                    ResultType     = "Text";
+                    ToolTip        = "Switch branches";
+                }
+            );
         },
         @{
             Line     = "--notmatch";

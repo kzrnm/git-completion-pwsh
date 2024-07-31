@@ -8,15 +8,10 @@ AfterAll {
 
 Describe 'ConfigVariable' {
     BeforeAll {
-        $script:envHOMEBak = $env:HOME
-        
-        mkdir ($env:HOME = "$TestDrive/home")
+        Initialize-Home
+
         mkdir ($rootPath = "TestDrive:/gitRoot")
         mkdir ($remotePath = "$TestDrive/gitRemote")
-
-        "[user]
-    email = Kitazato@example.com
-    name = 1000yen" > "$env:HOME/.gitconfig"
 
         Push-Location $remotePath
         git init --initial-branch=main
@@ -42,7 +37,7 @@ Describe 'ConfigVariable' {
     }
 
     AfterAll {
-        $env:HOME = $script:envHOMEBak
+        Restore-Home
         Pop-Location
     }
 

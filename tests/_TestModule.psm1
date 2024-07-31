@@ -1,5 +1,17 @@
 #Requires -Module Pester, git-completion
 
+function Initialize-Home {
+    $script:envHOMEBak = $env:HOME
+    
+    mkdir ($env:HOME = "$TestDrive/home")
+    "[user]
+email = Kitazato@example.com
+name = 1000yen" > "$env:HOME/.gitconfig"
+}
+function Restore-Home {
+    $env:HOME = $script:envHOMEBak
+}
+
 function Complete-FromLine {
     [OutputType([System.Management.Automation.CompletionResult[]])]
     param (
@@ -12,10 +24,13 @@ function Complete-FromLine {
 function Complete-Words {
     [OutputType([System.Management.Automation.CompletionResult[]])]
     param (
-        [Parameter(Mandatory)][string[]]$Words
+        [Parameter(Mandatory)][AllowEmptyCollection()][AllowEmptyString()][string[]]$Words
     )
 
     $WordPosition = $Words.Length
+    if ($WordPosition -notmatch '\s$') {
+        $WordPosition--
+    }
     $CursorPosition = $line.Length
     $CurrentWord = $Words[-1]
     $PreviousWord = $Words[-2]
@@ -28,10 +43,13 @@ function Complete-Words {
             -PreviousWord $PreviousWord)
 }
 
-function Should-BeCompletion (
-    $ActualValue,
-    [hashtable[]] $ExpectedValue,
-    [string] $Because) {
+function Should-BeCompletion {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope='Function')]
+    param(
+        $ActualValue,
+        [hashtable[]] $ExpectedValue,
+        [string] $Because
+    ) 
     <#
     .SYNOPSIS
         Asserts if collection equals expected completion
@@ -94,4 +112,4 @@ Add-ShouldOperator -Name BeCompletion `
     -Test ${function:Should-BeCompletion} `
     -SupportsArrayInput
 
-Export-ModuleMember -Function Complete-FromLine, Complete-Words
+Export-ModuleMember -Function Complete-FromLine, Complete-Words, Initialize-Home, Restore-Home

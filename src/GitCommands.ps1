@@ -122,8 +122,12 @@ function gitSecondLevelConfigVarsForSection {
 
 function gitAllCommands {
     [OutputType([string[]])]
-    param()
-    return (__git --list-cmds="main,others,alias,nohelpers" | Sort-Object -CaseSensitive)
+    param(
+        [Parameter(Mandatory, ValueFromRemainingArguments)]
+        [string[]]
+        $Categories
+    )
+    return (__git "--list-cmds=$($Categories -join ",")" | Sort-Object -CaseSensitive)
 }
 
 # Discovers the path to the git repository taking any '--git-dir=<path>' and
@@ -421,4 +425,18 @@ function gitIsConfiguredRemote {
     [OutputType([bool])]
     param([Parameter(Mandatory)][string]$Remote)
     return (__git remote | Where-Object { $_ -eq $Remote })
+}
+
+function gitListAliases {
+    [OutputType([PSCustomObject[]])]
+    param()
+
+    __git config -l | ForEach-Object {
+        if ($_ -match "^alias\.([^=]+)=(.*)") {
+            [PSCustomObject]@{
+                Name  = $Matches[1];
+                Value = $Matches[2];
+            }
+        }
+    }
 }

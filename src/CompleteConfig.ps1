@@ -183,7 +183,7 @@ function completeConfigVariableName {
     if ($Current -match "pager\.(.*)") {
         $section = 'pager'
         $second = $Matches[1]
-        completeList (gitAllCommands | ForEach-Object { "$section.$_$Suffix" })
+        completeList (gitAllCommands "main", "others", "alias", "nohelpers" | ForEach-Object { "$section.$_$Suffix" })
         return
     }
     if ($Current -match "remote\.(.*)") {

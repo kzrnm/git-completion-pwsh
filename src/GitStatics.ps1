@@ -1,4 +1,53 @@
 
+class CommandOption {
+    [string] $Short
+    [string] $Long
+    [string] $Description
+    [string] $Value
+
+    CommandOption ([string]$short, [string]$long, $description, $value) {
+        $this.Short = $Short
+        $this.Long = $Long
+        $this.Description = $Description
+        $this.Value = $Value
+    }
+
+    [System.Management.Automation.CompletionResult] ToLongCompletion([string]$Prefix) {
+        if ($this.Long -and ($this.Long -clike "$Prefix*")) {
+            return [System.Management.Automation.CompletionResult]::new(
+                $this.Long,
+                $this.Long + "$(if($this.Value){" $($this.Value)"})",
+                "ParameterName",
+                "$(if($this.Description){$this.Description}else{$this.Long})"
+            )
+        }
+        return $null
+    }
+
+    [System.Management.Automation.CompletionResult] ToShortCompletion() {
+        if ($this.Short) {
+            return [System.Management.Automation.CompletionResult]::new(
+                $this.Short,
+                $this.Short + "$(if($this.Value){" $($this.Value)"})",
+                "ParameterName",
+                "$(if($this.Description){$this.Description}else{$this.Short})"
+            )
+        }
+        return $null
+    }
+}
+
+function New-CommandOption {
+    [CmdletBinding()]
+    param (
+        [string]$Short = '',
+        [string]$Long = '',
+        [string]$Desc = '',
+        [string]$Value = ''
+    )
+    [CommandOption]::new($Short, $Long, $Desc, $Value)
+}
+
 # $script:gitDiffAlgorithms="myers minimal patience histogram"
 
 $script:gitDiffSubmoduleFormats = "diff", "log", "short"
@@ -94,68 +143,3 @@ $script:gitSendEmailConfirmOptions = "always", "never", "auto", "cc", "compose"
 $script:gitSendEmailSuppressccOptions = "author", "self", "cc", "bodycc", "sob", "cccmd", "body", "all"
 
 $script:gitOptionsDecriptionTable = @{}
-
-# Options
-class CommandOption {
-    [string] $Short
-    [string] $Long
-    [string] $Description
-    [string] $Value
-
-    CommandOption ([string]$short, [string]$long, $description, $value) {
-        $this.Short = $Short
-        $this.Long = $Long
-        $this.Description = $Description
-        $this.Value = $Value
-    }
-
-    [System.Management.Automation.CompletionResult] ToLongCompletion([string]$Prefix) {
-        if ($this.Long -and ($this.Long -clike "$Prefix*")) {
-            return [System.Management.Automation.CompletionResult]::new(
-                $this.Long,
-                $this.Long + "$(if($this.Value){" <$($this.Value)>"})",
-                "ParameterName",
-                $this.Description
-            )
-        }
-        return $null
-    }
-
-    [System.Management.Automation.CompletionResult] ToShortCompletion() {
-        if ($this.Short) {
-            return [System.Management.Automation.CompletionResult]::new(
-                $this.Short,
-                $this.Short + "$(if($this.Value){"<$($this.Value)>"})",
-                "ParameterName",
-                $this.Description
-            )
-        }
-        return $null
-    }
-}
-
-function New-CommandOption {
-    [CmdletBinding()]
-    param (
-        [string]$Short = '',
-        [string]$Long = '',
-        [string]$Desc = '',
-        [string]$Value = ''
-    )
-    [CommandOption]::new($Short, $Long, $Desc, $Value)
-}
-
-$script:gitGlobalOptions = @(
-    (
-        New-CommandOption -Short '-v' -Long '--version' `
-            -Desc 'Prints the Git suite version.'
-    ),
-    (
-        New-CommandOption -Short '-h' -Long '--help' `
-            -Desc 'Prints the helps. If --all is given then all available commands are printed.'
-    ),
-    (
-        New-CommandOption  -Long '--attr-source' `
-            -Desc 'Read gitattributes from <tree-ish> instead of the worktree.' `
-            -Value 'tree-ish')
-)

@@ -6,21 +6,24 @@ function completeList {
         $Candidates
     )
     $Candidates |
-    Where-Object { 
-        if ($_ -is [System.Management.Automation.CompletionResult]) {
+    Where-Object {
+        if (-not $script:CurrentWord) {
+            return $true
+        }
+        elseif ($_ -is [System.Management.Automation.CompletionResult]) {
             $name = $_.ListItemText
         }
         else {
             $name = $_
         }
-        $name.StartsWith($Current)
+        $name.StartsWith($script:CurrentWord)
     } |
     ForEach-Object { 
         [System.Management.Automation.CompletionResult]::new(
             "$_",
-            $_,
+            "$_",
             "ParameterName",
-            $_
+            "$_"
         )
     }
 }
@@ -44,7 +47,7 @@ function __gitcomp {
     )
 
     if (-not $Current) {
-        $Current = $script:Current
+        $Current = $script:CurrentWord
     }
 
     $gitOptionsDecriptionTable[$command]
