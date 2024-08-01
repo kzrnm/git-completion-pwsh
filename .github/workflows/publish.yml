@@ -13,7 +13,7 @@ jobs:
     outputs:
       version: ${{ steps.get-version.outputs.version }}
       is-prerelease: ${{ steps.get-version.outputs.is-prerelease }}
-      is-new: ${{ steps.is-new-version.outputs.is-new }}
+      new-tag: ${{ steps.is-new-version.outputs.new-tag }}
     steps:
       - uses: actions/checkout@v4
       - name: Get Module Version
@@ -41,12 +41,12 @@ jobs:
       - name: is new version?
         id: is-new-version
         run: |
-          IS_NEW=false
+          TAG=""
           if [ "${{ steps.check-tag.outputs.exists }}" = "false" ]; then
             echo "new version tag project: ${{ steps.get-version.outputs.version }}"
-            IS_NEW=true
+            TAG="v${{ steps.get-version.outputs.version }}"
           fi
-          echo "is-new=$IS_NEW" | tee -a "$GITHUB_OUTPUT"
+          echo "new-tag=$TAG" | tee -a "$GITHUB_OUTPUT"
   test:
     strategy:
       matrix:
@@ -70,7 +70,7 @@ jobs:
   new-version-only:
     runs-on: ubuntu-latest
     needs: [get-version, test]
-    if: ${{ needs.get-version.outputs.is-new == 'true' }}
+    if: ${{ needs.get-version.outputs.new-tag != '' }}
     steps:
       - run: echo "new-version"
 
@@ -87,16 +87,15 @@ jobs:
       - name: Push tag
         id: tag-version
         run: |
-          tag="v${{ needs.get-version.outputs.version }}"
+          tag="${{ needs.get-version.outputs.new-tag }}"
           git tag "$tag"
           git push origin "$tag"
-          echo "new-tag=$tag" | tee -a "$GITHUB_OUTPUT"
 
       - name: Create release
         uses: ncipollo/release-action@v1
         id: create-release
         with:
-          tag: ${{ steps.tag-version.outputs.new-tag }}
+          tag: ${{ needs.get-version.outputs.new-tag }}
           name: Version ${{ needs.get-version.outputs.version }}
           body: ${{ github.server_url }}/${{ github.repository }}/blob/${{ steps.tag-version.outputs.new_tag }}/CHANGELOG.md
           prerelease: ${{ needs.get-version.outputs.is-prerelease }}
