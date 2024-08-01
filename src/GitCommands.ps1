@@ -30,7 +30,6 @@ function gitListMergeStrategies {
 
     function listMergeStrategies {
         param ()
-        $ErrorActionPreference = 'Continue'
         (git merge -s help 2>&1 | Where-Object { $_ -match "[Aa]vailable strategies are: " }) -match ".*:\s*(.*)\s*\." | Out-Null
         return ($Matches[1] -split " ")
     }
@@ -438,12 +437,26 @@ function gitListAliases {
     [OutputType([PSCustomObject[]])]
     param()
 
-    __git config -l | ForEach-Object {
-        if ($_ -match "^alias\.([^=]+)=(.*)") {
+    __git config --get-regexp "^alias\." | ForEach-Object {
+        if ($_ -match "^alias\.([^ ]+) (.*)") {
             [PSCustomObject]@{
                 Name  = $Matches[1];
                 Value = $Matches[2];
             }
         }
+    }
+}
+function gitGetAlias {
+    [OutputType([string])]
+    param(
+        [Parameter(Mandatory, Position = 0)][string] $Alias
+    )
+
+    $ErrorActionPreference = 'SilentlyContinue'
+    try {
+        __git config --get "alias.$Alias"
+    }
+    catch {
+        $null
     }
 }

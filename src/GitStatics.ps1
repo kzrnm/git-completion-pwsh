@@ -141,5 +141,3 @@ $script:gitDiffSubmoduleFormats = "diff", "log", "short"
 $script:gitLogDateFormats = "relative", "iso8601", "iso8601-strict", "rfc2822", "short", "local", "default", "human", "raw", "unix", "auto:", "format:"
 $script:gitSendEmailConfirmOptions = "always", "never", "auto", "cc", "compose"
 $script:gitSendEmailSuppressccOptions = "author", "self", "cc", "bodycc", "sob", "cccmd", "body", "all"
-
-$script:gitOptionsDecriptionTable = @{}

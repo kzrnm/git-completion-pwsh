@@ -1,4 +1,5 @@
 . $PSScriptRoot/GitCommands.ps1
+. $PSScriptRoot/GitResolveAlias.ps1
 . $PSScriptRoot/GitStatics.ps1
 . $PSScriptRoot/CompletionUtil.ps1
 . $PSScriptRoot/CompleteConfig.ps1
@@ -11,6 +12,7 @@ function WriteLog {
         $Object >> $env:GitCompletionDubugPath
     }
 }
+
 
 # __git_main
 function Complete-Git-Ast {
@@ -277,7 +279,7 @@ function Complete-Git {
     WriteLog "commandIndex=$commandIndex"
 
     if ($command) {
-        return CompleteSubCommands
+        return CompleteSubCommands $command
     }
 
     switch -Wildcard -CaseSensitive ($PreviousWord) {

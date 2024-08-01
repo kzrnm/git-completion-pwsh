@@ -35,8 +35,9 @@ function completeList {
 # 2: A prefix to be added to each possible completion word (optional).
 # 3: Generate possible completion matches for this word (optional).
 # 4: A suffix to be appended to each possible completion word (optional).
-function __gitcomp {
+function gitcomp {
     [OutputType([System.Management.Automation.CompletionResult[]])]
+    [CmdletBinding(PositionalBinding = $false)]
     param(
         [string]$Current = $null,
         [string]$Prefix = '',
@@ -50,55 +51,54 @@ function __gitcomp {
         $Current = $script:CurrentWord
     }
 
-    $gitOptionsDecriptionTable[$command]
-
     switch -Wildcard ($Current) {
         '*=' {  
             return @()
         }
         '--no-*' {
-
+            return ($Candidates | ForEach-Object {
+                    if ($_ -ne '--') {
+                        $c = "$_$Suffix"
+                        if ($c -like "$Current*") {
+                            $c = "$Prefix$c"
+                            [System.Management.Automation.CompletionResult]::new(
+                                $c,
+                                $c,
+                                'Text',
+                                $c
+                            )
+                        }
+                    }
+                })
+        }
+        Default {
+            foreach ($_ in $Candidates) {
+                if ($_ -eq '--') {
+                    if ('--no-' -like "$Current*") {
+                        [System.Management.Automation.CompletionResult]::new(
+                            "--no-",
+                            "--no-...$Suffix",
+                            'Text',
+                            $c
+                        )
+                    }
+                    break
+                }
+                else {
+                    $c = "$_$Suffix"
+                    if ($c -like "$Current*") {
+                        $c = "$Prefix$c"
+                        [System.Management.Automation.CompletionResult]::new(
+                            $c,
+                            $c,
+                            'Text',
+                            $c
+                        )
+                    }
+                }
+            }
         }
     }
-    
-    # case "$cur_" in
-    # *=)
-    # 	;;
-    # --no-*)
-    # 	local c i=0 IFS=$' \t\n'
-    # 	for c in $1; do
-    # 		if [[ $c == "--" ]]; then
-    # 			continue
-    # 		fi
-    # 		c="$c${4-}"
-    # 		if [[ $c == "$cur_"* ]]; then
-    # 			case $c in
-    # 			--*=|*.) ;;
-    # 			*) c="$c " ;;
-    # 			esac
-    # 			COMPREPLY[i++]="${2-}$c"
-    # 		fi
-    # 	done
-    # 	;;
-    # *)
-    # 	local c i=0 IFS=$' \t\n'
-    # 	for c in $1; do
-    # 		if [[ $c == "--" ]]; then
-    # 			c="--no-...${4-}"
-    # 			if [[ $c == "$cur_"* ]]; then
-    # 				COMPREPLY[i++]="${2-}$c "
-    # 			fi
-    # 			break
-    # 		fi
-    # 		c="$c${4-}"
-    # 		if [[ $c == "$cur_"* ]]; then
-    # 			case $c in
-    # 			*=|*.) ;;
-    # 			*) c="$c " ;;
-    # 			esac
-    # 			COMPREPLY[i++]="${2-}$c"
-    # 		fi
-    # 	done
-    # 	;;
-    # esac
+
+    return
 }

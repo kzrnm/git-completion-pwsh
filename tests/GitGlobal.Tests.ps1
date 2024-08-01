@@ -15,7 +15,7 @@ Describe 'GirGlobal' {
         Push-Location $rootPath
         git init --initial-branch=main
         git config alias.sw "switch"
-        git config alias.swf "switch -f"
+        git config alias.swf "sw -f"
     }
 
     AfterAll {
@@ -99,7 +99,7 @@ Describe 'GirGlobal' {
                     CompletionText = "swf";
                     ListItemText   = "swf";
                     ResultType     = "Text";
-                    ToolTip        = "[alias] switch -f";
+                    ToolTip        = "[alias] sw -f";
                 },
                 @{
                     CompletionText = "switch";
