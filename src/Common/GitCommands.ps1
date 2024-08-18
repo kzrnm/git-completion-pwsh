@@ -127,6 +127,15 @@ function gitSecondLevelConfigVarsForSection {
     )
 }
 
+$script:__gitBuiltinCommands = $null
+function gitBuiltinCommands {
+    [OutputType([string[]])]
+    param()
+    if ($script:__gitBuiltinCommands) {
+        return $script:__gitBuiltinCommands
+    }
+    return $script:__gitBuiltinCommands = (git "--list-cmds=builtins")
+}
 function gitAllCommands {
     [CmdletBinding()]
     [OutputType([string[]])]
@@ -136,7 +145,7 @@ function gitAllCommands {
         $Categories
     )
     $list = ($Categories -join ",")
-    return (__git "--list-cmds=$list" | Sort-Object -CaseSensitive)
+    return (__git "--list-cmds=$list")
 }
 
 # Discovers the path to the git repository taking any '--git-dir=<path>' and

@@ -200,11 +200,13 @@ function Complete-GitCommandLine {
             $descriptions[$a.Name] = "[alias] $($a.Value)"
         }
 
-        $commands = (gitAllCommands builtins list-mainporcelain others nohelpers alias list-complete config)
-        $commands |
+        $commands = (gitAllCommands list-mainporcelain others nohelpers alias list-complete config) | Sort-Object -Unique
+        $commandsSet = [System.Collections.Generic.HashSet[string]]::new([string[]]$commands)
+        $builtinCommands = (gitBuiltinCommands | Where-Object { -not $commandsSet.Contains($_) })
+        ($commands + $builtinCommands) |
         Where-Object {
             $_.StartsWith($Context.CurrentWord)
-        } | Sort-Object -Unique | ForEach-Object {
+        } | ForEach-Object {
             $desc = $descriptions[$_]
             if (-not $desc) {
                 $desc = $_
