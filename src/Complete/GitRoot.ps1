@@ -174,7 +174,7 @@ function Complete-GitCommandLine {
                 return
             }
             '-c' {
-                return completeConfigVariableNameAndValue -Current $Context.CurrentWord
+                return completeConfigOptionVariableNameAndValue -Current $Context.CurrentWord
             }
             '--namespace' {
                 # we don't support completing these options' arguments

@@ -8,8 +8,8 @@ function completeList {
         $Current,
         [string]
         $Suffix = '',
-        [hashtable]
-        $Descriptions = $null,
+        [scriptblock]
+        $DescriptionBuilder = $null,
         [Parameter(ValueFromRemainingArguments = $true)]
         [string[]]
         $Candidates
@@ -23,8 +23,8 @@ function completeList {
     } |
     ForEach-Object {
         $desc = $null
-        if ($Descriptions) {
-            $desc = $Descriptions[$_]
+        if ($DescriptionBuilder) {
+            $desc = $DescriptionBuilder.Invoke($_)
         }
 
         if (-not $desc) {

@@ -788,7 +788,58 @@ Describe 'ConfigVariable' {
                     }
                 );
             },
-
+            @{
+                Line     = "diff.algorithm=";
+                Expected = (
+                    @{
+                        CompletionText = "diff.algorithm=default";
+                        ListItemText   = 'default';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'The basic greedy diff algorithm.';
+                    },
+                    @{
+                        CompletionText = "diff.algorithm=myers";
+                        ListItemText   = 'myers';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'The basic greedy diff algorithm. Currently, this is the default.';
+                    },
+                    @{
+                        CompletionText = "diff.algorithm=minimal";
+                        ListItemText   = 'minimal';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced.';
+                    },
+                    @{
+                        CompletionText = "diff.algorithm=patience";
+                        ListItemText   = 'patience';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'Use "patience diff" algorithm when generating patches.';
+                    },
+                    @{
+                        CompletionText = "diff.algorithm=histogram";
+                        ListItemText   = 'histogram';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements".';
+                    }
+                );
+            },
+            @{
+                Line     = "diff.algorithm=m";
+                Expected = (
+                    @{
+                        CompletionText = "diff.algorithm=myers";
+                        ListItemText   = 'myers';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'The basic greedy diff algorithm. Currently, this is the default.';
+                    },
+                    @{
+                        CompletionText = "diff.algorithm=minimal";
+                        ListItemText   = 'minimal';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced.';
+                    }
+                );
+            },
             @{
                 Line     = "diff.submodule=";
                 Expected = (
@@ -823,6 +874,54 @@ Describe 'ConfigVariable' {
                     }
                 );
             },
+
+            @{
+                Line     = "http.proxyAuthMethod=";
+                Expected = (
+                    @{
+                        CompletionText = "http.proxyAuthMethod=anyauth";
+                        ListItemText   = 'anyauth';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'Automatically pick a suitable authentication method.';
+                    },
+                    @{
+                        CompletionText = "http.proxyAuthMethod=basic";
+                        ListItemText   = 'basic';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'HTTP Basic authentication.';
+                    },
+                    @{
+                        CompletionText = "http.proxyAuthMethod=digest";
+                        ListItemText   = 'digest';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text.';
+                    },
+                    @{
+                        CompletionText = "http.proxyAuthMethod=negotiate";
+                        ListItemText   = 'negotiate';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = ' GSS-Negotiate authentication (compare the --negotiate option of curl).';
+                    },
+                    @{
+                        CompletionText = "http.proxyAuthMethod=ntlm";
+                        ListItemText   = 'ntlm';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'NTLM authentication (compare the --ntlm option of curl).';
+                    }
+                );
+            },
+            @{
+                Line     = "http.proxyAuthMethod=d";
+                Expected = (
+                    @{
+                        CompletionText = "http.proxyAuthMethod=digest";
+                        ListItemText   = 'digest';
+                        ResultType     = "ParameterValue";
+                        ToolTip        = 'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text.';
+                    }
+                );
+            },
+
             @{
                 Line     = "help.format=";
                 Expected = (
@@ -1187,37 +1286,37 @@ Describe 'ConfigVariable' {
                         CompletionText = "branch.main.description=";
                         ListItemText   = "branch.main.description";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.description";
+                        ToolTip        = "Branch description, can be edited with git branch --edit-description.";
                     },
                     @{
                         CompletionText = "branch.main.merge=";
                         ListItemText   = "branch.main.merge";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.merge";
+                        ToolTip        = "Defines, together with branch.main.remote, the upstream branch for the given branch.";
                     },
                     @{
                         CompletionText = "branch.main.mergeOptions=";
                         ListItemText   = "branch.main.mergeOptions";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.mergeOptions";
+                        ToolTip        = "Sets default options for merging into branch <main>.";
                     },
                     @{
                         CompletionText = "branch.main.pushRemote=";
                         ListItemText   = "branch.main.pushRemote";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.pushRemote";
+                        ToolTip        = "When on branch <main>, it overrides branch.main.remote for pushing.";
                     },
                     @{
                         CompletionText = "branch.main.rebase=";
                         ListItemText   = "branch.main.rebase";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.rebase";
+                        ToolTip        = 'When true, rebase the branch <main> on top of the fetched branch, instead of merging the default branch from the default remote when "git pull" is run.';
                     },
                     @{
                         CompletionText = "branch.main.remote=";
                         ListItemText   = "branch.main.remote";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.remote";
+                        ToolTip        = "When on branch <main>, it tells git fetch and git push which remote to fetch from or push to.";
                     }
                 );
             },
@@ -1228,13 +1327,13 @@ Describe 'ConfigVariable' {
                         CompletionText = "branch.main.rebase=";
                         ListItemText   = "branch.main.rebase";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.rebase";
+                        ToolTip        = 'When true, rebase the branch <main> on top of the fetched branch, instead of merging the default branch from the default remote when "git pull" is run.';
                     },
                     @{
                         CompletionText = "branch.main.remote=";
                         ListItemText   = "branch.main.remote";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.remote";
+                        ToolTip        = "When on branch <main>, it tells git fetch and git push which remote to fetch from or push to.";
                     }
                 );
             },
@@ -1245,61 +1344,61 @@ Describe 'ConfigVariable' {
                         CompletionText = "guitool.pwsh.argPrompt=";
                         ListItemText   = "guitool.pwsh.argPrompt";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.argPrompt";
+                        ToolTip        = "Request a string argument from the user, and pass it to the tool through the ARGS environment variable.";
                     },
                     @{
                         CompletionText = "guitool.pwsh.cmd=";
                         ListItemText   = "guitool.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.cmd";
+                        ToolTip        = "Specifies the shell command line to execute when the corresponding item of the git-gui Tools menu is invoked.";
                     },
                     @{
                         CompletionText = "guitool.pwsh.confirm=";
                         ListItemText   = "guitool.pwsh.confirm";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.confirm";
+                        ToolTip        = "Show a confirmation dialog before actually running the tool.";
                     },
                     @{
                         CompletionText = "guitool.pwsh.needsFile=";
                         ListItemText   = "guitool.pwsh.needsFile";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.needsFile";
+                        ToolTip        = "Run the tool only if a diff is selected in the GUI.";
                     },
                     @{
                         CompletionText = "guitool.pwsh.noConsole=";
                         ListItemText   = "guitool.pwsh.noConsole";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.noConsole";
+                        ToolTip        = "Run the command silently, without creating a window to display its output.";
                     },
                     @{
                         CompletionText = "guitool.pwsh.noRescan=";
                         ListItemText   = "guitool.pwsh.noRescan";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.noRescan";
+                        ToolTip        = "Don’t rescan the working directory for changes after the tool finishes execution.";
                     },
                     @{
                         CompletionText = "guitool.pwsh.prompt=";
                         ListItemText   = "guitool.pwsh.prompt";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.prompt";
+                        ToolTip        = "Specifies the general prompt string to display at the top of the dialog, before subsections for argPrompt and revPrompt.";
                     },
                     @{
                         CompletionText = "guitool.pwsh.revPrompt=";
                         ListItemText   = "guitool.pwsh.revPrompt";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.revPrompt";
+                        ToolTip        = "Request a single valid revision from the user, and set the REVISION environment variable.";
                     },
                     @{
                         CompletionText = "guitool.pwsh.revUnmerged=";
                         ListItemText   = "guitool.pwsh.revUnmerged";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.revUnmerged";
+                        ToolTip        = "Show only unmerged branches in the revPrompt subdialog.";
                     },
                     @{
                         CompletionText = "guitool.pwsh.title=";
                         ListItemText   = "guitool.pwsh.title";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.title";
+                        ToolTip        = "Specifies the title to use for the prompt dialog.";
                     }
                 );
             },
@@ -1310,13 +1409,13 @@ Describe 'ConfigVariable' {
                         CompletionText = "guitool.pwsh.revPrompt=";
                         ListItemText   = "guitool.pwsh.revPrompt";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.revPrompt";
+                        ToolTip        = "Request a single valid revision from the user, and set the REVISION environment variable.";
                     },
                     @{
                         CompletionText = "guitool.pwsh.revUnmerged=";
                         ListItemText   = "guitool.pwsh.revUnmerged";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.revUnmerged";
+                        ToolTip        = "Show only unmerged branches in the revPrompt subdialog.";
                     }
                 );
             },
@@ -1327,13 +1426,13 @@ Describe 'ConfigVariable' {
                         CompletionText = "difftool.pwsh.cmd=";
                         ListItemText   = "difftool.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "difftool.pwsh.cmd";
+                        ToolTip        = "Specify the command to invoke the specified diff tool.";
                     },
                     @{
                         CompletionText = "difftool.pwsh.path=";
                         ListItemText   = "difftool.pwsh.path";
                         ResultType     = "ParameterName";
-                        ToolTip        = "difftool.pwsh.path";
+                        ToolTip        = "Override the path for the given tool.";
                     }
                 );
             },
@@ -1344,7 +1443,7 @@ Describe 'ConfigVariable' {
                         CompletionText = "difftool.pwsh.cmd=";
                         ListItemText   = "difftool.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "difftool.pwsh.cmd";
+                        ToolTip        = "Specify the command to invoke the specified diff tool.";
                     }
                 );
             },
@@ -1355,13 +1454,13 @@ Describe 'ConfigVariable' {
                         CompletionText = "man.pwsh.cmd=";
                         ListItemText   = "man.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "man.pwsh.cmd";
+                        ToolTip        = "Specify the command to invoke the specified man viewer.";
                     },
                     @{
                         CompletionText = "man.pwsh.path=";
                         ListItemText   = "man.pwsh.path";
                         ResultType     = "ParameterName";
-                        ToolTip        = "man.pwsh.path";
+                        ToolTip        = "Override the path for the given tool that may be used to display help in the man format.";
                     }
                 );
             },
@@ -1372,7 +1471,7 @@ Describe 'ConfigVariable' {
                         CompletionText = "man.pwsh.cmd=";
                         ListItemText   = "man.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "man.pwsh.cmd";
+                        ToolTip        = "Specify the command to invoke the specified man viewer.";
                     }
                 );
             },
@@ -1383,31 +1482,31 @@ Describe 'ConfigVariable' {
                         CompletionText = "mergetool.pwsh.cmd=";
                         ListItemText   = "mergetool.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.cmd";
+                        ToolTip        = "Specify the command to invoke the specified merge tool.";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.hideResolved=";
                         ListItemText   = "mergetool.pwsh.hideResolved";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.hideResolved";
+                        ToolTip        = "Allows the user to override the global mergetool.hideResolved value for a specific tool.";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.path=";
                         ListItemText   = "mergetool.pwsh.path";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.path";
+                        ToolTip        = "Override the path for the given tool.";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.trustExitCode=";
                         ListItemText   = "mergetool.pwsh.trustExitCode";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.trustExitCode";
+                        ToolTip        = "For a custom merge command, specify whether the exit code of the merge command can be used to determine whether the merge was successful.";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.layout=";
                         ListItemText   = "mergetool.pwsh.layout";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.layout";
+                        ToolTip        = "Configure the split window layout for vimdiff’s <variant>, which is any of vimdiff, nvimdiff, gvimdiff.";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.hasOutput=";
@@ -1430,7 +1529,7 @@ Describe 'ConfigVariable' {
                         CompletionText = "mergetool.pwsh.cmd=";
                         ListItemText   = "mergetool.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.cmd";
+                        ToolTip        = "Specify the command to invoke the specified merge tool.";
                     }
                 );
             },
@@ -1441,91 +1540,91 @@ Describe 'ConfigVariable' {
                         CompletionText = "remote.pwsh.fetch=";
                         ListItemText   = "remote.pwsh.fetch";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.fetch";
+                        ToolTip        = 'The default set of "refspec" for git-fetch.';
                     },
                     @{
                         CompletionText = "remote.pwsh.mirror=";
                         ListItemText   = "remote.pwsh.mirror";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.mirror";
+                        ToolTip        = "If true, pushing to this remote will automatically behave as if the --mirror option was given on the command line.";
                     },
                     @{
                         CompletionText = "remote.pwsh.partialclonefilter=";
                         ListItemText   = "remote.pwsh.partialclonefilter";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.partialclonefilter";
+                        ToolTip        = "The filter that will be applied when fetching from this promisor remote.";
                     },
                     @{
                         CompletionText = "remote.pwsh.promisor=";
                         ListItemText   = "remote.pwsh.promisor";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.promisor";
+                        ToolTip        = "When set to true, this remote will be used to fetch promisor objects.";
                     },
                     @{
                         CompletionText = "remote.pwsh.proxy=";
                         ListItemText   = "remote.pwsh.proxy";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.proxy";
+                        ToolTip        = "For remotes that require curl (http, https and ftp), the URL to the proxy to use for that remote.";
                     },
                     @{
                         CompletionText = "remote.pwsh.proxyAuthMethod=";
                         ListItemText   = "remote.pwsh.proxyAuthMethod";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.proxyAuthMethod";
+                        ToolTip        = "For remotes that require curl (http, https and ftp), the method to use for authenticating against the proxy in use (probably set in remote.<name>.proxy).";
                     },
                     @{
                         CompletionText = "remote.pwsh.prune=";
                         ListItemText   = "remote.pwsh.prune";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.prune";
+                        ToolTip        = "When set to true, fetching from this remote by default will also remove any remote-tracking references that no longer exist on the remote (as if the --prune option was given on the command line).";
                     },
                     @{
                         CompletionText = "remote.pwsh.pruneTags=";
                         ListItemText   = "remote.pwsh.pruneTags";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.pruneTags";
+                        ToolTip        = "When set to true, fetching from this remote by default will also remove any local tags that no longer exist on the remote if pruning is activated in general via remote.*.prune, fetch.prune or --prune.";
                     },
                     @{
                         CompletionText = "remote.pwsh.push=";
                         ListItemText   = "remote.pwsh.push";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.push";
+                        ToolTip        = 'The default set of "refspec" for git-push.';
                     },
                     @{
                         CompletionText = "remote.pwsh.pushurl=";
                         ListItemText   = "remote.pwsh.pushurl";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.pushurl";
+                        ToolTip        = "The push URL of a remote repository.";
                     },
                     @{
                         CompletionText = "remote.pwsh.receivepack=";
                         ListItemText   = "remote.pwsh.receivepack";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.receivepack";
+                        ToolTip        = "The default program to execute on the remote side when pushing.";
                     },
                     @{
                         CompletionText = "remote.pwsh.skipDefaultUpdate=";
                         ListItemText   = "remote.pwsh.skipDefaultUpdate";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.skipDefaultUpdate";
+                        ToolTip        = "If true, this remote will be skipped by default when updating using git-fetch or the update subcommand of git-remote.";
                     },
                     @{
                         CompletionText = "remote.pwsh.skipFetchAll=";
                         ListItemText   = "remote.pwsh.skipFetchAll";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.skipFetchAll";
+                        ToolTip        = "If true, this remote will be skipped by default when updating using git-fetch or the update subcommand of git-remote.";
                     },
                     @{
                         CompletionText = "remote.pwsh.tagOpt=";
                         ListItemText   = "remote.pwsh.tagOpt";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.tagOpt";
+                        ToolTip        = "Setting this value to --no-tags disables automatic tag following when fetching from remote.";
                     },
                     @{
                         CompletionText = "remote.pwsh.uploadpack=";
                         ListItemText   = "remote.pwsh.uploadpack";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.uploadpack";
+                        ToolTip        = "The default program to execute on the remote side when fetching.";
                     },
                     @{
                         CompletionText = "remote.pwsh.url=";
@@ -1537,7 +1636,7 @@ Describe 'ConfigVariable' {
                         CompletionText = "remote.pwsh.vcs=";
                         ListItemText   = "remote.pwsh.vcs";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.vcs";
+                        ToolTip        = "Setting this to a value <vcs> will cause Git to interact with the remote with the git-remote-<vcs> helper.";
                     }
                 );
             },
@@ -1548,7 +1647,7 @@ Describe 'ConfigVariable' {
                         CompletionText = "remote.pwsh.uploadpack=";
                         ListItemText   = "remote.pwsh.uploadpack";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.uploadpack";
+                        ToolTip        = "The default program to execute on the remote side when fetching.";
                     },
                     @{
                         CompletionText = "remote.pwsh.url=";
@@ -1565,37 +1664,37 @@ Describe 'ConfigVariable' {
                         CompletionText = "submodule.posh.active=";
                         ListItemText   = "submodule.posh.active";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.active";
+                        ToolTip        = "Boolean value indicating if the submodule is of interest to git commands.";
                     },
                     @{
                         CompletionText = "submodule.posh.branch=";
                         ListItemText   = "submodule.posh.branch";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.branch";
+                        ToolTip        = "The remote branch name for a submodule, used by git submodule update --remote.";
                     },
                     @{
                         CompletionText = "submodule.posh.fetchRecurseSubmodules=";
                         ListItemText   = "submodule.posh.fetchRecurseSubmodules";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.fetchRecurseSubmodules";
+                        ToolTip        = "This option can be used to control recursive fetching of this submodule.";
                     },
                     @{
                         CompletionText = "submodule.posh.ignore=";
                         ListItemText   = "submodule.posh.ignore";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.ignore";
+                        ToolTip        = 'Defines under what circumstances "git status" and the diff family show a submodule as modified.';
                     },
                     @{
                         CompletionText = "submodule.posh.update=";
                         ListItemText   = "submodule.posh.update";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.update";
+                        ToolTip        = "The method by which a submodule is updated by git submodule update, which is the only affected command, others such as git checkout --recurse-submodules are unaffected.";
                     },
                     @{
                         CompletionText = "submodule.posh.url=";
                         ListItemText   = "submodule.posh.url";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.url";
+                        ToolTip        = "The URL for a submodule.";
                     }
                 )
             },
@@ -1606,13 +1705,13 @@ Describe 'ConfigVariable' {
                         CompletionText = "submodule.posh.update=";
                         ListItemText   = "submodule.posh.update";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.update";
+                        ToolTip        = "The method by which a submodule is updated by git submodule update, which is the only affected command, others such as git checkout --recurse-submodules are unaffected.";
                     },
                     @{
                         CompletionText = "submodule.posh.url=";
                         ListItemText   = "submodule.posh.url";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.url";
+                        ToolTip        = "The URL for a submodule.";
                     }
                 )
             },
@@ -1623,13 +1722,13 @@ Describe 'ConfigVariable' {
                         CompletionText = "url.git@github.com:.insteadOf=";
                         ListItemText   = "url.git@github.com:.insteadOf";
                         ResultType     = "ParameterName";
-                        ToolTip        = "url.git@github.com:.insteadOf";
+                        ToolTip        = "Any URL that starts with this value will be rewritten to start.";
                     },
                     @{
                         CompletionText = "url.git@github.com:.pushInsteadOf=";
                         ListItemText   = "url.git@github.com:.pushInsteadOf";
                         ResultType     = "ParameterName";
-                        ToolTip        = "url.git@github.com:.pushInsteadOf";
+                        ToolTip        = "Any URL that starts with this value will not be pushed to; the resulting URL will be pushed to.";
                     }
                 )
             },
@@ -1640,7 +1739,7 @@ Describe 'ConfigVariable' {
                         CompletionText = "url.git@github.com:.insteadOf=";
                         ListItemText   = "url.git@github.com:.insteadOf";
                         ResultType     = "ParameterName";
-                        ToolTip        = "url.git@github.com:.insteadOf";
+                        ToolTip        = "Any URL that starts with this value will be rewritten to start.";
                     }
                 )
             },
@@ -1669,19 +1768,19 @@ Describe 'ConfigVariable' {
                         CompletionText = "branch.autoSetupMerge=";
                         ListItemText   = "branch.autoSetupMerge";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.autoSetupMerge";
+                        ToolTip        = "Tells git branch, git switch and git checkout to set up new branches so that git-pull will appropriately merge from the starting point branch.";
                     },
                     @{
                         CompletionText = "branch.autoSetupRebase=";
                         ListItemText   = "branch.autoSetupRebase";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.autoSetupRebase";
+                        ToolTip        = "When a new branch is created with git branch, git switch or git checkout that tracks another branch, this variable tells Git to set up pull to rebase instead of merge.";
                     },
                     @{
                         CompletionText = "branch.sort=";
                         ListItemText   = "branch.sort";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.sort";
+                        ToolTip        = "This variable controls the sort ordering of branches when displayed by git-branch.";
                     }
                 )
             },
@@ -1709,13 +1808,13 @@ Describe 'ConfigVariable' {
                         CompletionText = "branch.autoSetupMerge=";
                         ListItemText   = "branch.autoSetupMerge";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.autoSetupMerge";
+                        ToolTip        = "Tells git branch, git switch and git checkout to set up new branches so that git-pull will appropriately merge from the starting point branch.";
                     },
                     @{
                         CompletionText = "branch.autoSetupRebase=";
                         ListItemText   = "branch.autoSetupRebase";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.autoSetupRebase";
+                        ToolTip        = "When a new branch is created with git branch, git switch or git checkout that tracks another branch, this variable tells Git to set up pull to rebase instead of merge.";
                     }
                 )
             },
@@ -1744,7 +1843,7 @@ Describe 'ConfigVariable' {
                         CompletionText = "remote.pushDefault=";
                         ListItemText   = "remote.pushDefault";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pushDefault";
+                        ToolTip        = "The remote to push to by default.";
                     }
                 )
             },
@@ -1772,7 +1871,7 @@ Describe 'ConfigVariable' {
                         CompletionText = "remote.pushDefault=";
                         ListItemText   = "remote.pushDefault";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pushDefault";
+                        ToolTip        = "The remote to push to by default.";
                     }
                 )
             },
@@ -1795,37 +1894,37 @@ Describe 'ConfigVariable' {
                         CompletionText = "submodule.active=";
                         ListItemText   = "submodule.active";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.active";
+                        ToolTip        = "A repeated field which contains a pathspec used to match against a submodule’s path to determine if the submodule is of interest to git commands.";
                     },
                     @{
                         CompletionText = "submodule.alternateErrorStrategy=";
                         ListItemText   = "submodule.alternateErrorStrategy";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.alternateErrorStrategy";
+                        ToolTip        = "Specifies how to treat errors with the alternates for a submodule as computed via submodule.alternateLocation.";
                     },
                     @{
                         CompletionText = "submodule.alternateLocation=";
                         ListItemText   = "submodule.alternateLocation";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.alternateLocation";
+                        ToolTip        = "Specifies how the submodules obtain alternates when submodules are cloned.";
                     },
                     @{
                         CompletionText = "submodule.fetchJobs=";
                         ListItemText   = "submodule.fetchJobs";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.fetchJobs";
+                        ToolTip        = "Specifies how many submodules are fetched/cloned at the same time.";
                     },
                     @{
                         CompletionText = "submodule.propagateBranches=";
                         ListItemText   = "submodule.propagateBranches";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.propagateBranches";
+                        ToolTip        = "A boolean that enables branching support when using --recurse-submodules or submodule.recurse=true.";
                     },
                     @{
                         CompletionText = "submodule.recurse=";
                         ListItemText   = "submodule.recurse";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.recurse";
+                        ToolTip        = "A boolean indicating if commands should enable the --recurse-submodules option by default.";
                     }
                 )
             },
@@ -1853,7 +1952,7 @@ Describe 'ConfigVariable' {
                         CompletionText = "submodule.recurse=";
                         ListItemText   = "submodule.recurse";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.recurse";
+                        ToolTip        = "A boolean indicating if commands should enable the --recurse-submodules option by default.";
                     }
                 )
             },
@@ -1864,19 +1963,19 @@ Describe 'ConfigVariable' {
                         CompletionText = "tag.forceSignAnnotated=";
                         ListItemText   = "tag.forceSignAnnotated";
                         ResultType     = "ParameterName";
-                        ToolTip        = "tag.forceSignAnnotated";
+                        ToolTip        = "Specify whether annotated tags created should be GPG signed.";
                     },
                     @{
                         CompletionText = "tag.gpgSign=";
                         ListItemText   = "tag.gpgSign";
                         ResultType     = "ParameterName";
-                        ToolTip        = "tag.gpgSign";
+                        ToolTip        = "Specify whether all tags should be GPG signed.";
                     },
                     @{
                         CompletionText = "tag.sort=";
                         ListItemText   = "tag.sort";
                         ResultType     = "ParameterName";
-                        ToolTip        = "tag.sort";
+                        ToolTip        = "Controls the sort ordering of tags when displayed by git-tag.";
                     }
                 )
             },
@@ -1887,7 +1986,7 @@ Describe 'ConfigVariable' {
                         CompletionText = "revert.reference=";
                         ListItemText   = "revert.reference";
                         ResultType     = "ParameterName";
-                        ToolTip        = "revert.reference";
+                        ToolTip        = "Setting this variable to true makes git revert behave as if the --reference option is given.";
                     }
                 )
             },
@@ -1906,6 +2005,11 @@ Describe 'ConfigVariable' {
                         ResultType     = "ParameterName";
                         ToolTip        = "push.";
                     }
+                )
+            },
+            @{
+                Line     = "browser.";
+                Expected = @(
                 )
             },
             @{
@@ -1933,19 +2037,19 @@ Describe 'ConfigVariable' {
                                 CompletionText = "pager.pr=";
                                 ListItemText   = "pager.pr";
                                 ResultType     = "ParameterName";
-                                ToolTip        = "pager.pr";
+                                ToolTip        = "Turns on or off pagination of the output of a particular Git subcommand <pr> when writing to a tty.";
                             },
                             @{
                                 CompletionText = "pager.prune=";
                                 ListItemText   = "pager.prune";
                                 ResultType     = "ParameterName";
-                                ToolTip        = "pager.prune";
+                                ToolTip        = "Turns on or off pagination of the output of a particular Git subcommand <prune> when writing to a tty.";
                             },
                             @{
                                 CompletionText = "pager.prune-packed=";
                                 ListItemText   = "pager.prune-packed";
                                 ResultType     = "ParameterName";
-                                ToolTip        = "pager.prune-packed";
+                                ToolTip        = "Turns on or off pagination of the output of a particular Git subcommand <prune-packed> when writing to a tty.";
                             }
                         )
                     }
@@ -1963,13 +2067,13 @@ Describe 'ConfigVariable' {
                                 CompletionText = "pager.prune=";
                                 ListItemText   = "pager.prune";
                                 ResultType     = "ParameterName";
-                                ToolTip        = "pager.prune";
+                                ToolTip        = "Turns on or off pagination of the output of a particular Git subcommand <prune> when writing to a tty.";
                             },
                             @{
                                 CompletionText = "pager.prune-packed=";
                                 ListItemText   = "pager.prune-packed";
                                 ResultType     = "ParameterName";
-                                ToolTip        = "pager.prune-packed";
+                                ToolTip        = "Turns on or off pagination of the output of a particular Git subcommand <prune-packed> when writing to a tty.";
                             }
                         )
                     }

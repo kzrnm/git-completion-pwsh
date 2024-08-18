@@ -1,12 +1,12 @@
 # __git_complete_config_variable_name_and_value
-function completeConfigVariableNameAndValue {
+function completeConfigOptionVariableNameAndValue {
     [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current
     )
 
     if ($Current -match '(.*)=(.*)') {
-        return (completeConfigVariableValue -VarName $Matches[1] -Current $Matches[2])
+        return (completeConfigVariableValue -VarName $Matches[1] -VarOp '=' -Current $Matches[2])
     }
     else {
         return (completeConfigVariableName -Suffix "=" -Current $Current)
@@ -18,8 +18,9 @@ function completeConfigVariableNameAndValue {
 function completeConfigVariableValue {
     [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
-        [Parameter(Mandatory)][string] $VarName,
-        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [string] $VarName = '',
+        [string] $VarOp = ''
     )
 
     function completeValue {
@@ -35,7 +36,7 @@ function completeConfigVariableValue {
         } |
         ForEach-Object { 
             [System.Management.Automation.CompletionResult]::new(
-                "$VarName=$_",
+                "$VarName${VarOp}$_",
                 $_,
                 "ParameterValue",
                 $_
@@ -78,7 +79,7 @@ function completeConfigVariableValue {
             if ($Current -eq "") {
                 $result = "refs/heads"
                 return [System.Management.Automation.CompletionResult]::new(
-                    "$VarName=$result",
+                    "$VarName${VarOp}$result",
                     $result,
                     "ParameterValue",
                     $result
@@ -91,7 +92,7 @@ function completeConfigVariableValue {
                 $ref = $Matches[2]
                 $result = "${ref}:refs/remotes/$remote/$($ref -replace '^refs/heads/')"
                 return [System.Management.Automation.CompletionResult]::new(
-                    "$VarName=$result",
+                    "$VarName${VarOp}$result",
                     $result,
                     "ParameterValue",
                     $result
@@ -133,6 +134,78 @@ function completeConfigVariableValue {
             completeValue @script:gitDiffSubmoduleFormats
             return
         }
+        "diff.algorithm" {
+            return (
+                [System.Management.Automation.CompletionResult]::new(
+                    "$VarName${VarOp}default",
+                    'default',
+                    "ParameterValue",
+                    'The basic greedy diff algorithm.'
+                ),
+                [System.Management.Automation.CompletionResult]::new(
+                    "$VarName${VarOp}myers",
+                    'myers',
+                    "ParameterValue",
+                    'The basic greedy diff algorithm. Currently, this is the default.'
+                ),
+                [System.Management.Automation.CompletionResult]::new(
+                    "$VarName${VarOp}minimal",
+                    'minimal',
+                    "ParameterValue",
+                    'Spend extra time to make sure the smallest possible diff is produced.'
+                ),
+                [System.Management.Automation.CompletionResult]::new(
+                    "$VarName${VarOp}patience",
+                    'patience',
+                    "ParameterValue",
+                    'Use "patience diff" algorithm when generating patches.'
+                ),
+                [System.Management.Automation.CompletionResult]::new(
+                    "$VarName${VarOp}histogram",
+                    'histogram',
+                    "ParameterValue",
+                    'This algorithm extends the patience algorithm to "support low-occurrence common elements".'
+                ) | Where-Object {
+                    $_.ListItemText.StartsWith($Current)
+                }
+            )
+        }
+        "http.proxyAuthMethod" {
+            return (
+                [System.Management.Automation.CompletionResult]::new(
+                    "$VarName${VarOp}anyauth",
+                    'anyauth',
+                    "ParameterValue",
+                    'Automatically pick a suitable authentication method.'
+                ),
+                [System.Management.Automation.CompletionResult]::new(
+                    "$VarName${VarOp}basic",
+                    'basic',
+                    "ParameterValue",
+                    'HTTP Basic authentication.'
+                ),
+                [System.Management.Automation.CompletionResult]::new(
+                    "$VarName${VarOp}digest",
+                    'digest',
+                    "ParameterValue",
+                    'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text.'
+                ),
+                [System.Management.Automation.CompletionResult]::new(
+                    "$VarName${VarOp}negotiate",
+                    'negotiate',
+                    "ParameterValue",
+                    ' GSS-Negotiate authentication (compare the --negotiate option of curl).'
+                ),
+                [System.Management.Automation.CompletionResult]::new(
+                    "$VarName${VarOp}ntlm",
+                    'ntlm',
+                    "ParameterValue",
+                    'NTLM authentication (compare the --ntlm option of curl).'
+                ) | Where-Object {
+                    $_.ListItemText.StartsWith($Current)
+                }
+            )
+        }
         "help.format" {
             completeValue "man" "info" "web" "html"
             return
@@ -168,6 +241,12 @@ function completeConfigVariableName {
         [string] $Suffix = '='
     )
 
+    $DescriptionBuilder = [scriptblock] {
+        param($Candidate)
+
+        Get-GitConfigDescription $Candidate
+    }
+
     if ($Current -match "(branch|guitool|difftool|man|mergetool|remote|submodule|url)\.(.*)\.([^\.]*)") {
         $section = $Matches[1]
         $second = $Matches[2]
@@ -175,7 +254,7 @@ function completeConfigVariableName {
                 "$section.$second.$_"
             }
         )
-        completeList -Current $Current -Suffix $Suffix @params
+        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params
         return
     }
     if ($Current -match "branch\.(.*)") {
@@ -186,8 +265,8 @@ function completeConfigVariableName {
                 "$section.$_"
             }
         )
-        completeList -Current $Current @params1
-        completeList -Current $Current -Suffix $Suffix @params2
+        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder @params1
+        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params2
         return
     }
     if ($Current -match "pager\.(.*)") {
@@ -197,7 +276,7 @@ function completeConfigVariableName {
                 "$section.$_"
             }
         )
-        completeList -Current $Current -Suffix $Suffix @params
+        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params
         return
     }
     if ($Current -match "remote\.(.*)") {
@@ -214,8 +293,8 @@ function completeConfigVariableName {
             }
         )
 
-        completeList -Current $Current @params1
-        completeList -Current $Current -Suffix $Suffix @params2
+        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder @params1
+        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params2
         return
     }
     if ($Current -match "submodule\.(.*)") {
@@ -235,19 +314,19 @@ function completeConfigVariableName {
                 "$section.$_"
             }
         )
-        completeList -Current $Current @params1
-        completeList -Current $Current -Suffix $Suffix @params2
+        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder @params1
+        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params2
         return
     }
     if ($Current -match "([^\.]*)\.(.*)") {
         $section = $Matches[1]
-        $params = [string[]](gitConfigVars | ForEach-Object { "$_" })
-        completeList -Current $Current -Suffix $Suffix @params
+        $params = [string[]](gitConfigVars | Where-Object { -not $_.EndsWith('.') })
+        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params
         return
     }
     else {
         $params = [string[]](gitConfigSections | ForEach-Object { "$_." })
-        completeList -Current $Current @params
+        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder @params
     }
     return
 }
