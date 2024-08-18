@@ -8,24 +8,18 @@ AfterAll {
 
 Describe 'GirDir' {
     BeforeAll {
-        $script:envHOMEBak = $env:HOME
-        
-        mkdir ($env:HOME = "$TestDrive/home")
+        Initialize-Home
+
         mkdir ($rootPath = "$TestDrive/gitRoot")
-
-        "[user]
-    email = Kitazato@example.com
-    name = 1000yen" > "$env:HOME/.gitconfig"
-
         Push-Location $rootPath
         git init --initial-branch=main
         git commit -m "initial" --allow-empty
-        git switch -c new
+        git switch -c new --quiet
         Pop-Location
     }
 
     AfterAll {
-        $env:HOME = $script:envHOMEBak
+        Restore-Home
     }
 
     It '--git-dir' {

@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Continue'
 
-Get-ChildItem -Recurse "$PSScriptRoot" | Where-Object { $_.Extension -eq '.ps1' } | ForEach-Object { . $_ }
+Get-ChildItem -Recurse "$PSScriptRoot" | Where-Object { $_.Extension -eq '.ps1' } | ForEach-Object { . $_.FullName }
 
 Register-ArgumentCompleter -Native -CommandName git -ScriptBlock {
     param($wordToComplete, $CommandAst, $CursorPosition)

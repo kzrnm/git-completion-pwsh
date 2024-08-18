@@ -16,7 +16,7 @@ Describe 'Resolve-GitAlias' {
         git init --initial-branch=main
         git config alias.sw 'switch'
         git config alias.swf 'sw -f'
-        git config alias.swcf '"swf" "-c"'
+        git config alias.swcf "'swf' '-c'"
         git config alias.ll '!ls -l'
     }
 
@@ -38,7 +38,7 @@ Describe 'Resolve-GitAlias' {
             },
             @{
                 Command  = 'swcf';
-                Expected = '"swf" "-c"';
+                Expected = "'swf' '-c'";
             },
             @{
                 Command  = 'll';

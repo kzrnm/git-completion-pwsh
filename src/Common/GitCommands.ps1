@@ -470,7 +470,7 @@ function gitGetAlias {
 
     $ErrorActionPreference = 'SilentlyContinue'
     try {
-        __git config --get "alias.$Alias"
+        __git config --get "alias.$Alias" 2>$null
     }
     catch {
         $null

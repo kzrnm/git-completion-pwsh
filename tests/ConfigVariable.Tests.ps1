@@ -6,7 +6,7 @@ AfterAll {
     Remove-Module git-completion, _TestModule
 }
 
-Describe 'ConfigVariable' {
+Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
     BeforeAll {
         Initialize-Home
 
