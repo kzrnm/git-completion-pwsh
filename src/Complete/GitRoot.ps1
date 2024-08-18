@@ -165,7 +165,13 @@ function Complete-GitCommandLine {
         Set-Variable 'Context' $Context -Scope 'Script'
 
         if ($Context.command) {
-            return CompleteSubCommands $Context.command
+            try {
+                & "Complete-GitSubCommand-$($Context.command)" $Context
+            }
+            catch {
+                # Do nothing
+            }
+            return
         }
 
         switch -Wildcard -CaseSensitive ($Context.PreviousWord) {
