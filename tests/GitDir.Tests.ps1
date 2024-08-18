@@ -20,6 +20,7 @@ Describe 'GirDir' {
         Push-Location $rootPath
         git init --initial-branch=main
         git commit -m "initial" --allow-empty
+        git switch -c new
         Pop-Location
     }
 
@@ -27,7 +28,40 @@ Describe 'GirDir' {
         $env:HOME = $script:envHOMEBak
     }
 
+    It '--git-dir' {
+        Push-Location $env:HOME
+        "git --git-dir ../gitRoot/.git -c branch.n" | Complete-FromLine | Should -BeCompletion @(
+            @{
+                CompletionText = "branch.new.";
+                ListItemText   = "branch.new.";
+                ResultType     = "ParameterName";
+                ToolTip        = "branch.new.";
+            }
+        )
+        Pop-Location
+    }
     It '--git-dir=' {
-        
+        Push-Location $env:HOME
+        "git --git-dir=../gitRoot/.git -c branch.n" | Complete-FromLine | Should -BeCompletion @(
+            @{
+                CompletionText = "branch.new.";
+                ListItemText   = "branch.new.";
+                ResultType     = "ParameterName";
+                ToolTip        = "branch.new.";
+            }
+        )
+        Pop-Location
+    }
+    It '--bare' {
+        Push-Location "$rootPath/.git"
+        "git --bare -c branch.n" | Complete-FromLine | Should -BeCompletion @(
+            @{
+                CompletionText = "branch.new.";
+                ListItemText   = "branch.new.";
+                ResultType     = "ParameterName";
+                ToolTip        = "branch.new.";
+            }
+        )
+        Pop-Location
     }
 }
