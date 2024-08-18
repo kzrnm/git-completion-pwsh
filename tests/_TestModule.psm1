@@ -19,6 +19,7 @@ function Complete-FromLine {
     return (Complete-Words ($line -split '\s+'))
 }
 
+
 function Complete-Words {
     [OutputType([System.Management.Automation.CompletionResult[]])]
     param (

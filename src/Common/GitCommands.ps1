@@ -5,6 +5,10 @@ function __git {
         [Parameter(ValueFromRemainingArguments)]$OrdinaryArgs
     )
 
+    $Context = Get-Variable 'Context' -ValueOnly -Scope 'Script' -ErrorAction Ignore
+    $gitDir = $Context.gitDir
+    $gitCArgs = $Context.gitCArgs
+
     if ($GitDirOverride) {
         $gitDirOption = "--git-dir=$GitDirOverride"
     }
@@ -17,7 +21,6 @@ function __git {
 
     git $gitDirOption @gitCArgs @OrdinaryArgs
 }
-
 
 $script:__git_merge_strategies = $null
 function gitListMergeStrategies {
@@ -142,6 +145,10 @@ function gitAllCommands {
 function gitRepoPath {
     [OutputType([string])]
     param()
+    $Context = Get-Variable 'Context' -ValueOnly -Scope 'Script' -ErrorAction Ignore
+    $gitDir = $Context.gitDir
+    $gitCArgs = $Context.gitCArgs
+
     if ($gitCArgs) {
         return (__git rev-parse --absolute-git-dir 2>$null)
     }
@@ -363,7 +370,7 @@ function gitRefs {
         }
         else {
             foreach ($i in ("HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD", "REBASE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD", "BISECT_HEAD", "AUTO_MERGE")) {
-                if (($i -clike "$match*") -or ($i -clike "$umatch*")) {
+                if (($i.StartsWith($match)) -or ($i.StartsWith($umatch))) {
                     if (Test-Path "$dir/$i" -PathType Leaf) {
                         "$Prefix$i$Suffix"
                     }

@@ -29,7 +29,10 @@ function completeConfigVariableValue {
             [string[]]
             $Candidates
         )
-        $Candidates -clike "$Current*" |
+        $Candidates |
+        Where-Object {
+            $_.StartsWith($Current)
+        } |
         ForEach-Object { 
             [System.Management.Automation.CompletionResult]::new(
                 "$VarName=$_",
@@ -127,7 +130,7 @@ function completeConfigVariableValue {
             return
         }
         "diff.submodule" {
-            completeValue @gitDiffSubmoduleFormats
+            completeValue @script:gitDiffSubmoduleFormats
             return
         }
         "help.format" {
@@ -135,7 +138,7 @@ function completeConfigVariableValue {
             return
         }
         "log.date" {
-            completeValue @gitLogDateFormats
+            completeValue @script:gitLogDateFormats
             return
         }
         "sendemail.aliasfiletype" {
@@ -143,11 +146,11 @@ function completeConfigVariableValue {
             return
         }
         "sendemail.confirm" {
-            completeValue @gitSendEmailConfirmOptions
+            completeValue @script:gitSendEmailConfirmOptions
             return
         }
         "sendemail.suppresscc" {
-            completeValue @gitSendEmailSuppressccOptions
+            completeValue @script:gitSendEmailSuppressccOptions
             return
         }
         "sendemail.transferencoding" {
@@ -169,10 +172,10 @@ function completeConfigVariableName {
         $section = $Matches[1]
         $second = $Matches[2]
         $params = [string[]](gitSecondLevelConfigVarsForSection $section | ForEach-Object {
-                "$section.$second.$_$Suffix"
+                "$section.$second.$_"
             }
         )
-        completeList @params
+        completeList -Current $Current -Suffix $Suffix @params
         return
     }
     if ($Current -match "branch\.(.*)") {
@@ -180,17 +183,21 @@ function completeConfigVariableName {
         $second = $Matches[1]
         $params1 = [string[]](gitHeads -Prefix "$section." -Current $second -Suffix ".")
         $params2 = [string[]](gitFirstLevelConfigVarsForSection $section | ForEach-Object {
-                "$section.$_$Suffix"
+                "$section.$_"
             }
         )
-        completeList @params1 @params2
+        completeList -Current $Current @params1
+        completeList -Current $Current -Suffix $Suffix @params2
         return
     }
     if ($Current -match "pager\.(.*)") {
         $section = 'pager'
         $second = $Matches[1]
-        $params = [string[]](gitAllCommands main others alias nohelpers | ForEach-Object { "$section.$_$Suffix" })
-        completeList @params
+        $params = [string[]](gitAllCommands main others alias nohelpers | ForEach-Object {
+                "$section.$_"
+            }
+        )
+        completeList -Current $Current -Suffix $Suffix @params
         return
     }
     if ($Current -match "remote\.(.*)") {
@@ -203,11 +210,12 @@ function completeConfigVariableName {
             }
         )
         $params2 = [string[]](gitFirstLevelConfigVarsForSection $section | ForEach-Object {
-                "$section.$_$Suffix"
+                "$section.$_"
             }
         )
 
-        completeList @params1 @params2
+        completeList -Current $Current @params1
+        completeList -Current $Current -Suffix $Suffix @params2
         return
     }
     if ($Current -match "submodule\.(.*)") {
@@ -224,21 +232,22 @@ function completeConfigVariableName {
             }
         )
         $params2 = [string[]](gitFirstLevelConfigVarsForSection $section | ForEach-Object {
-                "$section.$_$Suffix"
+                "$section.$_"
             }
         )
-        completeList @params1 @params2
+        completeList -Current $Current @params1
+        completeList -Current $Current -Suffix $Suffix @params2
         return
     }
     if ($Current -match "([^\.]*)\.(.*)") {
         $section = $Matches[1]
-        $params = [string[]](gitConfigVars | ForEach-Object { "$_$Suffix" })
-        completeList @params
+        $params = [string[]](gitConfigVars | ForEach-Object { "$_" })
+        completeList -Current $Current -Suffix $Suffix @params
         return
     }
     else {
         $params = [string[]](gitConfigSections | ForEach-Object { "$_." })
-        completeList @params
+        completeList -Current $Current @params
     }
     return
 }

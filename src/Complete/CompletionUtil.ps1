@@ -1,30 +1,60 @@
 function completeList {
+    [CmdletBinding(PositionalBinding = $false)]
     [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [string]
+        $Current,
+        [string]
+        $Suffix = '',
+        [hashtable]
+        $Descriptions = $null,
         [Parameter(ValueFromRemainingArguments = $true)]
         [string[]]
         $Candidates
     )
     $Candidates |
     Where-Object {
-        if (-not $script:CurrentWord) {
+        if (-not $Current) {
             return $true
         }
-        elseif ($_ -is [System.Management.Automation.CompletionResult]) {
-            $name = $_.ListItemText
-        }
-        else {
-            $name = $_
-        }
-        $name.StartsWith($script:CurrentWord)
+        $_.StartsWith($Current)
     } |
-    ForEach-Object { 
+    ForEach-Object {
+        $desc = $null
+        if ($Descriptions) {
+            $desc = $Descriptions[$_]
+        }
+
+        if (-not $desc) {
+            $desc = "$_"
+        }
         [System.Management.Automation.CompletionResult]::new(
-            "$_",
+            "$_$Suffix",
             "$_",
             "ParameterName",
-            "$_"
+            $desc
         )
+    }
+}
+
+function filterCompletionResult {
+    [OutputType([System.Management.Automation.CompletionResult[]])]
+    param (
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [string]
+        $Current,
+        [System.Management.Automation.CompletionResult]
+        [Parameter(ValueFromPipeline)]
+        $Completion
+    )
+
+    process {
+        if ($Completion.CompletionText.StartsWith($Current)) {
+            return $Completion
+        }
     }
 }
 
@@ -39,17 +69,15 @@ function gitcomp {
     [OutputType([System.Management.Automation.CompletionResult[]])]
     [CmdletBinding(PositionalBinding = $false)]
     param(
-        [string]$Current = $null,
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        $Current,
         [string]$Prefix = '',
         [string]$Suffix = '',
         [Parameter(ValueFromRemainingArguments)]
         [string[]]
         $Candidates
     )
-
-    if (-not $Current) {
-        $Current = $script:CurrentWord
-    }
 
     switch -Wildcard ($Current) {
         '*=' {  
@@ -59,7 +87,7 @@ function gitcomp {
             return ($Candidates | ForEach-Object {
                     if ($_ -ne '--') {
                         $c = "$_$Suffix"
-                        if ($c -like "$Current*") {
+                        if ($c.StartsWith($Current)) {
                             $c = "$Prefix$c"
                             [System.Management.Automation.CompletionResult]::new(
                                 $c,
@@ -74,7 +102,7 @@ function gitcomp {
         Default {
             foreach ($_ in $Candidates) {
                 if ($_ -eq '--') {
-                    if ('--no-' -like "$Current*") {
+                    if ('--no-'.StartsWith($Current)) {
                         [System.Management.Automation.CompletionResult]::new(
                             "--no-",
                             "--no-...$Suffix",
@@ -86,7 +114,7 @@ function gitcomp {
                 }
                 else {
                     $c = "$_$Suffix"
-                    if ($c -like "$Current*") {
+                    if ($c.StartsWith($Current)) {
                         $c = "$Prefix$c"
                         [System.Management.Automation.CompletionResult]::new(
                             $c,

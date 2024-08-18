@@ -1185,39 +1185,39 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "branch.main.description=";
-                        ListItemText   = "branch.main.description=";
+                        ListItemText   = "branch.main.description";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.description=";
+                        ToolTip        = "branch.main.description";
                     },
                     @{
                         CompletionText = "branch.main.merge=";
-                        ListItemText   = "branch.main.merge=";
+                        ListItemText   = "branch.main.merge";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.merge=";
+                        ToolTip        = "branch.main.merge";
                     },
                     @{
                         CompletionText = "branch.main.mergeOptions=";
-                        ListItemText   = "branch.main.mergeOptions=";
+                        ListItemText   = "branch.main.mergeOptions";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.mergeOptions=";
+                        ToolTip        = "branch.main.mergeOptions";
                     },
                     @{
                         CompletionText = "branch.main.pushRemote=";
-                        ListItemText   = "branch.main.pushRemote=";
+                        ListItemText   = "branch.main.pushRemote";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.pushRemote=";
+                        ToolTip        = "branch.main.pushRemote";
                     },
                     @{
                         CompletionText = "branch.main.rebase=";
-                        ListItemText   = "branch.main.rebase=";
+                        ListItemText   = "branch.main.rebase";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.rebase=";
+                        ToolTip        = "branch.main.rebase";
                     },
                     @{
                         CompletionText = "branch.main.remote=";
-                        ListItemText   = "branch.main.remote=";
+                        ListItemText   = "branch.main.remote";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.remote=";
+                        ToolTip        = "branch.main.remote";
                     }
                 );
             },
@@ -1226,15 +1226,15 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "branch.main.rebase=";
-                        ListItemText   = "branch.main.rebase=";
+                        ListItemText   = "branch.main.rebase";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.rebase=";
+                        ToolTip        = "branch.main.rebase";
                     },
                     @{
                         CompletionText = "branch.main.remote=";
-                        ListItemText   = "branch.main.remote=";
+                        ListItemText   = "branch.main.remote";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.main.remote=";
+                        ToolTip        = "branch.main.remote";
                     }
                 );
             },
@@ -1243,63 +1243,63 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "guitool.pwsh.argPrompt=";
-                        ListItemText   = "guitool.pwsh.argPrompt=";
+                        ListItemText   = "guitool.pwsh.argPrompt";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.argPrompt=";
+                        ToolTip        = "guitool.pwsh.argPrompt";
                     },
                     @{
                         CompletionText = "guitool.pwsh.cmd=";
-                        ListItemText   = "guitool.pwsh.cmd=";
+                        ListItemText   = "guitool.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.cmd=";
+                        ToolTip        = "guitool.pwsh.cmd";
                     },
                     @{
                         CompletionText = "guitool.pwsh.confirm=";
-                        ListItemText   = "guitool.pwsh.confirm=";
+                        ListItemText   = "guitool.pwsh.confirm";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.confirm=";
+                        ToolTip        = "guitool.pwsh.confirm";
                     },
                     @{
                         CompletionText = "guitool.pwsh.needsFile=";
-                        ListItemText   = "guitool.pwsh.needsFile=";
+                        ListItemText   = "guitool.pwsh.needsFile";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.needsFile=";
+                        ToolTip        = "guitool.pwsh.needsFile";
                     },
                     @{
                         CompletionText = "guitool.pwsh.noConsole=";
-                        ListItemText   = "guitool.pwsh.noConsole=";
+                        ListItemText   = "guitool.pwsh.noConsole";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.noConsole=";
+                        ToolTip        = "guitool.pwsh.noConsole";
                     },
                     @{
                         CompletionText = "guitool.pwsh.noRescan=";
-                        ListItemText   = "guitool.pwsh.noRescan=";
+                        ListItemText   = "guitool.pwsh.noRescan";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.noRescan=";
+                        ToolTip        = "guitool.pwsh.noRescan";
                     },
                     @{
                         CompletionText = "guitool.pwsh.prompt=";
-                        ListItemText   = "guitool.pwsh.prompt=";
+                        ListItemText   = "guitool.pwsh.prompt";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.prompt=";
+                        ToolTip        = "guitool.pwsh.prompt";
                     },
                     @{
                         CompletionText = "guitool.pwsh.revPrompt=";
-                        ListItemText   = "guitool.pwsh.revPrompt=";
+                        ListItemText   = "guitool.pwsh.revPrompt";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.revPrompt=";
+                        ToolTip        = "guitool.pwsh.revPrompt";
                     },
                     @{
                         CompletionText = "guitool.pwsh.revUnmerged=";
-                        ListItemText   = "guitool.pwsh.revUnmerged=";
+                        ListItemText   = "guitool.pwsh.revUnmerged";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.revUnmerged=";
+                        ToolTip        = "guitool.pwsh.revUnmerged";
                     },
                     @{
                         CompletionText = "guitool.pwsh.title=";
-                        ListItemText   = "guitool.pwsh.title=";
+                        ListItemText   = "guitool.pwsh.title";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.title=";
+                        ToolTip        = "guitool.pwsh.title";
                     }
                 );
             },
@@ -1308,15 +1308,15 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "guitool.pwsh.revPrompt=";
-                        ListItemText   = "guitool.pwsh.revPrompt=";
+                        ListItemText   = "guitool.pwsh.revPrompt";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.revPrompt=";
+                        ToolTip        = "guitool.pwsh.revPrompt";
                     },
                     @{
                         CompletionText = "guitool.pwsh.revUnmerged=";
-                        ListItemText   = "guitool.pwsh.revUnmerged=";
+                        ListItemText   = "guitool.pwsh.revUnmerged";
                         ResultType     = "ParameterName";
-                        ToolTip        = "guitool.pwsh.revUnmerged=";
+                        ToolTip        = "guitool.pwsh.revUnmerged";
                     }
                 );
             },
@@ -1325,15 +1325,15 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "difftool.pwsh.cmd=";
-                        ListItemText   = "difftool.pwsh.cmd=";
+                        ListItemText   = "difftool.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "difftool.pwsh.cmd=";
+                        ToolTip        = "difftool.pwsh.cmd";
                     },
                     @{
                         CompletionText = "difftool.pwsh.path=";
-                        ListItemText   = "difftool.pwsh.path=";
+                        ListItemText   = "difftool.pwsh.path";
                         ResultType     = "ParameterName";
-                        ToolTip        = "difftool.pwsh.path=";
+                        ToolTip        = "difftool.pwsh.path";
                     }
                 );
             },
@@ -1342,9 +1342,9 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "difftool.pwsh.cmd=";
-                        ListItemText   = "difftool.pwsh.cmd=";
+                        ListItemText   = "difftool.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "difftool.pwsh.cmd=";
+                        ToolTip        = "difftool.pwsh.cmd";
                     }
                 );
             },
@@ -1353,15 +1353,15 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "man.pwsh.cmd=";
-                        ListItemText   = "man.pwsh.cmd=";
+                        ListItemText   = "man.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "man.pwsh.cmd=";
+                        ToolTip        = "man.pwsh.cmd";
                     },
                     @{
                         CompletionText = "man.pwsh.path=";
-                        ListItemText   = "man.pwsh.path=";
+                        ListItemText   = "man.pwsh.path";
                         ResultType     = "ParameterName";
-                        ToolTip        = "man.pwsh.path=";
+                        ToolTip        = "man.pwsh.path";
                     }
                 );
             },
@@ -1370,9 +1370,9 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "man.pwsh.cmd=";
-                        ListItemText   = "man.pwsh.cmd=";
+                        ListItemText   = "man.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "man.pwsh.cmd=";
+                        ToolTip        = "man.pwsh.cmd";
                     }
                 );
             },
@@ -1381,45 +1381,45 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "mergetool.pwsh.cmd=";
-                        ListItemText   = "mergetool.pwsh.cmd=";
+                        ListItemText   = "mergetool.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.cmd=";
+                        ToolTip        = "mergetool.pwsh.cmd";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.hideResolved=";
-                        ListItemText   = "mergetool.pwsh.hideResolved=";
+                        ListItemText   = "mergetool.pwsh.hideResolved";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.hideResolved=";
+                        ToolTip        = "mergetool.pwsh.hideResolved";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.path=";
-                        ListItemText   = "mergetool.pwsh.path=";
+                        ListItemText   = "mergetool.pwsh.path";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.path=";
+                        ToolTip        = "mergetool.pwsh.path";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.trustExitCode=";
-                        ListItemText   = "mergetool.pwsh.trustExitCode=";
+                        ListItemText   = "mergetool.pwsh.trustExitCode";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.trustExitCode=";
+                        ToolTip        = "mergetool.pwsh.trustExitCode";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.layout=";
-                        ListItemText   = "mergetool.pwsh.layout=";
+                        ListItemText   = "mergetool.pwsh.layout";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.layout=";
+                        ToolTip        = "mergetool.pwsh.layout";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.hasOutput=";
-                        ListItemText   = "mergetool.pwsh.hasOutput=";
+                        ListItemText   = "mergetool.pwsh.hasOutput";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.hasOutput=";
+                        ToolTip        = "mergetool.pwsh.hasOutput";
                     },
                     @{
                         CompletionText = "mergetool.pwsh.useAutoMerge=";
-                        ListItemText   = "mergetool.pwsh.useAutoMerge=";
+                        ListItemText   = "mergetool.pwsh.useAutoMerge";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.useAutoMerge=";
+                        ToolTip        = "mergetool.pwsh.useAutoMerge";
                     }
                 );
             },
@@ -1428,9 +1428,9 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "mergetool.pwsh.cmd=";
-                        ListItemText   = "mergetool.pwsh.cmd=";
+                        ListItemText   = "mergetool.pwsh.cmd";
                         ResultType     = "ParameterName";
-                        ToolTip        = "mergetool.pwsh.cmd=";
+                        ToolTip        = "mergetool.pwsh.cmd";
                     }
                 );
             },
@@ -1439,105 +1439,105 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "remote.pwsh.fetch=";
-                        ListItemText   = "remote.pwsh.fetch=";
+                        ListItemText   = "remote.pwsh.fetch";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.fetch=";
+                        ToolTip        = "remote.pwsh.fetch";
                     },
                     @{
                         CompletionText = "remote.pwsh.mirror=";
-                        ListItemText   = "remote.pwsh.mirror=";
+                        ListItemText   = "remote.pwsh.mirror";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.mirror=";
+                        ToolTip        = "remote.pwsh.mirror";
                     },
                     @{
                         CompletionText = "remote.pwsh.partialclonefilter=";
-                        ListItemText   = "remote.pwsh.partialclonefilter=";
+                        ListItemText   = "remote.pwsh.partialclonefilter";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.partialclonefilter=";
+                        ToolTip        = "remote.pwsh.partialclonefilter";
                     },
                     @{
                         CompletionText = "remote.pwsh.promisor=";
-                        ListItemText   = "remote.pwsh.promisor=";
+                        ListItemText   = "remote.pwsh.promisor";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.promisor=";
+                        ToolTip        = "remote.pwsh.promisor";
                     },
                     @{
                         CompletionText = "remote.pwsh.proxy=";
-                        ListItemText   = "remote.pwsh.proxy=";
+                        ListItemText   = "remote.pwsh.proxy";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.proxy=";
+                        ToolTip        = "remote.pwsh.proxy";
                     },
                     @{
                         CompletionText = "remote.pwsh.proxyAuthMethod=";
-                        ListItemText   = "remote.pwsh.proxyAuthMethod=";
+                        ListItemText   = "remote.pwsh.proxyAuthMethod";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.proxyAuthMethod=";
+                        ToolTip        = "remote.pwsh.proxyAuthMethod";
                     },
                     @{
                         CompletionText = "remote.pwsh.prune=";
-                        ListItemText   = "remote.pwsh.prune=";
+                        ListItemText   = "remote.pwsh.prune";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.prune=";
+                        ToolTip        = "remote.pwsh.prune";
                     },
                     @{
                         CompletionText = "remote.pwsh.pruneTags=";
-                        ListItemText   = "remote.pwsh.pruneTags=";
+                        ListItemText   = "remote.pwsh.pruneTags";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.pruneTags=";
+                        ToolTip        = "remote.pwsh.pruneTags";
                     },
                     @{
                         CompletionText = "remote.pwsh.push=";
-                        ListItemText   = "remote.pwsh.push=";
+                        ListItemText   = "remote.pwsh.push";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.push=";
+                        ToolTip        = "remote.pwsh.push";
                     },
                     @{
                         CompletionText = "remote.pwsh.pushurl=";
-                        ListItemText   = "remote.pwsh.pushurl=";
+                        ListItemText   = "remote.pwsh.pushurl";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.pushurl=";
+                        ToolTip        = "remote.pwsh.pushurl";
                     },
                     @{
                         CompletionText = "remote.pwsh.receivepack=";
-                        ListItemText   = "remote.pwsh.receivepack=";
+                        ListItemText   = "remote.pwsh.receivepack";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.receivepack=";
+                        ToolTip        = "remote.pwsh.receivepack";
                     },
                     @{
                         CompletionText = "remote.pwsh.skipDefaultUpdate=";
-                        ListItemText   = "remote.pwsh.skipDefaultUpdate=";
+                        ListItemText   = "remote.pwsh.skipDefaultUpdate";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.skipDefaultUpdate=";
+                        ToolTip        = "remote.pwsh.skipDefaultUpdate";
                     },
                     @{
                         CompletionText = "remote.pwsh.skipFetchAll=";
-                        ListItemText   = "remote.pwsh.skipFetchAll=";
+                        ListItemText   = "remote.pwsh.skipFetchAll";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.skipFetchAll=";
+                        ToolTip        = "remote.pwsh.skipFetchAll";
                     },
                     @{
                         CompletionText = "remote.pwsh.tagOpt=";
-                        ListItemText   = "remote.pwsh.tagOpt=";
+                        ListItemText   = "remote.pwsh.tagOpt";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.tagOpt=";
+                        ToolTip        = "remote.pwsh.tagOpt";
                     },
                     @{
                         CompletionText = "remote.pwsh.uploadpack=";
-                        ListItemText   = "remote.pwsh.uploadpack=";
+                        ListItemText   = "remote.pwsh.uploadpack";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.uploadpack=";
+                        ToolTip        = "remote.pwsh.uploadpack";
                     },
                     @{
                         CompletionText = "remote.pwsh.url=";
-                        ListItemText   = "remote.pwsh.url=";
+                        ListItemText   = "remote.pwsh.url";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.url=";
+                        ToolTip        = "remote.pwsh.url";
                     },
                     @{
                         CompletionText = "remote.pwsh.vcs=";
-                        ListItemText   = "remote.pwsh.vcs=";
+                        ListItemText   = "remote.pwsh.vcs";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.vcs=";
+                        ToolTip        = "remote.pwsh.vcs";
                     }
                 );
             },
@@ -1546,15 +1546,15 @@ Describe 'ConfigVariable' {
                 Expected = (
                     @{
                         CompletionText = "remote.pwsh.uploadpack=";
-                        ListItemText   = "remote.pwsh.uploadpack=";
+                        ListItemText   = "remote.pwsh.uploadpack";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.uploadpack=";
+                        ToolTip        = "remote.pwsh.uploadpack";
                     },
                     @{
                         CompletionText = "remote.pwsh.url=";
-                        ListItemText   = "remote.pwsh.url=";
+                        ListItemText   = "remote.pwsh.url";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pwsh.url=";
+                        ToolTip        = "remote.pwsh.url";
                     }
                 );
             },
@@ -1563,39 +1563,39 @@ Describe 'ConfigVariable' {
                 Expected = @(
                     @{
                         CompletionText = "submodule.posh.active=";
-                        ListItemText   = "submodule.posh.active=";
+                        ListItemText   = "submodule.posh.active";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.active=";
+                        ToolTip        = "submodule.posh.active";
                     },
                     @{
                         CompletionText = "submodule.posh.branch=";
-                        ListItemText   = "submodule.posh.branch=";
+                        ListItemText   = "submodule.posh.branch";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.branch=";
+                        ToolTip        = "submodule.posh.branch";
                     },
                     @{
                         CompletionText = "submodule.posh.fetchRecurseSubmodules=";
-                        ListItemText   = "submodule.posh.fetchRecurseSubmodules=";
+                        ListItemText   = "submodule.posh.fetchRecurseSubmodules";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.fetchRecurseSubmodules=";
+                        ToolTip        = "submodule.posh.fetchRecurseSubmodules";
                     },
                     @{
                         CompletionText = "submodule.posh.ignore=";
-                        ListItemText   = "submodule.posh.ignore=";
+                        ListItemText   = "submodule.posh.ignore";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.ignore=";
+                        ToolTip        = "submodule.posh.ignore";
                     },
                     @{
                         CompletionText = "submodule.posh.update=";
-                        ListItemText   = "submodule.posh.update=";
+                        ListItemText   = "submodule.posh.update";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.update=";
+                        ToolTip        = "submodule.posh.update";
                     },
                     @{
                         CompletionText = "submodule.posh.url=";
-                        ListItemText   = "submodule.posh.url=";
+                        ListItemText   = "submodule.posh.url";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.url=";
+                        ToolTip        = "submodule.posh.url";
                     }
                 )
             },
@@ -1604,15 +1604,15 @@ Describe 'ConfigVariable' {
                 Expected = @(
                     @{
                         CompletionText = "submodule.posh.update=";
-                        ListItemText   = "submodule.posh.update=";
+                        ListItemText   = "submodule.posh.update";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.update=";
+                        ToolTip        = "submodule.posh.update";
                     },
                     @{
                         CompletionText = "submodule.posh.url=";
-                        ListItemText   = "submodule.posh.url=";
+                        ListItemText   = "submodule.posh.url";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.posh.url=";
+                        ToolTip        = "submodule.posh.url";
                     }
                 )
             },
@@ -1621,15 +1621,15 @@ Describe 'ConfigVariable' {
                 Expected = @(
                     @{
                         CompletionText = "url.git@github.com:.insteadOf=";
-                        ListItemText   = "url.git@github.com:.insteadOf=";
+                        ListItemText   = "url.git@github.com:.insteadOf";
                         ResultType     = "ParameterName";
-                        ToolTip        = "url.git@github.com:.insteadOf=";
+                        ToolTip        = "url.git@github.com:.insteadOf";
                     },
                     @{
                         CompletionText = "url.git@github.com:.pushInsteadOf=";
-                        ListItemText   = "url.git@github.com:.pushInsteadOf=";
+                        ListItemText   = "url.git@github.com:.pushInsteadOf";
                         ResultType     = "ParameterName";
-                        ToolTip        = "url.git@github.com:.pushInsteadOf=";
+                        ToolTip        = "url.git@github.com:.pushInsteadOf";
                     }
                 )
             },
@@ -1638,9 +1638,9 @@ Describe 'ConfigVariable' {
                 Expected = @(
                     @{
                         CompletionText = "url.git@github.com:.insteadOf=";
-                        ListItemText   = "url.git@github.com:.insteadOf=";
+                        ListItemText   = "url.git@github.com:.insteadOf";
                         ResultType     = "ParameterName";
-                        ToolTip        = "url.git@github.com:.insteadOf=";
+                        ToolTip        = "url.git@github.com:.insteadOf";
                     }
                 )
             },
@@ -1667,21 +1667,21 @@ Describe 'ConfigVariable' {
                     },
                     @{
                         CompletionText = "branch.autoSetupMerge=";
-                        ListItemText   = "branch.autoSetupMerge=";
+                        ListItemText   = "branch.autoSetupMerge";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.autoSetupMerge=";
+                        ToolTip        = "branch.autoSetupMerge";
                     },
                     @{
                         CompletionText = "branch.autoSetupRebase=";
-                        ListItemText   = "branch.autoSetupRebase=";
+                        ListItemText   = "branch.autoSetupRebase";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.autoSetupRebase=";
+                        ToolTip        = "branch.autoSetupRebase";
                     },
                     @{
                         CompletionText = "branch.sort=";
-                        ListItemText   = "branch.sort=";
+                        ListItemText   = "branch.sort";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.sort=";
+                        ToolTip        = "branch.sort";
                     }
                 )
             },
@@ -1707,15 +1707,15 @@ Describe 'ConfigVariable' {
                 Expected = @(
                     @{
                         CompletionText = "branch.autoSetupMerge=";
-                        ListItemText   = "branch.autoSetupMerge=";
+                        ListItemText   = "branch.autoSetupMerge";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.autoSetupMerge=";
+                        ToolTip        = "branch.autoSetupMerge";
                     },
                     @{
                         CompletionText = "branch.autoSetupRebase=";
-                        ListItemText   = "branch.autoSetupRebase=";
+                        ListItemText   = "branch.autoSetupRebase";
                         ResultType     = "ParameterName";
-                        ToolTip        = "branch.autoSetupRebase=";
+                        ToolTip        = "branch.autoSetupRebase";
                     }
                 )
             },
@@ -1742,9 +1742,9 @@ Describe 'ConfigVariable' {
                     },
                     @{
                         CompletionText = "remote.pushDefault=";
-                        ListItemText   = "remote.pushDefault=";
+                        ListItemText   = "remote.pushDefault";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pushDefault=";
+                        ToolTip        = "remote.pushDefault";
                     }
                 )
             },
@@ -1770,9 +1770,9 @@ Describe 'ConfigVariable' {
                 Expected = @(
                     @{
                         CompletionText = "remote.pushDefault=";
-                        ListItemText   = "remote.pushDefault=";
+                        ListItemText   = "remote.pushDefault";
                         ResultType     = "ParameterName";
-                        ToolTip        = "remote.pushDefault=";
+                        ToolTip        = "remote.pushDefault";
                     }
                 )
             },
@@ -1793,39 +1793,39 @@ Describe 'ConfigVariable' {
                     },
                     @{
                         CompletionText = "submodule.active=";
-                        ListItemText   = "submodule.active=";
+                        ListItemText   = "submodule.active";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.active=";
+                        ToolTip        = "submodule.active";
                     },
                     @{
                         CompletionText = "submodule.alternateErrorStrategy=";
-                        ListItemText   = "submodule.alternateErrorStrategy=";
+                        ListItemText   = "submodule.alternateErrorStrategy";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.alternateErrorStrategy=";
+                        ToolTip        = "submodule.alternateErrorStrategy";
                     },
                     @{
                         CompletionText = "submodule.alternateLocation=";
-                        ListItemText   = "submodule.alternateLocation=";
+                        ListItemText   = "submodule.alternateLocation";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.alternateLocation=";
+                        ToolTip        = "submodule.alternateLocation";
                     },
                     @{
                         CompletionText = "submodule.fetchJobs=";
-                        ListItemText   = "submodule.fetchJobs=";
+                        ListItemText   = "submodule.fetchJobs";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.fetchJobs=";
+                        ToolTip        = "submodule.fetchJobs";
                     },
                     @{
                         CompletionText = "submodule.propagateBranches=";
-                        ListItemText   = "submodule.propagateBranches=";
+                        ListItemText   = "submodule.propagateBranches";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.propagateBranches=";
+                        ToolTip        = "submodule.propagateBranches";
                     },
                     @{
                         CompletionText = "submodule.recurse=";
-                        ListItemText   = "submodule.recurse=";
+                        ListItemText   = "submodule.recurse";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.recurse=";
+                        ToolTip        = "submodule.recurse";
                     }
                 )
             },
@@ -1851,9 +1851,9 @@ Describe 'ConfigVariable' {
                 Expected = @(
                     @{
                         CompletionText = "submodule.recurse=";
-                        ListItemText   = "submodule.recurse=";
+                        ListItemText   = "submodule.recurse";
                         ResultType     = "ParameterName";
-                        ToolTip        = "submodule.recurse=";
+                        ToolTip        = "submodule.recurse";
                     }
                 )
             },
@@ -1862,21 +1862,21 @@ Describe 'ConfigVariable' {
                 Expected = @(
                     @{
                         CompletionText = "tag.forceSignAnnotated=";
-                        ListItemText   = "tag.forceSignAnnotated=";
+                        ListItemText   = "tag.forceSignAnnotated";
                         ResultType     = "ParameterName";
-                        ToolTip        = "tag.forceSignAnnotated=";
+                        ToolTip        = "tag.forceSignAnnotated";
                     },
                     @{
                         CompletionText = "tag.gpgSign=";
-                        ListItemText   = "tag.gpgSign=";
+                        ListItemText   = "tag.gpgSign";
                         ResultType     = "ParameterName";
-                        ToolTip        = "tag.gpgSign=";
+                        ToolTip        = "tag.gpgSign";
                     },
                     @{
                         CompletionText = "tag.sort=";
-                        ListItemText   = "tag.sort=";
+                        ListItemText   = "tag.sort";
                         ResultType     = "ParameterName";
-                        ToolTip        = "tag.sort=";
+                        ToolTip        = "tag.sort";
                     }
                 )
             },
@@ -1885,9 +1885,9 @@ Describe 'ConfigVariable' {
                 Expected = @(
                     @{
                         CompletionText = "revert.reference=";
-                        ListItemText   = "revert.reference=";
+                        ListItemText   = "revert.reference";
                         ResultType     = "ParameterName";
-                        ToolTip        = "revert.reference=";
+                        ToolTip        = "revert.reference";
                     }
                 )
             },
@@ -1931,21 +1931,21 @@ Describe 'ConfigVariable' {
                         Expected = (
                             @{
                                 CompletionText = "pager.pr=";
-                                ListItemText   = "pager.pr=";
+                                ListItemText   = "pager.pr";
                                 ResultType     = "ParameterName";
-                                ToolTip        = "pager.pr=";
+                                ToolTip        = "pager.pr";
                             },
                             @{
                                 CompletionText = "pager.prune=";
-                                ListItemText   = "pager.prune=";
+                                ListItemText   = "pager.prune";
                                 ResultType     = "ParameterName";
-                                ToolTip        = "pager.prune=";
+                                ToolTip        = "pager.prune";
                             },
                             @{
                                 CompletionText = "pager.prune-packed=";
-                                ListItemText   = "pager.prune-packed=";
+                                ListItemText   = "pager.prune-packed";
                                 ResultType     = "ParameterName";
-                                ToolTip        = "pager.prune-packed=";
+                                ToolTip        = "pager.prune-packed";
                             }
                         )
                     }
@@ -1961,15 +1961,15 @@ Describe 'ConfigVariable' {
                         Expected = (
                             @{
                                 CompletionText = "pager.prune=";
-                                ListItemText   = "pager.prune=";
+                                ListItemText   = "pager.prune";
                                 ResultType     = "ParameterName";
-                                ToolTip        = "pager.prune=";
+                                ToolTip        = "pager.prune";
                             },
                             @{
                                 CompletionText = "pager.prune-packed=";
-                                ListItemText   = "pager.prune-packed=";
+                                ListItemText   = "pager.prune-packed";
                                 ResultType     = "ParameterName";
-                                ToolTip        = "pager.prune-packed=";
+                                ToolTip        = "pager.prune-packed";
                             }
                         )
                     }
