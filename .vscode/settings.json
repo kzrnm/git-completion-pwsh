@@ -1,11 +1,24 @@
 {
-    "terminal.integrated.env.linux": {
-        // "GitCompletionDubugPath": "${workspaceFolder}/debug.log",
-    },
-    "terminal.integrated.env.osx": {
-        // "GitCompletionDubugPath": "${workspaceFolder}/debug.log",
-    },
-    "terminal.integrated.env.windows": {
-        // "GitCompletionDubugPath": "${workspaceFolder}/debug.log",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "color": "terminal.ansiMagenta",
+            "args": [
+                "-NoExit",
+                "-Command",
+                "$SkipHeavyTest=$true; Import-Module ./src/git-completion.psd1 -Force"
+            ],
+            "icon": "terminal-powershell"
+        },
+        "WindowsPowerShell": {
+            "path": "powershell.exe",
+            "args": [
+                "-NoExit",
+                "-Command",
+                "Import-Module ./src/git-completion.psd1 -Force"
+            ],
+            "color": "terminal.ansiCyan",
+            "icon": "terminal-powershell"
+        }
     }
 }
