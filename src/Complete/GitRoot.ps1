@@ -19,111 +19,111 @@ function Complete-Git {
 $gitGlobalOptions = @(
     (
         New-CommandOption -Short '-v' -Long '--version' `
-            -Desc 'Prints the Git suite version.'
+            -Desc 'Prints the Git suite version'
     ),
     (
         New-CommandOption -Short '-h' -Long '--help' `
-            -Desc 'Prints the helps. If --all is given then all available commands are printed.'
+            -Desc 'Prints the helps. If --all is given then all available commands are printed'
     ),
     (
         New-CommandOption -Short '-C' `
             -Value '<path>' `
-            -Desc 'Run as if git was started in <path> instead of the current working directory.' 
+            -Desc 'Run as if git was started in <path> instead of the current working directory'
     ),
     (
         New-CommandOption -Short '-c' `
             -Value '<name>=<value>' `
-            -Desc 'Pass a configuration parameter to the command.'
+            -Desc 'Pass a configuration parameter to the command'
     ),
     (
         New-CommandOption -Long '--config-env' `
             -Value '<name>=<envvar>' `
-            -Desc 'Like -c <name>=<value>, give configuration variable <name> a value, where <envvar> is the name of an environment variable from which to retrieve the value.'
+            -Desc 'Like -c <name>=<value>, give configuration variable <name> a value, where <envvar> is the name of an environment variable from which to retrieve the value'
     ),
     (
         New-CommandOption -Long '--exec-path' `
             -Value '<path>' `
-            -Desc 'Path to wherever your core Git programs are installed.'
+            -Desc 'Path to wherever your core Git programs are installed'
     ),
     (
         New-CommandOption -Long '--html-path' `
-            -Desc "Print the path, without trailing slash, where Git’s HTML documentation is installed and exit."
+            -Desc "Print the path, without trailing slash, where Git’s HTML documentation is installed and exit"
     ),
     (
         New-CommandOption -Long '--man-path' `
-            -Desc 'Print the manpath for the man pages for this version of Git and exit.'
+            -Desc 'Print the manpath for the man pages for this version of Git and exit'
     ),
     (
         New-CommandOption -Long '--info-path' `
-            -Desc 'Print the path where the Info files documenting this version of Git are installed and exit.'
+            -Desc 'Print the path where the Info files documenting this version of Git are installed and exit'
     ),
     (
         New-CommandOption -Short '-p' -Long '--paginate' `
-            -Desc 'Pipe all output into less (or if set, $PAGER) if standard output is a terminal.'
+            -Desc 'Pipe all output into less (or if set, $PAGER) if standard output is a terminal'
     ),
     (
         New-CommandOption -Short '-P' -Long '--no-pager' `
-            -Desc 'Do not pipe Git output into a pager.'
+            -Desc 'Do not pipe Git output into a pager'
     ),
     (
         New-CommandOption -Long '--git-dir' `
-            -Desc 'Set the path to the repository (".git" directory).'
+            -Desc 'Set the path to the repository (".git" directory)'
     ),
     (
         New-CommandOption -Long '--work-tree' `
             -Value '<path>' `
-            -Desc 'Set the path to the working tree.'
+            -Desc 'Set the path to the working tree'
     ),
     (
         New-CommandOption -Long '--namespace' `
             -Value '<path>' `
-            -Desc 'Set the Git namespace.'
+            -Desc 'Set the Git namespace'
     ),
     (
         New-CommandOption -Long '--bare' `
-            -Desc 'Treat the repository as a bare repository.'
+            -Desc 'Treat the repository as a bare repository'
     ),
     (
         New-CommandOption -Long '--no-replace-objects' `
-            -Desc 'Do not use replacement refs to replace Git objects.'
+            -Desc 'Do not use replacement refs to replace Git objects'
     ),
     (
         New-CommandOption -Long '--no-lazy-fetch' `
-            -Desc 'Do not fetch missing objects from the promisor remote on demand.'
+            -Desc 'Do not fetch missing objects from the promisor remote on demand'
     ),
     (
         New-CommandOption -Long '--literal-pathspecs' `
-            -Desc 'Treat pathspecs literally (i.e. no globbing, no pathspec magic).'
+            -Desc 'Treat pathspecs literally (i.e. no globbing, no pathspec magic)'
     ),
     (
         New-CommandOption -Long '--glob-pathspecs' `
-            -Desc 'Add "glob" magic to all pathspec.'
+            -Desc 'Add "glob" magic to all pathspec'
     ),
     (
         New-CommandOption -Long '--noglob-pathspecs' `
-            -Desc 'Add "literal" magic to all pathspec.'
+            -Desc 'Add "literal" magic to all pathspec'
     ),
     (
         New-CommandOption -Long '--icase-pathspecs' `
-            -Desc 'Add "icase" magic to all pathspec.'
+            -Desc 'Add "icase" magic to all pathspec'
     ),
     (
         New-CommandOption -Long '--no-optional-locks' `
-            -Desc 'Do not perform optional operations that require locks.'
+            -Desc 'Do not perform optional operations that require locks'
     ),
     (
         New-CommandOption -Long '--list-cmds' `
             -Value '<group>[,<group>…​]' `
-            -Desc 'List commands by group.'
+            -Desc 'List commands by group'
     ),
     (
         New-CommandOption -Long '--no-replace-objects' `
-            -Desc 'List commands by group.'
+            -Desc 'List commands by group'
     ),
     (
         New-CommandOption  -Long '--attr-source' `
-            -Desc 'Read gitattributes from <tree-ish> instead of the worktree.' `
-            -Value '<tree-ish>'
+            -Value '<tree-ish>' `
+            -Desc 'Read gitattributes from <tree-ish> instead of the worktree'
     )
 )
 

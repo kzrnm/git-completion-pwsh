@@ -267,31 +267,31 @@ function completeConfigVariableValue {
                     "${Prefix}default",
                     'default',
                     'ParameterValue',
-                    'The basic greedy diff algorithm.'
+                    'The basic greedy diff algorithm'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
                     "${Prefix}myers",
                     'myers',
                     'ParameterValue',
-                    'The basic greedy diff algorithm. Currently, this is the default.'
+                    'The basic greedy diff algorithm. Currently, this is the default'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
                     "${Prefix}minimal",
                     'minimal',
                     'ParameterValue',
-                    'Spend extra time to make sure the smallest possible diff is produced.'
+                    'Spend extra time to make sure the smallest possible diff is produced'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
                     "${Prefix}patience",
                     'patience',
                     'ParameterValue',
-                    'Use "patience diff" algorithm when generating patches.'
+                    'Use "patience diff" algorithm when generating patches'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
                     "${Prefix}histogram",
                     'histogram',
                     'ParameterValue',
-                    'This algorithm extends the patience algorithm to "support low-occurrence common elements".'
+                    'This algorithm extends the patience algorithm to "support low-occurrence common elements"'
                 ) | Where-Object {
                     $_.ListItemText.StartsWith($Current)
                 }
@@ -303,31 +303,31 @@ function completeConfigVariableValue {
                     "${Prefix}anyauth",
                     'anyauth',
                     'ParameterValue',
-                    'Automatically pick a suitable authentication method.'
+                    'Automatically pick a suitable authentication method'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
                     "${Prefix}basic",
                     'basic',
                     'ParameterValue',
-                    'HTTP Basic authentication.'
+                    'HTTP Basic authentication'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
                     "${Prefix}digest",
                     'digest',
                     'ParameterValue',
-                    'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text.'
+                    'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
                     "${Prefix}negotiate",
                     'negotiate',
                     'ParameterValue',
-                    ' GSS-Negotiate authentication (compare the --negotiate option of curl).'
+                    ' GSS-Negotiate authentication (compare the --negotiate option of curl)'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
                     "${Prefix}ntlm",
                     'ntlm',
                     'ParameterValue',
-                    'NTLM authentication (compare the --ntlm option of curl).'
+                    'NTLM authentication (compare the --ntlm option of curl)'
                 ) | Where-Object {
                     $_.ListItemText.StartsWith($Current)
                 }

@@ -30,7 +30,7 @@ Describe 'GirGlobal' {
                     CompletionText = "--version";
                     ListItemText   = "--version";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "Prints the Git suite version.";
+                    ToolTip        = "Prints the Git suite version";
                 }
             )
         },
@@ -41,7 +41,7 @@ Describe 'GirGlobal' {
                     CompletionText = "--attr-source";
                     ListItemText   = "--attr-source <tree-ish>";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "Read gitattributes from <tree-ish> instead of the worktree.";
+                    ToolTip        = "Read gitattributes from <tree-ish> instead of the worktree";
                 }
             )
         },
@@ -52,37 +52,37 @@ Describe 'GirGlobal' {
                     CompletionText = "-v";
                     ListItemText   = "-v";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "Prints the Git suite version.";
+                    ToolTip        = "Prints the Git suite version";
                 },
                 @{
                     CompletionText = "-h";
                     ListItemText   = "-h";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "Prints the helps. If --all is given then all available commands are printed.";
+                    ToolTip        = "Prints the helps. If --all is given then all available commands are printed";
                 },
                 @{
                     CompletionText = "-C";
                     ListItemText   = "-C <path>";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "Run as if git was started in <path> instead of the current working directory.";
+                    ToolTip        = "Run as if git was started in <path> instead of the current working directory";
                 },
                 @{
                     CompletionText = "-c";
                     ListItemText   = "-c <name>=<value>";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "Pass a configuration parameter to the command.";
+                    ToolTip        = "Pass a configuration parameter to the command";
                 },
                 @{
                     CompletionText = "-p";
                     ListItemText   = "-p";
                     ResultType     = 'ParameterName';
-                    ToolTip        = 'Pipe all output into less (or if set, $PAGER) if standard output is a terminal.';
+                    ToolTip        = 'Pipe all output into less (or if set, $PAGER) if standard output is a terminal';
                 },
                 @{
                     CompletionText = "-P";
                     ListItemText   = "-P";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "Do not pipe Git output into a pager.";
+                    ToolTip        = "Do not pipe Git output into a pager";
                 }
             )
         },

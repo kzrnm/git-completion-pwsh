@@ -88,43 +88,43 @@ Describe 'Config' {
                             CompletionText = 'list';
                             ListItemText   = 'list';
                             ResultType     = 'ParameterName';
-                            ToolTip        = 'List all variables set in config file.';
+                            ToolTip        = 'List all variables set in config file';
                         },
                         @{
                             CompletionText = 'get';
                             ListItemText   = 'get';
                             ResultType     = 'ParameterName';
-                            ToolTip        = 'Emits the value of the specified key.';
+                            ToolTip        = 'Emits the value of the specified key';
                         },
                         @{
                             CompletionText = 'set';
                             ListItemText   = 'set';
                             ResultType     = 'ParameterName';
-                            ToolTip        = 'Set value for one or more config options.';
+                            ToolTip        = 'Set value for one or more config options';
                         },
                         @{
                             CompletionText = 'unset';
                             ListItemText   = 'unset';
                             ResultType     = 'ParameterName';
-                            ToolTip        = 'Unset value for one or more config options.';
+                            ToolTip        = 'Unset value for one or more config options';
                         },
                         @{
                             CompletionText = 'rename-section';
                             ListItemText   = 'rename-section';
                             ResultType     = 'ParameterName';
-                            ToolTip        = 'Rename the given section to a new name.';
+                            ToolTip        = 'Rename the given section to a new name';
                         },
                         @{
                             CompletionText = 'remove-section';
                             ListItemText   = 'remove-section';
                             ResultType     = 'ParameterName';
-                            ToolTip        = 'Remove the given section from the configuration file.';
+                            ToolTip        = 'Remove the given section from the configuration file';
                         },
                         @{
                             CompletionText = 'edit';
                             ListItemText   = 'edit';
                             ResultType     = 'ParameterName';
-                            ToolTip        = 'Opens an editor to modify the specified config file.';
+                            ToolTip        = 'Opens an editor to modify the specified config file';
                         }
                     )
                 },
@@ -135,7 +135,7 @@ Describe 'Config' {
                             CompletionText = 'set';
                             ListItemText   = 'set';
                             ResultType     = 'ParameterName';
-                            ToolTip        = 'Set value for one or more config options.';
+                            ToolTip        = 'Set value for one or more config options';
                         }
                     )
                 }
