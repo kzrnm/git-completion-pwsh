@@ -26,14 +26,14 @@ function completeList {
         if ($DescriptionBuilder) {
             $desc = $DescriptionBuilder.Invoke($_)
         }
-
         if (-not $desc) {
             $desc = "$_"
         }
+
         [System.Management.Automation.CompletionResult]::new(
             "$_$Suffix",
             "$_",
-            "ParameterName",
+            'ParameterName',
             $desc
         )
     }
@@ -46,13 +46,15 @@ function filterCompletionResult {
         [AllowEmptyString()]
         [string]
         $Current,
-        [System.Management.Automation.CompletionResult]
         [Parameter(ValueFromPipeline)]
         $Completion
     )
 
     process {
-        if ($Completion.CompletionText.StartsWith($Current)) {
+        if (($Completion -is [System.Management.Automation.CompletionResult]) -and $Completion.ListItemText.StartsWith($Current)) {
+            return $Completion
+        }
+        elseif (($Completion -is [string]) -and $Completion.StartsWith($Current)) {
             return $Completion
         }
     }
@@ -74,59 +76,68 @@ function gitcomp {
         $Current,
         [string]$Prefix = '',
         [string]$Suffix = '',
-        [Parameter(ValueFromRemainingArguments)]
-        [string[]]
-        $Candidates
+        [scriptblock]
+        $DescriptionBuilder = $null,
+        [Parameter(ValueFromPipeline)]
+        [string]
+        $Candidate
     )
 
-    switch -Wildcard ($Current) {
-        '*=' {  
-            return @()
+    begin {
+        switch -Wildcard ($Current) {
+            '*=' { $Type = -1 }
+            '--no-*' { $Type = 1 }
+            Default { $Type = 0 }
         }
-        '--no-*' {
-            return ($Candidates | ForEach-Object {
-                    if ($_ -ne '--') {
-                        $c = "$_$Suffix"
-                        if ($c.StartsWith($Current)) {
-                            $c = "$Prefix$c"
-                            [System.Management.Automation.CompletionResult]::new(
-                                $c,
-                                $c,
-                                'Text',
-                                $c
-                            )
-                        }
-                    }
-                })
+    }
+
+    process {
+        $desc = $null
+        if ($DescriptionBuilder) {
+            $desc = $DescriptionBuilder.Invoke($_)
         }
-        Default {
-            foreach ($_ in $Candidates) {
-                if ($_ -eq '--') {
+        
+        $cw = "$Candidate$Suffix"
+        $c = "$Prefix$cw"
+        if (-not $desc) {
+            $desc = "$c"
+        }
+
+        switch ($Type) {
+            -1 {  }
+            1 { 
+                if ($cw.StartsWith($Current)) {
+                    [System.Management.Automation.CompletionResult]::new(
+                        $c,
+                        $c,
+                        'ParameterName',
+                        $desc
+                    )
+                }
+            }
+            Default {
+                if ($Candidate -eq '--') {
                     if ('--no-'.StartsWith($Current)) {
                         [System.Management.Automation.CompletionResult]::new(
                             "--no-",
                             "--no-...$Suffix",
                             'Text',
-                            $c
+                            "--no-...$Suffix"
                         )
                     }
-                    break
+                    $Type = = -1
                 }
                 else {
-                    $c = "$_$Suffix"
-                    if ($c.StartsWith($Current)) {
-                        $c = "$Prefix$c"
+                    if ($cw.StartsWith($Current)) {
                         [System.Management.Automation.CompletionResult]::new(
                             $c,
                             $c,
-                            'Text',
-                            $c
+                            'ParameterName',
+                            $desc
                         )
                     }
                 }
             }
-        }
+        }   
     }
-
-    return
 }

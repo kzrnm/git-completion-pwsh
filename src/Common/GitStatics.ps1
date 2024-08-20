@@ -17,7 +17,7 @@ class CommandOption {
             return [System.Management.Automation.CompletionResult]::new(
                 $this.Long,
                 $this.Long + "$(if($this.Value){" $($this.Value)"})",
-                "ParameterName",
+                'ParameterName',
                 "$(if($this.Description){$this.Description}else{$this.Long})"
             )
         }
@@ -29,7 +29,7 @@ class CommandOption {
             return [System.Management.Automation.CompletionResult]::new(
                 $this.Short,
                 $this.Short + "$(if($this.Value){" $($this.Value)"})",
-                "ParameterName",
+                'ParameterName',
                 "$(if($this.Description){$this.Description}else{$this.Short})"
             )
         }

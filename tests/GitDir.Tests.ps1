@@ -1,5 +1,5 @@
 BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.Replace('\', '/').LastIndexOf('tests')))/tests/_TestInitialize.ps1"
+    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
 
 AfterAll {
@@ -28,7 +28,7 @@ Describe 'GirDir' {
             @{
                 CompletionText = "branch.new.";
                 ListItemText   = "branch.new.";
-                ResultType     = "ParameterName";
+                ResultType     = 'ParameterName';
                 ToolTip        = "branch.new.";
             }
         )
@@ -40,7 +40,7 @@ Describe 'GirDir' {
             @{
                 CompletionText = "branch.new.";
                 ListItemText   = "branch.new.";
-                ResultType     = "ParameterName";
+                ResultType     = 'ParameterName';
                 ToolTip        = "branch.new.";
             }
         )
@@ -52,7 +52,7 @@ Describe 'GirDir' {
             @{
                 CompletionText = "branch.new.";
                 ListItemText   = "branch.new.";
-                ResultType     = "ParameterName";
+                ResultType     = 'ParameterName';
                 ToolTip        = "branch.new.";
             }
         )

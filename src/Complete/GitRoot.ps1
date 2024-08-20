@@ -4,7 +4,6 @@ function Complete-Git {
     param(
         [int][Parameter(Mandatory)]$CursorPosition,
         [string[]][AllowEmptyCollection()][AllowEmptyString()][Parameter(Mandatory)]$Words,
-        [int][Parameter(Mandatory)]$WordPosition,
         [string][AllowEmptyString()][Parameter(Mandatory)]$CurrentWord,
         [string][AllowEmptyString()][Parameter(Mandatory)]$PreviousWord
     )
@@ -12,7 +11,6 @@ function Complete-Git {
     return Complete-GitCommandLine ([CommandLineContext]::new(
             $CursorPosition,
             $Words,
-            $WordPosition,
             $CurrentWord,
             $PreviousWord
         ))
@@ -166,7 +164,8 @@ function Complete-GitCommandLine {
 
         if ($Context.command) {
             try {
-                & "Complete-GitSubCommand-$($Context.command)" $Context
+                $completeSubcommandFunc = "Complete-GitSubCommand-$($Context.command)"
+                & $completeSubcommandFunc $Context
             }
             catch {
                 # Do nothing
@@ -207,9 +206,13 @@ function Complete-GitCommandLine {
         }
 
         $commands = (gitAllCommands list-mainporcelain others nohelpers alias list-complete config) | Sort-Object -Unique
-        $commandsSet = [System.Collections.Generic.HashSet[string]]::new([string[]]$commands)
-        $builtinCommands = (gitBuiltinCommands | Where-Object { -not $commandsSet.Contains($_) })
-        ($commands + $builtinCommands) |
+
+        if (isGitCompletionShowAllCommand) {
+            $commandsSet = [System.Collections.Generic.HashSet[string]]::new([string[]]$commands)
+            $commands += (gitBuiltinCommands | Where-Object { -not $commandsSet.Contains($_) } | Sort-Object -Unique)
+        }
+
+        $commands |
         Where-Object {
             $_.StartsWith($Context.CurrentWord)
         } | ForEach-Object {

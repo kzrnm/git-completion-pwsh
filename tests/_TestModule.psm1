@@ -2,7 +2,9 @@
 
 function Initialize-Home {
     $script:envHOMEBak = $env:HOME
-    
+    $env:GIT_COMPLETION_SHOW_ALL = ''
+    $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = ''
+
     mkdir ($env:HOME = "$TestDrive/home")
     "[user]`nemail = Kitazato@example.com`nname = 1000yen" | Out-File "$env:HOME/.gitconfig" -Encoding ascii
 }
@@ -26,10 +28,6 @@ function Complete-Words {
         [Parameter(Mandatory)][AllowEmptyCollection()][AllowEmptyString()][string[]]$Words
     )
 
-    $WordPosition = $Words.Length
-    if ($WordPosition -notmatch '\s$') {
-        $WordPosition--
-    }
     $CursorPosition = $line.Length
     $CurrentWord = $Words[-1]
     $PreviousWord = $Words[-2]
@@ -37,7 +35,6 @@ function Complete-Words {
     return (Complete-Git `
             -CursorPosition $CursorPosition `
             -Words $Words `
-            -WordPosition $WordPosition `
             -CurrentWord $CurrentWord `
             -PreviousWord $PreviousWord)
 }

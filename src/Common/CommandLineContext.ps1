@@ -1,7 +1,6 @@
 class CommandLineContext {
     [int] $CursorPosition
     [string[]] $Words
-    [int] $WordPosition
     [string] $CurrentWord
     [string] $PreviousWord
     [System.IO.DirectoryInfo] $gitDir
@@ -13,13 +12,11 @@ class CommandLineContext {
     CommandLineContext (
         [int] $CursorPosition,
         [string[]] $Words,
-        [int] $WordPosition,
         [string] $CurrentWord,
         [string] $PreviousWord
     ) {
         $this.CursorPosition = $CursorPosition
         $this.Words = $Words
-        $this.WordPosition = $WordPosition
         $this.CurrentWord = $CurrentWord
         $this.PreviousWord = $PreviousWord
 
@@ -28,7 +25,7 @@ class CommandLineContext {
         $this.command = ''
         $this.commandIndex = 0
 
-        :globalflag for ($i = 1; $i -lt $this.WordPosition; $i++) {
+        :globalflag for ($i = 1; $i -lt ($this.Words.Length - 1); $i++) {
             $s = $this.Words[$i]
             switch -Wildcard -CaseSensitive ($s) {
                 '--git-dir=*' {
@@ -67,5 +64,14 @@ class CommandLineContext {
                 }
             }
         }
+    }
+
+    [string] Subcommand() {
+        $i = $this.commandIndex + 1
+
+        if ($i -lt ($this.Words.Length - 1)) {
+            return $this.Words[$i]
+        }
+        return $null
     }
 }

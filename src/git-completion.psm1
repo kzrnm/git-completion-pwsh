@@ -5,38 +5,41 @@ Get-ChildItem -Recurse "$PSScriptRoot" | Where-Object { $_.Extension -eq '.ps1' 
 Register-ArgumentCompleter -Native -CommandName git -ScriptBlock {
     param($wordToComplete, $CommandAst, $CursorPosition)
     
-    $Words = ($CommandAst.CommandElements | Select-Object -ExpandProperty Extent | Select-Object -ExpandProperty Text)
+    $ws = [System.Collections.Generic.List[string]]::new($CommandAst.CommandElements.Count)
+    $ws.Add('git')
 
-    $cw = $CommandAst.CommandElements.Count
-    $pr = $Words[$Words.Count - 1]
+    $pr = $CommandAst.CommandElements[-1]
     $cr = ''
 
     for ($i = 1; $i -lt $CommandAst.CommandElements.Count; $i++) {
+        $ws.Add($commandAst.CommandElements[$i].Extent.Text)
         $extent = $CommandAst.CommandElements[$i].Extent
-
         if ($CursorPosition -lt $extent.StartOffset) {
             # The cursor is within whitespace between the previous and current words.
             $pr = $commandAst.CommandElements[$i - 1].Extent.Text
-            $cw = $i
             break
         }
         elseif ($CursorPosition -le $extent.EndOffset) {
             $cr = $extent.Text
             $pr = $commandAst.CommandElements[$i - 1].Extent.Text
-            $cw = $i
             break
         }
     }
 
-    $WordPosition = $cw
-    $CurrentWord = $cr
-    $PreviousWord = $pr
+    if ($CommandAst.CommandElements.Count -eq $i) {
+        $ws.Add('')
+        $CurrentWord = ''
+        $PreviousWord = $cr
+    }
+    else {
+        $CurrentWord = $cr
+        $PreviousWord = $pr
+    }
 
     return (
         Complete-Git `
             -CursorPosition $CursorPosition `
-            -Words $Words `
-            -WordPosition $WordPosition `
+            -Words $ws.ToArray() `
             -CurrentWord $CurrentWord `
             -PreviousWord $PreviousWord `
     )

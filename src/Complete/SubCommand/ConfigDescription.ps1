@@ -1,7 +1,112 @@
-function Get-GitConfigDescription {
-    [CmdletBinding(PositionalBinding)]
+function Get-GitConfigShortOptions {
+    [CmdletBinding()]
+    [OutputType([System.Management.Automation.CompletionResult[]])]
+    param()
+
+    @(
+        [PSCustomObject]@{Short = '-e'; Long = '--edit'; }
+        [PSCustomObject]@{Short = '-f'; Long = '--file'; }
+        [PSCustomObject]@{Short = '-l'; Long = '--list'; }
+        [PSCustomObject]@{Short = '-z'; Long = '--null'; }
+    ) | ForEach-Object {
+        $desc = (Get-GitConfigOptionsDescription $_.Long)
+        if (-not $desc) {
+            $desc = $_.Short
+        }
+        [System.Management.Automation.CompletionResult]::new(
+            $_.Short,
+            $_.Short,
+            'ParameterName',
+            $desc
+        )
+    }
+}
+
+function Get-GitConfigSubcommandDescription {
+    [CmdletBinding()]
     [OutputType([string])]
     param (
+        [Parameter(Position = 0)]
+        [string]$Current
+    )
+
+    switch ($Current) {
+        "list" { 'List all variables set in config file.' }
+        "get" { 'Emits the value of the specified key.' }
+        "set" { 'Set value for one or more config options.' }
+        "unset" { 'Unset value for one or more config options.' }
+        "rename-section" { 'Rename the given section to a new name.' }
+        "remove-section" { 'Remove the given section from the configuration file.' }
+        "edit" { 'Opens an editor to modify the specified config file.' }
+    }
+}
+
+function Get-GitConfigOptionsDescription {
+    [CmdletBinding()]
+    [OutputType([string])]
+    param (
+        [Parameter(Position = 0)]
+        [string]$Current,
+        [string]$Subcommand = ''
+    )
+
+    if ($Current.StartsWith('--no-')) {
+        $positive = Get-GitConfigOptionsDescription ('--' + $Current.Substring('--no-'.Length)) -Subcommand $Subcommand
+        if ($positive) {
+            return "[NO] $positive"
+        }
+        return $null
+    }
+
+    switch ($Current) {
+        '--global' { 'use global config file' }
+        '--system' { 'use system config file' }
+        '--local' { 'use repository config file' }
+        '--worktree' { 'use per-worktree config file' }
+        '--file' { 'use given config file' }
+        '--blob' { 'read config from given blob object' }
+        "--get" { 'get value: name [value-pattern]' }
+        "--get-all" { 'get all values: key [value-pattern]' }
+        "--get-regexp" { 'get values for regexp: name-regex [value-pattern]' }
+        "--get-urlmatch" { 'get value specific for the URL: section[.var] URL' }
+        "--replace-all" { 'replace all matching variables: name value [value-pattern]' }
+        "--add" { 'add a new variable: name value' }
+        "--unset" { 'remove a variable: name [value-pattern]' }
+        "--unset-all" { 'remove all matches: name [value-pattern]' }
+        "--rename-section" { 'rename section: old-name new-name' }
+        "--remove-section" { 'remove a section: name' }
+        "--list" { 'list all' }
+        "--fixed-value" { "use string equality when comparing values to 'value-pattern'" }
+        "--edit" { 'open an editor' }
+        "--get-color" { 'find the color configured: slot [default]' }
+        "--get-colorbool" { 'find the color setting: slot [stdout-is-tty]' }
+        "--type" { 'value is given this type' }
+        "--bool" { 'value is "true" or "false"' }
+        "--int" { 'value is decimal number' }
+        "--bool-or-int" { 'value is --bool or --int' }
+        "--bool-or-str" { 'value is --bool or string' }
+        "--path" { 'value is a path (file or directory name)' }
+        "--expiry-date" { 'value is an expiry date' }
+        "--null" { 'terminate values with NUL byte' }
+        "--name-only" { 'show variable names only' }
+        "--includes" { 'respect include directives on lookup' }
+        "--show-origin" { 'show origin of config (file, standard input, blob, command line)' }
+        "--show-scope" { 'show scope of config (worktree, local, global, system, command)' }
+        "--show-names" { 'show config keys in addition to their values' }
+        "--default" { 'with --get, use default value when missing entry' }
+        "--comment" { 'human-readable comment string (# will be prepended as needed)' }
+        "--all" { 'return all values for multi-valued config options' }
+        "--value" { 'show config with values matching the pattern' }
+        "--regexp" { 'interpret the name as a regular expression' }
+    }
+}
+
+
+function Get-GitConfigDescription {
+    [CmdletBinding()]
+    [OutputType([string])]
+    param (
+        [Parameter(Position = 0)]
         [string]$Current
     )
 
@@ -307,7 +412,7 @@ function Get-GitConfigDescription {
 
         "format.attach" { 'Enable multipart/mixed attachments as the default for format-patch.' }
         "format.from" { 'Provides the default value for the --from option to format-patch.' }
-        "format.forceInBodyFrom" { 'Provides the default value for the --[no-]force-in-body-from option to format-patch.' }
+        "format.forceInBodyFrom" { 'Provides the default value for the --force-in-body-from option to format-patch.' }
         "format.numbered" { 'A boolean which can enable or disable sequence numbers in patch subjects.' }
         "format.headers" { 'Additional email headers to include in a patch to be submitted by mail.' }
         "format.to" { 'Additional recipients to include in a patch to be submitted by mail.' }
@@ -800,8 +905,8 @@ function Get-GitConfigDescription {
         "uploadpackfilter.allow" { 'Provides a default value for unspecified object filters.' }
         "uploadpackfilter.*.allow" { 'Explicitly allow or ban the object filter' }
 
-        "uploadpackfilter.tree.maxDepth"{'Only allow --filter=tree:<n> when <n> is no more than the value of uploadpackfilter.tree.maxDepth.'}
-        "uploadpack.allowRefInWant"{'If this option is set, upload-pack will support the ref-in-want feature of the protocol version 2 fetch command.'}
+        "uploadpackfilter.tree.maxDepth" { 'Only allow --filter=tree:<n> when <n> is no more than the value of uploadpackfilter.tree.maxDepth.' }
+        "uploadpack.allowRefInWant" { 'If this option is set, upload-pack will support the ref-in-want feature of the protocol version 2 fetch command.' }
 
         "url.*.insteadOf" { 'Any URL that starts with this value will be rewritten to start.' }
         "url.*.pushInsteadOf" { 'Any URL that starts with this value will not be pushed to; the resulting URL will be pushed to.' }

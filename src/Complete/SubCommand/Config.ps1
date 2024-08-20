@@ -1,3 +1,129 @@
+function Complete-GitSubCommand-config {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([System.Management.Automation.CompletionResult[]])]
+    param(
+        # [CommandLineContext] # For dynamic call
+        [Parameter(Position = 0, Mandatory)]$Context
+    )
+
+    $gitVersion = gitVersion
+    if ($gitVersion -lt [version]::new(2, 46)) {
+        Complete-GitSubCommand-config-Git2_45 $Context
+        return
+    }
+
+    $Prev = $Context.PreviousWord
+    $Current = $Context.CurrentWord
+
+    if ($Current -eq '-') {
+        return Get-GitConfigShortOptions
+    }
+
+    $subcommands = gitResolveBuiltins $Context.command
+    $subcommand = $Context.Subcommand()
+    if ($subcommand -notin $subcommands) {
+        $subcommands | gitcomp -Current $Current -DescriptionBuilder { param($c); Get-GitConfigSubcommandDescription $c }
+        return
+    }
+    if ($Current.StartsWith('--')) {
+        gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { param($c); Get-GitConfigOptionsDescription -Subcommand $subcommand $c }
+        return
+    }
+
+    switch ($subcommand) {
+        'get' { completeGitConfigGetSetVariables $Context -Current $Current }
+        'unset' { completeGitConfigGetSetVariables $Context -Current $Current }
+    }
+
+    return
+    return @(
+        [System.Management.Automation.CompletionResult]::new(
+            "branch.",
+            "branch.",
+            'ParameterValue',
+            "branch."
+        ),
+        [System.Management.Automation.CompletionResult]::new(
+            "merge.",
+            "merge.",
+            'ParameterValue',
+            "merge."
+        )
+    )
+}
+function Complete-GitSubCommand-config-Git2_45 {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([System.Management.Automation.CompletionResult[]])]
+    param(
+        [CommandLineContext]
+        [Parameter(Position = 0, Mandatory)]$Context
+    )
+    $Prev = $Context.PreviousWord
+    $Current = $Context.CurrentWord
+
+    if ($Current -eq '-') {
+        return Get-GitConfigShortOptions
+    }
+
+    if ($Prev -in ('--get', '--get-all', '--unset', '--unset-all')) {
+        completeGitConfigGetSetVariables $Context -Current $Current
+    }
+    elseif ($Prev -like '*.*') {
+        completeConfigVariableValue -Current $Current -VarName $Prev
+    }
+    elseif ($Current.StartsWith('--')) {
+        gitResolveBuiltins $Context.command | gitcomp -Current $Current -DescriptionBuilder { param($c); Get-GitConfigOptionsDescription $c }
+    }
+    else {
+        completeConfigVariableName -Current $Current -Suffix ' '
+    }
+}
+
+function completeGitConfigGetSetVariables {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([string[]])]
+    param(
+        [Parameter(Position = 0, Mandatory)][CommandLineContext]$Context,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+    )
+    
+    gitConfigGetSetVariables $Context | filterCompletionResult -Current $Current | ForEach-Object {
+        $desc = Get-GitConfigDescription $_
+        if (-not $desc) { $desc = $_ }
+
+        [System.Management.Automation.CompletionResult]::new(
+            $_,
+            $_,
+            'ParameterValue',
+            $desc
+        )
+    }
+}
+
+# __git_config_get_set_variables
+function gitConfigGetSetVariables {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([string[]])]
+    param(
+        [Parameter(Position = 0, Mandatory)][CommandLineContext]$Context
+    )
+    $file = @()
+    $prev = ''
+    for ($i = $Context.Words.Length - 1; $i -gt $Context.commandIndex ; $i--) {
+        $word = $Context.Words[$i]
+        if (($word -in @('--system', '--global', '--local')) -or ($word -like "--file=*")) {
+            $file = @($word)
+            break
+        }
+        elseif ($word -in @('-f', '--file')) {
+            $file = @($word, $prev)
+        }
+        $prev = $word
+    }
+    __git config @file --name-only --list
+}
+
+
 # __git_complete_config_variable_name_and_value
 function completeConfigOptionVariableNameAndValue {
     [OutputType([System.Management.Automation.CompletionResult[]])]
@@ -6,7 +132,8 @@ function completeConfigOptionVariableNameAndValue {
     )
 
     if ($Current -match '(.*)=(.*)') {
-        return (completeConfigVariableValue -VarName $Matches[1] -VarOp '=' -Current $Matches[2])
+        $VarName = $Matches[1]
+        return (completeConfigVariableValue -VarName $VarName -Prefix "$VarName=" -Current $Matches[2])
     }
     else {
         return (completeConfigVariableName -Suffix "=" -Current $Current)
@@ -19,8 +146,8 @@ function completeConfigVariableValue {
     [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
-        [string] $VarName = '',
-        [string] $VarOp = ''
+        [Parameter(Mandatory)][AllowEmptyString()][string] $VarName,
+        [string] $Prefix = ''
     )
 
     function completeValue {
@@ -34,18 +161,18 @@ function completeConfigVariableValue {
         Where-Object {
             $_.StartsWith($Current)
         } |
-        ForEach-Object { 
+        ForEach-Object {
             [System.Management.Automation.CompletionResult]::new(
-                "$VarName${VarOp}$_",
+                "${Prefix}$_",
                 $_,
-                "ParameterValue",
+                'ParameterValue',
                 $_
             )
         }
     }
 
     function remote {
-        $remotes = (__git remote)
+        $remotes = [string[]](__git remote)
         completeValue @remotes
     }
 
@@ -63,7 +190,7 @@ function completeConfigVariableValue {
             return
         }
         "branch.*.merge" {
-            $params = (gitCompleteRefs -Current $Current)
+            $params = [string[]](gitCompleteRefs -Current $Current)
             completeValue @params
             return
         }
@@ -79,9 +206,9 @@ function completeConfigVariableValue {
             if ($Current -eq "") {
                 $result = "refs/heads"
                 return [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}$result",
+                    "${Prefix}$result",
                     $result,
-                    "ParameterValue",
+                    'ParameterValue',
                     $result
                 )
             }
@@ -92,9 +219,9 @@ function completeConfigVariableValue {
                 $ref = $Matches[2]
                 $result = "${ref}:refs/remotes/$remote/$($ref -replace '^refs/heads/')"
                 return [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}$result",
+                    "${Prefix}$result",
                     $result,
-                    "ParameterValue",
+                    'ParameterValue',
                     $result
                 )
             }
@@ -104,17 +231,17 @@ function completeConfigVariableValue {
             return
         }
         "remote.*.push" {
-            $params = (__git for-each-ref --format='%(refname):%(refname)' refs/heads)
+            $params = [string[]](__git for-each-ref --format='%(refname):%(refname)' refs/heads)
             completeValue @params
             return
         }
         "pull.twohead" {
-            $params = (gitListMergeStrategies)
+            $params = [string[]](gitListMergeStrategies)
             completeValue @params
             return
         }
         "pull.octopus" {
-            $params = (gitListMergeStrategies)
+            $params = [string[]](gitListMergeStrategies)
             completeValue @params
             return
         }
@@ -137,33 +264,33 @@ function completeConfigVariableValue {
         "diff.algorithm" {
             return (
                 [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}default",
+                    "${Prefix}default",
                     'default',
-                    "ParameterValue",
+                    'ParameterValue',
                     'The basic greedy diff algorithm.'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}myers",
+                    "${Prefix}myers",
                     'myers',
-                    "ParameterValue",
+                    'ParameterValue',
                     'The basic greedy diff algorithm. Currently, this is the default.'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}minimal",
+                    "${Prefix}minimal",
                     'minimal',
-                    "ParameterValue",
+                    'ParameterValue',
                     'Spend extra time to make sure the smallest possible diff is produced.'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}patience",
+                    "${Prefix}patience",
                     'patience',
-                    "ParameterValue",
+                    'ParameterValue',
                     'Use "patience diff" algorithm when generating patches.'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}histogram",
+                    "${Prefix}histogram",
                     'histogram',
-                    "ParameterValue",
+                    'ParameterValue',
                     'This algorithm extends the patience algorithm to "support low-occurrence common elements".'
                 ) | Where-Object {
                     $_.ListItemText.StartsWith($Current)
@@ -173,33 +300,33 @@ function completeConfigVariableValue {
         "http.proxyAuthMethod" {
             return (
                 [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}anyauth",
+                    "${Prefix}anyauth",
                     'anyauth',
-                    "ParameterValue",
+                    'ParameterValue',
                     'Automatically pick a suitable authentication method.'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}basic",
+                    "${Prefix}basic",
                     'basic',
-                    "ParameterValue",
+                    'ParameterValue',
                     'HTTP Basic authentication.'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}digest",
+                    "${Prefix}digest",
                     'digest',
-                    "ParameterValue",
+                    'ParameterValue',
                     'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text.'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}negotiate",
+                    "${Prefix}negotiate",
                     'negotiate',
-                    "ParameterValue",
+                    'ParameterValue',
                     ' GSS-Negotiate authentication (compare the --negotiate option of curl).'
                 ),
                 [System.Management.Automation.CompletionResult]::new(
-                    "$VarName${VarOp}ntlm",
+                    "${Prefix}ntlm",
                     'ntlm',
-                    "ParameterValue",
+                    'ParameterValue',
                     'NTLM authentication (compare the --ntlm option of curl).'
                 ) | Where-Object {
                     $_.ListItemText.StartsWith($Current)
