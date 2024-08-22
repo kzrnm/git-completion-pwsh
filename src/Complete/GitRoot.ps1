@@ -2,18 +2,10 @@ function Complete-Git {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
-        [int][Parameter(Mandatory)]$CursorPosition,
-        [string[]][AllowEmptyCollection()][AllowEmptyString()][Parameter(Mandatory)]$Words,
-        [string][AllowEmptyString()][Parameter(Mandatory)]$CurrentWord,
-        [string][AllowEmptyString()][Parameter(Mandatory)]$PreviousWord
+        [string[]][AllowEmptyCollection()][AllowEmptyString()][Parameter(Mandatory)]$Words
     )
 
-    return Complete-GitCommandLine ([CommandLineContext]::new(
-            $CursorPosition,
-            $Words,
-            $CurrentWord,
-            $PreviousWord
-        ))
+    return Complete-GitCommandLine ([CommandLineContext]::new($Words))
 }
 
 $gitGlobalOptions = @(
@@ -173,13 +165,13 @@ function Complete-GitCommandLine {
             return
         }
 
-        switch -Wildcard -CaseSensitive ($Context.PreviousWord) {
+        switch -Wildcard -CaseSensitive ($Context.PreviousWord()) {
             { $_ -cin @('-C', '--work-tree', '--git-dir') } {
                 # these need a path argument
                 return
             }
             '-c' {
-                return completeConfigOptionVariableNameAndValue -Current $Context.CurrentWord
+                return completeConfigOptionVariableNameAndValue -Current $Context.CurrentWord()
             }
             '--namespace' {
                 # we don't support completing these options' arguments
@@ -187,13 +179,13 @@ function Complete-GitCommandLine {
             }
         }
 
-        switch -Wildcard ($Context.CurrentWord) {
+        switch -Wildcard ($Context.CurrentWord()) {
             '--*' {
-                $gitGlobalOptions | ForEach-Object { $_.ToLongCompletion($Context.CurrentWord) } | Where-Object { $_ }
+                $gitGlobalOptions | ForEach-Object { $_.ToLongCompletion($Context.CurrentWord()) } | Where-Object { $_ }
                 return
             }
             '-*' {
-                if ($Context.CurrentWord -eq '-') {
+                if ($Context.CurrentWord() -eq '-') {
                     $gitGlobalOptions | ForEach-Object { $_.ToShortCompletion() } | Where-Object { $_ }
                 }
                 return
@@ -214,7 +206,7 @@ function Complete-GitCommandLine {
 
         $commands |
         Where-Object {
-            $_.StartsWith($Context.CurrentWord)
+            $_.StartsWith($Context.CurrentWord())
         } | ForEach-Object {
             $desc = $descriptions[$_]
             if (-not $desc) {

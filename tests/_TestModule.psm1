@@ -28,15 +28,7 @@ function Complete-Words {
         [Parameter(Mandatory)][AllowEmptyCollection()][AllowEmptyString()][string[]]$Words
     )
 
-    $CursorPosition = $line.Length
-    $CurrentWord = $Words[-1]
-    $PreviousWord = $Words[-2]
-
-    return (Complete-Git `
-            -CursorPosition $CursorPosition `
-            -Words $Words `
-            -CurrentWord $CurrentWord `
-            -PreviousWord $PreviousWord)
+    return (Complete-Git -Words $Words)
 }
 
 function Should-BeCompletion {

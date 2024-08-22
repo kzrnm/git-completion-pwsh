@@ -1,27 +1,3 @@
-function Get-GitConfigShortOptions {
-    [CmdletBinding()]
-    [OutputType([System.Management.Automation.CompletionResult[]])]
-    param()
-
-    @(
-        [PSCustomObject]@{Short = '-e'; Long = '--edit'; }
-        [PSCustomObject]@{Short = '-f'; Long = '--file'; }
-        [PSCustomObject]@{Short = '-l'; Long = '--list'; }
-        [PSCustomObject]@{Short = '-z'; Long = '--null'; }
-    ) | ForEach-Object {
-        $desc = (Get-GitConfigOptionsDescription $_.Long)
-        if (-not $desc) {
-            $desc = $_.Short
-        }
-        [System.Management.Automation.CompletionResult]::new(
-            $_.Short,
-            $_.Short,
-            'ParameterName',
-            $desc
-        )
-    }
-}
-
 function Get-GitConfigSubcommandDescription {
     [CmdletBinding()]
     [OutputType([string])]
@@ -38,6 +14,50 @@ function Get-GitConfigSubcommandDescription {
         "rename-section" { 'Rename the given section to a new name' }
         "remove-section" { 'Remove the given section from the configuration file' }
         "edit" { 'Opens an editor to modify the specified config file' }
+    }
+}
+
+function Convert-GitConfigShortToLong {
+    param(
+        [Parameter(Position = 0, Mandatory)][string]$Short,
+        [string]$Subcommand = ''
+    )
+    switch($Short) {
+        '-f' { '--file' }
+        '-z' { '--null' }
+        '-t' { '--type' }
+    }
+}
+
+function Get-GitConfigShortOptions {
+    [CmdletBinding()]
+    [OutputType([System.Management.Automation.CompletionResult[]])]
+    param(
+        [string]$Subcommand = ''
+    )
+
+    $shortOptions = switch ($Subcommand) {
+        'list' { @('-f', '-t', '-z') }
+        'get' { @('-f', '-t', '-z') }
+        'set' { @('-f', '-t') }
+        'unset' { @('-f') }
+        'rename-section' { @('-f') }
+        'remove-section' { @('-f') }
+        'edit' { @('-f') }
+        Default { @() }
+    }
+    $shortOptions | ForEach-Object {
+        $long = (Convert-GitConfigShortToLong $_ -Subcommand $Subcommand)
+        $desc = (Get-GitConfigOptionsDescription $long)
+        if (-not $desc) {
+            $desc = $_
+        }
+        [System.Management.Automation.CompletionResult]::new(
+            $_,
+            $_,
+            'ParameterName',
+            $desc
+        )
     }
 }
 
@@ -65,44 +85,36 @@ function Get-GitConfigOptionsDescription {
         '--worktree' { 'use per-worktree config file' }
         '--file' { 'use given config file' }
         '--blob' { 'read config from given blob object' }
-        "--get" { 'get value: name [value-pattern]' }
-        "--get-all" { 'get all values: key [value-pattern]' }
-        "--get-regexp" { 'get values for regexp: name-regex [value-pattern]' }
-        "--get-urlmatch" { 'get value specific for the URL: section[.var] URL' }
-        "--replace-all" { 'replace all matching variables: name value [value-pattern]' }
-        "--add" { 'add a new variable: name value' }
-        "--unset" { 'remove a variable: name [value-pattern]' }
-        "--unset-all" { 'remove all matches: name [value-pattern]' }
-        "--rename-section" { 'rename section: old-name new-name' }
-        "--remove-section" { 'remove a section: name' }
-        "--list" { 'list all' }
-        "--fixed-value" { "use string equality when comparing values to 'value-pattern'" }
-        "--edit" { 'open an editor' }
-        "--get-color" { 'find the color configured: slot [default]' }
-        "--get-colorbool" { 'find the color setting: slot [stdout-is-tty]' }
-        "--type" { 'value is given this type' }
-        "--bool" { 'value is "true" or "false"' }
-        "--int" { 'value is decimal number' }
-        "--bool-or-int" { 'value is --bool or --int' }
-        "--bool-or-str" { 'value is --bool or string' }
-        "--path" { 'value is a path (file or directory name)' }
-        "--expiry-date" { 'value is an expiry date' }
-        "--null" { 'terminate values with NUL byte' }
-        "--name-only" { 'show variable names only' }
-        "--includes" { 'respect include directives on lookup' }
-        "--show-origin" { 'show origin of config (file, standard input, blob, command line)' }
-        "--show-scope" { 'show scope of config (worktree, local, global, system, command)' }
-        "--show-names" { 'show config keys in addition to their values' }
-        "--default" { 'with --get, use default value when missing entry' }
-        "--comment" { 'human-readable comment string (# will be prepended as needed)' }
-        "--all" { 'return all values for multi-valued config options' }
-        "--value" { 'show config with values matching the pattern' }
-        "--regexp" { 'interpret the name as a regular expression' }
+        '--null' { 'terminate values with NUL byte' }
+        '--name-only' { 'show variable names only' }
+        '--show-origin' { 'show origin of config (file, standard input, blob, command line)' }
+        '--show-scope' { 'show scope of config (worktree, local, global, system, command)' }
+        '--show-names' { 'show config keys in addition to their values' }
+        '--type' { 'value is given this type' }
+        '--bool' { 'value is "true" or "false"' }
+        '--int' { 'value is decimal number' }
+        '--bool-or-int' { 'value is --bool or --int' }
+        '--bool-or-str' { 'value is --bool or string' }
+        '--path' { 'value is a path (file or directory name)' }
+        '--expiry-date' { 'value is an expiry date' }
+        '--includes' { 'respect include directives on lookup' }
+        '--all' {
+            switch ($Subcommand) {
+                'get' { 'return all values for multi-valued config options' }
+                Default { 'replace multi-valued config option with new value' }
+            }
+        }
+        '--regexp' { 'interpret the name as a regular expression' }
+        '--value' { 'show config with values matching the pattern' }
+        '--fixed-value' { 'use string equality when comparing values to value pattern' }
+        '--url' { 'show config matching the given URL' }
+        '--default' { 'use default value when missing entry' }
+        '--comment' { 'human-readable comment string (# will be prepended as needed)' }
+        '--append' { 'add a new line without altering any existing values' }
     }
 }
 
-
-function Get-GitConfigDescription {
+function Get-GitConfigVariableDescription {
     [CmdletBinding()]
     [OutputType([string])]
     param (
@@ -931,5 +943,29 @@ function Get-GitConfigDescription {
         "windows.appendAtomically" { "By default, append atomic API is used on windows. But it works only with local disk files, if you’re working on a network file system, you should set it false to turn it off" }
         "worktree.guessRemote" { 'If no branch is specified and neither -b nor -B nor --detach is used, then git worktree add defaults to creating a new branch from HEAD' }
         Default { $null }
+    }
+}
+
+function Get-GitConfigShortOptionsGit2_45 {
+    [CmdletBinding()]
+    [OutputType([System.Management.Automation.CompletionResult[]])]
+    param()
+
+    @(
+        [PSCustomObject]@{Short = '-e'; Long = '--edit'; }
+        [PSCustomObject]@{Short = '-f'; Long = '--file'; }
+        [PSCustomObject]@{Short = '-l'; Long = '--list'; }
+        [PSCustomObject]@{Short = '-z'; Long = '--null'; }
+    ) | ForEach-Object {
+        $desc = (Get-GitConfigOptionsDescription $_.Long)
+        if (-not $desc) {
+            $desc = $_.Short
+        }
+        [System.Management.Automation.CompletionResult]::new(
+            $_.Short,
+            $_.Short,
+            'ParameterName',
+            $desc
+        )
     }
 }

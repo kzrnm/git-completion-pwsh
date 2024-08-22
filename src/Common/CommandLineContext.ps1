@@ -1,8 +1,5 @@
 class CommandLineContext {
-    [int] $CursorPosition
     [string[]] $Words
-    [string] $CurrentWord
-    [string] $PreviousWord
     [System.IO.DirectoryInfo] $gitDir
     [string] $command
     [int] $commandIndex
@@ -10,15 +7,9 @@ class CommandLineContext {
 
 
     CommandLineContext (
-        [int] $CursorPosition,
-        [string[]] $Words,
-        [string] $CurrentWord,
-        [string] $PreviousWord
+        [string[]] $Words
     ) {
-        $this.CursorPosition = $CursorPosition
         $this.Words = $Words
-        $this.CurrentWord = $CurrentWord
-        $this.PreviousWord = $PreviousWord
 
         $this.gitDir = $null
         $this.gitCArgs = @()
@@ -74,4 +65,7 @@ class CommandLineContext {
         }
         return $null
     }
+
+    [string] CurrentWord() { return $this.Words[-1] }
+    [string] PreviousWord() { return $this.Words[-2] }
 }

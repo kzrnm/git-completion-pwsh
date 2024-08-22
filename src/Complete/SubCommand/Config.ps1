@@ -12,44 +12,39 @@ function Complete-GitSubCommand-config {
         return
     }
 
-    $Prev = $Context.PreviousWord
-    $Current = $Context.CurrentWord
-
-    if ($Current -eq '-') {
-        return Get-GitConfigShortOptions
-    }
+    $Prev = $Context.PreviousWord()
+    $Current = $Context.CurrentWord()
 
     $subcommands = gitResolveBuiltins $Context.command
     $subcommand = $Context.Subcommand()
     if ($subcommand -notin $subcommands) {
-        $subcommands | gitcomp -Current $Current -DescriptionBuilder { param($c); Get-GitConfigSubcommandDescription $c }
+        $subcommands | gitcomp -Current $Current -DescriptionBuilder { Get-GitConfigSubcommandDescription $_ }
         return
     }
+    
+    if ($Current -eq '-') {
+        return Get-GitConfigShortOptions -Subcommand $subcommand
+    }
+
     if ($Current.StartsWith('--')) {
-        gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { param($c); Get-GitConfigOptionsDescription -Subcommand $subcommand $c }
+        gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { Get-GitConfigOptionsDescription -Subcommand $subcommand $_ }
         return
     }
 
     switch ($subcommand) {
         'get' { completeGitConfigGetSetVariables $Context -Current $Current }
         'unset' { completeGitConfigGetSetVariables $Context -Current $Current }
+        'set' {
+            if ($Prev -like '*.*') {
+                completeConfigVariableValue -VarName $Prev -Current $Current
+            }
+            else {
+                completeConfigVariableName -Current $Current
+            }
+        }
     }
 
     return
-    return @(
-        [System.Management.Automation.CompletionResult]::new(
-            "branch.",
-            "branch.",
-            'ParameterValue',
-            "branch."
-        ),
-        [System.Management.Automation.CompletionResult]::new(
-            "merge.",
-            "merge.",
-            'ParameterValue',
-            "merge."
-        )
-    )
 }
 function Complete-GitSubCommand-config-Git2_45 {
     [CmdletBinding(PositionalBinding = $false)]
@@ -58,11 +53,11 @@ function Complete-GitSubCommand-config-Git2_45 {
         [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
-    $Prev = $Context.PreviousWord
-    $Current = $Context.CurrentWord
+    $Prev = $Context.PreviousWord()
+    $Current = $Context.CurrentWord()
 
     if ($Current -eq '-') {
-        return Get-GitConfigShortOptions
+        return Get-GitConfigShortOptionsGit2_45
     }
 
     if ($Prev -in ('--get', '--get-all', '--unset', '--unset-all')) {
@@ -72,10 +67,10 @@ function Complete-GitSubCommand-config-Git2_45 {
         completeConfigVariableValue -Current $Current -VarName $Prev
     }
     elseif ($Current.StartsWith('--')) {
-        gitResolveBuiltins $Context.command | gitcomp -Current $Current -DescriptionBuilder { param($c); Get-GitConfigOptionsDescription $c }
+        gitResolveBuiltins $Context.command | gitcomp -Current $Current -DescriptionBuilder { Get-GitConfigOptionsDescription $_ }
     }
     else {
-        completeConfigVariableName -Current $Current -Suffix ' '
+        completeConfigVariableName -Current $Current
     }
 }
 
@@ -88,7 +83,7 @@ function completeGitConfigGetSetVariables {
     )
     
     gitConfigGetSetVariables $Context | filterCompletionResult -Current $Current | ForEach-Object {
-        $desc = Get-GitConfigDescription $_
+        $desc = Get-GitConfigVariableDescription $_
         if (-not $desc) { $desc = $_ }
 
         [System.Management.Automation.CompletionResult]::new(
@@ -365,13 +360,13 @@ function completeConfigVariableName {
     [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
-        [string] $Suffix = '='
+        [string] $Suffix = ''
     )
 
     $DescriptionBuilder = [scriptblock] {
         param($Candidate)
 
-        Get-GitConfigDescription $Candidate
+        Get-GitConfigVariableDescription $Candidate
     }
 
     if ($Current -match "(branch|guitool|difftool|man|mergetool|remote|submodule|url)\.(.*)\.([^\.]*)") {

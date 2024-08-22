@@ -94,7 +94,11 @@ function gitcomp {
     process {
         $desc = $null
         if ($DescriptionBuilder) {
-            $desc = $DescriptionBuilder.Invoke($_)
+            $desc = $DescriptionBuilder.InvokeWithContext(
+                $null,
+                @([psvariable]::new('_', $Candidate)),
+                @($Candidate)
+            )
         }
         
         $cw = "$Candidate$Suffix"

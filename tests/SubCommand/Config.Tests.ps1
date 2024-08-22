@@ -50,36 +50,65 @@ Describe 'Config' {
             }
         }
 
-        It 'ShortOptions' {
-            "git config -" | Complete-FromLine | Should -BeCompletion @(
+        Describe 'ShortOptions' {
+            It '<Line>' -ForEach @(
                 @{
-                    CompletionText = "-e";
-                    ListItemText   = "-e";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "open an editor";
+                    Line     = 'get'
+                    Expected = @(
+                        @{
+                            CompletionText = "-f";
+                            ListItemText   = "-f";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "use given config file";
+                        },
+                        @{
+                            CompletionText = "-t";
+                            ListItemText   = "-t";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "value is given this type";
+                        },
+                        @{
+                            CompletionText = "-z";
+                            ListItemText   = "-z";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "terminate values with NUL byte";
+                        }
+                    )
                 },
                 @{
-                    CompletionText = "-f";
-                    ListItemText   = "-f";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "use given config file";
+                    Line     = 'set'
+                    Expected = @(
+                        @{
+                            CompletionText = "-f";
+                            ListItemText   = "-f";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "use given config file";
+                        },
+                        @{
+                            CompletionText = "-t";
+                            ListItemText   = "-t";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "value is given this type";
+                        }
+                    )
                 },
                 @{
-                    CompletionText = "-l";
-                    ListItemText   = "-l";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "list all";
-                },
-                @{
-                    CompletionText = "-z";
-                    ListItemText   = "-z";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "terminate values with NUL byte";
+                    Line     = 'unset'
+                    Expected = @(
+                        @{
+                            CompletionText = "-f";
+                            ListItemText   = "-f";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "use given config file";
+                        }
+                    )
                 }
-            )
+            ) {
+                "git config $Line -" | Complete-FromLine | Should -BeCompletion $Expected
+            }
         }
 
-        Describe 'Subcommand' {
+        Describe 'CompleteSubcommands' {
             It '<Line>' -ForEach @(
                 @{
                     Line     = ''
@@ -141,6 +170,74 @@ Describe 'Config' {
                 }
             ) {
                 "git config $Line" | Complete-FromLine | Should -BeCompletion $Expected
+            }
+        }
+
+
+        Describe 'Subcommand' {
+            It '<Subcommand> <Line>' -ForEach @(
+                @{
+                    Line       = '--a';
+                    Subcommand = 'get';
+                    Expected   = @(
+                        @{
+                            CompletionText = '--all';
+                            ListItemText   = '--all';
+                            ResultType     = 'ParameterName';
+                            ToolTip        = 'return all values for multi-valued config options';
+                        }
+                    )
+                },
+                @{
+                    Line       = '--no-a';
+                    Subcommand = 'get';
+                    Expected   = @(
+                        @{
+                            CompletionText = '--no-all';
+                            ListItemText   = '--no-all';
+                            ResultType     = 'ParameterName';
+                            ToolTip        = '[NO] return all values for multi-valued config options';
+                        }
+                    )
+                },
+                @{
+                    Line       = '--a';
+                    Subcommand = 'set';
+                    Expected   = @(
+                        @{
+                            CompletionText = '--all';
+                            ListItemText   = '--all';
+                            ResultType     = 'ParameterName';
+                            ToolTip        = 'replace multi-valued config option with new value';
+                        },
+                        @{
+                            CompletionText = '--append';
+                            ListItemText   = '--append';
+                            ResultType     = 'ParameterName';
+                            ToolTip        = 'add a new line without altering any existing values';
+                        }
+                    )
+                },
+                @{
+                    Line       = '--no-a';
+                    Subcommand = 'set';
+                    Expected   = @(
+                        @{
+                            CompletionText = '--no-all';
+                            ListItemText   = '--no-all';
+                            ResultType     = 'ParameterName';
+                            ToolTip        = '[NO] replace multi-valued config option with new value';
+                        },
+                        @{
+                            CompletionText = '--no-append';
+                            ListItemText   = '--no-append';
+                            ResultType     = 'ParameterName';
+                            ToolTip        = '[NO] add a new line without altering any existing values';
+                        }
+                    )
+                }
+            ) {
+                "git config $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $Expected
             }
         }
 
@@ -300,7 +397,7 @@ Describe 'Config' {
                     CompletionText = "-e";
                     ListItemText   = "-e";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "open an editor";
+                    ToolTip        = "-e";
                 },
                 @{
                     CompletionText = "-f";
@@ -312,7 +409,7 @@ Describe 'Config' {
                     CompletionText = "-l";
                     ListItemText   = "-l";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "list all";
+                    ToolTip        = "-l";
                 },
                 @{
                     CompletionText = "-z";
@@ -372,7 +469,7 @@ Describe 'Config' {
                             CompletionText = "--list";
                             ListItemText   = "--list";
                             ResultType     = 'ParameterName';
-                            ToolTip        = "list all";
+                            ToolTip        = "--list";
                         }
                     )
                 },
@@ -389,7 +486,7 @@ Describe 'Config' {
                             CompletionText = "--no-list";
                             ListItemText   = "--no-list";
                             ResultType     = 'ParameterName';
-                            ToolTip        = "[NO] list all";
+                            ToolTip        = "--no-list";
                         }
                     )
                 }
