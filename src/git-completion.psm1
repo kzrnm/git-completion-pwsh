@@ -2,9 +2,9 @@ $ErrorActionPreference = 'Continue'
 
 Get-ChildItem -Recurse "$PSScriptRoot" | Where-Object { $_.Extension -eq '.ps1' } | ForEach-Object { . $_.FullName }
 
-Register-ArgumentCompleter -Native -CommandName git -ScriptBlock {
+Register-ArgumentCompleter -CommandName git -Native -ScriptBlock {
     param($wordToComplete, $CommandAst, $CursorPosition)
-    
+
     $ws = [System.Collections.Generic.List[string]]::new($CommandAst.CommandElements.Count + 2)
     $ws.Add('git')
 

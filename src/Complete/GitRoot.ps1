@@ -154,14 +154,14 @@ function Complete-GitCommandLine {
     try {
         Set-Variable 'Context' $Context -Scope 'Script'
         [string] $Current = $Context.CurrentWord()
-
         if ($Context.command) {
+
             try {
                 $completeSubcommandFunc = "Complete-GitSubCommand-$($Context.command)"
                 & $completeSubcommandFunc $Context
             }
             catch {
-                if (($Current -like '--*') -and (gitSupportParseoptHelper $Context.command)) {
+                if (($Current.StartsWith('--')) -and (gitSupportParseoptHelper $Context.command)) {
                     gitResolveBuiltins $Context.command | gitcomp -Current $Current
                 }
             }
