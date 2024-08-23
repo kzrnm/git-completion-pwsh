@@ -96,7 +96,7 @@ function gitcomp {
         if ($DescriptionBuilder) {
             $desc = $DescriptionBuilder.InvokeWithContext(
                 $null,
-                @([psvariable]::new('_', $Candidate)),
+                [psvariable]::new('_', $Candidate),
                 @($Candidate)
             )
         }

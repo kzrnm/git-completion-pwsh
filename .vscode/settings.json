@@ -15,7 +15,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "Import-Module ./src/git-completion.psd1 -Force"
+                "Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "color": "terminal.ansiCyan",
             "icon": "terminal-powershell"
