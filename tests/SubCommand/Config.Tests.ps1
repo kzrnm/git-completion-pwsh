@@ -287,7 +287,25 @@ Describe 'Config' {
             }
         }
 
-        
+        Describe 'EqualOptions' {
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = 'get --type ';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'get --file ';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'unset --file ';
+                    Expected = @()
+                }
+            ) {
+                "git config $Line" | Complete-FromLine | Should -BeCompletion @()
+            }
+        }
+
         Describe 'VariableSubcommand' {
             Context '<Option> <Line>' -ForEach @(
                 @{
@@ -363,7 +381,7 @@ Describe 'Config' {
                     )
                 }
             ) {
-                It '<_>' -ForEach @('get', 'unset') {
+                It '<_>' -ForEach @('get', 'unset', 'get --no-url') {
                     $Subcommand = $_ 
                     "git config $Subcommand $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
                 }

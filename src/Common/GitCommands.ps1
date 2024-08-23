@@ -507,34 +507,38 @@ function gitGetAlias {
     }
 }
 
+
 # __git_resolve_builtins 
 function gitResolveBuiltins {
     [OutputType([string[]])]
     param(
-        [Parameter(Mandatory, ValueFromRemainingArguments)][string[]] $Command,
-        [switch] $KeepLastEqual
+        [Parameter(Mandatory, ValueFromRemainingArguments)]
+        [string[]]
+        $Command
     )
 
-    gitResolveBuiltinsImpl @Command |
-    ForEach-Object { $_ -split "\s+" } |
-    Where-Object { $_ } |
-    ForEach-Object {
-        if ((-not $KeepLastEqual) -and $_.EndsWith('=')) {
-            $_.Substring(0, $_.Length - 1)
-        }
-        else {
-            $_
-        }
-    }
+    return (gitResolveBuiltinsImpl @Command -All:(isGitCompletionShowAll) |
+        ForEach-Object { $_ -split "\s+" } |
+        Where-Object { $_ } |
+        ForEach-Object {
+            if ($_.EndsWith('=')) {
+                $s = $_.Substring(0, $_.Length - 1)
+                $s | Add-Member HasEqual $true -PassThru
+            }
+            else {
+                $_
+            }
+        })
 }
 
 function gitResolveBuiltinsImpl {
     [OutputType([string[]])]
     param(
-        [Parameter(Mandatory, ValueFromRemainingArguments)][string[]] $Command
+        [Parameter(Mandatory, ValueFromRemainingArguments)][string[]] $Command,
+        [switch] $All
     )
     
-    if (isGitCompletionShowAll) {
+    if ($All) {
         $completionHelper = '--git-completion-helper-all'
     }
     else {

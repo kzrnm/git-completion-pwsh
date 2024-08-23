@@ -12,11 +12,11 @@ function Complete-GitSubCommand-config {
         return
     }
 
-    $Prev = $Context.PreviousWord()
-    $Current = $Context.CurrentWord()
+    [string] $Prev = $Context.PreviousWord()
+    [string] $Current = $Context.CurrentWord()
 
     $subcommands = gitResolveBuiltins $Context.command
-    $subcommand = $Context.Subcommand()
+    [string] $subcommand = $Context.Subcommand()
     if ($subcommand -notin $subcommands) {
         $subcommands | gitcomp -Current $Current -DescriptionBuilder { Get-GitConfigSubcommandDescription $_ }
         return
@@ -29,6 +29,12 @@ function Complete-GitSubCommand-config {
     if ($Current.StartsWith('--')) {
         gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { Get-GitConfigOptionsDescription -Subcommand $subcommand $_ }
         return
+    }
+
+    if ($Prev.StartsWith('--')) {
+        if (gitResolveBuiltins $Context.command $subcommand | Where-Object { ($_.HasEqual) -and ($_ -eq $Prev) }) {
+            return @()
+        }
     }
 
     switch ($subcommand) {
