@@ -129,7 +129,7 @@ function gitcomp {
                             "--no-...$Suffix"
                         )
                     }
-                    $Type = = -1
+                    $Type = -1
                 }
                 else {
                     if ($cw.StartsWith($Current)) {

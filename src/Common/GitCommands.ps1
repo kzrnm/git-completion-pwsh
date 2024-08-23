@@ -1,3 +1,5 @@
+using namespace System.Collections.Generic;
+
 function __git {
     [CmdletBinding(PositionalBinding = $false)]
     param(
@@ -546,4 +548,17 @@ function gitResolveBuiltinsImpl {
     }
 
     return (__git @Command $completionHelper)
+}
+
+
+$script:__git_support_parseopt_helper = $null
+# __git_support_parseopt_helper
+function gitSupportParseoptHelper {
+    [OutputType([bool])]
+    param([Parameter(Mandatory, Position = 0)][string]$Command)
+    if (-not $script:__git_support_parseopt_helper) {
+        $script:__git_support_parseopt_helper = [HashSet[string]]::new([string[]]((git --list-cmds=parseopt) -split '\s+' | Where-Object { $_ }))
+    }
+
+    return $script:__git_support_parseopt_helper.Contains($Command)
 }

@@ -153,6 +153,7 @@ function Complete-GitCommandLine {
 
     try {
         Set-Variable 'Context' $Context -Scope 'Script'
+        [string] $Current = $Context.CurrentWord()
 
         if ($Context.command) {
             try {
@@ -160,7 +161,9 @@ function Complete-GitCommandLine {
                 & $completeSubcommandFunc $Context
             }
             catch {
-                # Do nothing
+                if (($Current -like '--*') -and (gitSupportParseoptHelper $Context.command)) {
+                    gitResolveBuiltins $Context.command | gitcomp -Current $Current
+                }
             }
             return
         }
@@ -171,7 +174,7 @@ function Complete-GitCommandLine {
                 return
             }
             '-c' {
-                return completeConfigOptionVariableNameAndValue -Current $Context.CurrentWord()
+                return completeConfigOptionVariableNameAndValue -Current $Current
             }
             '--namespace' {
                 # we don't support completing these options' arguments
@@ -179,13 +182,13 @@ function Complete-GitCommandLine {
             }
         }
 
-        switch -Wildcard ($Context.CurrentWord()) {
+        switch -Wildcard ($Current) {
             '--*' {
-                $gitGlobalOptions | ForEach-Object { $_.ToLongCompletion($Context.CurrentWord()) } | Where-Object { $_ }
+                $gitGlobalOptions | ForEach-Object { $_.ToLongCompletion($Current) } | Where-Object { $_ }
                 return
             }
             '-*' {
-                if ($Context.CurrentWord() -eq '-') {
+                if ($Current -eq '-') {
                     $gitGlobalOptions | ForEach-Object { $_.ToShortCompletion() } | Where-Object { $_ }
                 }
                 return
@@ -206,7 +209,7 @@ function Complete-GitCommandLine {
 
         $commands |
         Where-Object {
-            $_.StartsWith($Context.CurrentWord())
+            $_.StartsWith($Current)
         } | ForEach-Object {
             $desc = $descriptions[$_]
             if (-not $desc) {
