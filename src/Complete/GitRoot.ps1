@@ -1,6 +1,8 @@
+using namespace System.Management.Automation;
+
 function Complete-Git {
     [CmdletBinding(PositionalBinding = $false)]
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param(
         [string[]][AllowEmptyCollection()][AllowEmptyString()][Parameter(Mandatory)]$Words
     )
@@ -22,9 +24,9 @@ class CommandOption {
         $this.Value = $Value
     }
 
-    [System.Management.Automation.CompletionResult] ToLongCompletion([string]$Prefix) {
+    [CompletionResult] ToLongCompletion([string]$Prefix) {
         if ($this.Long -and ($this.Long -clike "$Prefix*")) {
-            return [System.Management.Automation.CompletionResult]::new(
+            return [CompletionResult]::new(
                 $this.Long,
                 $this.Long + "$(if($this.Value){" $($this.Value)"})",
                 'ParameterName',
@@ -34,9 +36,9 @@ class CommandOption {
         return $null
     }
 
-    [System.Management.Automation.CompletionResult] ToShortCompletion() {
+    [CompletionResult] ToShortCompletion() {
         if ($this.Short) {
-            return [System.Management.Automation.CompletionResult]::new(
+            return [CompletionResult]::new(
                 $this.Short,
                 $this.Short + "$(if($this.Value){" $($this.Value)"})",
                 'ParameterName',
@@ -196,7 +198,7 @@ $gitSubCommandDescriptions = @{
 
 function Complete-GitCommandLine {
     [CmdletBinding(PositionalBinding = $false)]
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param(
         [CommandLineContext][Parameter(Position = 0, Mandatory)]$Context
     )
@@ -255,7 +257,7 @@ function Complete-GitCommandLine {
             if (-not $desc) {
                 $desc = $_
             }
-            [System.Management.Automation.CompletionResult]::new(
+            [CompletionResult]::new(
                 "$_",
                 "$_",
                 "Text",

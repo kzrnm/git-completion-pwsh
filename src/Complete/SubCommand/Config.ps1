@@ -1,6 +1,8 @@
+using namespace System.Management.Automation;
+
 function Complete-GitSubCommand-config {
     [CmdletBinding(PositionalBinding = $false)]
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param(
         # [CommandLineContext] # For dynamic call
         [Parameter(Position = 0, Mandatory)]$Context
@@ -70,7 +72,7 @@ function Complete-GitSubCommand-config {
 }
 function Complete-GitSubCommand-config-Git2_45 {
     [CmdletBinding(PositionalBinding = $false)]
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param(
         [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
@@ -108,7 +110,7 @@ function completeGitConfigGetSetVariables {
         $desc = Get-GitConfigVariableDescription $_
         if (-not $desc) { $desc = $_ }
 
-        [System.Management.Automation.CompletionResult]::new(
+        [CompletionResult]::new(
             $_,
             $_,
             'ParameterValue',
@@ -143,7 +145,7 @@ function gitConfigGetSetVariables {
 
 # __git_complete_config_variable_name_and_value
 function completeConfigOptionVariableNameAndValue {
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current
     )
@@ -160,7 +162,7 @@ function completeConfigOptionVariableNameAndValue {
 
 # __git_complete_config_variable_value
 function completeConfigVariableValue {
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
         [Parameter(Mandatory)][AllowEmptyString()][string] $VarName,
@@ -168,7 +170,7 @@ function completeConfigVariableValue {
     )
 
     function completeValue {
-        [OutputType([System.Management.Automation.CompletionResult[]])]
+        [OutputType([CompletionResult[]])]
         param(
             [Parameter(ValueFromRemainingArguments = $true)]
             [string[]]
@@ -179,7 +181,7 @@ function completeConfigVariableValue {
             $_.StartsWith($Current)
         } |
         ForEach-Object {
-            [System.Management.Automation.CompletionResult]::new(
+            [CompletionResult]::new(
                 "${Prefix}$_",
                 $_,
                 'ParameterValue',
@@ -222,7 +224,7 @@ function completeConfigVariableValue {
         "remote.*.fetch" {
             if ($Current -eq "") {
                 $result = "refs/heads"
-                return [System.Management.Automation.CompletionResult]::new(
+                return [CompletionResult]::new(
                     "${Prefix}$result",
                     $result,
                     'ParameterValue',
@@ -235,7 +237,7 @@ function completeConfigVariableValue {
                 # $hash = $Matches[1]
                 $ref = $Matches[2]
                 $result = "${ref}:refs/remotes/$remote/$($ref -replace '^refs/heads/')"
-                return [System.Management.Automation.CompletionResult]::new(
+                return [CompletionResult]::new(
                     "${Prefix}$result",
                     $result,
                     'ParameterValue',
@@ -280,31 +282,31 @@ function completeConfigVariableValue {
         }
         "diff.algorithm" {
             return (
-                [System.Management.Automation.CompletionResult]::new(
+                [CompletionResult]::new(
                     "${Prefix}default",
                     'default',
                     'ParameterValue',
                     'The basic greedy diff algorithm'
                 ),
-                [System.Management.Automation.CompletionResult]::new(
+                [CompletionResult]::new(
                     "${Prefix}myers",
                     'myers',
                     'ParameterValue',
                     'The basic greedy diff algorithm. Currently, this is the default'
                 ),
-                [System.Management.Automation.CompletionResult]::new(
+                [CompletionResult]::new(
                     "${Prefix}minimal",
                     'minimal',
                     'ParameterValue',
                     'Spend extra time to make sure the smallest possible diff is produced'
                 ),
-                [System.Management.Automation.CompletionResult]::new(
+                [CompletionResult]::new(
                     "${Prefix}patience",
                     'patience',
                     'ParameterValue',
                     'Use "patience diff" algorithm when generating patches'
                 ),
-                [System.Management.Automation.CompletionResult]::new(
+                [CompletionResult]::new(
                     "${Prefix}histogram",
                     'histogram',
                     'ParameterValue',
@@ -316,31 +318,31 @@ function completeConfigVariableValue {
         }
         "http.proxyAuthMethod" {
             return (
-                [System.Management.Automation.CompletionResult]::new(
+                [CompletionResult]::new(
                     "${Prefix}anyauth",
                     'anyauth',
                     'ParameterValue',
                     'Automatically pick a suitable authentication method'
                 ),
-                [System.Management.Automation.CompletionResult]::new(
+                [CompletionResult]::new(
                     "${Prefix}basic",
                     'basic',
                     'ParameterValue',
                     'HTTP Basic authentication'
                 ),
-                [System.Management.Automation.CompletionResult]::new(
+                [CompletionResult]::new(
                     "${Prefix}digest",
                     'digest',
                     'ParameterValue',
                     'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text'
                 ),
-                [System.Management.Automation.CompletionResult]::new(
+                [CompletionResult]::new(
                     "${Prefix}negotiate",
                     'negotiate',
                     'ParameterValue',
                     ' GSS-Negotiate authentication (compare the --negotiate option of curl)'
                 ),
-                [System.Management.Automation.CompletionResult]::new(
+                [CompletionResult]::new(
                     "${Prefix}ntlm",
                     'ntlm',
                     'ParameterValue',
@@ -379,7 +381,7 @@ function completeConfigVariableValue {
 
 # __git_complete_config_variable_name
 function completeConfigVariableName {
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
         [string] $Suffix = ''

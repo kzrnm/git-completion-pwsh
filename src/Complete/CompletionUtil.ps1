@@ -1,6 +1,8 @@
+using namespace System.Management.Automation;
+
 function completeList {
     [CmdletBinding(PositionalBinding = $false)]
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param(
         [Parameter(Mandatory)]
         [AllowEmptyString()]
@@ -30,7 +32,7 @@ function completeList {
             $desc = "$_"
         }
 
-        [System.Management.Automation.CompletionResult]::new(
+        [CompletionResult]::new(
             "$_$Suffix",
             "$_",
             'ParameterName',
@@ -40,7 +42,7 @@ function completeList {
 }
 
 function filterCompletionResult {
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param (
         [Parameter(Mandatory)]
         [AllowEmptyString()]
@@ -51,7 +53,7 @@ function filterCompletionResult {
     )
 
     process {
-        if (($Completion -is [System.Management.Automation.CompletionResult]) -and $Completion.ListItemText.StartsWith($Current)) {
+        if (($Completion -is [CompletionResult]) -and $Completion.ListItemText.StartsWith($Current)) {
             return $Completion
         }
         elseif (($Completion -is [string]) -and $Completion.StartsWith($Current)) {
@@ -68,7 +70,7 @@ function filterCompletionResult {
 # 3: Generate possible completion matches for this word (optional).
 # 4: A suffix to be appended to each possible completion word (optional).
 function gitcomp {
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     [CmdletBinding(PositionalBinding = $false)]
     param(
         [Parameter(Mandatory)]
@@ -111,7 +113,7 @@ function gitcomp {
             -1 {  }
             1 { 
                 if ($cw.StartsWith($Current)) {
-                    [System.Management.Automation.CompletionResult]::new(
+                    [CompletionResult]::new(
                         $c,
                         $c,
                         'ParameterName',
@@ -122,7 +124,7 @@ function gitcomp {
             Default {
                 if ($Candidate -eq '--') {
                     if ('--no-'.StartsWith($Current)) {
-                        [System.Management.Automation.CompletionResult]::new(
+                        [CompletionResult]::new(
                             "--no-",
                             "--no-...$Suffix",
                             'Text',
@@ -133,7 +135,7 @@ function gitcomp {
                 }
                 else {
                     if ($cw.StartsWith($Current)) {
-                        [System.Management.Automation.CompletionResult]::new(
+                        [CompletionResult]::new(
                             $c,
                             $c,
                             'ParameterName',

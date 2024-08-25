@@ -1,6 +1,8 @@
+using namespace System.IO;
+
 class CommandLineContext {
     [string[]] $Words
-    [System.IO.DirectoryInfo] $gitDir
+    [DirectoryInfo] $gitDir
     [string] $command
     [int] $commandIndex
     [string[]] $gitCArgs
@@ -20,17 +22,17 @@ class CommandLineContext {
             $s = $this.Words[$i]
             switch -Wildcard -CaseSensitive ($s) {
                 '--git-dir=*' {
-                    $this.gitDir = [System.IO.DirectoryInfo]::new($s.Substring('--git-dir='.Length))
+                    $this.gitDir = [DirectoryInfo]::new($s.Substring('--git-dir='.Length))
                     continue
                 }
                 '--git-dir' {
                     if (++$i -lt $this.Words.Count) {
-                        $this.gitDir = [System.IO.DirectoryInfo]::new($this.Words[$i])
+                        $this.gitDir = [DirectoryInfo]::new($this.Words[$i])
                     }
                     continue
                 }
                 '--bare' {
-                    $this.gitDir = [System.IO.DirectoryInfo]::new('.')
+                    $this.gitDir = [DirectoryInfo]::new('.')
                     continue
                 }
                 '--help' {
