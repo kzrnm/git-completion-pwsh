@@ -117,8 +117,8 @@ Describe 'GirGlobal' {
         "git $line" | Complete-FromLine | Should -BeCompletion $expected
     }
 
-    Describe 'GIT_COMPLETION_SHOW_ALL_COMMANDS' {
-        Describe 'False' {
+    Describe 'Complete subcommands' {
+        Describe 'GIT_COMPLETION_SHOW_ALL_COMMANDS:False' {
             It '<Text>' -ForEach @(
                 @{
                     Text  = '0';
@@ -146,7 +146,7 @@ Describe 'GirGlobal' {
                 )
             }
         }
-        Describe 'True' {
+        Describe 'GIT_COMPLETION_SHOW_ALL_COMMANDS:True' {
             It '<Value>' -ForEach @(
                 @{
                     Value = '1';
@@ -190,9 +190,110 @@ Describe 'GirGlobal' {
                 )
             }
         }
-        
-        AfterAll {
+
+        AfterEach {
             $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = ''
         }
+    }
+
+    It 'Add,Remove-GitSubcommand' {
+        $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = ''
+
+        Add-GitSubcommand diffusion difficult
+
+        "git diff" | Complete-FromLine | Should -BeCompletion @(
+            @{
+                CompletionText = "diff";
+                ListItemText   = "diff";
+                ResultType     = 'Text';
+                ToolTip        = "Show changes between commits, commit and working tree, etc";
+            },
+            @{
+                CompletionText = "difficult";
+                ListItemText   = "difficult";
+                ResultType     = 'Text';
+                ToolTip        = "difficult";
+            },
+            @{
+                CompletionText = "difftool";
+                ListItemText   = "difftool";
+                ResultType     = 'Text';
+                ToolTip        = "difftool";
+            },
+            @{
+                CompletionText = "diffusion";
+                ListItemText   = "diffusion";
+                ResultType     = 'Text';
+                ToolTip        = "diffusion";
+            }
+        )
+
+        Remove-GitSubcommand difficult
+
+        "git diff" | Complete-FromLine | Should -BeCompletion @(
+            @{
+                CompletionText = "diff";
+                ListItemText   = "diff";
+                ResultType     = 'Text';
+                ToolTip        = "Show changes between commits, commit and working tree, etc";
+            },
+            @{
+                CompletionText = "difftool";
+                ListItemText   = "difftool";
+                ResultType     = 'Text';
+                ToolTip        = "difftool";
+            },
+            @{
+                CompletionText = "diffusion";
+                ListItemText   = "diffusion";
+                ResultType     = 'Text';
+                ToolTip        = "diffusion";
+            }
+        )
+
+        $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = '1'
+
+        "git diff" | Complete-FromLine | Should -BeCompletion @(
+            @{
+                CompletionText = "diff";
+                ListItemText   = "diff";
+                ResultType     = 'Text';
+                ToolTip        = "Show changes between commits, commit and working tree, etc";
+            },
+            @{
+                CompletionText = "difftool";
+                ListItemText   = "difftool";
+                ResultType     = 'Text';
+                ToolTip        = "difftool";
+            },
+            @{
+                CompletionText = "diffusion";
+                ListItemText   = "diffusion";
+                ResultType     = 'Text';
+                ToolTip        = "diffusion";
+            },
+            @{
+                CompletionText = "diff-files";
+                ListItemText   = "diff-files";
+                ResultType     = 'Text';
+                ToolTip        = "diff-files";
+            },
+            @{
+                CompletionText = "diff-index";
+                ListItemText   = "diff-index";
+                ResultType     = 'Text';
+                ToolTip        = "diff-index";
+            },
+            @{
+                CompletionText = "diff-tree";
+                ListItemText   = "diff-tree";
+                ResultType     = 'Text';
+                ToolTip        = "diff-tree";
+            }
+        )
+    }
+
+    AfterEach {
+        $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = ''
     }
 }

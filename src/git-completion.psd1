@@ -69,7 +69,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Complete-Git', 'Resolve-GitAlias')
+    FunctionsToExport = @('Complete-Git', 'Resolve-GitAlias', 'Add-GitSubcommand', 'Remove-GitSubcommand')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport   = @()
@@ -110,7 +110,7 @@
             ReleaseNotes = 'https://github.com/kzrnm/git-completion-pwsh/blob/main/CHANGELOG.md'
 
             # Prerelease string of this module
-            Prerelease = 'alpha'
+            Prerelease   = 'alpha'
 
             # Flag to indicate whether the module requires explicit user acceptance for install/update/save
             # RequireLicenseAcceptance = $false

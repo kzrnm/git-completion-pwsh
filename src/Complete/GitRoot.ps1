@@ -250,15 +250,7 @@ function Complete-GitCommandLine {
             $descriptions[$a.Name] = "[alias] $($a.Value)"
         }
 
-        $commands = (gitAllCommands list-mainporcelain others nohelpers alias list-complete config) | Sort-Object -Unique
-
-        if (isGitCompletionShowAllCommand) {
-            $commandsSet = [System.Collections.Generic.HashSet[string]]::new([string[]]$commands)
-            $commands += (gitBuiltinCommands | Where-Object { -not $commandsSet.Contains($_) } | Sort-Object -Unique)
-        }
-
-        $commands |
-        Where-Object {
+        listCommands | Where-Object {
             $_.StartsWith($Current)
         } | ForEach-Object {
             $desc = $descriptions[$_]
