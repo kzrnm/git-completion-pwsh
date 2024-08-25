@@ -90,7 +90,7 @@ function gitConfigVars {
     if ($script:__git_config_vars) {
         return $script:__git_config_vars
     }
-    return $script:__git_config_vars = (git help --config-for-completion)
+    return $script:__git_config_vars = (git help --config-for-completion | Sort-Object)
 }
 
 $script:__git_config_vars_all = $null
