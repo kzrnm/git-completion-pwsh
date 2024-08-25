@@ -1,4 +1,4 @@
-BeforeAll {
+﻿BeforeAll {
     . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
 

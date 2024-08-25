@@ -1,4 +1,4 @@
-function Get-GitConfigSubcommandDescription {
+﻿function Get-GitConfigSubcommandDescription {
     [CmdletBinding()]
     [OutputType([string])]
     param (
