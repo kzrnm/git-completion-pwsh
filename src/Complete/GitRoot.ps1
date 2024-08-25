@@ -8,6 +8,56 @@ function Complete-Git {
     return Complete-GitCommandLine ([CommandLineContext]::new($Words))
 }
 
+
+class CommandOption {
+    [string] $Short
+    [string] $Long
+    [string] $Description
+    [string] $Value
+
+    CommandOption ([string]$short, [string]$long, $description, $value) {
+        $this.Short = $Short
+        $this.Long = $Long
+        $this.Description = $Description
+        $this.Value = $Value
+    }
+
+    [System.Management.Automation.CompletionResult] ToLongCompletion([string]$Prefix) {
+        if ($this.Long -and ($this.Long -clike "$Prefix*")) {
+            return [System.Management.Automation.CompletionResult]::new(
+                $this.Long,
+                $this.Long + "$(if($this.Value){" $($this.Value)"})",
+                'ParameterName',
+                "$(if($this.Description){$this.Description}else{$this.Long})"
+            )
+        }
+        return $null
+    }
+
+    [System.Management.Automation.CompletionResult] ToShortCompletion() {
+        if ($this.Short) {
+            return [System.Management.Automation.CompletionResult]::new(
+                $this.Short,
+                $this.Short + "$(if($this.Value){" $($this.Value)"})",
+                'ParameterName',
+                "$(if($this.Description){$this.Description}else{$this.Short})"
+            )
+        }
+        return $null
+    }
+}
+
+function New-CommandOption {
+    [CmdletBinding()]
+    param (
+        [string]$Short = '',
+        [string]$Long = '',
+        [string]$Desc = '',
+        [string]$Value = ''
+    )
+    [CommandOption]::new($Short, $Long, $Desc, $Value)
+}
+
 $gitGlobalOptions = @(
     (
         New-CommandOption -Short '-v' -Long '--version' `
