@@ -54,14 +54,20 @@ function Convert-FromGitHelp {
                 $long = $Matches[3].Replace('[no-]', '')
                 $remaining = $Matches[4]
                 $ShortToLong[$Matches[1]] = $long
+                $key = $long
                 
                 Write-Parser "`e[35m$($Matches[1])`e[0m$($Matches[2])`e[36m$($Matches[3])`e[0m" -NoNewline
             }
             elseif ($line -match '(--\S+)(.*)') {
                 $long = $Matches[1].Replace('[no-]', '')
                 $remaining = $Matches[2]
+                $key = $long
                 
                 Write-Parser "`e[36m$($Matches[1])`e[0m" -NoNewline
+            }
+            elseif ($line -match '(-\S)(.*)') {
+                $key = $Matches[1]
+                $remaining = $Matches[2]
             }
             else {
                 throw "!? $line !?"
@@ -76,10 +82,10 @@ function Convert-FromGitHelp {
             $desc = $remaining.Trim()
             
             if ($desc) {
-                $Descriptions[$long] = $desc
+                $Descriptions[$key] = $desc
             }
             else {
-                $Prev = $long
+                $Prev = $key
             }
         }
         else {
@@ -117,14 +123,14 @@ function buildSwitch {
                 }
             } | Sort-Object { $_.Sub.Length }
             $c += $vv | Select-Object -SkipLast 1 | ForEach-Object {
-                $l = $_.Long
+                $l = $_.Long.Replace("'", "''")
                 $_.Sub | ForEach-Object {
                     "
                 '$($_)' { '$l' }"
                 }
             }
             $c += $vv | Select-Object -Last 1 | ForEach-Object {
-                $l = $_.Long 
+                $l = $_.Long.Replace("'", "''")
                 "
                 Default { '$l' }"
             }
@@ -221,7 +227,8 @@ else {
     $shortArray = ($Options | ForEach-Object ShortToLong | ForEach-Object Keys | Sort-Object | ForEach-Object { "'$_'" }) -join ', '
 }
 
-return "
+return "using namespace System.Management.Automation;
+
 function Convert-Git${CamelCommand}ShortToLong {
     param(
         [Parameter(Position = 0, Mandatory)][string]`$Short,
@@ -234,24 +241,25 @@ $((buildShortToLong $Options) -join "`n")
 
 function Get-Git${CamelCommand}ShortOptions {
     [CmdletBinding()]
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param(
         [string]`$Subcommand = ''
     )
 
     $shortArray | ForEach-Object {
-        `$long = (Convert-Git${CamelCommand}ShortToLong `$_ -Subcommand $Subcommand)
+        `$long = (Convert-Git${CamelCommand}ShortToLong `$_ -Subcommand `$Subcommand)
         `$desc = (Get-Git${CamelCommand}OptionsDescription `$long)
         if (-not `$desc) {
             `$desc = `$_
         }
-        [System.Management.Automation.CompletionResult]::new(
+        [CompletionResult]::new(
             `$_,
             `$_,
             'ParameterName',
             `$desc
         )
     }
+    `$script:__helpCompletion
 }
 
 function Get-Git${CamelCommand}OptionsDescription {

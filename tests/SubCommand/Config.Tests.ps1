@@ -51,6 +51,17 @@ Describe 'Config' {
         }
 
         Describe 'ShortOptions' {
+            It 'Root' {
+                "git config -" | Complete-FromLine | Should -BeCompletion @(
+                    @{
+                        CompletionText = "-h";
+                        ListItemText   = "-h";
+                        ResultType     = 'ParameterName';
+                        ToolTip        = "show help";
+                    }
+                )
+            }
+
             It '<Line>' -ForEach @(
                 @{
                     Line     = 'get'
@@ -72,6 +83,12 @@ Describe 'Config' {
                             ListItemText   = "-z";
                             ResultType     = 'ParameterName';
                             ToolTip        = "terminate values with NUL byte";
+                        },
+                        @{
+                            CompletionText = "-h";
+                            ListItemText   = "-h";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "show help";
                         }
                     )
                 },
@@ -89,6 +106,12 @@ Describe 'Config' {
                             ListItemText   = "-t";
                             ResultType     = 'ParameterName';
                             ToolTip        = "value is given this type";
+                        },
+                        @{
+                            CompletionText = "-h";
+                            ListItemText   = "-h";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "show help";
                         }
                     )
                 },
@@ -100,6 +123,12 @@ Describe 'Config' {
                             ListItemText   = "-f";
                             ResultType     = 'ParameterName';
                             ToolTip        = "use given config file";
+                        },
+                        @{
+                            CompletionText = "-h";
+                            ListItemText   = "-h";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "show help";
                         }
                     )
                 }

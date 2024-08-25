@@ -8,6 +8,10 @@ function Complete-GitSubCommandCommon {
 
     $Current = $Context.CurrentWord()
 
+    if ($Current -eq '-') {
+        $script:__helpCompletion
+        return
+    }
     if (($Current.StartsWith('--')) -and (gitSupportParseoptHelper $Context.command)) {
         gitResolveBuiltins $Context.command | gitcomp -Current $Current
         return

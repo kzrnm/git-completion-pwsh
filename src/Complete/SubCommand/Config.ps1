@@ -18,8 +18,14 @@ function Complete-GitSubCommand-config {
     $subcommands = gitResolveBuiltins $Context.command
     [string] $subcommand = $Context.Subcommand()
     if ($subcommand -notin $subcommands) {
-        $subcommands | gitcomp -Current $Current -DescriptionBuilder { Get-GitConfigSubcommandDescription $_ }
-        return
+        if ($Current -eq '-') {
+            $script:__helpCompletion
+            return
+        }
+        else {
+            $subcommands | gitcomp -Current $Current -DescriptionBuilder { Get-GitConfigSubcommandDescription $_ }
+            return
+        }
     }
     
     if ($Current -eq '-') {

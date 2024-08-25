@@ -1,4 +1,6 @@
-﻿function Get-GitConfigSubcommandDescription {
+﻿using namespace System.Management.Automation;
+
+function Get-GitConfigSubcommandDescription {
     [CmdletBinding()]
     [OutputType([string])]
     param (
@@ -31,7 +33,7 @@ function Convert-GitConfigShortToLong {
 
 function Get-GitConfigShortOptions {
     [CmdletBinding()]
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param(
         [string]$Subcommand = ''
     )
@@ -52,13 +54,14 @@ function Get-GitConfigShortOptions {
         if (-not $desc) {
             $desc = $_
         }
-        [System.Management.Automation.CompletionResult]::new(
+        [CompletionResult]::new(
             $_,
             $_,
             'ParameterName',
             $desc
         )
     }
+    $script:__helpCompletion
 }
 
 function Get-GitConfigOptionsDescription {
@@ -948,7 +951,7 @@ function Get-GitConfigVariableDescription {
 
 function Get-GitConfigShortOptionsGit2_45 {
     [CmdletBinding()]
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param()
 
     @(
@@ -961,7 +964,7 @@ function Get-GitConfigShortOptionsGit2_45 {
         if (-not $desc) {
             $desc = $_.Short
         }
-        [System.Management.Automation.CompletionResult]::new(
+        [CompletionResult]::new(
             $_.Short,
             $_.Short,
             'ParameterName',

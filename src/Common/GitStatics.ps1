@@ -1,3 +1,10 @@
+$script:__helpCompletion = [System.Management.Automation.CompletionResult]::new(
+    '-h',
+    '-h',
+    'ParameterName',
+    'show help'
+)
+
 # $script:gitDiffAlgorithms="myers minimal patience histogram"
 
 $script:gitDiffSubmoduleFormats = "diff", "log", "short"
