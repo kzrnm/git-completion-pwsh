@@ -49,7 +49,7 @@ function gitVersion {
         return $script:__gitVersion 
     }
 
-    (git --version) -match 'version\s(\d+\.\d+\.\d+)'
+    (git --version) -match 'version\s*(\d+\.\d+\.\d+)'
     [version]::TryParse($Matches[1], [ref]$script:__gitVersion) | Out-Null
     return $script:__gitVersion
 }
