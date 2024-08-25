@@ -3,7 +3,8 @@ using namespace System.Collections.Generic;
 param(
     [Parameter(Position = 0, Mandatory)][string]$Command,
     [Parameter(ValueFromRemainingArguments)][string[]]$Subcommands,
-    [switch] $NoParser
+    [switch] $NoParser,
+    [switch] $WriteFile
 )
 
 # e.g.
@@ -11,7 +12,7 @@ param(
 # tools/description.ps1 add
 
 $ErrorActionPreference = 'Stop'
-$CamelCommand = $Command -replace '^.', { $_.Value.ToUpper() }
+$CamelCommand = $Command -replace "(^|-)(.)", { $_.Groups[2].Value.ToUpper() }
 
 if (-not $Subcommands) {
     $Subcommands = (git $Command --git-completion-helper-all) -split '\s+'
@@ -49,25 +50,27 @@ function Convert-FromGitHelp {
             $Prev = $null
             Write-Parser "`e[32m$line`e[0m"
         }
-        elseif ($line -match '\s+-') {
+        elseif ($line -match '^\s+-') {
             if ($line -match '(-[^-])(,.*)(--\S+)(.*)') {
                 $long = $Matches[3].Replace('[no-]', '')
                 $remaining = $Matches[4]
                 $ShortToLong[$Matches[1]] = $long
                 $key = $long
-                
+
                 Write-Parser "`e[35m$($Matches[1])`e[0m$($Matches[2])`e[36m$($Matches[3])`e[0m" -NoNewline
             }
             elseif ($line -match '(--\S+)(.*)') {
                 $long = $Matches[1].Replace('[no-]', '')
                 $remaining = $Matches[2]
                 $key = $long
-                
+
                 Write-Parser "`e[36m$($Matches[1])`e[0m" -NoNewline
             }
             elseif ($line -match '(-\S)(.*)') {
                 $key = $Matches[1]
                 $remaining = $Matches[2]
+
+                Write-Parser "`e[35m$($Matches[1])`e[0m" -NoNewline
             }
             else {
                 throw "!? $line !?"
@@ -227,7 +230,7 @@ else {
     $shortArray = ($Options | ForEach-Object ShortToLong | ForEach-Object Keys | Sort-Object | ForEach-Object { "'$_'" }) -join ', '
 }
 
-return "using namespace System.Management.Automation;
+$result = "using namespace System.Management.Automation;
 
 function Convert-Git${CamelCommand}ShortToLong {
     param(
@@ -284,3 +287,8 @@ $((buildDescriptions $Options) -join "`n")
     }
 }
 "
+
+if ($result) {
+    $result | Out-File -Encoding utf8BOM "$PSScriptRoot/../src/Complete/SubCommand/${CamelCommand}Description.ps1"
+}
+return $result

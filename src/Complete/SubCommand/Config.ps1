@@ -23,7 +23,17 @@ function Complete-GitSubCommand-config {
             return
         }
         else {
-            $subcommands | gitcomp -Current $Current -DescriptionBuilder { Get-GitConfigSubcommandDescription $_ }
+            $subcommands | gitcomp -Current $Current -DescriptionBuilder { 
+                switch ($_) {
+                    "list" { 'List all variables set in config file' }
+                    "get" { 'Emits the value of the specified key' }
+                    "set" { 'Set value for one or more config options' }
+                    "unset" { 'Unset value for one or more config options' }
+                    "rename-section" { 'Rename the given section to a new name' }
+                    "remove-section" { 'Remove the given section from the configuration file' }
+                    "edit" { 'Opens an editor to modify the specified config file' }
+                }
+            }
             return
         }
     }
