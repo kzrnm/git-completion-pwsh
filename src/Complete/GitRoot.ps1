@@ -211,9 +211,7 @@ function Complete-GitCommandLine {
                 & $completeSubcommandFunc $Context
             }
             catch {
-                if (($Current.StartsWith('--')) -and (gitSupportParseoptHelper $Context.command)) {
-                    gitResolveBuiltins $Context.command | gitcomp -Current $Current
-                }
+                Complete-GitSubCommandCommon $Context
             }
             return
         }
