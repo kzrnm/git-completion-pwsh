@@ -291,6 +291,29 @@ Describe 'GirGlobal' {
                 ToolTip        = "diff-tree";
             }
         )
+
+        Remove-GitSubcommand diffusion diff-index diff-files
+
+        "git diff" | Complete-FromLine | Should -BeCompletion @(
+            @{
+                CompletionText = "diff";
+                ListItemText   = "diff";
+                ResultType     = 'Text';
+                ToolTip        = "Show changes between commits, commit and working tree, etc";
+            },
+            @{
+                CompletionText = "difftool";
+                ListItemText   = "difftool";
+                ResultType     = 'Text';
+                ToolTip        = "difftool";
+            },
+            @{
+                CompletionText = "diff-tree";
+                ListItemText   = "diff-tree";
+                ResultType     = 'Text';
+                ToolTip        = "diff-tree";
+            }
+        )
     }
 
     AfterEach {
