@@ -7,12 +7,14 @@ function gitCompleteFetchRefspecs {
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
         [Parameter(Mandatory)][string] $Remote,
         [string] $Prefix = "",
-        [string] $Suffix = ""
+        [string] $Suffix = "",
+        [CompletionResultType]
+        $ResultType = [CompletionResultType]::ParameterValue
     )
 
-    gitRefs -Remote $Remote -Current $Current -Prefix '' -Suffix '' |
+    gitRefs -Remote $Remote -Current $Current |
     ForEach-Object { "${_}:${_}" } |
-    completeList -Current $Current -Prefix $Prefix -Suffix $Suffix
+    completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
 }
 
 # __git_complete_remote_or_refspec
@@ -91,26 +93,26 @@ function gitCompleteRemoteOrRefspec {
 
     if ($Command -eq 'fetch') {
         if ($lhs) {
-            gitCompleteFetchRefspecs -Remote $remote -Current $Current -Prefix $Prefix
+            gitCompleteFetchRefspecs -Remote $remote -Current $Current -Prefix $Prefix -ResultType $ResultType
         }
         else {
-            gitCompleteRefs -Current $Current -Prefix $Prefix
+            gitCompleteRefs -Current $Current -Prefix $Prefix -ResultType $ResultType
         }
     }
     elseif ($Command -in @('pull', 'remote')) {
         if ($lhs) {
-            gitCompleteRefs -Current $Current -Prefix $Prefix -Remote $remote
+            gitCompleteRefs -Current $Current -Prefix $Prefix -Remote $remote -ResultType $ResultType
         }
         else {
-            gitCompleteRefs -Current $Current -Prefix $Prefix
+            gitCompleteRefs -Current $Current -Prefix $Prefix -ResultType $ResultType
         }
     }
     elseif ($Command -eq 'push') {
         if ($lhs) {
-            gitCompleteRefs -Current $Current -Prefix $Prefix
+            gitCompleteRefs -Current $Current -Prefix $Prefix -ResultType $ResultType
         }
         else {
-            gitCompleteRefs -Current $Current -Prefix $Prefix -Remote $remote
+            gitCompleteRefs -Current $Current -Prefix $Prefix -Remote $remote -ResultType $ResultType
         }
     }
 }

@@ -2,6 +2,7 @@
 
 $script:gitDiffSubmoduleFormats = "diff", "log", "short"
 $script:gitPushRecurseSubmodules = "check", "on-demand", "only"
+$script:gitFetchRecurseSubmodules = "yes", "on-demand", "no"
 
 # $script:gitColorMovedOpts="no default plain blocks zebra dimmed-zebra"
 

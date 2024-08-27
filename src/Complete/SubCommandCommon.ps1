@@ -18,12 +18,11 @@ function Complete-GitSubCommandCommon {
         Get-GitShortOptions $Command $subcommand 
         return
     }
-    elseif (gitSupportParseoptHelper $Command) {
-        if ($Current.StartsWith('--')) {
-            gitResolveBuiltins $Command | gitcomp -Current $Current -DescriptionBuilder {
-                Get-GitOptionsDescription $Command $_ -Subcommand $subcommand 
-            }
-            return
+    # elseif (gitSupportParseoptHelper $Command) {
+    if ($Current.StartsWith('--')) {
+        gitResolveBuiltins $Command | gitcomp -Current $Current -DescriptionBuilder {
+            Get-GitOptionsDescription $Command $_ -Subcommand $subcommand 
         }
+        return
     }
 }

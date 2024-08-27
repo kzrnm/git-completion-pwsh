@@ -2,10 +2,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "PowerShell: Run Cuttent Pester Test",
+            "name": "PowerShell: Complete Git Command",
             "type": "PowerShell",
             "request": "launch",
-            "script": "$SkipHeavyTest=$false; Invoke-Pester '${file}'"
+            "script": "${workspaceFolder}/tools/makeExpected.ps1 '${input:commandLine}'",
+            "createTemporaryIntegratedConsole": true,
+            "attachDotnetDebugger": true
         },
         {
             "name": "PowerShell: Run Pester Light Tests",
@@ -22,6 +24,13 @@
             "script": "$SkipHeavyTest=$false; Invoke-Pester",
             "createTemporaryIntegratedConsole": true,
             "attachDotnetDebugger": true
+        }
+    ],
+    "inputs": [
+        {
+            "id": "commandLine",
+            "type": "promptString",
+            "description": "Input command line. e.g. `git add -`"
         }
     ]
 }
