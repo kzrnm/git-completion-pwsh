@@ -27,31 +27,6 @@ Describe 'Config' {
     }
 
     Describe 'Git2.46.0' {
-        BeforeAll {
-            InModuleScope git-completion {
-                Mock gitVersion { return [version]::new(2, 46, 0) }
-                Mock gitResolveBuiltinsImpl {
-                    if ($Command.Length -lt 2) {
-                        return 'list get set unset rename-section remove-section edit'
-                    }
-                    else {
-                        switch ($Command[1]) {
-                            'list' { ' --global --system --local --worktree --file= --blob= --null --name-only --show-origin --show-scope --show-names --type= --bool --int --bool-or-int --bool-or-str --path --expiry-date --includes --no-global -- --no-system --no-local --no-worktree --no-file --no-blob --no-null --no-name-only --no-show-origin --no-show-scope --no-show-names --no-type --no-includes' }
-                            'get' { ' --global --system --local --worktree --file= --blob= --all --regexp --value= --fixed-value --url= --null --name-only --show-origin --show-scope --show-names --type= --bool --int --bool-or-int --bool-or-str --path --expiry-date --includes --default= --no-global -- --no-system --no-local --no-worktree --no-file --no-blob --no-all --no-regexp --no-value --no-fixed-value --no-url --no-null --no-name-only --no-show-origin --no-show-scope --no-show-names --no-type --no-includes --no-default' }
-                            'set' { ' --global --system --local --worktree --file= --blob= --type= --bool --int --bool-or-int --bool-or-str --path --expiry-date --all --value= --fixed-value --comment= --append --no-global -- --no-system --no-local --no-worktree --no-file --no-blob --no-type --no-all --no-value --no-fixed-value --no-comment --no-append' }
-                            'unset' { ' --global --system --local --worktree --file= --blob= --all --value= --fixed-value --no-global -- --no-system --no-local --no-worktree --no-file --no-blob --no-all --no-value --no-fixed-value' }
-                            'rename-section' { ' --global --system --local --worktree --file= --blob= --no-global -- --no-system --no-local --no-worktree --no-file --no-blob' }
-                            'remove-section' { ' --global --system --local --worktree --file= --blob= --no-global -- --no-system --no-local --no-worktree --no-file --no-blob' }
-                            'edit' { ' --global --system --local --worktree --file= --blob= --no-global -- --no-system --no-local --no-worktree --no-file --no-blob' }
-                            Default { '' }
-                        }
-                    }
-                } -ParameterFilter { 
-                    $Command[0] -eq 'config'
-                }
-            }
-        }
-
         Describe 'ShortOptions' {
             It 'Root' {
                 "git config -" | Complete-FromLine | Should -BeCompletion @(
