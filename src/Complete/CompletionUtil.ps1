@@ -9,35 +9,39 @@ function completeList {
         [string]
         $Current,
         [string]
+        $Prefix = '',
+        [string]
         $Suffix = '',
         [scriptblock]
         $DescriptionBuilder = $null,
-        [Parameter(ValueFromRemainingArguments = $true)]
-        [string[]]
-        $Candidates
+        [CompletionResultType]
+        $ResultType = [CompletionResultType]::ParameterName,
+        [Parameter(ValueFromPipeline)]
+        [string]
+        $Candidate
     )
-    $Candidates |
-    Where-Object {
-        if (-not $Current) {
-            return $true
-        }
-        $_.StartsWith($Current)
-    } |
-    ForEach-Object {
-        $desc = $null
-        if ($DescriptionBuilder) {
-            $desc = $DescriptionBuilder.Invoke($_)
-        }
-        if (-not $desc) {
-            $desc = "$_"
-        }
 
-        [CompletionResult]::new(
-            "$_$Suffix",
-            "$_",
-            'ParameterName',
-            $desc
-        )
+    process {
+        if ((-not $Current) -or $Candidate.StartsWith($Current)) {
+            $desc = $null
+            if ($DescriptionBuilder) {
+                $desc = [string]$DescriptionBuilder.InvokeWithContext(
+                    $null,
+                    [psvariable]::new('_', $_),
+                    @($_)
+                )
+            }
+            if (-not $desc) {
+                $desc = "$_"
+            }
+
+            [CompletionResult]::new(
+                "$Prefix$_$Suffix",
+                "$_",
+                $ResultType,
+                $desc
+            )
+        } 
     }
 }
 

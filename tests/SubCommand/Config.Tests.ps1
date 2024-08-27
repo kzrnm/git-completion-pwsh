@@ -266,6 +266,18 @@ Describe 'Config' {
                             ToolTip        = '[NO] add a new line without altering any existing values';
                         }
                     )
+                },
+                @{
+                    Line       = '--ty';
+                    Subcommand = 'set';
+                    Expected   = @(
+                        @{
+                            CompletionText = '--type=';
+                            ListItemText   = '--type=';
+                            ResultType     = 'ParameterName';
+                            ToolTip        = 'value is given this type';
+                        }
+                    )
                 }
             ) {
                 "git config $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $Expected

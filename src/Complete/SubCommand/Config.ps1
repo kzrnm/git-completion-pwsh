@@ -50,7 +50,7 @@ function Complete-GitSubCommand-config {
     }
 
     if ($Prev.StartsWith('--')) {
-        if (gitResolveBuiltins $Context.command $subcommand | Where-Object { ($_.HasEqual) -and ($_ -eq $Prev) }) {
+        if ((gitResolveBuiltins $Context.command $subcommand) -eq "$Prev=") {
             return @()
         }
     }
@@ -169,30 +169,9 @@ function completeConfigVariableValue {
         [string] $Prefix = ''
     )
 
-    function completeValue {
-        [OutputType([CompletionResult[]])]
-        param(
-            [Parameter(ValueFromRemainingArguments = $true)]
-            [string[]]
-            $Candidates
-        )
-        $Candidates |
-        Where-Object {
-            $_.StartsWith($Current)
-        } |
-        ForEach-Object {
-            [CompletionResult]::new(
-                "${Prefix}$_",
-                $_,
-                'ParameterValue',
-                $_
-            )
-        }
-    }
-
     function remote {
         $remotes = [string[]](__git remote)
-        completeValue @remotes
+        $remotes | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
     }
 
     switch -Wildcard ($VarName.ToLowerInvariant()) {
@@ -210,11 +189,11 @@ function completeConfigVariableValue {
         }
         "branch.*.merge" {
             $params = [string[]](gitCompleteRefs -Current $Current)
-            completeValue @params
+            $params | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "branch.*.rebase" {
-            completeValue "false" "true" "merges" "interactive"
+            "false", "true", "merges", "interactive" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "remote.pushdefault" {
@@ -251,33 +230,33 @@ function completeConfigVariableValue {
         }
         "remote.*.push" {
             $params = [string[]](__git for-each-ref --format='%(refname):%(refname)' refs/heads)
-            completeValue @params
+            $params | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "pull.twohead" {
             $params = [string[]](gitListMergeStrategies)
-            completeValue @params
+            $params | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "pull.octopus" {
             $params = [string[]](gitListMergeStrategies)
-            completeValue @params
+            $params | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "color.pager" {
-            completeValue "false" "true"
+            "false", "true" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "color.*.*" {
-            completeValue "normal" "black" "red" "green" "yellow" "blue" "magenta" "cyan" "white" "bold" "dim" "ul" "blink" "reverse"
+            "normal", "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "bold", "dim", "ul", "blink", "reverse" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "color.*" {
-            completeValue "false" "true" "always" "never" "auto"
+            "false", "true", "always", "never", "auto" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "diff.submodule" {
-            completeValue @script:gitDiffSubmoduleFormats
+            $script:gitDiffSubmoduleFormats | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "diff.algorithm" {
@@ -353,27 +332,27 @@ function completeConfigVariableValue {
             )
         }
         "help.format" {
-            completeValue "man" "info" "web" "html"
+            "man", "info", "web", "html" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "log.date" {
-            completeValue @script:gitLogDateFormats
+            $script:gitLogDateFormats | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "sendemail.aliasfiletype" {
-            completeValue "mutt" "mailrc" "pine" "elm" "gnus"
+            "mutt", "mailrc", "pine", "elm", "gnus" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "sendemail.confirm" {
-            completeValue @script:gitSendEmailConfirmOptions
+            $script:gitSendEmailConfirmOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "sendemail.suppresscc" {
-            completeValue @script:gitSendEmailSuppressccOptions
+            $script:gitSendEmailSuppressccOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "sendemail.transferencoding" {
-            completeValue "7bit" "8bit" "quoted-printable" "base64"
+            "7bit", "8bit", "quoted-printable", "base64" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
     }
@@ -388,9 +367,7 @@ function completeConfigVariableName {
     )
 
     $DescriptionBuilder = [scriptblock] {
-        param($Candidate)
-
-        Get-GitConfigVariableDescription $Candidate
+        Get-GitConfigVariableDescription $_
     }
 
     if ($Current -match "(branch|guitool|difftool|man|mergetool|remote|submodule|url)\.(.*)\.([^\.]*)") {
@@ -400,7 +377,7 @@ function completeConfigVariableName {
                 "$section.$second.$_"
             }
         )
-        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params
+        $params | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "branch\.(.*)") {
@@ -411,8 +388,8 @@ function completeConfigVariableName {
                 "$section.$_"
             }
         )
-        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder @params1
-        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params2
+        $params1 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
+        $params2 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "pager\.(.*)") {
@@ -422,7 +399,7 @@ function completeConfigVariableName {
                 "$section.$_"
             }
         )
-        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params
+        $params | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "remote\.(.*)") {
@@ -439,8 +416,8 @@ function completeConfigVariableName {
             }
         )
 
-        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder @params1
-        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params2
+        $params1 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
+        $params2 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "submodule\.(.*)") {
@@ -460,19 +437,19 @@ function completeConfigVariableName {
                 "$section.$_"
             }
         )
-        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder @params1
-        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params2
+        $params1 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
+        $params2 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "([^\.]*)\.(.*)") {
         $section = $Matches[1]
         $params = [string[]](gitConfigVars | Where-Object { -not $_.EndsWith('.') })
-        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix @params
+        $params | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     else {
         $params = [string[]](gitConfigSections | ForEach-Object { "$_." })
-        completeList -Current $Current -DescriptionBuilder $DescriptionBuilder @params
+        $params | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
     }
     return
 }

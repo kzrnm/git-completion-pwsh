@@ -303,6 +303,9 @@ function Get-GitOptionsDescription {
         [string]$Subcommand = ''
     )
 
+    if ($Current.EndsWith('=')) {
+        $Current = $Current.TrimEnd('=')
+    }
     $gh = Get-GitHelp $Command
     $result = $gh.Description($Subcommand, $Current)
 

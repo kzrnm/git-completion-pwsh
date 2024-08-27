@@ -250,20 +250,7 @@ function Complete-GitCommandLine {
             $descriptions[$a.Name] = "[alias] $($a.Value)"
         }
 
-        listCommands | Where-Object {
-            $_.StartsWith($Current)
-        } | ForEach-Object {
-            $desc = $descriptions[$_]
-            if (-not $desc) {
-                $desc = $_
-            }
-            [CompletionResult]::new(
-                "$_",
-                "$_",
-                "Text",
-                $desc
-            )
-        }
+        listCommands | completeList -Current $Current -DescriptionBuilder { $descriptions[$_] } -ResultType Text
     }
     finally {
         Remove-Variable 'Context' -Scope 'Script'

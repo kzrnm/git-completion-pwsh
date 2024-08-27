@@ -478,7 +478,14 @@ function gitRefs {
 function gitIsConfiguredRemote {
     [OutputType([bool])]
     param([Parameter(Mandatory)][string]$Remote)
-    return (__git remote | Where-Object { $_ -eq $Remote })
+    return (gitRemote | Where-Object { $_ -eq $Remote })
+}
+
+function gitRemote {
+    [OutputType([string[]])]
+    param ()
+
+    return (__git remote)
 }
 
 function gitListAliases {
@@ -509,7 +516,6 @@ function gitGetAlias {
     }
 }
 
-
 # __git_resolve_builtins 
 function gitResolveBuiltins {
     [OutputType([string[]])]
@@ -521,16 +527,8 @@ function gitResolveBuiltins {
 
     return (gitResolveBuiltinsImpl @Command -All:(isGitCompletionShowAll) |
         ForEach-Object { $_ -split "\s+" } |
-        Where-Object { $_ } |
-        ForEach-Object {
-            if ($_.EndsWith('=')) {
-                $s = $_.Substring(0, $_.Length - 1)
-                $s | Add-Member HasEqual $true -PassThru
-            }
-            else {
-                $_
-            }
-        })
+        Where-Object { $_ }
+    )
 }
 
 function gitResolveBuiltinsImpl {

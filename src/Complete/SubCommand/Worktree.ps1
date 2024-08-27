@@ -92,13 +92,5 @@ function gitCompleteWorktreePaths {
     Select-Object -Skip 2 |
     Where-Object { $_.StartsWith('worktree ') } |
     ForEach-Object { $_.Substring('worktree '.Length) } |
-    Where-Object { $_.StartsWith($Current) } |
-    ForEach-Object {
-        [CompletionResult]::new(
-            $_,
-            $_,
-            'ParameterValue',
-            $_
-        )
-    }
+    completeList -Current $Current -ResultType ParameterValue
 }

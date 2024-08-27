@@ -204,8 +204,8 @@ Describe 'Worktree' {
             Line     = "add --re"
             Expected = @(
                 @{
-                    CompletionText = '--reason';
-                    ListItemText   = '--reason';
+                    CompletionText = '--reason=';
+                    ListItemText   = '--reason=';
                     ResultType     = 'ParameterName';
                     ToolTip        = 'reason for locking'
                 }
@@ -268,6 +268,18 @@ Describe 'Worktree' {
         },
         @{
             Line     = "add --reason val bar b"
+            Expected = $brn
+        },
+        @{
+            Line     = "add --reason=val "
+            Expected = @()
+        },
+        @{
+            Line     = "add --reason=val bar "
+            Expected = $refs
+        },
+        @{
+            Line     = "add --reason=val bar b"
             Expected = $brn
         },
         @{
