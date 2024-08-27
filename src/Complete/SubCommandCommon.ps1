@@ -7,13 +7,23 @@ function Complete-GitSubCommandCommon {
     )
 
     $Current = $Context.CurrentWord()
+    $Command = $Context.command
+
+    [string] $subcommand = $Context.Subcommand()
+    if ((-not $subcommand) -or $subcommand.StartsWith('-')) {
+        $subcommand = ''
+    }
 
     if ($Current -eq '-') {
-        $script:__helpCompletion
+        Get-GitShortOptions $Command $subcommand 
         return
     }
-    if (($Current.StartsWith('--')) -and (gitSupportParseoptHelper $Context.command)) {
-        gitResolveBuiltins $Context.command | gitcomp -Current $Current
-        return
+    elseif (gitSupportParseoptHelper $Command) {
+        if ($Current.StartsWith('--')) {
+            gitResolveBuiltins $Command | gitcomp -Current $Current -DescriptionBuilder {
+                Get-GitOptionsDescription $Command $_ -Subcommand $subcommand 
+            }
+            return
+        }
     }
 }

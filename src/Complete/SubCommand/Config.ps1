@@ -41,11 +41,11 @@ function Complete-GitSubCommand-config {
     }
     
     if ($Current -eq '-') {
-        return Get-GitConfigShortOptions -Subcommand $subcommand
+        return Get-GitShortOptions $Context.command -Subcommand $subcommand
     }
 
     if ($Current.StartsWith('--')) {
-        gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { Get-GitConfigOptionsDescription -Subcommand $subcommand $_ }
+        gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription config  $_ -Subcommand $subcommand }
         return
     }
 
@@ -81,7 +81,7 @@ function Complete-GitSubCommand-config-Git2_45 {
     $Current = $Context.CurrentWord()
 
     if ($Current -eq '-') {
-        return Get-GitConfigShortOptionsGit2_45
+        return Get-GitShortOptions $Context.command -Subcommand $subcommand
     }
 
     if ($Prev -in ('--get', '--get-all', '--unset', '--unset-all')) {
@@ -91,7 +91,7 @@ function Complete-GitSubCommand-config-Git2_45 {
         completeConfigVariableValue -Current $Current -VarName $Prev
     }
     elseif ($Current.StartsWith('--')) {
-        gitResolveBuiltins $Context.command | gitcomp -Current $Current -DescriptionBuilder { Get-GitConfigOptionsDescription $_ }
+        gitResolveBuiltins $Context.command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription config $_ }
     }
     else {
         completeConfigVariableName -Current $Current

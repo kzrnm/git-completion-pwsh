@@ -91,23 +91,32 @@ function gitcomp {
             '--no-*' { $Type = 1 }
             Default { $Type = 0 }
         }
+
+        function buildDescription {
+            param (
+                [Parameter(Position = 0)]
+                [string]
+                $Candidate
+            )
+            $desc = $null
+            if ($DescriptionBuilder) {
+                $desc = [string]$DescriptionBuilder.InvokeWithContext(
+                    $null,
+                    [psvariable]::new('_', $Candidate),
+                    @($Candidate)
+                )
+            }
+            if (-not $desc) {
+                $desc = "$c"
+            }
+            return $desc
+        }
     }
 
     process {
-        $desc = $null
-        if ($DescriptionBuilder) {
-            $desc = $DescriptionBuilder.InvokeWithContext(
-                $null,
-                [psvariable]::new('_', $Candidate),
-                @($Candidate)
-            )
-        }
-        
         $cw = "$Candidate$Suffix"
         $c = "$Prefix$cw"
-        if (-not $desc) {
-            $desc = "$c"
-        }
+
 
         switch ($Type) {
             -1 {  }
@@ -117,7 +126,7 @@ function gitcomp {
                         $c,
                         $c,
                         'ParameterName',
-                        $desc
+                        (buildDescription $Candidate)
                     )
                 }
             }
@@ -139,7 +148,7 @@ function gitcomp {
                             $c,
                             $c,
                             'ParameterName',
-                            $desc
+                            (buildDescription $Candidate)
                         )
                     }
                 }

@@ -1,3 +1,5 @@
+using namespace System.Collections.Generic;
+
 BeforeAll {
     . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
@@ -431,9 +433,39 @@ Describe 'Config' {
                         ' --no-add --no-unset --no-unset-all --no-rename-section --no-remove-section --no-list --no-fixed-value' +
                         ' --no-edit --no-get-color --no-get-colorbool --no-type --no-null --no-name-only --no-includes --no-show-origin' +
                         ' --no-show-scope --no-default --no-comment'
-                    ) 
+                    )
                 } -ParameterFilter { 
                     ($Command.Length -eq 1) -and ($Command[0] -eq 'config')
+                }
+                Mock Get-GitHelp {
+                    $short = [Dictionary[string, string]]::new()
+                    (
+                        @{Key = "-e"; Value = "open an editor"; },
+                        @{Key = "-f"; Value = "use given config file"; },
+                        @{Key = "-l"; Value = "list all"; },
+                        @{Key = "-z"; Value = "terminate values with NUL byte"; }
+                    ) | ForEach-Object {
+                        $short[$_.Key] = $_.Value
+                    }
+
+                    $long = [Dictionary[string, string]]::new()
+                    (
+                        @{Key = "--includes"; Value = "respect include directives on lookup"; },
+                        @{Key = "--int"; Value = "value is decimal number"; },
+                        @{Key = "--local"; Value = "use repository config file"; }
+                    ) | ForEach-Object {
+                        $long[$_.Key] = $_.Value
+                    }
+
+                    return [GitHelp]::new(@(
+                            [GitHelpOptions]@{
+                                Subcommand = '';
+                                Short      = $short;
+                                Long       = $long;
+                            }
+                        ))
+                } -ParameterFilter { 
+                    $Command -eq 'config'
                 }
             }
         }
@@ -444,7 +476,7 @@ Describe 'Config' {
                     CompletionText = "-e";
                     ListItemText   = "-e";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "-e";
+                    ToolTip        = "open an editor";
                 },
                 @{
                     CompletionText = "-f";
@@ -456,13 +488,19 @@ Describe 'Config' {
                     CompletionText = "-l";
                     ListItemText   = "-l";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "-l";
+                    ToolTip        = "list all";
                 },
                 @{
                     CompletionText = "-z";
                     ListItemText   = "-z";
                     ResultType     = 'ParameterName';
                     ToolTip        = "terminate values with NUL byte";
+                },
+                @{
+                    CompletionText = "-h";
+                    ListItemText   = "-h";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "show help";
                 }
             )
         }

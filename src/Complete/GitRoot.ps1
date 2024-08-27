@@ -207,7 +207,7 @@ function Complete-GitCommandLine {
         Set-Variable 'Context' $Context -Scope 'Script'
         [string] $Current = $Context.CurrentWord()
         if ($Context.command) {
-
+            $Context.command = Resolve-GitAlias $Context.command -ActualCommand
             try {
                 $completeSubcommandFunc = "Complete-GitSubCommand-$($Context.command)"
                 & $completeSubcommandFunc $Context
