@@ -2,7 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "PowerShell: Run Pester Tests",
+            "name": "PowerShell: Run Cuttent Pester Test",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "$SkipHeavyTest=$false; Invoke-Pester '${file}'"
+        },
+        {
+            "name": "PowerShell: Run Pester Light Tests",
             "type": "PowerShell",
             "request": "launch",
             "script": "$SkipHeavyTest=$true; Invoke-Pester",

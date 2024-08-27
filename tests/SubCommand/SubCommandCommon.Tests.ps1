@@ -24,102 +24,104 @@ Describe 'SubCommandCommon-ls-files' {
     }
 
 
-    It 'ShortOptions' {
-        "git ls-files -" | Complete-FromLine | Should -BeCompletion @(
-            @{
-                CompletionText = "-c";
-                ListItemText   = "-c";
-                ResultType     = 'ParameterName';
-                ToolTip        = "show cached files in the output (default)";
-            }, 
-            @{
-                CompletionText = "-d";
-                ListItemText   = "-d";
-                ResultType     = 'ParameterName';
-                ToolTip        = "show deleted files in the output";
-            }, 
-            @{
-                CompletionText = "-f";
-                ListItemText   = "-f";
-                ResultType     = 'ParameterName';
-                ToolTip        = "use lowercase letters for 'fsmonitor clean' files";
-            }, 
-            @{
-                CompletionText = "-i";
-                ListItemText   = "-i";
-                ResultType     = 'ParameterName';
-                ToolTip        = "show ignored files in the output";
-            }, 
-            @{
-                CompletionText = "-k";
-                ListItemText   = "-k";
-                ResultType     = 'ParameterName';
-                ToolTip        = "show files on the filesystem that need to be removed";
-            }, 
-            @{
-                CompletionText = "-m";
-                ListItemText   = "-m";
-                ResultType     = 'ParameterName';
-                ToolTip        = "show modified files in the output";
-            }, 
-            @{
-                CompletionText = "-o";
-                ListItemText   = "-o";
-                ResultType     = 'ParameterName';
-                ToolTip        = "show other files in the output";
-            }, 
-            @{
-                CompletionText = "-s";
-                ListItemText   = "-s";
-                ResultType     = 'ParameterName';
-                ToolTip        = "show staged contents' object name in the output";
-            }, 
-            @{
-                CompletionText = "-t";
-                ListItemText   = "-t";
-                ResultType     = 'ParameterName';
-                ToolTip        = "identify the file status with tags";
-            }, 
-            @{
-                CompletionText = "-u";
-                ListItemText   = "-u";
-                ResultType     = 'ParameterName';
-                ToolTip        = "show unmerged files in the output";
-            }, 
-            @{
-                CompletionText = "-v";
-                ListItemText   = "-v";
-                ResultType     = 'ParameterName';
-                ToolTip        = "use lowercase letters for 'assume unchanged' files";
-            }, 
-            @{
-                CompletionText = "-x";
-                ListItemText   = "-x";
-                ResultType     = 'ParameterName';
-                ToolTip        = "skip files matching pattern";
-            }, 
-            @{
-                CompletionText = "-X";
-                ListItemText   = "-X";
-                ResultType     = 'ParameterName';
-                ToolTip        = "read exclude patterns from <file>";
-            },
-            @{
-                CompletionText = "-z";
-                ListItemText   = "-z";
-                ResultType     = 'ParameterName';
-                ToolTip        = "separate paths with the NUL character";
-            },
-            @{
-                CompletionText = "-h";
-                ListItemText   = "-h";
-                ResultType     = 'ParameterName';
-                ToolTip        = "show help";
-            }
-        )
+    Describe 'ShortOptions' {
+        It '<_>' -ForEach @('', 'foo') {
+            $expected = @(
+                @{
+                    CompletionText = "-c";
+                    ListItemText   = "-c";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "show cached files in the output (default)";
+                }, 
+                @{
+                    CompletionText = "-d";
+                    ListItemText   = "-d";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "show deleted files in the output";
+                }, 
+                @{
+                    CompletionText = "-f";
+                    ListItemText   = "-f";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "use lowercase letters for 'fsmonitor clean' files";
+                }, 
+                @{
+                    CompletionText = "-i";
+                    ListItemText   = "-i";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "show ignored files in the output";
+                }, 
+                @{
+                    CompletionText = "-k";
+                    ListItemText   = "-k";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "show files on the filesystem that need to be removed";
+                }, 
+                @{
+                    CompletionText = "-m";
+                    ListItemText   = "-m";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "show modified files in the output";
+                }, 
+                @{
+                    CompletionText = "-o";
+                    ListItemText   = "-o";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "show other files in the output";
+                }, 
+                @{
+                    CompletionText = "-s";
+                    ListItemText   = "-s";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "show staged contents' object name in the output";
+                }, 
+                @{
+                    CompletionText = "-t";
+                    ListItemText   = "-t";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "identify the file status with tags";
+                }, 
+                @{
+                    CompletionText = "-u";
+                    ListItemText   = "-u";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "show unmerged files in the output";
+                }, 
+                @{
+                    CompletionText = "-v";
+                    ListItemText   = "-v";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "use lowercase letters for 'assume unchanged' files";
+                }, 
+                @{
+                    CompletionText = "-x";
+                    ListItemText   = "-x";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "skip files matching pattern";
+                }, 
+                @{
+                    CompletionText = "-X";
+                    ListItemText   = "-X";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "read exclude patterns from <file>";
+                },
+                @{
+                    CompletionText = "-z";
+                    ListItemText   = "-z";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "separate paths with the NUL character";
+                },
+                @{
+                    CompletionText = "-h";
+                    ListItemText   = "-h";
+                    ResultType     = 'ParameterName';
+                    ToolTip        = "show help";
+                }
+            )
+            "git ls-files $_ -" | Complete-FromLine | Should -BeCompletion $expected
+        }
     }
 
-    
     Describe 'CommonOption' {
         It '<Line>' -ForEach @(
             @{

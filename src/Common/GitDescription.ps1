@@ -183,7 +183,7 @@ function Convert-ToGitHelpOptions {
             $line = $Matches[2]
             $long = $null
             $short = $null
-            if ($line -match '^((-[^-])(,\s*))?(--\S+)(.*)') {
+            if ($line -match '^((-[^-])(,?\s*))?(--\S+)(.*)') {
                 $short = $Matches[2]
                 if ($short) {
                     Write-HostParsing "`e[35m$($short)`e[0m$($Matches[3])" -NoNewline
@@ -327,15 +327,19 @@ class GitHelpOptions {
     [CompletionResult[]] ShortOptions() {
         if ($null -ne $this._shortOptionsCache) { return $this._shortOptionsCache }
 
-        return ($this._shortOptionsCache = $this.Short.GetEnumerator() | ForEach-Object {
-                [CompletionResult]::new(
-                    $_.Key,
-                    $_.Key,
-                    'ParameterName',
-                    $_.Value
-                )
-            } | Sort-Object ListItemText
-        )
+        $ret = $this.Short.GetEnumerator() | ForEach-Object {
+            [CompletionResult]::new(
+                $_.Key,
+                $_.Key,
+                'ParameterName',
+                $_.Value
+            )
+        } | Sort-Object ListItemText
+
+        if ($null -eq $ret) {
+            return ($this._shortOptionsCache = @()) 
+        }
+        return ($this._shortOptionsCache = $ret)
     }
 
     [string] Description([string]$key) {
@@ -355,17 +359,19 @@ class GitHelp {
         }
     }
 
-    [CompletionResult[]] ShortOptions([string]$Subcommand) {
-        $opt = $this.Options[$Subcommand]
-        if (-not $opt) { return @() }
+    [GitHelpOptions] getOption([string]$Subcommand) {
+        $opt = $null
+        if ($this.Options.TryGetValue($Subcommand, [ref]$opt)) {
+            return $opt
+        }
+        return $this.Options['']
+    }
 
-        return $opt.ShortOptions()
+    [CompletionResult[]] ShortOptions([string]$Subcommand) {
+        return $this.getOption($Subcommand).ShortOptions()
     }
 
     [string] Description([string]$Subcommand, [string]$long) {
-        $opt = $this.Options[$Subcommand]
-        if (-not $opt) { return @() }
-
-        return $opt.Description($long)
+        return $this.getOption($Subcommand).Description($long)
     }
 }
