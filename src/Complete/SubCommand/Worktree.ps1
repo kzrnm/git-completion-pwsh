@@ -81,6 +81,7 @@ function Complete-GitSubCommand-worktree {
     }
 }
 
+# __git_complete_worktree_paths
 function gitCompleteWorktreePaths {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]

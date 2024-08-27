@@ -188,8 +188,7 @@ function completeConfigVariableValue {
             return
         }
         "branch.*.merge" {
-            $params = [string[]](gitCompleteRefs -Current $Current)
-            $params | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            gitCompleteRefs -Current $Current -Prefix $Prefix
             return
         }
         "branch.*.rebase" {
@@ -229,18 +228,15 @@ function completeConfigVariableValue {
             return
         }
         "remote.*.push" {
-            $params = [string[]](__git for-each-ref --format='%(refname):%(refname)' refs/heads)
-            $params | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            __git for-each-ref --format='%(refname):%(refname)' refs/heads | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "pull.twohead" {
-            $params = [string[]](gitListMergeStrategies)
-            $params | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            gitListMergeStrategies | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "pull.octopus" {
-            $params = [string[]](gitListMergeStrategies)
-            $params | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            gitListMergeStrategies | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "color.pager" {
@@ -373,83 +369,68 @@ function completeConfigVariableName {
     if ($Current -match "(branch|guitool|difftool|man|mergetool|remote|submodule|url)\.(.*)\.([^\.]*)") {
         $section = $Matches[1]
         $second = $Matches[2]
-        $params = [string[]](gitSecondLevelConfigVarsForSection $section | ForEach-Object {
-                "$section.$second.$_"
-            }
-        )
-        $params | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        gitSecondLevelConfigVarsForSection $section | ForEach-Object {
+            "$section.$second.$_"
+        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "branch\.(.*)") {
         $section = 'branch'
         $second = $Matches[1]
-        $params1 = [string[]](gitHeads -Prefix "$section." -Current $second -Suffix ".")
-        $params2 = [string[]](gitFirstLevelConfigVarsForSection $section | ForEach-Object {
-                "$section.$_"
-            }
-        )
-        $params1 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
-        $params2 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        gitHeads -Current $second | ForEach-Object { "$section.$_." } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
+        gitFirstLevelConfigVarsForSection $section | ForEach-Object {
+            "$section.$_"
+        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "pager\.(.*)") {
         $section = 'pager'
         $second = $Matches[1]
-        $params = [string[]](gitAllCommands main others alias nohelpers | ForEach-Object {
-                "$section.$_"
-            }
-        )
-        $params | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        gitAllCommands main others alias nohelpers | ForEach-Object {
+            "$section.$_"
+        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "remote\.(.*)") {
         $section = 'remote'
         $second = $Matches[1]
-        $params1 = [string[]](__git remote | Where-Object {
-                $_.StartsWith($second) 
-            } | ForEach-Object {
-                "$section.$_."
-            }
-        )
-        $params2 = [string[]](gitFirstLevelConfigVarsForSection $section | ForEach-Object {
-                "$section.$_"
-            }
-        )
+        
+        __git remote | Where-Object {
+            $_.StartsWith($second) 
+        } | ForEach-Object {
+            "$section.$_."
+        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
 
-        $params1 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
-        $params2 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        gitFirstLevelConfigVarsForSection $section | ForEach-Object {
+            "$section.$_"
+        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "submodule\.(.*)") {
         $section = 'submodule'
         $second = $Matches[1]
         $gitTopPath = (__git rev-parse --show-toplevel)
-        
-        $params1 = [string[]](__git config -f "$gitTopPath/.gitmodules" --name-only --list |
-            ForEach-Object {
-                if ($_ -match 'submodule\.(.*)\.path') {
-                    $sub = $Matches[1]
-                    "$section.$sub."
-                }
+
+        __git config -f "$gitTopPath/.gitmodules" --name-only --list |
+        ForEach-Object {
+            if ($_ -match 'submodule\.(.*)\.path') {
+                $sub = $Matches[1]
+                "$section.$sub."
             }
-        )
-        $params2 = [string[]](gitFirstLevelConfigVarsForSection $section | ForEach-Object {
-                "$section.$_"
-            }
-        )
-        $params1 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
-        $params2 | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
+
+        gitFirstLevelConfigVarsForSection $section | ForEach-Object {
+            "$section.$_"
+        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "([^\.]*)\.(.*)") {
         $section = $Matches[1]
-        $params = [string[]](gitConfigVars | Where-Object { -not $_.EndsWith('.') })
-        $params | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        gitConfigVars | Where-Object { -not $_.EndsWith('.') } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     else {
-        $params = [string[]](gitConfigSections | ForEach-Object { "$_." })
-        $params | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
+        gitConfigSections | ForEach-Object { "$_." } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
     }
     return
 }

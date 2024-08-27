@@ -1,6 +1,7 @@
 # $script:gitDiffAlgorithms="myers minimal patience histogram"
 
 $script:gitDiffSubmoduleFormats = "diff", "log", "short"
+$script:gitPushRecurseSubmodules = "check", "on-demand", "only"
 
 # $script:gitColorMovedOpts="no default plain blocks zebra dimmed-zebra"
 

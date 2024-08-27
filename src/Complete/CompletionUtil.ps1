@@ -1,13 +1,15 @@
 using namespace System.Management.Automation;
 
 function completeList {
-    [CmdletBinding(PositionalBinding = $false)]
+    [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = 'Default')]
     [OutputType([CompletionResult[]])]
     param(
-        [Parameter(Mandatory)]
         [AllowEmptyString()]
         [string]
         $Current,
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(Mandatory, ParameterSetName = 'Prefix')]
+        [AllowEmptyString()]
         [string]
         $Prefix = '',
         [string]
@@ -16,28 +18,34 @@ function completeList {
         $DescriptionBuilder = $null,
         [CompletionResultType]
         $ResultType = [CompletionResultType]::ParameterName,
+        [Parameter(ParameterSetName = 'Prefix')]
+        [switch]
+        $RemovePrefix,
         [Parameter(ValueFromPipeline)]
         [string]
         $Candidate
     )
 
     process {
+        if ($RemovePrefix -and $Current.StartsWith($Prefix)) {
+            $Current = $Current.Substring($Prefix.Length)
+        }
         if ((-not $Current) -or $Candidate.StartsWith($Current)) {
             $desc = $null
             if ($DescriptionBuilder) {
                 $desc = [string]$DescriptionBuilder.InvokeWithContext(
                     $null,
-                    [psvariable]::new('_', $_),
-                    @($_)
+                    [psvariable]::new('_', $Candidate),
+                    @($Candidate)
                 )
             }
             if (-not $desc) {
-                $desc = "$_"
+                $desc = "$Candidate"
             }
 
             [CompletionResult]::new(
-                "$Prefix$_$Suffix",
-                "$_",
+                "$Prefix$Candidate$Suffix",
+                "$Candidate",
                 $ResultType,
                 $desc
             )

@@ -163,31 +163,31 @@ Describe 'Worktree' {
         @{
             CompletionText = 'HEAD';
             ListItemText   = 'HEAD';
-            ResultType     = 'Text';
+            ResultType     = 'ParameterValue';
             ToolTip        = 'HEAD';
         },
         @{
             CompletionText = 'brn';
             ListItemText   = 'brn';
-            ResultType     = 'Text';
+            ResultType     = 'ParameterValue';
             ToolTip        = 'brn';
         },
         @{
             CompletionText = 'main';
             ListItemText   = 'main';
-            ResultType     = 'Text';
+            ResultType     = 'ParameterValue';
             ToolTip        = 'main';
         },
         @{
             CompletionText = 'wk';
             ListItemText   = 'wk';
-            ResultType     = 'Text';
+            ResultType     = 'ParameterValue';
             ToolTip        = 'wk';
         },
         @{
             CompletionText = 'wt';
             ListItemText   = 'wt';
-            ResultType     = 'Text';
+            ResultType     = 'ParameterValue';
             ToolTip        = 'wt';
         }
     )
@@ -195,7 +195,7 @@ Describe 'Worktree' {
         @{
             CompletionText = 'brn';
             ListItemText   = 'brn';
-            ResultType     = 'Text';
+            ResultType     = 'ParameterValue';
             ToolTip        = 'brn';
         }
     )
