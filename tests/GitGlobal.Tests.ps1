@@ -107,11 +107,11 @@ Describe 'GirGlobal' {
                     ResultType     = "Text";
                     ToolTip        = "Switch branches";
                 }
-            );
+            )
         },
         @{
             Line     = "--notmatch";
-            Expected = @();
+            Expected = @()
         }
     ) {
         "git $line" | Complete-FromLine | Should -BeCompletion $expected
@@ -141,7 +141,7 @@ Describe 'GirGlobal' {
                         CompletionText = "difftool";
                         ListItemText   = "difftool";
                         ResultType     = 'Text';
-                        ToolTip        = "difftool";
+                        ToolTip        = "Show changes using common diff tools";
                     }
                 )
             }
@@ -167,25 +167,25 @@ Describe 'GirGlobal' {
                         CompletionText = "difftool";
                         ListItemText   = "difftool";
                         ResultType     = 'Text';
-                        ToolTip        = "difftool";
+                        ToolTip        = "Show changes using common diff tools";
                     },
                     @{
                         CompletionText = "diff-files";
                         ListItemText   = "diff-files";
                         ResultType     = 'Text';
-                        ToolTip        = "diff-files";
+                        ToolTip        = "Compares files in the working tree and the index";
                     },
                     @{
                         CompletionText = "diff-index";
                         ListItemText   = "diff-index";
                         ResultType     = 'Text';
-                        ToolTip        = "diff-index";
+                        ToolTip        = "Compare a tree to the working tree or index";
                     },
                     @{
                         CompletionText = "diff-tree";
                         ListItemText   = "diff-tree";
                         ResultType     = 'Text';
-                        ToolTip        = "diff-tree";
+                        ToolTip        = "Compares the content and mode of blobs found via two tree objects";
                     }
                 )
             }
@@ -218,7 +218,7 @@ Describe 'GirGlobal' {
                 CompletionText = "difftool";
                 ListItemText   = "difftool";
                 ResultType     = 'Text';
-                ToolTip        = "difftool";
+                ToolTip        = "Show changes using common diff tools";
             },
             @{
                 CompletionText = "diffusion";
@@ -241,7 +241,7 @@ Describe 'GirGlobal' {
                 CompletionText = "difftool";
                 ListItemText   = "difftool";
                 ResultType     = 'Text';
-                ToolTip        = "difftool";
+                ToolTip        = "Show changes using common diff tools";
             },
             @{
                 CompletionText = "diffusion";
@@ -264,7 +264,7 @@ Describe 'GirGlobal' {
                 CompletionText = "difftool";
                 ListItemText   = "difftool";
                 ResultType     = 'Text';
-                ToolTip        = "difftool";
+                ToolTip        = "Show changes using common diff tools";
             },
             @{
                 CompletionText = "diffusion";
@@ -276,19 +276,19 @@ Describe 'GirGlobal' {
                 CompletionText = "diff-files";
                 ListItemText   = "diff-files";
                 ResultType     = 'Text';
-                ToolTip        = "diff-files";
+                ToolTip        = "Compares files in the working tree and the index";
             },
             @{
                 CompletionText = "diff-index";
                 ListItemText   = "diff-index";
                 ResultType     = 'Text';
-                ToolTip        = "diff-index";
+                ToolTip        = "Compare a tree to the working tree or index";
             },
             @{
                 CompletionText = "diff-tree";
                 ListItemText   = "diff-tree";
                 ResultType     = 'Text';
-                ToolTip        = "diff-tree";
+                ToolTip        = "Compares the content and mode of blobs found via two tree objects";
             }
         )
 
@@ -305,13 +305,13 @@ Describe 'GirGlobal' {
                 CompletionText = "difftool";
                 ListItemText   = "difftool";
                 ResultType     = 'Text';
-                ToolTip        = "difftool";
+                ToolTip        = "Show changes using common diff tools";
             },
             @{
                 CompletionText = "diff-tree";
                 ListItemText   = "diff-tree";
                 ResultType     = 'Text';
-                ToolTip        = "diff-tree";
+                ToolTip        = "Compares the content and mode of blobs found via two tree objects";
             }
         )
     }

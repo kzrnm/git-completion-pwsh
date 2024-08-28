@@ -31,15 +31,42 @@ function Complete-Words {
     return (Complete-Git -Words $Words)
 }
 
+function writeObjectLine {
+    param(
+        [Parameter(Mandatory, Position = 0)]$Completion,
+        [string] $Prefix = '',
+        [string] $Suffix = ''
+    )
+
+    "$Prefix$([PSCustomObject]@{
+        CompletionText = $Completion.CompletionText;
+        ListItemText   = $Completion.ListItemText;
+        ResultType     = $Completion.ResultType;
+        ToolTip        = $Completion.ToolTip;
+    })$Suffix"
+}
+
 function buildFailedMessage {
     [OutputType([string[]])]
     param (
-        [Parameter(Mandatory)] $ActualValue,
-        [Parameter(Mandatory)][hashtable[]] $ExpectedValue
+        $ActualValue,
+        [hashtable[]] $ExpectedValue
     )
 
+    if (-not $ActualValue) {
+        if (-not $ExpectedValue) {
+            return @()
+        }
+        "The expected collection is not empty, but the resulting collection is empty."
+        "Expected:"
+        foreach ($e in $ExpectedValue) {
+            writeObjectLine $e -Suffix ','
+        }
+        return
+    }
+
     if ($ActualValue.Count -ne $ExpectedValue.Count) {
-        "Expected collection with size $($ExpectedValue.Count), but got collection with size $($ActualValue.Count)."
+        "The expected collection with size $($ExpectedValue.Count), but the resulting collection with size $($ActualValue.Count)."
     }
 
     $Length = [math]::Min($ExpectedValue.Length, $ActualValue.Length)
@@ -53,22 +80,12 @@ function buildFailedMessage {
             ($a.ToolTip -ne $e.ToolTip) -or 
             ($a.ResultType -ne [System.Management.Automation.CompletionResultType]$e.ResultType)
         ) {
-            $head = "At index:$i,expected"
-            $second = "but got"
+            $head = "At index:$i,expected "
+            $second = "but actual "
             $second = ' ' * ($head.Length - $second.Length) + $second
 
-            "$head $([PSCustomObject]@{
-                    CompletionText = $e.CompletionText;
-                    ListItemText   = $e.ListItemText;
-                    ResultType     = $e.ResultType;
-                    ToolTip        = $e.ToolTip;
-                })"
-            "$second $([PSCustomObject]@{
-                    CompletionText = $a.CompletionText;
-                    ListItemText   = $a.ListItemText;
-                    ResultType     = $a.ResultType;
-                    ToolTip        = $a.ToolTip;
-                })"
+            writeObjectLine $e -Prefix $head
+            writeObjectLine $a -Prefix $second
         }
     }
 }

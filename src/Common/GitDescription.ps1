@@ -1,6 +1,7 @@
 using namespace System.Collections.Generic;
 using namespace System.Management.Automation;
 
+# Options
 $__helpCompletion = [System.Management.Automation.CompletionResult]::new(
     '-h',
     '-h',
@@ -385,4 +386,35 @@ class GitHelp {
         }
         return $this.Options[''].Description($long)
     }
+}
+
+# Command
+$script:__gitCommandDescriptionAll = $null
+function Get-GitCommandDescriptionAll {
+    [CmdletBinding()]
+    [OutputType([hashtable])]
+    param ()
+
+    if ($script:__gitCommandDescriptionAll) { return $script:__gitCommandDescriptionAll }
+
+    $t = @{}
+    foreach ($line in (git help --verbose --all --no-external-commands --no-aliases)) {
+        if ($line -match '\s\s(\S+)\s+(.+)') {
+            $t[$Matches[1]] = $Matches[2]
+        }
+    }
+    $script:__gitCommandDescriptionAll = $t
+    return $t
+}
+
+function Get-GitCommandDescription {
+    [CmdletBinding()]
+    [OutputType([string])]
+    param (
+        [Parameter(Mandatory, Position = 0)]
+        [string]
+        $Command
+    )
+
+    return (Get-GitCommandDescriptionAll)[$Command]
 }

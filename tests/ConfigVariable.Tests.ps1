@@ -964,80 +964,14 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
             },
             @{
                 Line     = "log.date=";
-                Expected = (
+                Expected = "relative", "iso8601", "iso8601-strict", "rfc2822", "short", "local", "default", "human", "raw", "unix", "auto:", "format:" | ForEach-Object {
                     @{
-                        CompletionText = "log.date=relative";
-                        ListItemText   = "relative";
+                        CompletionText = "log.date=$_";
+                        ListItemText   = "$_";
                         ResultType     = 'ParameterValue';
-                        ToolTip        = "relative";
-                    },
-                    @{
-                        CompletionText = "log.date=iso8601";
-                        ListItemText   = "iso8601";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "iso8601";
-                    },
-                    @{
-                        CompletionText = "log.date=iso8601-strict";
-                        ListItemText   = "iso8601-strict";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "iso8601-strict";
-                    },
-                    @{
-                        CompletionText = "log.date=rfc2822";
-                        ListItemText   = "rfc2822";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "rfc2822";
-                    },
-                    @{
-                        CompletionText = "log.date=short";
-                        ListItemText   = "short";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "short";
-                    },
-                    @{
-                        CompletionText = "log.date=local";
-                        ListItemText   = "local";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "local";
-                    },
-                    @{
-                        CompletionText = "log.date=default";
-                        ListItemText   = "default";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "default";
-                    },
-                    @{
-                        CompletionText = "log.date=human";
-                        ListItemText   = "human";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "human";
-                    },
-                    @{
-                        CompletionText = "log.date=raw";
-                        ListItemText   = "raw";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "raw";
-                    },
-                    @{
-                        CompletionText = "log.date=unix";
-                        ListItemText   = "unix";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "unix";
-                    },
-                    @{
-                        CompletionText = "log.date=auto:";
-                        ListItemText   = "auto:";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "auto:";
-                    },
-                    @{
-                        CompletionText = "log.date=format:";
-                        ListItemText   = "format:";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "format:";
+                        ToolTip        = "$_";
                     }
-                );
+                }
             },
             @{
                 Line     = "log.date=i";
