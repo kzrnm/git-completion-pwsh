@@ -4,7 +4,7 @@
 
 **A PowerShell module for tab completion of Git commands.**
 
-PowerShell port of https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
+PowerShell port of [git-completion.bash Commit: 159f2d50e75c17382c9f4eb7cbda671a6fa612d1](https://github.com/git/git/blob/159f2d50e75c17382c9f4eb7cbda671a6fa612d1/contrib/completion/git-completion.bash).
 
 ## Get Started
 
