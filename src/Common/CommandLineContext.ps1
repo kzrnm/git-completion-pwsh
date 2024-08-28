@@ -18,7 +18,7 @@ class CommandLineContext {
         $this.command = ''
         $this.commandIndex = -1
 
-        :globalflag for ($i = 1; $i -lt ($this.Words.Length - 1); $i++) {
+        :globalflag for ($i = 1; ($i + 1) -lt $this.Words.Length; $i++) {
             $s = $this.Words[$i]
             switch -Wildcard -CaseSensitive ($s) {
                 '--git-dir=*' {
@@ -62,7 +62,7 @@ class CommandLineContext {
     [string] Subcommand() {
         $i = $this.commandIndex + 1
 
-        if ((0 -lt $i) -and ($i -lt ($this.Words.Length - 1))) {
+        if ((0 -lt $i) -and (($i + 1) -lt $this.Words.Length)) {
             return $this.Words[$i]
         }
         return $null

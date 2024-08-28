@@ -342,7 +342,7 @@ class GitHelpOptions {
                 'ParameterName',
                 $_.Value
             )
-        } | Sort-Object ListItemText
+        } | Sort-Object ListItemText -CaseSensitive
 
         if ($null -eq $ret) {
             return ($this._shortOptionsCache = @()) 
