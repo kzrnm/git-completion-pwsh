@@ -13,7 +13,6 @@ function Complete-GitSubCommand-worktree {
     [string] $Current = $Context.CurrentWord()
 
     $subcommands = gitResolveBuiltins $Context.command
-    [string] $subcommand = $Context.Subcommand()
 
     if (-not $subcommand) {
         if ($Current -eq '-') {
@@ -42,7 +41,7 @@ function Complete-GitSubCommand-worktree {
     }
 
     if ($Current.StartsWith('--')) {
-        gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $Context.command  $_ -Subcommand $subcommand }
+        gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.command $subcommand }
         return
     }
 

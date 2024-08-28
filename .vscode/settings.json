@@ -6,7 +6,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$SkipHeavyTest=$true; Import-Module ./src/git-completion.psd1 -Force"
+                "$SkipHeavyTest=$false; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "icon": "terminal-powershell"
         },

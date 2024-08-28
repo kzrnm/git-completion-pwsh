@@ -36,9 +36,10 @@ function gitCompleteRemoteOrRefspec {
     $lhs = $true
     $noCompleteRefspec = $false
 
+    $c = 1
     if ($Command -eq 'remote') { $c++ }
 
-    for ($i = $Context.commandIndex + 1; ($i + 1) -lt $Context.Words.Length; $i++) {
+    for ($i = $Context.commandIndex + $c; ($i + 1) -lt $Context.Words.Length; $i++) {
         $w = $Context.Words[$i]
         if ($w -eq '--mirror') {
             if ($Command -eq 'push') {
@@ -145,4 +146,52 @@ function gitCompleteRefs {
     if ($dwim) {
         gitDwimRemoteHeads -Current $Current | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
     }
+}
+
+# __git_complete_strategy
+function gitCompleteStrategy {
+    param (
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Prev
+    )
+
+    $gitMergeStrategyOptions = @(
+        'ours',
+        'theirs',
+        'subtree',
+        'subtree=',
+        'patience',
+        'histogram',
+        'diff-algorithm=',
+        'ignore-space-change',
+        'ignore-all-space',
+        'ignore-space-at-eol',
+        'renormalize',
+        'no-renormalize',
+        'no-renames',
+        'find-renames',
+        'find-renames=',
+        'rename-threshold='
+    )
+
+    if ($Prev -cin @('-s', '--strategy')) {
+        gitListMergeStrategies | completeList -Current $Current -ResultType ParameterValue 
+        return
+    }
+    elseif ($Prev -cin @('-X', '--strategy-option')) {
+        $gitMergeStrategyOptions | completeList -Current $Current -ResultType ParameterValue 
+        return
+    }
+
+    switch -Wildcard ($Current) {
+        '--strategy=*' { 
+            gitListMergeStrategies | completeList -Current $Current -ResultType ParameterValue -Prefix '--strategy=' -RemovePrefix
+            return
+        }
+        '--strategy-option=*' {
+            $gitMergeStrategyOptions | completeList -Current $Current -ResultType ParameterValue -Prefix '--strategy-option=' -RemovePrefix
+            return
+        }
+    }
+    return $null
 }

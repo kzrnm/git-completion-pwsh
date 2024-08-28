@@ -281,14 +281,17 @@ function Get-GitShortOptions {
         $Command,
         [Parameter(Position = 1)]
         [string]
-        $Subcommand = ''
+        $Subcommand = '',
+        [switch]$SkipHelp
     )
 
     $gh = Get-GitHelp $Command
     if ($gh) {
         $gh.ShortOptions($Subcommand)
     }
-    $__helpCompletion
+    if (-not $SkipHelp) {
+        $__helpCompletion
+    }
 }
 
 function Get-GitOptionsDescription {
@@ -296,10 +299,12 @@ function Get-GitOptionsDescription {
     [OutputType([string])]
     param (
         [Parameter(Mandatory, Position = 0)]
+        [AllowEmptyString()]
+        [string]$Current,
+        [Parameter(Mandatory, Position = 1)]
         [string]
         $Command,
-        [Parameter(Position = 1)]
-        [string]$Current,
+        [Parameter(Position = 2)]
         [string]$Subcommand = ''
     )
 
@@ -312,7 +317,7 @@ function Get-GitOptionsDescription {
     if ($result) { return $result }
 
     if ($Current.StartsWith('--no-')) {
-        $positive = Get-GitOptionsDescription $Command ('--' + $Current.Substring('--no-'.Length)) -Subcommand $Subcommand
+        $positive = Get-GitOptionsDescription ('--' + $Current.Substring('--no-'.Length)) $Command $Subcommand
         if ($positive) {
             return "[NO] $positive"
         }
@@ -362,19 +367,22 @@ class GitHelp {
         }
     }
 
-    [GitHelpOptions] getOption([string]$Subcommand) {
-        $opt = $null
-        if ($this.Options.TryGetValue($Subcommand, [ref]$opt)) {
-            return $opt
-        }
-        return $this.Options['']
-    }
-
     [CompletionResult[]] ShortOptions([string]$Subcommand) {
-        return $this.getOption($Subcommand).ShortOptions()
+        $opt = $null
+        if (-not $this.Options.TryGetValue($Subcommand, [ref]$opt)) {
+            $opt = $this.Options['']
+        }
+        return $opt.ShortOptions()
     }
 
     [string] Description([string]$Subcommand, [string]$long) {
-        return $this.getOption($Subcommand).Description($long)
+        $opt = $null
+        if ($this.Options.TryGetValue($Subcommand, [ref]$opt)) {
+            $result = $opt.Description($long)
+            if ($result) {
+                return $result
+            }
+        }
+        return $this.Options[''].Description($long)
     }
 }

@@ -21,7 +21,7 @@ function Complete-GitSubCommandCommon {
     # elseif (gitSupportParseoptHelper $Command) {
     if ($Current.StartsWith('--')) {
         gitResolveBuiltins $Command | gitcomp -Current $Current -DescriptionBuilder {
-            Get-GitOptionsDescription $Command $_ -Subcommand $subcommand 
+            Get-GitOptionsDescription $_ $Command $subcommand 
         }
         return
     }

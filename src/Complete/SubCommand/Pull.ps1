@@ -1,6 +1,6 @@
 using namespace System.Management.Automation;
 
-function Complete-GitSubCommand-fetch {
+function Complete-GitSubCommand-pull {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -15,14 +15,13 @@ function Complete-GitSubCommand-fetch {
         return Get-GitShortOptions $Context.command
     }
 
-    $gitFetchFilters = "blob:none", "blob:limit=", "sparse:oid="
+    $result = gitCompleteStrategy -Current $Current -Prev $Prev
+    if ($null -ne $result) { return $result }
+
+    
     switch ($Prev) {
         '--recurse-submodules' {
             $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
-            return
-        }
-        '--filter' {
-            $gitFetchFilters | completeList -Current $Current -ResultType ParameterValue 
             return
         }
     }
@@ -32,14 +31,11 @@ function Complete-GitSubCommand-fetch {
             $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
             return
         }
-        '--filter=*' {
-            $gitFetchFilters | completeList -Current $Current -ResultType ParameterValue -Prefix '--filter=' -RemovePrefix
-            return
-        }
         '--*' {
             gitResolveBuiltins $Context.command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.command }
             return
         }
     }
+
     gitCompleteRemoteOrRefspec $Context
 }

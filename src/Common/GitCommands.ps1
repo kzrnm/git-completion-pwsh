@@ -3,7 +3,7 @@ using namespace System.Collections.Generic;
 function __git {
     [CmdletBinding(PositionalBinding = $false)]
     param(
-        [Parameter()]$GitDirOverride = $null,
+        [Parameter()][string]$GitDirOverride = $null,
         [Parameter(ValueFromRemainingArguments)]$OrdinaryArgs
     )
 
@@ -513,4 +513,19 @@ function gitSupportParseoptHelper {
     }
 
     return $script:__git_support_parseopt_helper.Contains($Command)
+}
+
+
+# __git_get_config_variables
+# Lists all set config variables starting with the given section prefix,
+# with the prefix removed.
+function gitGetConfigVariables () {
+    [CmdletBinding()]
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory, Position = 0)][string]$Section
+    )
+    __git config --name-only --get-regexp "^$Section\..*" | ForEach-Object {
+        $_.Substring($Section.Length + 1)
+    }
 }

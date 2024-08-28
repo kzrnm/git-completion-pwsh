@@ -16,7 +16,7 @@ class CommandLineContext {
         $this.gitDir = $null
         $this.gitCArgs = @()
         $this.command = ''
-        $this.commandIndex = 0
+        $this.commandIndex = -1
 
         :globalflag for ($i = 1; $i -lt ($this.Words.Length - 1); $i++) {
             $s = $this.Words[$i]
@@ -62,7 +62,7 @@ class CommandLineContext {
     [string] Subcommand() {
         $i = $this.commandIndex + 1
 
-        if ($i -lt ($this.Words.Length - 1)) {
+        if ((0 -lt $i) -and ($i -lt ($this.Words.Length - 1))) {
             return $this.Words[$i]
         }
         return $null
@@ -70,4 +70,18 @@ class CommandLineContext {
 
     [string] CurrentWord() { return $this.Words[-1] }
     [string] PreviousWord() { return $this.Words[-2] }
+
+    [string[]] WordsWithoutLeadingOptions() {
+        $l = [System.Collections.Generic.List[string]]::new($this.Words.Length)
+        for ($i = $this.commandIndex + 1; $i -lt $this.Words.Length; $i++) {
+            $w = $this.Words[$i]
+            if ($w.StartsWith('-') -and ($l.Count -eq 0)) {
+                # Do nothing
+            }
+            else {
+                $l.Add($w)
+            }
+        }
+        return $l.ToArray()
+    }
 }

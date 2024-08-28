@@ -30,6 +30,7 @@
         {
             "id": "commandLine",
             "type": "promptString",
+            "default": "git ",
             "description": "Input command line. e.g. `git add -`"
         }
     ]
