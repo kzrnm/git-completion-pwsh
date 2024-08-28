@@ -180,6 +180,7 @@ function gitAllCommands {
     return (__git "--list-cmds=$list")
 }
 
+# __git_find_repo_path, gitFindRepoPath
 # Discovers the path to the git repository taking any '--git-dir=<path>' and
 # '-C <path>' options into account and stores it in the $__git_repo_path
 # variable.

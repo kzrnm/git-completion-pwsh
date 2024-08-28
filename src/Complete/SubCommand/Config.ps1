@@ -45,7 +45,7 @@ function Complete-GitSubCommand-config {
     }
 
     if ($Current.StartsWith('--')) {
-        gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.command -Subcommand $subcommand }
+        gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
         return
     }
 
@@ -91,7 +91,7 @@ function Complete-GitSubCommand-config-Git2_45 {
         completeConfigVariableValue -Current $Current -VarName $Prev
     }
     elseif ($Current.StartsWith('--')) {
-        gitResolveBuiltins $Context.command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.command }
+        gitCompleteResolveBuiltins $Context.command -Current $Current
     }
     else {
         completeConfigVariableName -Current $Current

@@ -195,3 +195,17 @@ function gitCompleteStrategy {
     }
     return $null
 }
+
+function gitCompleteResolveBuiltins {
+    [CmdletBinding(PositionalBinding = $false)]
+    param (
+        [Parameter(Mandatory)]
+        [string]
+        $Current,
+        [Parameter(Mandatory, ValueFromRemainingArguments)]
+        [string[]]
+        $Command
+    )
+
+    gitResolveBuiltins @Command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ @Command }
+}

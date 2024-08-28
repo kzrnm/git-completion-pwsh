@@ -20,9 +20,13 @@ function Complete-GitSubCommandCommon {
     }
     # elseif (gitSupportParseoptHelper $Command) {
     if ($Current.StartsWith('--')) {
-        gitResolveBuiltins $Command | gitcomp -Current $Current -DescriptionBuilder {
-            Get-GitOptionsDescription $_ $Command $subcommand 
+        if ($subcommand) {
+            $Commands = @($Command, $subcommand)
+        } else{
+            $Commands = @($Command)
         }
+
+        gitCompleteResolveBuiltins @Commands -Current $Current
         return
     }
 }

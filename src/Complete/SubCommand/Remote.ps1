@@ -24,7 +24,7 @@ function Complete-GitSubCommand-remote {
             Get-GitShortOptions $Context.command
         }
         elseif ($Current.StartsWith('--')) {
-            gitResolveBuiltins $Context.command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.command }
+            gitCompleteResolveBuiltins $Context.command -Current $Current
         }
         else {
             $subcommands | completeList -Current $Current -DescriptionBuilder { 
@@ -51,7 +51,7 @@ function Complete-GitSubCommand-remote {
         return
     }
     if ($Current.StartsWith('--')) {
-        gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.command $subcommand }
+        gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
         return
     }
 

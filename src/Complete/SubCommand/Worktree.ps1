@@ -41,7 +41,7 @@ function Complete-GitSubCommand-worktree {
     }
 
     if ($Current.StartsWith('--')) {
-        gitResolveBuiltins $Context.command $subcommand | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.command $subcommand }
+        gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
         return
     }
 

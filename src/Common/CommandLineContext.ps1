@@ -84,4 +84,15 @@ class CommandLineContext {
         }
         return $l.ToArray()
     }
+
+    # __git_has_doubledash
+    [bool] HasDoubledash() {
+        for ($i = 1; ($i + 1) -lt $this.Words.Length; $i++) {
+            $w = $this.Words[$i]
+            if ($w -eq '--') {
+                return $true
+            }
+        }
+        return $false
+    }
 }

@@ -48,7 +48,7 @@ function Complete-GitSubCommand-push {
             return
         }
         '--*' {
-            gitResolveBuiltins $Context.command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.command }
+            gitCompleteResolveBuiltins $Context.command -Current $Current
             return
         }
     }
