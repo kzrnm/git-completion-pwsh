@@ -31,6 +31,48 @@ function Complete-Words {
     return (Complete-Git -Words $Words)
 }
 
+function buildFailedMessage {
+    [OutputType([string[]])]
+    param (
+        [Parameter(Mandatory)] $ActualValue,
+        [Parameter(Mandatory)][hashtable[]] $ExpectedValue
+    )
+
+    if ($ActualValue.Count -ne $ExpectedValue.Count) {
+        "Expected collection with size $($ExpectedValue.Count), but got collection with size $($ActualValue.Count)."
+    }
+
+    $Length = [math]::Min($ExpectedValue.Length, $ActualValue.Length)
+    for ($i = 0; $i -lt $Length ; $i++) {
+        $a = [System.Management.Automation.CompletionResult]$ActualValue[$i]
+        $e = $ExpectedValue[$i]
+
+        if (
+            ($a.CompletionText -ne $e.CompletionText) -or 
+            ($a.ListItemText -ne $e.ListItemText) -or 
+            ($a.ToolTip -ne $e.ToolTip) -or 
+            ($a.ResultType -ne [System.Management.Automation.CompletionResultType]$e.ResultType)
+        ) {
+            $head = "At index:$i,expected"
+            $second = "but got"
+            $second = ' ' * ($head.Length - $second.Length) + $second
+
+            "$head $([PSCustomObject]@{
+                    CompletionText = $e.CompletionText;
+                    ListItemText   = $e.ListItemText;
+                    ResultType     = $e.ResultType;
+                    ToolTip        = $e.ToolTip;
+                })"
+            "$second $([PSCustomObject]@{
+                    CompletionText = $a.CompletionText;
+                    ListItemText   = $a.ListItemText;
+                    ResultType     = $a.ResultType;
+                    ToolTip        = $a.ToolTip;
+                })"
+        }
+    }
+}
+
 function Should-BeCompletion {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope = 'Function')]
     param(
@@ -43,49 +85,15 @@ function Should-BeCompletion {
         Asserts if collection equals expected completion
     #>
 
-    if ($ActualValue.Count -ne $ExpectedValue.Count) {
+    $message = @(buildFailedMessage -ActualValue $ActualValue -ExpectedValue $ExpectedValue)
+
+    if ($message) {
+        if ($Because) {
+            $message += "because $Because"
+        }
         return [PSCustomObject]@{
             Succeeded      = $false
-            FailureMessage = "Expected a collection with size $($ExpectedValue.Count), but got collection with size $($ActualValue.Count)$(if($Because) { " because $Because"})."
-        }
-    }
-
-    $failures = @()
-
-    for ($i = 0; $i -lt $ExpectedValue.Count; $i++) {
-        $a = [System.Management.Automation.CompletionResult]$ActualValue[$i]
-        $e = [PSCustomObject]$ExpectedValue[$i]
-
-        if (
-            ($a.CompletionText -ne $e.CompletionText) -or 
-            ($a.ListItemText -ne $e.ListItemText) -or 
-            ($a.ToolTip -ne $e.ToolTip) -or 
-            ($a.ResultType -ne [System.Management.Automation.CompletionResultType]$e.ResultType)
-        ) {
-            $failures += [PSCustomObject]@{
-                Index    = $i;
-                Actual   = [PSCustomObject]@{
-                    CompletionText = $a.CompletionText;
-                    ListItemText   = $a.ListItemText;
-                    ResultType     = $a.ResultType;
-                    ToolTip        = $a.ToolTip;
-                };
-                Expected = $e;
-            }
-        }
-    }
-
-    if ($failures) {
-        $message = ($failures | ForEach-Object {
-                $i = $_.Index
-                $a = $_.Actual
-                $e = $_.Expected
-                "At index:$i, Expected $e, but got $a"
-            }
-        ) -join ':'
-        return [PSCustomObject]@{
-            Succeeded      = $false
-            FailureMessage = "$message$(if($Because) { " because $Because"})."
+            FailureMessage = $message -join "`n"
         }
     }
 
@@ -96,7 +104,6 @@ function Should-BeCompletion {
 }
 
 Add-ShouldOperator -Name BeCompletion `
-    -InternalName 'Should-BeCompletion' `
     -Test ${function:Should-BeCompletion} `
     -SupportsArrayInput
 
