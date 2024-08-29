@@ -19,6 +19,18 @@
             ],
             "color": "terminal.ansiCyan",
             "icon": "terminal-powershell"
+        },
+        "Ubuntu (WSL)": {
+            "path": "wsl.exe",
+            "args": [
+                "--exec",
+                "pwsh",
+                "-NoExit",
+                "-Command",
+                "Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Import-Module ./src/git-completion.psd1 -Force"
+            ],
+            "color": "terminal.ansiGreen",
+            "icon": "terminal-ubuntu"
         }
     }
 }

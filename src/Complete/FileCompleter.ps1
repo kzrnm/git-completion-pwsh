@@ -13,14 +13,14 @@ function Complete-FilePath {
     )
 
     $lx = $Current.LastIndexOfAny(@([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar))
-    $left = $Current.Substring(0, $lx + 1) -creplace '(\s)', '`$1'
+    $left = $Current.Substring(0, $lx + 1) -creplace '([`\s])', '`$1'
 
     Get-ChildItem "$Current*" | ForEach-Object {
-        $name = $_.Name -creplace '(\s)', '`$1'
+        $name = $_.Name -creplace '([`\s])', '`$1'
         if ($_ -is [System.IO.DirectoryInfo]) {
             [CompletionResult]::new(
                 "${Prefix}${left}${name}/",
-                $_.Name,
+                $_.Name + '/',
                 'ProviderContainer',
                 $_.FullName
             )

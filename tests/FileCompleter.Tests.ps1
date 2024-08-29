@@ -12,7 +12,7 @@ Describe 'FileCompleter' {
         New-Item "$TestDrive/aunt" -ItemType File
 
         New-Item "$TestDrive/Root/漢字" -ItemType Directory
-        New-Item "$TestDrive/Root/漢帝国" -ItemType File
+        New-Item "$TestDrive/Root/漢``帝国" -ItemType File
         New-Item "$TestDrive/Root/Deava" -ItemType File
         New-Item "$TestDrive/Root/Aquarion Evol" -ItemType Directory
         New-Item "$TestDrive/Root/Aquarion Evol/Evol" -ItemType File
@@ -34,9 +34,9 @@ Describe 'FileCompleter' {
             Expected = @(
                 @{
                     CompletionText = 'Aquarion` Evol/';
-                    ListItemText   = 'Aquarion Evol';
+                    ListItemText   = 'Aquarion Evol/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol";
                 }
             )
         },
@@ -46,9 +46,9 @@ Describe 'FileCompleter' {
             Expected = @(
                 @{
                     CompletionText = 'Path=Aquarion` Evol/';
-                    ListItemText   = 'Aquarion Evol';
+                    ListItemText   = 'Aquarion Evol/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol";
                 }
             )
         },
@@ -58,27 +58,27 @@ Describe 'FileCompleter' {
             Expected = @(
                 @{
                     CompletionText = 'Aquarion` Evol/Ancient/';
-                    ListItemText   = 'Ancient';
+                    ListItemText   = 'Ancient/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol/Ancient";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol/Ancient";
                 },
                 @{
                     CompletionText = 'Aquarion` Evol/Evol';
                     ListItemText   = 'Evol';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol/Evol";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol/Evol";
                 },
                 @{
                     CompletionText = 'Aquarion` Evol/Gepada';
                     ListItemText   = 'Gepada';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol/Gepada";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol/Gepada";
                 },
                 @{
                     CompletionText = 'Aquarion` Evol/Gepard';
                     ListItemText   = 'Gepard';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol/Gepard";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol/Gepard";
                 }
             )
         },
@@ -88,27 +88,27 @@ Describe 'FileCompleter' {
             Expected = @(
                 @{
                     CompletionText = 'Path=Aquarion` Evol/Ancient/';
-                    ListItemText   = 'Ancient';
+                    ListItemText   = 'Ancient/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol/Ancient";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol/Ancient";
                 },
                 @{
                     CompletionText = 'Path=Aquarion` Evol/Evol';
                     ListItemText   = 'Evol';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol/Evol";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol/Evol";
                 },
                 @{
                     CompletionText = 'Path=Aquarion` Evol/Gepada';
                     ListItemText   = 'Gepada';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol/Gepada";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol/Gepada";
                 },
                 @{
                     CompletionText = 'Path=Aquarion` Evol/Gepard';
                     ListItemText   = 'Gepard';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol/Gepard";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol/Gepard";
                 }
             )
         },
@@ -118,15 +118,15 @@ Describe 'FileCompleter' {
             Expected = @(
                 @{
                     CompletionText = '漢字/';
-                    ListItemText   = '漢字';
+                    ListItemText   = '漢字/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root/漢字";
+                    ToolTipOrig    = "TestDrive:/Root/漢字";
                 },
                 @{
-                    CompletionText = '漢帝国';
-                    ListItemText   = '漢帝国';
+                    CompletionText = '漢``帝国';
+                    ListItemText   = '漢`帝国';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/漢帝国";
+                    ToolTipOrig    = "TestDrive:/Root/漢``帝国";
                 }
             )
         },
@@ -136,15 +136,15 @@ Describe 'FileCompleter' {
             Expected = @(
                 @{
                     CompletionText = 'Path=漢字/';
-                    ListItemText   = '漢字';
+                    ListItemText   = '漢字/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root/漢字";
+                    ToolTipOrig    = "TestDrive:/Root/漢字";
                 },
                 @{
-                    CompletionText = 'Path=漢帝国';
-                    ListItemText   = '漢帝国';
+                    CompletionText = 'Path=漢``帝国';
+                    ListItemText   = '漢`帝国';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/漢帝国";
+                    ToolTipOrig    = "TestDrive:/Root/漢``帝国";
                 }
             )
         },
@@ -154,27 +154,27 @@ Describe 'FileCompleter' {
             Expected = @(
                 @{
                     CompletionText = '../aurora/';
-                    ListItemText   = 'aurora';
+                    ListItemText   = 'aurora/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/aurora";
+                    ToolTipOrig    = "TestDrive:/aurora";
                 },
                 @{
                     CompletionText = '../Root/';
-                    ListItemText   = 'Root';
+                    ListItemText   = 'Root/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root";
+                    ToolTipOrig    = "TestDrive:/Root";
                 },
                 @{
                     CompletionText = '../aunt';
                     ListItemText   = 'aunt';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/aunt";
+                    ToolTipOrig    = "TestDrive:/aunt";
                 },
                 @{
                     CompletionText = '../uncle';
                     ListItemText   = 'uncle';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/uncle";
+                    ToolTipOrig    = "TestDrive:/uncle";
                 }
             )
         },
@@ -184,27 +184,27 @@ Describe 'FileCompleter' {
             Expected = @(
                 @{
                     CompletionText = 'Path=../aurora/';
-                    ListItemText   = 'aurora';
+                    ListItemText   = 'aurora/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/aurora";
+                    ToolTipOrig    = "TestDrive:/aurora";
                 },
                 @{
                     CompletionText = 'Path=../Root/';
-                    ListItemText   = 'Root';
+                    ListItemText   = 'Root/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root";
+                    ToolTipOrig    = "TestDrive:/Root";
                 },
                 @{
                     CompletionText = 'Path=../aunt';
                     ListItemText   = 'aunt';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/aunt";
+                    ToolTipOrig    = "TestDrive:/aunt";
                 },
                 @{
                     CompletionText = 'Path=../uncle';
                     ListItemText   = 'uncle';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/uncle";
+                    ToolTipOrig    = "TestDrive:/uncle";
                 }
             )
         }    
@@ -214,27 +214,27 @@ Describe 'FileCompleter' {
             Expected = @(
                 @{
                     CompletionText = 'Aquarion` Evol/';
-                    ListItemText   = 'Aquarion Evol';
+                    ListItemText   = 'Aquarion Evol/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol";
                 },
                 @{
                     CompletionText = '漢字/';
-                    ListItemText   = '漢字';
+                    ListItemText   = '漢字/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root/漢字";
+                    ToolTipOrig    = "TestDrive:/Root/漢字";
                 },
                 @{
                     CompletionText = 'Deava';
                     ListItemText   = 'Deava';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/Deava";
+                    ToolTipOrig    = "TestDrive:/Root/Deava";
                 },
                 @{
-                    CompletionText = '漢帝国';
-                    ListItemText   = '漢帝国';
+                    CompletionText = '漢``帝国';
+                    ListItemText   = '漢`帝国';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/漢帝国";
+                    ToolTipOrig    = "TestDrive:/Root/漢``帝国";
                 }
             )
         },
@@ -244,33 +244,38 @@ Describe 'FileCompleter' {
             Expected = @(
                 @{
                     CompletionText = 'Path=Aquarion` Evol/';
-                    ListItemText   = 'Aquarion Evol';
+                    ListItemText   = 'Aquarion Evol/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root/Aquarion Evol";
+                    ToolTipOrig    = "TestDrive:/Root/Aquarion Evol";
                 },
                 @{
                     CompletionText = 'Path=漢字/';
-                    ListItemText   = '漢字';
+                    ListItemText   = '漢字/';
                     ResultType     = 'ProviderContainer';
-                    ToolTip        = "TestDrive:/Root/漢字";
+                    ToolTipOrig    = "TestDrive:/Root/漢字";
                 },
                 @{
                     CompletionText = 'Path=Deava';
                     ListItemText   = 'Deava';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/Deava";
+                    ToolTipOrig    = "TestDrive:/Root/Deava";
                 },
                 @{
-                    CompletionText = 'Path=漢帝国';
-                    ListItemText   = '漢帝国';
+                    CompletionText = 'Path=漢``帝国';
+                    ListItemText   = '漢`帝国';
                     ResultType     = 'ProviderItem';
-                    ToolTip        = "TestDrive:/Root/漢帝国";
+                    ToolTipOrig    = "TestDrive:/Root/漢``帝国";
                 }
             )
+        },
+        @{
+            Prefix   = '';
+            Current  = 'Aquarion Logos';
+            Expected = @()
         }
     ) {
         foreach ($e in $Expected) {
-            $e.ToolTip = (Get-item ($e.ToolTip -creplace '^TestDrive:', $TestDrive)).FullName
+            $e.ToolTip = (Get-item ($e.ToolTipOrig -creplace '^TestDrive:', $TestDrive)).FullName
         }
         Complete-FilePath $Current -Prefix $Prefix | Should -BeCompletion $Expected
     }
