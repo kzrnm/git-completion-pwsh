@@ -33,17 +33,17 @@ function Complete-Words {
 
 function writeObjectLine {
     param(
-        [Parameter(Mandatory, Position = 0)]$Completion,
+        [Parameter(Position = 0)]$Completion,
         [string] $Prefix = '',
         [string] $Suffix = ''
     )
 
-    "$Prefix$([PSCustomObject]@{
+    "$Prefix$(if($Completion){[PSCustomObject]@{
         CompletionText = $Completion.CompletionText;
         ListItemText   = $Completion.ListItemText;
         ResultType     = $Completion.ResultType;
         ToolTip        = $Completion.ToolTip;
-    })$Suffix"
+    }})$Suffix"
 }
 
 function buildFailedMessage {
@@ -69,7 +69,7 @@ function buildFailedMessage {
         "The expected collection with size $($ExpectedValue.Count), but the resulting collection with size $($ActualValue.Count)."
     }
 
-    $Length = [math]::Min($ExpectedValue.Length, $ActualValue.Length)
+    $Length = [math]::Max($ExpectedValue.Length, $ActualValue.Length)
     for ($i = 0; $i -lt $Length ; $i++) {
         $a = [System.Management.Automation.CompletionResult]$ActualValue[$i]
         $e = $ExpectedValue[$i]

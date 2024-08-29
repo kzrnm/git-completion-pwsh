@@ -1,8 +1,23 @@
 using namespace System.Management.Automation;
 
+function gitCompleteResolveBuiltins {
+    [OutputType([CompletionResult[]])]
+    [CmdletBinding(PositionalBinding = $false)]
+    param (
+        [Parameter(Mandatory)]
+        [string]
+        $Current,
+        [Parameter(Mandatory, ValueFromRemainingArguments)]
+        [string[]]
+        $Command
+    )
+
+    gitResolveBuiltins @Command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ @Command }
+}
+
 # __git_complete_fetch_refspecs
 function gitCompleteFetchRefspecs {
-    [OutputType([string[]])]
+    [OutputType([CompletionResult[]])]
     param (
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
         [Parameter(Mandatory)][string] $Remote,
@@ -150,6 +165,7 @@ function gitCompleteRefs {
 
 # __git_complete_strategy
 function gitCompleteStrategy {
+    [OutputType([CompletionResult[]])]
     param (
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
         [Parameter(Mandatory)][AllowEmptyString()][string] $Prev
@@ -196,16 +212,65 @@ function gitCompleteStrategy {
     return $null
 }
 
-function gitCompleteResolveBuiltins {
-    [CmdletBinding(PositionalBinding = $false)]
+# __git_complete_revlist
+# __git_complete_file
+# __git_complete_revlist_file
+function gitCompleteRevlistFile {
+    [OutputType([CompletionResult[]])]
     param (
-        [Parameter(Mandatory)]
-        [string]
-        $Current,
-        [Parameter(Mandatory, ValueFromRemainingArguments)]
-        [string[]]
-        $Command
     )
 
-    gitResolveBuiltins @Command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ @Command }
+    <#
+	local dequoted_word pfx ls ref cur_="$cur"
+	case "$cur_" in
+	*..?*:*)
+		return
+		;;
+	?*:*)
+		ref="${cur_%%:*}"
+		cur_="${cur_#*:}"
+
+		__git_dequote "$cur_"
+
+		case "$dequoted_word" in
+		?*/*)
+			pfx="${dequoted_word%/*}"
+			cur_="${dequoted_word##*/}"
+			ls="$ref:$pfx"
+			pfx="$pfx/"
+			;;
+		*)
+			cur_="$dequoted_word"
+			ls="$ref"
+			;;
+		esac
+
+		case "$COMP_WORDBREAKS" in
+		*:*) : great ;;
+		*)   pfx="$ref:$pfx" ;;
+		esac
+
+		__gitcomp_file "$(__git ls-tree "$ls" \
+				| sed 's/^.*	//
+				       s/$//')" \
+			"$pfx" "$cur_"
+		;;
+	*...*)
+		pfx="${cur_%...*}..."
+		cur_="${cur_#*...}"
+		gitCompleteRefs --pfx="$pfx" --cur="$cur_"
+		;;
+	*..*)
+		pfx="${cur_%..*}.."
+		cur_="${cur_#*..}"
+		gitCompleteRefs --pfx="$pfx" --cur="$cur_"
+		;;
+	*)
+		gitCompleteRefs
+		;;
+	esac
+    #>
 }
+
+Set-Alias gitCompleteFile gitCompleteRevlistFile
+Set-Alias gitCompleteRevlist gitCompleteRevlistFile

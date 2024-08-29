@@ -456,6 +456,7 @@ function gitListAliases {
         }
     }
 }
+
 function gitGetAlias {
     [OutputType([string])]
     param(
@@ -529,4 +530,26 @@ function gitGetConfigVariables () {
     __git config --name-only --get-regexp "^$Section\..*" | ForEach-Object {
         $_.Substring($Section.Length + 1)
     }
+}
+
+# __git_pseudoref_exists
+# Runs git in $__git_repo_path to determine whether a pseudoref exists.
+# 1: The pseudo-ref to search
+function gitPseudorefExists {
+    param([Parameter(Mandatory, Position = 0)][string]$ref)
+
+    $repoPath = (gitRepoPath)
+    [string]$head = (Get-Content "$repoPath/HEAD" -ErrorAction Ignore | Select-Object -First 1)
+
+    # If the reftable is in use, we have to shell out to 'git rev-parse'
+    # to determine whether the ref exists instead of looking directly in
+    # the filesystem to determine whether the ref exists. Otherwise, use
+    # Bash builtins since executing Git commands are expensive on some
+    # platforms.
+    if ($head -eq 'ref: refs/heads/.invalid') {
+        __git show-ref --exists "$ref" 1>$null 2>$null
+        return $LASTEXITCODE
+    }
+
+    return ((Get-Item "$repoPath/$ref" -ErrorAction Ignore) -is [System.IO.FileInfo])
 }

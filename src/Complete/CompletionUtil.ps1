@@ -21,6 +21,9 @@ function completeList {
         [Parameter(ParameterSetName = 'Prefix')]
         [switch]
         $RemovePrefix,
+        [Parameter(HelpMessage = 'Escape space')]
+        [switch]
+        $IsPath,
         [Parameter(ValueFromPipeline)]
         [string]
         $Candidate
@@ -42,10 +45,16 @@ function completeList {
             if (!$desc) {
                 $desc = "$Candidate"
             }
+            $ListItem = $Candidate
+
+            if ($IsPath) {
+                $Candidate -replace '(\s)', '`$1'
+            }
+            $Completion = "$Prefix$Candidate$Suffix"
 
             [CompletionResult]::new(
-                "$Prefix$Candidate$Suffix",
-                "$Candidate",
+                "$Completion",
+                $ListItem,
                 $ResultType,
                 $desc
             )
