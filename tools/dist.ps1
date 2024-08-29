@@ -5,7 +5,7 @@ param (
     $TagName
 )
 
-if (-not $env:Module) {
+if (!$env:Module) {
     throw 'dist.ps1 requires $env:Module'
 }
 

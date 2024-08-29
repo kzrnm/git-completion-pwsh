@@ -16,10 +16,10 @@ function Complete-GitSubCommand-remote {
         $subcommand = $trailingWords[0]
     }
     $subcommands = gitResolveBuiltins $Context.command | Where-Object {
-        (-not $_.StartsWith('--')) -and ($_ -ne 'rm')
+        (!$_.StartsWith('--')) -and ($_ -ne 'rm')
     }
 
-    if (-not $subcommand) {
+    if (!$subcommand) {
         if ($Current -eq '-') {
             Get-GitShortOptions $Context.command
         }

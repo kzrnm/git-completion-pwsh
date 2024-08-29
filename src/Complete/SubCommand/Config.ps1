@@ -108,7 +108,7 @@ function completeGitConfigGetSetVariables {
     
     gitConfigGetSetVariables $Context | filterCompletionResult -Current $Current | ForEach-Object {
         $desc = Get-GitConfigVariableDescription $_
-        if (-not $desc) { $desc = $_ }
+        if (!$desc) { $desc = $_ }
 
         [CompletionResult]::new(
             $_,
@@ -426,7 +426,7 @@ function completeConfigVariableName {
     }
     if ($Current -match "([^\.]*)\.(.*)") {
         $section = $Matches[1]
-        gitConfigVars | Where-Object { -not $_.EndsWith('.') } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        gitConfigVars | Where-Object { !$_.EndsWith('.') } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     else {

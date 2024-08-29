@@ -19,7 +19,7 @@ if ($ColoredFile) {
     }
 }
 
-$gh = Get-GitHelp -Command $Command -ShowParser:(-not $ColoredFile)
+$gh = Get-GitHelp -Command $Command -ShowParser:(!$ColoredFile)
 if ($PathThru) {
     $gh
 }

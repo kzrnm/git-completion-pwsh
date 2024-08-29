@@ -117,7 +117,7 @@ function gitFirstLevelConfigVarsForSection {
     param (
         [Parameter(Position = 0, Mandatory)][string] $section
     )
-    if (-not $script:__git_first_level_config_vars_for_section) {
+    if (!$script:__git_first_level_config_vars_for_section) {
         $script:__git_first_level_config_vars_for_section = @{}
     }
 
@@ -141,7 +141,7 @@ function gitSecondLevelConfigVarsForSection {
     param (
         [Parameter(Position = 0, Mandatory)][string] $section
     )
-    if (-not $script:__git_second_level_config_vars_for_section) {
+    if (!$script:__git_second_level_config_vars_for_section) {
         $script:__git_second_level_config_vars_for_section = @{}
     }
 
@@ -326,8 +326,8 @@ function gitRefs {
     $ignoreCase = $null
 
     $dir = (gitRepoPath)
-    if (-not $Remote) {
-        if (-not $dir) {
+    if (!$Remote) {
+        if (!$dir) {
             return @()
         }
     }
@@ -509,7 +509,7 @@ $script:__git_support_parseopt_helper = $null
 function gitSupportParseoptHelper {
     [OutputType([bool])]
     param([Parameter(Mandatory, Position = 0)][string]$Command)
-    if (-not $script:__git_support_parseopt_helper) {
+    if (!$script:__git_support_parseopt_helper) {
         $script:__git_support_parseopt_helper = [HashSet[string]]::new([string[]]((git --list-cmds=parseopt) -split '\s+' | Where-Object { $_ }))
     }
 

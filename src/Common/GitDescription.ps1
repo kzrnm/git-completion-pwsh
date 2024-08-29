@@ -290,7 +290,7 @@ function Get-GitShortOptions {
     if ($gh) {
         $gh.ShortOptions($Subcommand)
     }
-    if (-not $SkipHelp) {
+    if (!$SkipHelp) {
         $__helpCompletion
     }
 }
@@ -370,7 +370,7 @@ class GitHelp {
 
     [CompletionResult[]] ShortOptions([string]$Subcommand) {
         $opt = $null
-        if (-not $this.Options.TryGetValue($Subcommand, [ref]$opt)) {
+        if (!$this.Options.TryGetValue($Subcommand, [ref]$opt)) {
             $opt = $this.Options['']
         }
         return $opt.ShortOptions()

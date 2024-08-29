@@ -49,7 +49,7 @@ function addOrRemoveSubcommand {
         [ref] $remove
     )
 
-    if (-not $add.Value) {
+    if (!$add.Value) {
         $add.Value = [HashSet[string]]::new()
     }
     $add.Value.Add($Candidate) | Out-Null
@@ -89,7 +89,7 @@ function listCommands {
 
     if (isGitCompletionShowAllCommand) {
         $commandsSet = [HashSet[string]]::new($commands)
-        $commands.AddRange([string[]]@(gitBuiltinCommands | filterSubcommandExclude | Where-Object { -not $commandsSet.Contains($_) } | Sort-Object -Unique))
+        $commands.AddRange([string[]]@(gitBuiltinCommands | filterSubcommandExclude | Where-Object { !$commandsSet.Contains($_) } | Sort-Object -Unique))
     }
 
     return $commands.ToArray()

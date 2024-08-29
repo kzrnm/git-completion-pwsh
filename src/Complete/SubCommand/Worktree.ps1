@@ -14,7 +14,7 @@ function Complete-GitSubCommand-worktree {
 
     $subcommands = gitResolveBuiltins $Context.command
 
-    if (-not $subcommand) {
+    if (!$subcommand) {
         if ($Current -eq '-') {
             $script:__helpCompletion
             return

@@ -53,8 +53,8 @@ function buildFailedMessage {
         [hashtable[]] $ExpectedValue
     )
 
-    if (-not $ActualValue) {
-        if (-not $ExpectedValue) {
+    if (!$ActualValue) {
+        if (!$ExpectedValue) {
             return @()
         }
         "The expected collection is not empty, but the resulting collection is empty."

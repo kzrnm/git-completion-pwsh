@@ -63,13 +63,13 @@ function gitCompleteRemoteOrRefspec {
             $noCompleteRefspec = $true
             break
         }
-        elseif (-not $w.StartsWith('--')) {
+        elseif (!$w.StartsWith('--')) {
             $remote = $w
             break
         }
     }
 
-    if (-not $remote) {
+    if (!$remote) {
         gitRemote | completeList -Current $Current -ResultType $ResultType
         return
     }

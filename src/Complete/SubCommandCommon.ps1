@@ -10,7 +10,7 @@ function Complete-GitSubCommandCommon {
     $Command = $Context.command
 
     [string] $subcommand = $Context.Subcommand()
-    if ((-not $subcommand) -or $subcommand.StartsWith('-')) {
+    if ((!$subcommand) -or $subcommand.StartsWith('-')) {
         $subcommand = ''
     }
 
@@ -22,7 +22,8 @@ function Complete-GitSubCommandCommon {
     if ($Current.StartsWith('--')) {
         if ($subcommand) {
             $Commands = @($Command, $subcommand)
-        } else{
+        }
+        else {
             $Commands = @($Command)
         }
 

@@ -30,7 +30,7 @@ function completeList {
         if ($RemovePrefix -and $Current.StartsWith($Prefix)) {
             $Current = $Current.Substring($Prefix.Length)
         }
-        if ((-not $Current) -or $Candidate.StartsWith($Current)) {
+        if ((!$Current) -or $Candidate.StartsWith($Current)) {
             $desc = $null
             if ($DescriptionBuilder) {
                 $desc = [string]$DescriptionBuilder.InvokeWithContext(
@@ -39,7 +39,7 @@ function completeList {
                     @($Candidate)
                 )
             }
-            if (-not $desc) {
+            if (!$desc) {
                 $desc = "$Candidate"
             }
 
@@ -118,7 +118,7 @@ function gitcomp {
                     @($Candidate)
                 )
             }
-            if (-not $desc) {
+            if (!$desc) {
                 $desc = "$c"
             }
             return $desc

@@ -1,6 +1,6 @@
 function Test-GitVersion {
     $minGitVersion = [version]::new(2, 45)
-    if (-not ((git --version) -match 'version\s*(\d+\.\d+\.\d+)')) {
+    if (!((git --version) -match 'version\s*(\d+\.\d+\.\d+)')) {
         throw "Failed to parse version"
     }
     if ([version]::Parse($Matches[1]) -lt $minGitVersion) {
