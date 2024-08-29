@@ -18,17 +18,7 @@ function Complete-FromLine {
         [string][Parameter(ValueFromPipeline)] $line
     )
 
-    return (Complete-Words ($line -split '\s+'))
-}
-
-
-function Complete-Words {
-    [OutputType([System.Management.Automation.CompletionResult[]])]
-    param (
-        [Parameter(Mandatory)][AllowEmptyCollection()][AllowEmptyString()][string[]]$Words
-    )
-
-    return (Complete-Git -Words $Words)
+    return (Complete-Git -Words ($line -split '\s+'))
 }
 
 function writeObjectLine {
@@ -124,4 +114,4 @@ Add-ShouldOperator -Name BeCompletion `
     -Test ${function:Should-BeCompletion} `
     -SupportsArrayInput
 
-Export-ModuleMember -Function Complete-FromLine, Complete-Words, Initialize-Home, Restore-Home
+Export-ModuleMember -Function Complete-FromLine, Initialize-Home, Restore-Home

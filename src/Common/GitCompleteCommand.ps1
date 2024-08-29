@@ -54,7 +54,7 @@ function gitCompleteRemoteOrRefspec {
     $c = 1
     if ($Command -eq 'remote') { $c++ }
 
-    for ($i = $Context.commandIndex + $c; ($i + 1) -lt $Context.Words.Length; $i++) {
+    for ($i = $Context.commandIndex + $c; $i -lt $Context.CurrentIndex; $i++) {
         $w = $Context.Words[$i]
         if ($w -eq '--mirror') {
             if ($Command -eq 'push') {
@@ -218,7 +218,13 @@ function gitCompleteStrategy {
 function gitCompleteRevlistFile {
     [OutputType([CompletionResult[]])]
     param (
+        [Parameter(Mandatory, Position = 0)]
+        [AllowEmptyString()]
+        $Current
     )
+
+    throw 'WIP'
+    if ($Current -like '*..?*:*') { return }
 
     <#
 	local dequoted_word pfx ls ref cur_="$cur"

@@ -4,28 +4,32 @@ function Complete-GitSubCommand-whatchanged {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
-        # [CommandLineContext] # For dynamic call
+        [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
     $Context.command = 'log'
-    Complete-GitSubCommand-whatchanged $Context
+    Complete-GitSubCommand-log $Context
 }
 
 function Complete-GitSubCommand-log {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
-        # [CommandLineContext] # For dynamic call
+        [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
 
-    if ($Context.CurrentWord() -eq '-') {
+    if ($Context.HasDoubledash()) { return }
+
+    [string] $Current = $Context.CurrentWord()
+
+    if ($Current -eq '-') {
         return Get-GitShortOptions $Context.command
     }
 
-    if ($Context.HasDoubledash()) { return }
     $result = completeLogOpts $Context
     if ($result) { return $result }
+    gitCompleteRevlistFile $Current
 }
 
 # __git_complete_log_opts

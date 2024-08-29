@@ -4,7 +4,7 @@ function Complete-GitSubCommand-config {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
-        # [CommandLineContext] # For dynamic call
+        [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
 
@@ -18,7 +18,7 @@ function Complete-GitSubCommand-config {
     [string] $Current = $Context.CurrentWord()
 
     $subcommands = gitResolveBuiltins $Context.command
-    [string] $subcommand = $Context.Subcommand()
+    [string] $subcommand = $Context.SubcommandWithoutGlobalOption()
     if ($subcommand -notin $subcommands) {
         if ($Current -eq '-') {
             $script:__helpCompletion

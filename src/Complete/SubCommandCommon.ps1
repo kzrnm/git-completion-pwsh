@@ -2,14 +2,14 @@ function Complete-GitSubCommandCommon {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([System.Management.Automation.CompletionResult[]])]
     param(
-        # [CommandLineContext] # For dynamic call
+        [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
 
     $Current = $Context.CurrentWord()
     $Command = $Context.command
 
-    [string] $subcommand = $Context.Subcommand()
+    [string] $subcommand = $Context.SubcommandWithoutGlobalOption()
     if ((!$subcommand) -or $subcommand.StartsWith('-')) {
         $subcommand = ''
     }

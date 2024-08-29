@@ -4,10 +4,12 @@ function Complete-Git {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
-        [string[]][AllowEmptyCollection()][AllowEmptyString()][Parameter(Mandatory)]$Words
+        [string[]][AllowEmptyCollection()][AllowEmptyString()][Parameter(Mandatory)]$Words,
+        [int]$CurrentIndex = -1
     )
 
-    return Complete-GitCommandLine ([CommandLineContext]::new($Words))
+    if ($CurrentIndex -lt 0) { $CurrentIndex = $Words.Length - 1 }
+    return Complete-GitCommandLine ([CommandLineContext]::new($Words, $CurrentIndex))
 }
 
 
@@ -185,7 +187,7 @@ function Complete-GitCommandLine {
             $Context.command = Resolve-GitAlias $Context.command -ActualCommand
             try {
                 $completeSubcommandFunc = "Complete-GitSubCommand-$($Context.command)"
-                & $completeSubcommandFunc $Context
+                . $completeSubcommandFunc $Context
             }
             catch {
                 Complete-GitSubCommandCommon $Context

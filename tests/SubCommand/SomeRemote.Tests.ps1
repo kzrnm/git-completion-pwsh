@@ -647,6 +647,32 @@ Describe 'UseRemote' -Skip:$SkipHeavyTest {
                 "git push $Line" | Complete-FromLine | Should -BeCompletion $expected
             }
         }
+
+        Describe 'Middle' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = @('git', 'push', 'o');
+                    Right    = @('main');
+                    Expected = @(
+                        @{
+                            CompletionText = 'ordinary';
+                            ListItemText   = 'ordinary';
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = 'ordinary';
+                        },
+                        @{
+                            CompletionText = 'origin';
+                            ListItemText   = 'origin';
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = 'origin';
+                        }
+                    )
+                }
+            ) {
+                Complete-Git -Words ($Left + $Right) -CurrentIndex ($Left.Length - 1) | 
+                Should -BeCompletion $expected
+            }
+        }
     }
 
     Describe 'Fetch' {

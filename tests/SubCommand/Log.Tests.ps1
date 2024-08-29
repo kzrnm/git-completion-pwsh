@@ -25,7 +25,7 @@ Describe 'Log' {
         Pop-Location
     }
 
-    Describe '<_>' -ForEach @('log', 'whatchanged') {
+    Describe '<Command>' -ForEach ('log', 'whatchanged' | ForEach-Object { @{Command = $_ } }) {
         It 'ShortOptions' {
             $expected = @(
                 @{
@@ -47,11 +47,47 @@ Describe 'Log' {
                     ToolTip        = "show help";
                 }
             )
-            "git log -" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
         }
 
         Describe 'DoubleDash' {
+            Context 'In Right' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = @('git', 'log', '--quiet');
+                        Right    = @('--');
+                        Expected = @(
+                            @{
+                                CompletionText = '--quiet';
+                                ListItemText = '--quiet';
+                                ResultType = 'ParameterName';
+                                ToolTip = '--quiet';
+                            }
+                        )
+                    },
+                    @{
+                        Left     = @('git', 'log', '--quiet');
+                        Right    = @('-- --all');
+                        Expected = @(
+                            @{
+                                CompletionText = '--quiet';
+                                ListItemText = '--quiet';
+                                ResultType = 'ParameterName';
+                                ToolTip = '--quiet';
+                            }
+                        )
+                    }
+                ) {
+                    Complete-Git -Words ($Left + $Right) -CurrentIndex ($Left.Length - 1) | 
+                    Should -BeCompletion $expected
+                }
+            }
+
             It '<Line>' -ForEach @(
+                @{
+                    Line     = 'src -- -';
+                    Expected = @()
+                },
                 @{
                     Line     = 'src -- ';
                     Expected = @()
@@ -61,7 +97,7 @@ Describe 'Log' {
                     Expected = @()
                 }
             ) {
-                "git log $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
             }
         }
 
@@ -90,7 +126,7 @@ Describe 'Log' {
                     }
                 }
             ) {
-                "git log $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
             }
         }
 
@@ -295,7 +331,36 @@ Describe 'Log' {
                     }
                 }
             ) {
-                "git log $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
+        Describe 'Revlist' {
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '--bi';
+                    Expected = '--bisect', '--binary' | ForEach-Object { 
+                        @{
+                            CompletionText = "$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "$_"
+                        }
+                    }
+                },
+                @{
+                    Line     = '--no-p';
+                    Expected = '--no-prefix', '--no-patch' | ForEach-Object { 
+                        @{
+                            CompletionText = "$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterName';
+                            ToolTip        = "$_"
+                        }
+                    }
+                }
+            ) {
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
             }
         }
     }

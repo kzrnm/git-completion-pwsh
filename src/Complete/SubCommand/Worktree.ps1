@@ -4,11 +4,11 @@ function Complete-GitSubCommand-worktree {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
-        # [CommandLineContext] # For dynamic call
+        [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
 
-    [string] $Subcommand = $Context.Subcommand()
+    [string] $Subcommand = $Context.SubcommandWithoutGlobalOption()
     [string] $Prev = $Context.PreviousWord()
     [string] $Current = $Context.CurrentWord()
 
@@ -50,7 +50,7 @@ function Complete-GitSubCommand-worktree {
         'remove' { return gitCompleteWorktreePaths $Current }
         'unlock' { return gitCompleteWorktreePaths $Current }
         'move' {
-            if ($Context.Words.Length -eq ($Context.commandIndex + 3)) {
+            if ($Context.CurrentIndex -eq ($Context.commandIndex + 2)) {
                 return gitCompleteWorktreePaths $Current
             }
             else {
@@ -63,9 +63,8 @@ function Complete-GitSubCommand-worktree {
                 return
             }
 
-            $words = $Context.Words
-            for ($i = 3; ($i + 1) -lt $words.Length; $i++) {
-                switch -Wildcard ($words[$i]) {
+            for ($i = 3; $i -lt $Context.CurrentIndex; $i++) {
+                switch -Wildcard ($Context.Words[$i]) {
                     '-b' { $i++ }
                     '--reason' { $i++ }
                     '-*' { }

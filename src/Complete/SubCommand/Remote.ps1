@@ -4,17 +4,12 @@ function Complete-GitSubCommand-remote {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
-        # [CommandLineContext] # For dynamic call
+        [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
 
     [string] $Current = $Context.CurrentWord()
-    [string[]] $trailingWords = $Context.WordsWithoutLeadingOptions()
-
-    [string] $subcommand = ''
-    if ($trailingWords.Length -gt 1) {
-        $subcommand = $trailingWords[0]
-    }
+    [string] $subcommand = $Context.Subcommand()
     $subcommands = gitResolveBuiltins $Context.command | Where-Object {
         (!$_.StartsWith('--')) -and ($_ -ne 'rm')
     }

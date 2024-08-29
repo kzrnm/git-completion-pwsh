@@ -8,28 +8,29 @@ Register-ArgumentCompleter -CommandName git -Native -ScriptBlock {
     $ws = [System.Collections.Generic.List[string]]::new($CommandAst.CommandElements.Count + 2)
     $ws.Add('git')
 
+    $CurrentIndex = 0
+
     for ($i = 1; $i -lt $CommandAst.CommandElements.Count; $i++) {
         $extent = $CommandAst.CommandElements[$i].Extent
-        if ($CursorPosition -lt $extent.StartOffset) {
-            $ws.Add('')
-            break
+        if ($CurrentIndex) {
+            $ws.Add($extent.Text)
         }
-
-        if ($CursorPosition -lt $extent.EndOffset) {
-            $ws.Add($extent.Text.Substring(0, $CursorPosition - $extent.StartOffset))
-            break
+        elseif ($CursorPosition -le $extent.EndOffset) {
+            $ws.Add($wordToComplete)
+            $CurrentIndex = $i
+            if ($CursorPosition -lt $extent.StartOffset) {
+                $ws.Add($extent.Text)
+            }
         }
         else {
             $ws.Add($extent.Text)
-            if ($CursorPosition -eq $extent.EndOffset) { break }
         }
     }
 
-    if ($CommandAst.CommandElements.Count -eq $i) {
+    if (!$CurrentIndex) {
+        $CurrentIndex = $ws.Count
         $ws.Add('')
     }
 
-    return (
-        Complete-Git -Words $ws.ToArray() 
-    )
+    return (Complete-Git -Words $ws.ToArray() -CurrentIndex $CurrentIndex)
 }

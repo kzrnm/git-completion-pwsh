@@ -68,8 +68,8 @@ $script:gitLogCommonOptions = '--not', '--all',
 '--since-as-filter', '--single-worktree'
 
 # Options that go well for log and gitk (not shortlog)
-$script:gitLogGitkOptions = '--dense', '--sparse', '--full-history'
-'--simplify-merges', '--simplify-by-decoration'
+$script:gitLogGitkOptions = '--dense', '--sparse', '--full-history',
+'--simplify-merges', '--simplify-by-decoration',
 '--left-right', '--notes', '--no-notes'
 
 # Options that go well for log and shortlog (not gitk)
