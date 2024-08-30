@@ -1,6 +1,14 @@
 #Requires -Module Pester, git-completion
 
 function Initialize-Home {
+    $script:GitCompletionSettings = @{
+        IgnoreCase         = $false;
+        ShowAllCommand     = $false;
+        ShowAllOptions     = $false;
+        AdditionalCommands = @();
+        ExcludeCommands    = @();
+    }
+
     $script:envHOMEBak = $env:HOME
     $env:GIT_COMPLETION_SHOW_ALL = ''
     $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = ''
@@ -10,6 +18,14 @@ function Initialize-Home {
 }
 function Restore-Home {
     $env:HOME = $script:envHOMEBak
+
+    $script:GitCompletionSettings = @{
+        IgnoreCase         = $false;
+        ShowAllCommand     = $false;
+        ShowAllOptions     = $false;
+        AdditionalCommands = @();
+        ExcludeCommands    = @();
+    }
 }
 
 function Complete-FromLine {

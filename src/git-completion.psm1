@@ -2,6 +2,8 @@ $ErrorActionPreference = 'Continue'
 
 Get-ChildItem -Recurse "$PSScriptRoot" | Where-Object { $_.Extension -eq '.ps1' } | ForEach-Object { . $_.FullName }
 
+Export-ModuleMember -Variable 'GitCompletionSettings'
+
 Register-ArgumentCompleter -CommandName git -Native -ScriptBlock {
     param($wordToComplete, $CommandAst, $CursorPosition)
 

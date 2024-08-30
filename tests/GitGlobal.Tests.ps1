@@ -118,205 +118,173 @@ Describe 'GirGlobal' {
     }
 
     Describe 'Complete subcommands' {
-        Describe 'GIT_COMPLETION_SHOW_ALL_COMMANDS:False' {
-            It '<Text>' -ForEach @(
+        Describe 'ShowAllCommand' {
+            Describe '<Line>' -ForEach @(
                 @{
-                    Text  = '0';
-                    Value = '0';
-                },
-                @{
-                    Text  = '$null';
-                    Value = $null;
+                    Line     = 'git w';
+                    Expected = @{
+                        $true  = @(
+                            @{
+                                CompletionText = "whatchanged";
+                                ListItemText   = "whatchanged";
+                                ResultType     = 'Text';
+                                ToolTip        = "Show logs with differences each commit introduces";
+                            },
+                            @{
+                                CompletionText = "worktree";
+                                ListItemText   = "worktree";
+                                ResultType     = 'Text';
+                                ToolTip        = "Manage multiple working trees";
+                            },
+                            @{
+                                CompletionText = "write-tree";
+                                ListItemText   = "write-tree";
+                                ResultType     = 'Text';
+                                ToolTip        = "Create a tree object from the current index";
+                            }
+                        )
+                        $false = @(
+                            @{
+                                CompletionText = "whatchanged";
+                                ListItemText   = "whatchanged";
+                                ResultType     = 'Text';
+                                ToolTip        = "Show logs with differences each commit introduces";
+                            },
+                            @{
+                                CompletionText = "worktree";
+                                ListItemText   = "worktree";
+                                ResultType     = 'Text';
+                                ToolTip        = "Manage multiple working trees";
+                            }
+                        )
+                    }
                 }
             ) {
-                $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = $Value
-                "git diff" | Complete-FromLine | Should -BeCompletion @(
-                    @{
-                        CompletionText = "diff";
-                        ListItemText   = "diff";
-                        ResultType     = 'Text';
-                        ToolTip        = "Show changes between commits, commit and working tree, etc";
-                    },
-                    @{
-                        CompletionText = "difftool";
-                        ListItemText   = "difftool";
-                        ResultType     = 'Text';
-                        ToolTip        = "Show changes using common diff tools";
-                    }
-                )
-            }
-        }
-        Describe 'GIT_COMPLETION_SHOW_ALL_COMMANDS:True' {
-            It '<Value>' -ForEach @(
-                @{
-                    Value = '1';
-                },
-                @{
-                    Value = 'any';
+                It '<_>'  -ForEach @($true, $false) {
+                    $GitCompletionSettings.ShowAllCommand = $_
+                    "$Line" | Complete-FromLine | Should -BeCompletion $Expected[$_]
                 }
-            ) {
-                $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = $Value
-                "git diff" | Complete-FromLine | Should -BeCompletion @(
-                    @{
-                        CompletionText = "diff";
-                        ListItemText   = "diff";
-                        ResultType     = 'Text';
-                        ToolTip        = "Show changes between commits, commit and working tree, etc";
-                    },
-                    @{
-                        CompletionText = "difftool";
-                        ListItemText   = "difftool";
-                        ResultType     = 'Text';
-                        ToolTip        = "Show changes using common diff tools";
-                    },
-                    @{
-                        CompletionText = "diff-files";
-                        ListItemText   = "diff-files";
-                        ResultType     = 'Text';
-                        ToolTip        = "Compares files in the working tree and the index";
-                    },
-                    @{
-                        CompletionText = "diff-index";
-                        ListItemText   = "diff-index";
-                        ResultType     = 'Text';
-                        ToolTip        = "Compare a tree to the working tree or index";
-                    },
-                    @{
-                        CompletionText = "diff-tree";
-                        ListItemText   = "diff-tree";
-                        ResultType     = 'Text';
-                        ToolTip        = "Compares the content and mode of blobs found via two tree objects";
-                    }
-                )
             }
         }
 
         AfterEach {
-            $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = ''
+            $GitCompletionSettings.ShowAllCommand = $false
         }
     }
 
-    It 'Add,Remove-GitSubcommand' {
-        $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = ''
-
-        Add-GitSubcommand diffusion difficult
-
-        "git diff" | Complete-FromLine | Should -BeCompletion @(
+    Describe 'AdditionalCommands,ExcludeCommands' {
+        It '<Command>,Add:(<Add>),Exclude:(<Exclude>)' -ForEach @(
             @{
-                CompletionText = "diff";
-                ListItemText   = "diff";
-                ResultType     = 'Text';
-                ToolTip        = "Show changes between commits, commit and working tree, etc";
+                Add      = @();
+                Exclude  = @();
+                Command  = 'wh';
+                Expected = @(
+                    @{
+                        CompletionText = "whatchanged";
+                        ListItemText   = "whatchanged";
+                        ResultType     = 'Text';
+                        ToolTip        = "Show logs with differences each commit introduces";
+                    }
+                )
             },
             @{
-                CompletionText = "difficult";
-                ListItemText   = "difficult";
-                ResultType     = 'Text';
-                ToolTip        = "difficult";
+                Add      = 'why';
+                Exclude  = @();
+                Command  = 'wh';
+                Expected = @(
+                    @{
+                        CompletionText = "whatchanged";
+                        ListItemText   = "whatchanged";
+                        ResultType     = 'Text';
+                        ToolTip        = "Show logs with differences each commit introduces";
+                    },
+                    @{
+                        CompletionText = "why";
+                        ListItemText   = "why";
+                        ResultType     = 'Text';
+                        ToolTip        = "why";
+                    }
+                )
             },
             @{
-                CompletionText = "difftool";
-                ListItemText   = "difftool";
-                ResultType     = 'Text';
-                ToolTip        = "Show changes using common diff tools";
+                Add      = @('why', 'who');
+                Exclude  = @();
+                Command  = 'wh';
+                Expected = @(
+                    @{
+                        CompletionText = "whatchanged";
+                        ListItemText   = "whatchanged";
+                        ResultType     = 'Text';
+                        ToolTip        = "Show logs with differences each commit introduces";
+                    },
+                    @{
+                        CompletionText = "who";
+                        ListItemText   = "who";
+                        ResultType     = 'Text';
+                        ToolTip        = "who";
+                    },
+                    @{
+                        CompletionText = "why";
+                        ListItemText   = "why";
+                        ResultType     = 'Text';
+                        ToolTip        = "why";
+                    }
+                )
             },
             @{
-                CompletionText = "diffusion";
-                ListItemText   = "diffusion";
-                ResultType     = 'Text';
-                ToolTip        = "diffusion";
+                Add      = @();
+                Exclude  = 'whatchanged';
+                Command  = 'wh';
+                Expected = @()
+            },
+            @{
+                Add      = 'why';
+                Exclude  = @('whatchanged', 'worktree');
+                Command  = 'w';
+                Expected = @(
+                    @{
+                        CompletionText = "why";
+                        ListItemText   = "why";
+                        ResultType     = 'Text';
+                        ToolTip        = "why";
+                    }
+                )
+            },
+            @{
+                Add      = @('why', 'who');
+                Exclude  = @('whatchanged', 'who');
+                Command  = 'wh';
+                Expected = @(
+                    @{
+                        CompletionText = "why";
+                        ListItemText   = "why";
+                        ResultType     = 'Text';
+                        ToolTip        = "why";
+                    }
+                )
+            },
+            @{
+                Add      = @('ls-files');
+                Exclude  = @();
+                Command  = 'ls';
+                Expected = @(
+                    @{
+                        CompletionText = "ls-files";
+                        ListItemText   = "ls-files";
+                        ResultType     = 'Text';
+                        ToolTip        = "Show information about files in the index and the working tree";
+                    }
+                )
             }
-        )
+        ) {
+            $GitCompletionSettings.AdditionalCommands = $Add
+            $GitCompletionSettings.ExcludeCommands = $Exclude
 
-        Remove-GitSubcommand difficult
-
-        "git diff" | Complete-FromLine | Should -BeCompletion @(
-            @{
-                CompletionText = "diff";
-                ListItemText   = "diff";
-                ResultType     = 'Text';
-                ToolTip        = "Show changes between commits, commit and working tree, etc";
-            },
-            @{
-                CompletionText = "difftool";
-                ListItemText   = "difftool";
-                ResultType     = 'Text';
-                ToolTip        = "Show changes using common diff tools";
-            },
-            @{
-                CompletionText = "diffusion";
-                ListItemText   = "diffusion";
-                ResultType     = 'Text';
-                ToolTip        = "diffusion";
-            }
-        )
-
-        $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = '1'
-
-        "git diff" | Complete-FromLine | Should -BeCompletion @(
-            @{
-                CompletionText = "diff";
-                ListItemText   = "diff";
-                ResultType     = 'Text';
-                ToolTip        = "Show changes between commits, commit and working tree, etc";
-            },
-            @{
-                CompletionText = "difftool";
-                ListItemText   = "difftool";
-                ResultType     = 'Text';
-                ToolTip        = "Show changes using common diff tools";
-            },
-            @{
-                CompletionText = "diffusion";
-                ListItemText   = "diffusion";
-                ResultType     = 'Text';
-                ToolTip        = "diffusion";
-            },
-            @{
-                CompletionText = "diff-files";
-                ListItemText   = "diff-files";
-                ResultType     = 'Text';
-                ToolTip        = "Compares files in the working tree and the index";
-            },
-            @{
-                CompletionText = "diff-index";
-                ListItemText   = "diff-index";
-                ResultType     = 'Text';
-                ToolTip        = "Compare a tree to the working tree or index";
-            },
-            @{
-                CompletionText = "diff-tree";
-                ListItemText   = "diff-tree";
-                ResultType     = 'Text';
-                ToolTip        = "Compares the content and mode of blobs found via two tree objects";
-            }
-        )
-
-        Remove-GitSubcommand diffusion diff-index diff-files
-
-        "git diff" | Complete-FromLine | Should -BeCompletion @(
-            @{
-                CompletionText = "diff";
-                ListItemText   = "diff";
-                ResultType     = 'Text';
-                ToolTip        = "Show changes between commits, commit and working tree, etc";
-            },
-            @{
-                CompletionText = "difftool";
-                ListItemText   = "difftool";
-                ResultType     = 'Text';
-                ToolTip        = "Show changes using common diff tools";
-            },
-            @{
-                CompletionText = "diff-tree";
-                ListItemText   = "diff-tree";
-                ResultType     = 'Text';
-                ToolTip        = "Compares the content and mode of blobs found via two tree objects";
-            }
-        )
+            "git $Command" | Complete-FromLine | Should -BeCompletion $Expected
+        }
     }
 
     AfterEach {
-        $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = ''
+        $GitCompletionSettings.ShowAllCommand = $false
     }
 }

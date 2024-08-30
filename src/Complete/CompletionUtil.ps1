@@ -6,7 +6,7 @@ function completeList {
     param(
         [AllowEmptyString()]
         [string]
-        $Current,
+        $Current = '',
         [Parameter(ParameterSetName = 'Default')]
         [Parameter(Mandatory, ParameterSetName = 'Prefix')]
         [AllowEmptyString()]

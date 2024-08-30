@@ -377,7 +377,7 @@ function completeConfigVariableName {
     if ($Current -match "branch\.(.*)") {
         $section = 'branch'
         $second = $Matches[1]
-        gitHeads -Current $second | ForEach-Object { "$section.$_." } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
+        gitHeads -Current $second | ForEach-Object { "$section.$_."} | completeList -DescriptionBuilder $DescriptionBuilder
         gitFirstLevelConfigVarsForSection $section | ForEach-Object {
             "$section.$_"
         } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix

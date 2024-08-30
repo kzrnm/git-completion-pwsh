@@ -135,15 +135,15 @@ function gitCompleteRefs {
             gitRefs -Current $Current -Remote $Remote | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
         }
         'heads' { 
-            gitHeads -Current $Current | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+            gitHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
         }
         'remote-heads' { 
-            gitRemoteHeads -Current $Current | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+            gitRemoteHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
         }
     }
 
     if ($dwim) {
-        gitDwimRemoteHeads -Current $Current | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+        gitDwimRemoteHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
     }
 }
 

@@ -24,22 +24,6 @@ function __git {
     git $gitDirOption @gitCArgs @OrdinaryArgs
 }
 
-function isGitCompletionShowAll {
-    [OutputType([bool])]
-    param()
-    return ($env:GIT_COMPLETION_SHOW_ALL -and ($env:GIT_COMPLETION_SHOW_ALL -ne '0'))
-}
-function isGitCompletionShowAllCommand {
-    [OutputType([bool])]
-    param()
-    return ($env:GIT_COMPLETION_SHOW_ALL_COMMANDS -and ($env:GIT_COMPLETION_SHOW_ALL_COMMANDS -ne '0'))
-}
-function isGitCompletionIgnoreCase {
-    [OutputType([bool])]
-    param()
-    return ($env:GIT_COMPLETION_IGNORE_CASE -and ($env:GIT_COMPLETION_IGNORE_CASE -ne '0'))
-}
-
 $script:__gitVersion = $null
 function gitVersion {
     [OutputType([version])]
@@ -220,15 +204,6 @@ function gitSecondLevelConfigVarsForSection {
     )
 }
 
-$script:__gitBuiltinCommands = $null
-function gitBuiltinCommands {
-    [OutputType([string[]])]
-    param()
-    if ($script:__gitBuiltinCommands) {
-        return $script:__gitBuiltinCommands
-    }
-    return $script:__gitBuiltinCommands = (git "--list-cmds=builtins")
-}
 function gitAllCommands {
     [CmdletBinding()]
     [OutputType([string[]])]
@@ -281,7 +256,7 @@ function gitHeads {
     )
 
     $ignoreCase = $null
-    if (isGitCompletionIgnoreCase) {
+    if ($script:GitCompletionSettings.IgnoreCase) {
         $ignoreCase = '--ignore-case'
     }
 
@@ -302,7 +277,7 @@ function gitRemoteHeads {
     )
 
     $ignoreCase = $null
-    if (isGitCompletionIgnoreCase) {
+    if ($script:GitCompletionSettings.IgnoreCase) {
         $ignoreCase = '--ignore-case'
     }
 
@@ -323,7 +298,7 @@ function gitTags {
 
     $ForeachPrefix = "$Prefix".Replace('%', '%%')
     $ignoreCase = $null
-    if (isGitCompletionIgnoreCase) {
+    if ($script:GitCompletionSettings.IgnoreCase) {
         $ignoreCase = '--ignore-case'
     }
 
@@ -346,7 +321,7 @@ function gitDwimRemoteHeads {
     )
 
     $ignoreCase = $null
-    if (isGitCompletionIgnoreCase) {
+    if ($script:GitCompletionSettings.IgnoreCase) {
         $ignoreCase = '--ignore-case'
     }
 
@@ -411,7 +386,7 @@ function gitRefs {
         }
     }
 
-    if (isGitCompletionIgnoreCase) {
+    if ($script:GitCompletionSettings.IgnoreCase) {
         $ignoreCase = '--ignore-case'
         $umatch = $Current.ToUpperInvariant()
     }
@@ -501,7 +476,7 @@ function gitResolveBuiltins {
         $Command
     )
 
-    return (gitResolveBuiltinsImpl @Command -All:(isGitCompletionShowAll) |
+    return (gitResolveBuiltinsImpl @Command -All:($script:GitCompletionSettings.ShowAllOptions) |
         ForEach-Object { $_ -split "\s+" } |
         Where-Object { $_ }
     )
