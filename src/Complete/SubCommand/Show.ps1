@@ -1,17 +1,6 @@
 using namespace System.Management.Automation;
 
-function Complete-GitSubCommand-whatchanged {
-    [CmdletBinding(PositionalBinding = $false)]
-    [OutputType([CompletionResult[]])]
-    param(
-        [CommandLineContext]
-        [Parameter(Position = 0, Mandatory)]$Context
-    )
-    $Context.command = 'log'
-    Complete-GitSubCommand-log $Context
-}
-
-function Complete-GitSubCommand-log {
+function Complete-GitSubCommand-show {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -27,16 +16,13 @@ function Complete-GitSubCommand-log {
         return Get-GitShortOptions $Context.command
     }
 
-    $result = completeLogOpts $Context
+    $result = completeShowOpts $Context
     if ($result) { return $result }
+
     gitCompleteRevlistFile $Current
 }
 
-# __git_complete_log_opts
-# Complete porcelain (i.e. not git-rev-list) options and at least some
-# option arguments accepted by git-log.  Note that this same set of options
-# are also accepted by some other git commands besides git-log.
-function completeLogOpts {
+function completeShowOpts {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param (
@@ -50,10 +36,10 @@ function completeLogOpts {
     # -L seems difficult to implement, so skip it.
     # -G, -S <- what is these? what is __git_complete_symbol?
     $prevCandidates = switch ($Context.PreviousWord()) {
-        '--date' { $script:gitLogDateFormats }
         '--diff-algorithm' { $script:gitDiffAlgorithms }
-        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
         '--diff-merges' { $script:gitDiffMergesOpts }
+        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
+        '--color-moved-ws' { $script:gitColorMovedWsOpts }
     }
 
     if ($prevCandidates) {
@@ -68,13 +54,12 @@ function completeLogOpts {
         $candidates = switch ($key) {
             '--pretty' { $script:gitLogPrettyFormats }
             '--format' { $script:gitLogPrettyFormats }
-            '--date' { $script:gitLogDateFormats }
-            '--decorate' { 'full', 'short', 'no' }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
+            '--diff-merges' { $script:gitDiffMergesOpts }
             '--submodule' { $script:gitDiffSubmoduleFormats }
             '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
-            '--no-walk' { 'sorted', 'unsorted' }
-            '--diff-merges' { $script:gitDiffMergesOpts }
+            '--color-moved' { $script:gitColorMovedOpts }
+            '--color-moved-ws' { $script:gitColorMovedWsOpts }
         }
 
         if ($candidates) {
@@ -83,53 +68,23 @@ function completeLogOpts {
         }
     }
 
-    gitLogOpts -Merge:(gitPseudorefExists MERGE_HEAD) | completeList -Current $Current -ResultType ParameterName
+    gitShowOpts | completeList -Current $Current
     return
 }
 
-function gitLogOpts {
+function gitShowOpts {
     [OutputType([string[]])]
-    param (
-        [switch]$Merge
-    )
+    param ()
     
-    $gitLogCommonOptions
-    $gitLogShortlogOptions
-    $gitLogGitkOptions
+    "--pretty="
+    "--format="
+    "--abbrev-commit"
+    "--no-abbrev-commit"
+    "--oneline"
+    "--show-signature"
+    "--expand-tabs"
+    "--expand-tabs="
+    "--no-expand-tabs"
     $gitLogShowOptions
-    '--root'
-    '--topo-order'
-    '--date-order'
-    '--reverse'
-    '--follow'
-    '--full-diff'
-    '--abbrev-commit'
-    '--no-abbrev-commit'
-    '--abbrev='
-    '--relative-date'
-    '--date='
-    '--pretty='
-    '--format='
-    '--oneline'
-    '--show-signature'
-    '--cherry-mark'
-    '--cherry-pick'
-    '--graph'
-    '--decorate'
-    '--decorate='
-    '--no-decorate'
-    '--walk-reflogs'
-    '--no-walk'
-    '--no-walk='
-    '--do-walk'
-    '--parents'
-    '--children'
-    '--expand-tabs'
-    '--expand-tabs='
-    '--no-expand-tabs'
-    '--clear-decorations'
-    '--decorate-refs='
-    '--decorate-refs-exclude='
-    if ($Merge) { '--merge' }
     $gitDiffCommonOptions
 }

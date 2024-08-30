@@ -157,6 +157,28 @@ Describe 'Log' {
         Describe 'OptionValue' {
             It '<Line>' -ForEach @(
                 @{
+                    Line     = '--ws-error-highlight d';
+                    Expected = 'default' | ForEach-Object {
+                        @{
+                            CompletionText = "$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "$_";
+                        }
+                    }
+                },
+                @{
+                    Line     = '--ws-error-highlight ';
+                    Expected = 'context', 'old', 'new', 'all', 'default' | ForEach-Object {
+                        @{
+                            CompletionText = "$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "$_";
+                        }
+                    }
+                },
+                @{
                     Line     = '--ws-error-highlight=d';
                     Expected = 'default' | ForEach-Object {
                         @{
@@ -194,6 +216,28 @@ Describe 'Log' {
                     Expected = 'sorted', 'unsorted' | ForEach-Object {
                         @{
                             CompletionText = "--no-walk=$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "$_";
+                        }
+                    }
+                },
+                @{
+                    Line     = '--diff-merges o';
+                    Expected = 'off', 'on' | ForEach-Object {
+                        @{
+                            CompletionText = "$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "$_";
+                        }
+                    }
+                },
+                @{
+                    Line     = '--diff-merges ';
+                    Expected = 'off', 'none', 'on', 'first-parent', '1', 'separate', 'm', 'combined', 'c', 'dense-combined', 'cc', 'remerge', 'r' | ForEach-Object {
+                        @{
+                            CompletionText = "$_";
                             ListItemText   = "$_";
                             ResultType     = 'ParameterValue';
                             ToolTip        = "$_";
@@ -245,6 +289,28 @@ Describe 'Log' {
                     }
                 },
                 @{
+                    Line     = '--diff-algorithm m';
+                    Expected = 'myers', 'minimal' | ForEach-Object {
+                        @{
+                            CompletionText = "$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "$_";
+                        }
+                    }
+                },
+                @{
+                    Line     = '--diff-algorithm ';
+                    Expected = 'myers', 'minimal', 'patience', 'histogram' | ForEach-Object {
+                        @{
+                            CompletionText = "$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "$_";
+                        }
+                    }
+                },
+                @{
                     Line     = '--diff-algorithm=m';
                     Expected = 'myers', 'minimal' | ForEach-Object {
                         @{
@@ -282,6 +348,28 @@ Describe 'Log' {
                     Expected = 'full', 'short', 'no' | ForEach-Object {
                         @{
                             CompletionText = "--decorate=$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "$_";
+                        }
+                    }
+                },
+                @{
+                    Line     = '--date iso';
+                    Expected = 'iso8601', 'iso8601-strict' | ForEach-Object {
+                        @{
+                            CompletionText = "$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "$_";
+                        }
+                    }
+                },
+                @{
+                    Line     = '--date ';
+                    Expected = 'relative', 'iso8601', 'iso8601-strict', 'rfc2822', 'short', 'local', 'default', 'human', 'raw', 'unix', 'auto:', 'format:' | ForEach-Object {
+                        @{
+                            CompletionText = "$_";
                             ListItemText   = "$_";
                             ResultType     = 'ParameterValue';
                             ToolTip        = "$_";
