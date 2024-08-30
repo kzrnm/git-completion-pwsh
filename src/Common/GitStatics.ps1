@@ -85,3 +85,7 @@ $script:gitLogPrettyFormats = 'oneline', 'short', 'medium', 'full', 'fuller', 'r
 $script:gitLogDateFormats = 'relative', 'iso8601', 'iso8601-strict', 'rfc2822', 'short', 'local', 'default', 'human', 'raw', 'unix', 'auto:', 'format:'
 $script:gitSendEmailConfirmOptions = 'always', 'never', 'auto', 'cc', 'compose'
 $script:gitSendEmailSuppressccOptions = 'author', 'self', 'cc', 'bodycc', 'sob', 'cccmd', 'body', 'all'
+
+
+$script:gitMergetoolsCommon = 'diffuse', 'diffmerge', 'ecmerge', 'emerge', 'kdiff3', 'meld', 'opendiff',
+'tkdiff', 'vimdiff', 'nvimdiff', 'gvimdiff', 'xxdiff', 'araxis', 'p4merge', 'bc', 'codecompare', 'smerge'

@@ -5,7 +5,7 @@ BeforeAll {
     . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
 
-Describe 'Diff' {
+Describe 'RangeDiff' {
     BeforeAll {
         Initialize-Home
 

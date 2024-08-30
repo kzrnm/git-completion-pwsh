@@ -8,8 +8,6 @@ function Complete-GitSubCommand-range-diff {
         [Parameter(Position = 0, Mandatory)]$Context
     )
 
-    if ($Context.HasDoubledash()) { return }
-
     [string] $Current = $Context.CurrentWord()
 
     if ($Current -eq '-') {

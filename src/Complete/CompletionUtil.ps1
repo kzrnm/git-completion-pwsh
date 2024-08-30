@@ -26,10 +26,13 @@ function completeList {
         $Candidate
     )
 
-    process {
+    begin {
         if ($RemovePrefix -and $Current.StartsWith($Prefix)) {
             $Current = $Current.Substring($Prefix.Length)
         }
+    }
+
+    process {
         if ((!$Current) -or $Candidate.StartsWith($Current)) {
             $desc = $null
             if ($DescriptionBuilder) {
