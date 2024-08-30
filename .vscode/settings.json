@@ -9,6 +9,9 @@
                 "-Command",
                 "$SkipHeavyTest=$false; Import-Module ./src/git-completion.psd1 -Force"
             ],
+            "env": {
+                "GIT_COMPLETION_SHOW_ALL_COMMANDS": "1"
+            },
             "icon": "terminal-powershell"
         },
         "WindowsPowerShell": {
@@ -18,6 +21,9 @@
                 "-Command",
                 "Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Import-Module ./src/git-completion.psd1 -Force"
             ],
+            "env": {
+                "GIT_COMPLETION_SHOW_ALL_COMMANDS": "1"
+            },
             "color": "terminal.ansiCyan",
             "icon": "terminal-powershell"
         },
