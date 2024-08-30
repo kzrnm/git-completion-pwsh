@@ -2,10 +2,6 @@
     . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
 
-AfterAll {
-    Remove-Module git-completion, _TestModule
-}
-
 Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
     BeforeAll {
         Initialize-Home

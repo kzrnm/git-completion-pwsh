@@ -5,10 +5,6 @@ BeforeAll {
     . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
 
-AfterAll {
-    Remove-Module git-completion, _TestModule
-}
-
 Describe 'Show' {
     BeforeAll {
         Initialize-Home
