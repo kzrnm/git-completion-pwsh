@@ -556,6 +556,38 @@ Describe 'UseRemote' -Skip:$SkipHeavyTest {
                     }
                 },
                 @{
+                    Line     = 'origin ^';
+                    Expected = @(
+                        'HEAD',
+                        'FETCH_HEAD',
+                        'main',
+                        'grm/main',
+                        'ordinary/main',
+                        'origin/main'
+                    ) | ForEach-Object {
+                        @{
+                            CompletionText = "^$_";
+                            ListItemText   = "^$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "^$_";
+                        }
+                    }
+                },
+                @{
+                    Line     = 'origin ^o';
+                    Expected = @(
+                        'ordinary/main',
+                        'origin/main'
+                    ) | ForEach-Object {
+                        @{
+                            CompletionText = "^$_";
+                            ListItemText   = "^$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "^$_";
+                        }
+                    }
+                },
+                @{
                     Line     = 'origin +';
                     Expected = @(
                         'HEAD',
@@ -634,6 +666,35 @@ Describe 'UseRemote' -Skip:$SkipHeavyTest {
                         'grm',
                         'ordinary',
                         'origin'
+                    ) | ForEach-Object {
+                        @{
+                            CompletionText = "$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "$_";
+                        }
+                    }
+                },
+                @{
+                    Line     = 'origin refs';
+                    Expected = @(
+                        'refs/heads/main',
+                        'refs/remotes/grm/main',
+                        'refs/remotes/ordinary/main',
+                        'refs/remotes/origin/main'
+                    ) | ForEach-Object {
+                        @{
+                            CompletionText = "$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ParameterValue';
+                            ToolTip        = "$_";
+                        }
+                    }
+                },
+                @{
+                    Line     = 'origin refs/h';
+                    Expected = @(
+                        'refs/heads/main'
                     ) | ForEach-Object {
                         @{
                             CompletionText = "$_";

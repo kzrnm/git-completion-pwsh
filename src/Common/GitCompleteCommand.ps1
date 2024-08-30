@@ -15,23 +15,6 @@ function gitCompleteResolveBuiltins {
     gitResolveBuiltins @Command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ @Command }
 }
 
-# __git_complete_fetch_refspecs
-function gitCompleteFetchRefspecs {
-    [OutputType([CompletionResult[]])]
-    param (
-        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
-        [Parameter(Mandatory)][string] $Remote,
-        [string] $Prefix = "",
-        [string] $Suffix = "",
-        [CompletionResultType]
-        $ResultType = [CompletionResultType]::ParameterValue
-    )
-
-    gitRefs -Remote $Remote -Current $Current |
-    ForEach-Object { "${_}:${_}" } |
-    completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
-}
-
 # __git_complete_remote_or_refspec
 function gitCompleteRemoteOrRefspec {
     [OutputType([CompletionResult[]])]
@@ -163,6 +146,23 @@ function gitCompleteRefs {
     }
 }
 
+# __git_complete_fetch_refspecs
+function gitCompleteFetchRefspecs {
+    [OutputType([CompletionResult[]])]
+    param (
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [Parameter(Mandatory)][string] $Remote,
+        [string] $Prefix = "",
+        [string] $Suffix = "",
+        [CompletionResultType]
+        $ResultType = [CompletionResultType]::ParameterValue
+    )
+
+    gitRefs -Remote $Remote -Current $Current |
+    ForEach-Object { "${_}:${_}" } |
+    completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+}
+
 # __git_complete_strategy
 function gitCompleteStrategy {
     [OutputType([CompletionResult[]])]
@@ -223,59 +223,46 @@ function gitCompleteRevlistFile {
         $Current
     )
 
-    throw 'WIP'
-    if ($Current -like '*..?*:*') { return }
+    switch -Regex ($Current) {
+        '(?<prefix>.*\.{2,3}.*:)(?<file>.*)' {
+            completeCurrentDirectory $Matches['file'] -Prefix $Matches['prefix']
+            return
+        }
+        '(?<ref>[^:]+):(?<file>.*)' {
+            $ref = $Matches['ref']
+            $CurrentFile = $Matches['file']
+            $Prefix = ''
+            $BaseDir = ''
 
-    <#
-	local dequoted_word pfx ls ref cur_="$cur"
-	case "$cur_" in
-	*..?*:*)
-		return
-		;;
-	?*:*)
-		ref="${cur_%%:*}"
-		cur_="${cur_#*:}"
+            switch -Regex ($CurrentFile) {
+                { $_.StartsWith('.') } {
+                    completeCurrentDirectory $CurrentFile -Prefix "${ref}:"
+                    return
+                }
+                '(?<prefix>.+)/(?<current>[^/]*)' {
+                    $CurrentFile = $Matches['current']
+                    $ls = "${ref}:$($Matches['prefix'])"
+                    $BaseDir = $Matches['prefix']
+                    $Prefix = "${ls}/"
+                }
+                Default {
+                    $ls = $ref
+                    $Prefix = "${ref}:"
+                }
+            }
 
-		__git_dequote "$cur_"
-
-		case "$dequoted_word" in
-		?*/*)
-			pfx="${dequoted_word%/*}"
-			cur_="${dequoted_word##*/}"
-			ls="$ref:$pfx"
-			pfx="$pfx/"
-			;;
-		*)
-			cur_="$dequoted_word"
-			ls="$ref"
-			;;
-		esac
-
-		case "$COMP_WORDBREAKS" in
-		*:*) : great ;;
-		*)   pfx="$ref:$pfx" ;;
-		esac
-
-		__gitcomp_file "$(__git ls-tree "$ls" \
-				| sed 's/^.*	//
-				       s/$//')" \
-			"$pfx" "$cur_"
-		;;
-	*...*)
-		pfx="${cur_%...*}..."
-		cur_="${cur_#*...}"
-		gitCompleteRefs --pfx="$pfx" --cur="$cur_"
-		;;
-	*..*)
-		pfx="${cur_%..*}.."
-		cur_="${cur_#*..}"
-		gitCompleteRefs --pfx="$pfx" --cur="$cur_"
-		;;
-	*)
-		gitCompleteRefs
-		;;
-	esac
-    #>
+            gitLsTreeFile "$ls" | completeFile -Current $CurrentFile -Prefix $Prefix -BaseDir $BaseDir -RemovePrefix
+            return
+        }
+        '(?<prefix>.*\.{2,3})(?<current>.*)' {
+            gitCompleteRefs $Matches['current'] -Prefix $Matches['prefix']
+            return
+        }
+        Default {
+            gitCompleteRefs $Current
+            return
+        }
+    }
 }
 
 Set-Alias gitCompleteFile gitCompleteRevlistFile

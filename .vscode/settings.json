@@ -1,4 +1,5 @@
 {
+    "powershell.powerShellDefaultVersion": "Windows PowerShell (x64)",
     "terminal.integrated.profiles.windows": {
         "PowerShell": {
             "source": "PowerShell",

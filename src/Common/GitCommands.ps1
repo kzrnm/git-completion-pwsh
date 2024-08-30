@@ -54,6 +54,67 @@ function gitVersion {
     return $script:__gitVersion
 }
 
+
+# Returns true if $1 matches the name of a configured remote, false otherwise.
+function gitIsConfiguredRemote {
+    [OutputType([bool])]
+    param([Parameter(Mandatory, Position = 0)][string]$Remote)
+    return (gitRemote | Where-Object { $_ -eq $Remote })
+}
+
+function gitRemote {
+    [OutputType([string[]])]
+    param ()
+
+    return (__git remote)
+}
+
+function gitListAliases {
+    [OutputType([PSCustomObject[]])]
+    param()
+
+    __git config --get-regexp "^alias\." | ForEach-Object {
+        if ($_ -match "^alias\.([^ ]+) (.*)") {
+            [PSCustomObject]@{
+                Name  = $Matches[1];
+                Value = $Matches[2];
+            }
+        }
+    }
+}
+
+function gitGetAlias {
+    [OutputType([string])]
+    param(
+        [Parameter(Mandatory, Position = 0)][string] $Alias
+    )
+
+    $ErrorActionPreference = 'SilentlyContinue'
+    try {
+        __git config --get "alias.$Alias" 2>$null
+    }
+    catch {
+        $null
+    }
+}
+
+function gitLsTreeFile {
+    [OutputType([string[]])]
+    param ([Parameter(Mandatory, Position = 0)][string]$treeIsh)
+
+    $lsTree = @(__git ls-tree "$treeIsh" -z) -split "`0"
+    foreach ($line in $lsTree) {
+        if ($line -cmatch '(?<mode>\S+) (?<type>\S+) (?<name>\S+)\t(?<path>.+)') {
+            $path = $Matches['path']
+            if ($Matches['type'] -eq 'tree') {
+                $path += '/'
+            }
+            $path
+        }
+    }
+}
+
+
 $script:__git_merge_strategies = $null
 function gitListMergeStrategies {
     [OutputType([string[]])]
@@ -65,7 +126,7 @@ function gitListMergeStrategies {
 
     function listMergeStrategies {
         param ()
-        (git merge -s help 2>&1 | Where-Object { $_ -match "[Aa]vailable strategies are: " }) -match ".*:\s*(.*)\s*\." | Out-Null
+        (git merge -s help 2>&1 | Where-Object { $_ -like "*Available strategies are: *" }) -match ".*:\s*(.*)\s*\." | Out-Null
         return ($Matches[1] -split " ")
     }
 
@@ -75,7 +136,7 @@ function gitListMergeStrategies {
         $env:LANG = "C"
         $env:LC_ALL = "C"
 
-        return $script:__git_merge_strategies = (listMergeStrategies)
+        return $script:__git_merge_strategies = @(listMergeStrategies)
     }
     finally {
         $env:LANG = $LANG
@@ -280,7 +341,8 @@ function gitTags {
 function gitDwimRemoteHeads {
     [OutputType([string[]])]
     param(
-        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [string]$Prefix = ''
     )
 
     $ignoreCase = $null
@@ -288,7 +350,7 @@ function gitDwimRemoteHeads {
         $ignoreCase = '--ignore-case'
     }
 
-    __git for-each-ref --format="%(refname:strip=3)" `
+    __git for-each-ref --format="${Prefix}%(refname:strip=3)" `
         --sort="refname:strip=3" `
         $ignoreCase `
         "refs/remotes/*/$Current*" "refs/remotes/*/$Current*/**" | 
@@ -317,7 +379,8 @@ function gitRefs {
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string] $Remote,
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
-        [string] $Track = ""
+        [string] $Track = "",
+        [string] $Prefix = ''
     )
     
     $listRefsFrom = "path"
@@ -358,9 +421,10 @@ function gitRefs {
             $Current = $Current.Substring(1)
             $match = $match.Substring(1)
             $umatch = $umatch.Substring(1)
+            $Prefix = '^'
         }
 
-        if ($Current -match "refs(/.*)?") {
+        if ($Current -match "\^?refs(/.*)?") {
             $format = "refname"
             $refs = @("$match*", "$match*/**")
             $Track = ""
@@ -369,7 +433,7 @@ function gitRefs {
             foreach ($i in ("HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD", "REBASE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD", "BISECT_HEAD", "AUTO_MERGE")) {
                 if (($i.StartsWith($match)) -or ($i.StartsWith($umatch))) {
                     if (Test-Path "$dir/$i" -PathType Leaf) {
-                        $i
+                        "$Prefix$i"
                     }
                 }
             }
@@ -382,9 +446,9 @@ function gitRefs {
                 "refs/remotes/$match*", 
                 "refs/remotes/$match*/**")
         }
-        __git -GitDirOverride $dir for-each-ref "--format=%($format)" $ignoreCase @refs
+        __git -GitDirOverride $dir for-each-ref "--format=$Prefix%($format)" $ignoreCase @refs
         if ($Track) {
-            gitDwimRemoteHeads -Current $match
+            gitDwimRemoteHeads -Current $match -Prefix $Prefix
         }
         return
     }
@@ -425,50 +489,6 @@ function gitRefs {
                 }
             }
         }
-    }
-}
-
-
-# Returns true if $1 matches the name of a configured remote, false otherwise.
-function gitIsConfiguredRemote {
-    [OutputType([bool])]
-    param([Parameter(Mandatory, Position = 0)][string]$Remote)
-    return (gitRemote | Where-Object { $_ -eq $Remote })
-}
-
-function gitRemote {
-    [OutputType([string[]])]
-    param ()
-
-    return (__git remote)
-}
-
-function gitListAliases {
-    [OutputType([PSCustomObject[]])]
-    param()
-
-    __git config --get-regexp "^alias\." | ForEach-Object {
-        if ($_ -match "^alias\.([^ ]+) (.*)") {
-            [PSCustomObject]@{
-                Name  = $Matches[1];
-                Value = $Matches[2];
-            }
-        }
-    }
-}
-
-function gitGetAlias {
-    [OutputType([string])]
-    param(
-        [Parameter(Mandatory, Position = 0)][string] $Alias
-    )
-
-    $ErrorActionPreference = 'SilentlyContinue'
-    try {
-        __git config --get "alias.$Alias" 2>$null
-    }
-    catch {
-        $null
     }
 }
 

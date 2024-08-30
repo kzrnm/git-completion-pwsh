@@ -9,25 +9,35 @@ function Complete-GitSubCommandCommon {
     $Current = $Context.CurrentWord()
     $Command = $Context.command
 
-    [string] $subcommand = $Context.SubcommandWithoutGlobalOption()
-    if ((!$subcommand) -or $subcommand.StartsWith('-')) {
-        $subcommand = ''
-    }
+    [string] $Subcommand = $Context.Subcommand()
 
-    if ($Current -eq '-') {
-        Get-GitShortOptions $Command $subcommand 
-        return
+    if ($Subcommand -and ($Subcommand -like '*[:/\]*')) {
+        if ($Current -eq '-') {
+            $result = Get-GitShortOptions $Command $Subcommand
+            if ($result) {
+                return $result
+            }
+            Get-GitShortOptions $Command
+            return
+        }
+        elseif ($Current.StartsWith('--')) {
+            $result = gitCompleteResolveBuiltins $Command $Subcommand -Current $Current
+            if ($result) {
+                return $result
+            }
+    
+            gitCompleteResolveBuiltins $Command -Current $Current
+            return
+        }
     }
-    # elseif (gitSupportParseoptHelper $Command) {
-    if ($Current.StartsWith('--')) {
-        if ($subcommand) {
-            $Commands = @($Command, $subcommand)
+    else {
+        if ($Current -eq '-') {
+            Get-GitShortOptions $Command
+            return
         }
-        else {
-            $Commands = @($Command)
+        elseif ($Current.StartsWith('--')) {
+            gitCompleteResolveBuiltins $Command -Current $Current
+            return
         }
-
-        gitCompleteResolveBuiltins @Commands -Current $Current
-        return
     }
 }
