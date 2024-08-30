@@ -5,6 +5,7 @@ function gitCompleteResolveBuiltins {
     [CmdletBinding(PositionalBinding = $false)]
     param (
         [Parameter(Mandatory)]
+        [AllowEmptyString()]
         [string]
         $Current,
         [Parameter(Mandatory, ValueFromRemainingArguments)]
