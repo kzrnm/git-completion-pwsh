@@ -44,8 +44,6 @@ function Complete-Opts-diff {
         return
     }
 
-    if (!$Current.StartsWith('--')) { return @() }
-
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
         $candidates = switch ($key) {
@@ -62,6 +60,10 @@ function Complete-Opts-diff {
         }
     }
 
-    $script:gitDiffDifftoolOptions | completeList -Current $Current
+    if ($Current.StartsWith('--')) {
+        $script:gitDiffDifftoolOptions | completeList -Current $Current
+        return
+    }
+
     return
 }

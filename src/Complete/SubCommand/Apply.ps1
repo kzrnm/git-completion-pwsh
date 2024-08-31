@@ -1,6 +1,6 @@
 using namespace System.Management.Automation;
 
-function Complete-GitSubCommand-difftool {
+function Complete-GitSubCommand-apply {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -15,7 +15,7 @@ function Complete-GitSubCommand-difftool {
     }
 
     $prevCandidates = switch ($Context.PreviousWord()) {
-        '--tool' { ($gitMergetoolsCommon + @('kompare')) }
+        '--whitespace' { $script:gitWhitespacelist }
     }
 
     if ($prevCandidates) {
@@ -26,7 +26,7 @@ function Complete-GitSubCommand-difftool {
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
         $candidates = switch ($key) {
-            '--tool' { ($gitMergetoolsCommon + @('kompare')) }
+            '--whitespace' { $script:gitWhitespacelist }
         }
 
         if ($candidates) {
@@ -36,10 +36,7 @@ function Complete-GitSubCommand-difftool {
     }
 
     if ($Current.StartsWith('--')) {
-        $gitDiffDifftoolOptions | completeList -Current $Current
         gitCompleteResolveBuiltins $Context.command -Current $Current
         return
     }
-
-    gitCompleteRevlistFile $Current
 }

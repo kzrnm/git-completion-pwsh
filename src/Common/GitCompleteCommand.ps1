@@ -10,10 +10,24 @@ function gitCompleteResolveBuiltins {
         $Current,
         [Parameter(Mandatory, ValueFromRemainingArguments)]
         [string[]]
-        $Command
+        $Command,
+        [string[]]
+        $Exclude = $null
     )
 
-    gitResolveBuiltins @Command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ @Command }
+    if ($Exclude) {
+        $ex = [System.Collections.Generic.HashSet[string]]::new($Exclude.Length)
+        foreach ($e in $Exclude) {
+            $ex.Add($e) | Out-Null
+        }
+
+        gitResolveBuiltins @Command | Where-Object {
+            !$ex.Contains($_)
+        } | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ @Command }
+    }
+    else {
+        gitResolveBuiltins @Command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ @Command }
+    }
 }
 
 # __git_complete_remote_or_refspec

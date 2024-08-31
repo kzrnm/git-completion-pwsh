@@ -34,21 +34,28 @@ function Complete-GitSubCommand-mergetool {
         )
     }
 
-    if ($Context.PreviousWord() -eq '--tool') {
-        ($gitMergetoolsCommon + @('tortoisemerge')) | completeList -Current $Current -ResultType ParameterValue
-        return
+    $prevCandidates = switch ($Context.PreviousWord()) {
+        '--tool' { ($gitMergetoolsCommon + @('tortoisemerge')) }
     }
 
-    if (!$Current.StartsWith('--')) { return @() }
+    if ($prevCandidates) {
+        $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+        return
+    }
+    if ($Current -cmatch '(--[^=]+)=.*') {
+        $key = $Matches[1]
+        $candidates = switch ($key) {
+            '--tool' { ($gitMergetoolsCommon + @('tortoisemerge')) }
+        }
 
-    switch -Wildcard ($Current) {
-        '--tool=*' {
-            ($gitMergetoolsCommon + @('tortoisemerge')) | completeList -Current $Current -Prefix "--tool=" -ResultType ParameterValue -RemovePrefix
+        if ($candidates) {
+            $candidates | completeList -Current $Current -Prefix "$key=" -ResultType ParameterValue -RemovePrefix
             return
         }
-        '--*' {
-            '--tool=', '--prompt', '--no-prompt', '--gui', '--no-gui' | completeList -Current $Current
-            return
-        }
+    }
+
+    if ($Current.StartsWith('--')) {
+        '--tool=', '--prompt', '--no-prompt', '--gui', '--no-gui' | completeList -Current $Current
+        return
     }
 }

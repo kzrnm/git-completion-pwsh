@@ -30,9 +30,9 @@ function Complete-Opts-range-diff {
 
     [string] $Current = $Context.CurrentWord()
 
-    if (!$Current.StartsWith('--')) { return @() }
-
-    '--creation-factor=', '--no-dual-color' | completeList -Current $Current
-    $script:gitDiffCommonOptions | completeList -Current $Current
-    return
+    if ($Current.StartsWith('--')) {
+        '--creation-factor=', '--no-dual-color' | completeList -Current $Current
+        $script:gitDiffCommonOptions | completeList -Current $Current
+        return
+    }
 }

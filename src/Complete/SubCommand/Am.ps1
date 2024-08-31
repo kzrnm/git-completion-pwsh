@@ -1,6 +1,6 @@
 using namespace System.Management.Automation;
 
-function Complete-GitSubCommand-difftool {
+function Complete-GitSubCommand-am {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -15,7 +15,8 @@ function Complete-GitSubCommand-difftool {
     }
 
     $prevCandidates = switch ($Context.PreviousWord()) {
-        '--tool' { ($gitMergetoolsCommon + @('kompare')) }
+        '--whitespace' { $script:gitWhitespacelist }
+        '--patch-format' { $script:gitPatchformat }
     }
 
     if ($prevCandidates) {
@@ -26,7 +27,10 @@ function Complete-GitSubCommand-difftool {
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
         $candidates = switch ($key) {
-            '--tool' { ($gitMergetoolsCommon + @('kompare')) }
+            '--whitespace' { $script:gitWhitespacelist }
+            '--patch-format' { $script:gitPatchformat }
+            '--show-current-patch' { $script:gitShowcurrentpatch }
+            '--quoted-cr' { $script:gitQuotedCr }
         }
 
         if ($candidates) {
@@ -35,11 +39,13 @@ function Complete-GitSubCommand-difftool {
         }
     }
 
-    if ($Current.StartsWith('--')) {
-        $gitDiffDifftoolOptions | completeList -Current $Current
-        gitCompleteResolveBuiltins $Context.command -Current $Current
+    if (Test-Path "$(gitRepoPath)/rebase-apply" -PathType Container) {
+        $gitAmInprogressOptions | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.Command }
         return
     }
 
-    gitCompleteRevlistFile $Current
+    if ($Current.StartsWith('--')) {
+        gitCompleteResolveBuiltins $Context.Command -Current $Current -Exclude $gitAmInprogressOptions
+        return
+    }
 }

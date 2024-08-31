@@ -89,3 +89,9 @@ $script:gitSendEmailSuppressccOptions = 'author', 'self', 'cc', 'bodycc', 'sob',
 
 $script:gitMergetoolsCommon = 'diffuse', 'diffmerge', 'ecmerge', 'emerge', 'kdiff3', 'meld', 'opendiff',
 'tkdiff', 'vimdiff', 'nvimdiff', 'gvimdiff', 'xxdiff', 'araxis', 'p4merge', 'bc', 'codecompare', 'smerge'
+
+$script:gitWhitespacelist = 'nowarn', 'warn', 'error', 'error-all', 'fix'
+$script:gitPatchformat = 'mbox', 'stgit', 'stgit-series', 'hg', 'mboxrd'
+$script:gitShowcurrentpatch = 'diff', 'raw'
+$script:gitAmInprogressOptions = '--skip', '--continue', '--resolved', '--abort', '--quit', '--show-current-patch'
+$script:gitQuotedCr = 'nowarn', 'warn', 'strip'
