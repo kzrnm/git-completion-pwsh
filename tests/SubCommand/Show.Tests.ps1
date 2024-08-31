@@ -1,13 +1,11 @@
 using namespace System.Collections.Generic;
 using namespace System.IO;
 
-BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
-}
+. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
-        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
@@ -22,26 +20,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     It 'ShortOptions' {
-        $expected = @(
-            @{
-                CompletionText = '-L';
-                ListItemText   = '-L';
-                ResultType     = 'ParameterName';
-                ToolTip        = "trace the evolution of line range <start>,<end> or function :<funcname> in <file>"
-            },
-            @{
-                CompletionText = '-q';
-                ListItemText   = '-q';
-                ResultType     = 'ParameterName';
-                ToolTip        = "suppress diff output"
-            },
-            @{
-                CompletionText = '-h';
-                ListItemText   = '-h';
-                ResultType     = 'ParameterName';
-                ToolTip        = "show help";
-            }
-        )
+        $expected = @{
+            ListItemText = '-L';
+            ToolTip      = "trace the evolution of line range <start>,<end> or function :<funcname> in <file>"
+        },
+        @{
+            ListItemText = '-q';
+            ToolTip      = "suppress diff output"
+        },
+        @{
+            ListItemText = '-h';
+            ToolTip      = "show help";
+        } | ConvertTo-Completion -ResultType ParameterName
         "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
@@ -68,25 +58,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--b';
-                Expected = '--binary', '--break-rewrites' | ForEach-Object { 
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "$_"
-                    }
-                }
+                Expected = '--binary', '--break-rewrites' | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no-p';
-                Expected = '--no-prefix', '--no-patch' | ForEach-Object { 
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "$_"
-                    }
-                }
+                Expected = '--no-prefix', '--no-patch' | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -98,266 +74,130 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
             @{
                 Line     = '--color-moved-ws i';
-                Expected = 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--color-moved-ws ';
-                Expected = 'no', 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space', 'allow-indentation-change' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'no', 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space', 'allow-indentation-change' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--color-moved-ws=i';
                 Expected = 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space' | ForEach-Object {
-                    @{
-                        CompletionText = "--color-moved-ws=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--color-moved-ws=$_"
                 }
             },
             @{
                 Line     = '--color-moved-ws=';
                 Expected = 'no', 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space', 'allow-indentation-change' | ForEach-Object {
-                    @{
-                        CompletionText = "--color-moved-ws=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--color-moved-ws=$_"
                 }
             },
             @{
                 Line     = '--color-moved=d';
                 Expected = 'default', 'dimmed-zebra'  | ForEach-Object {
-                    @{
-                        CompletionText = "--color-moved=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--color-moved=$_"
                 }
             },
             @{
                 Line     = '--color-moved=';
                 Expected = 'no', 'default', 'plain', 'blocks', 'zebra', 'dimmed-zebra' | ForEach-Object {
-                    @{
-                        CompletionText = "--color-moved=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--color-moved=$_"
                 }
             },
             @{
                 Line     = '--ws-error-highlight d';
-                Expected = 'default' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'default' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--ws-error-highlight ';
-                Expected = 'context', 'old', 'new', 'all', 'default' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'context', 'old', 'new', 'all', 'default' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--ws-error-highlight=d';
                 Expected = 'default' | ForEach-Object {
-                    @{
-                        CompletionText = "--ws-error-highlight=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--ws-error-highlight=$_"
                 }
             },
             @{
                 Line     = '--ws-error-highlight=';
                 Expected = 'context', 'old', 'new', 'all', 'default' | ForEach-Object {
-                    @{
-                        CompletionText = "--ws-error-highlight=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--ws-error-highlight=$_"
                 }
             },
             @{
                 Line     = '--diff-merges o';
-                Expected = 'off', 'on' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'off', 'on' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--diff-merges ';
-                Expected = 'off', 'none', 'on', 'first-parent', '1', 'separate', 'm', 'combined', 'c', 'dense-combined', 'cc', 'remerge', 'r' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'off', 'none', 'on', 'first-parent', '1', 'separate', 'm', 'combined', 'c', 'dense-combined', 'cc', 'remerge', 'r' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--diff-merges=o';
                 Expected = 'off', 'on' | ForEach-Object {
-                    @{
-                        CompletionText = "--diff-merges=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--diff-merges=$_"
                 }
             },
             @{
                 Line     = '--diff-merges=';
                 Expected = 'off', 'none', 'on', 'first-parent', '1', 'separate', 'm', 'combined', 'c', 'dense-combined', 'cc', 'remerge', 'r' | ForEach-Object {
-                    @{
-                        CompletionText = "--diff-merges=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--diff-merges=$_"
                 }
             },
             @{
                 Line     = '--submodule=d';
                 Expected = 'diff' | ForEach-Object {
-                    @{
-                        CompletionText = "--submodule=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--submodule=$_"
                 }
             },
             @{
                 Line     = '--submodule=';
                 Expected = 'diff', 'log', 'short' | ForEach-Object {
-                    @{
-                        CompletionText = "--submodule=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--submodule=$_"
                 }
             },
             @{
                 Line     = '--diff-algorithm m';
-                Expected = 'myers', 'minimal' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'myers', 'minimal' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--diff-algorithm ';
-                Expected = 'myers', 'minimal', 'patience', 'histogram' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'myers', 'minimal', 'patience', 'histogram' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--diff-algorithm=m';
                 Expected = 'myers', 'minimal' | ForEach-Object {
-                    @{
-                        CompletionText = "--diff-algorithm=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--diff-algorithm=$_"
                 }
             },
             @{
                 Line     = '--diff-algorithm=';
                 Expected = 'myers', 'minimal', 'patience', 'histogram' | ForEach-Object {
-                    @{
-                        CompletionText = "--diff-algorithm=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--diff-algorithm=$_"
                 }
             },
             @{
                 Line     = '--format=m';
                 Expected = 'medium', 'mboxrd' | ForEach-Object {
-                    @{
-                        CompletionText = "--format=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_"
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--format=$_"
                 }
             },
             @{
                 Line     = '--format=';
                 Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd' | ForEach-Object {
-                    @{
-                        CompletionText = "--format=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_"
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--format=$_"
                 }
             },
             @{
                 Line     = '--pretty=f';
                 Expected = 'full', 'fuller', 'format:' | ForEach-Object {
-                    @{
-                        CompletionText = "--pretty=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_"
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--pretty=$_"
                 }
             },
             @{
                 Line     = '--pretty=';
                 Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd' | ForEach-Object {
-                    @{
-                        CompletionText = "--pretty=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_"
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--pretty=$_"
                 }
             }
         ) {
@@ -366,6 +206,6 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     Describe 'Revlist' {
-        . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_Revlist.ps1"
+        . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/Revlist.ps1"
     }
 }

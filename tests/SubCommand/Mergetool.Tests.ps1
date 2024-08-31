@@ -1,13 +1,11 @@
 using namespace System.Collections.Generic;
 using namespace System.IO;
 
-BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
-}
+. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
-        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
@@ -21,32 +19,22 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     It 'ShortOptions' {
-        $expected = @(
-            @{
-                CompletionText = '-g';
-                ListItemText   = '-g';
-                ResultType     = 'ParameterName';
-                ToolTip        = "--gui"
-            },
-            @{
-                CompletionText = '-O';
-                ListItemText   = '-O';
-                ResultType     = 'ParameterName';
-                ToolTip        = "Process files in the order specified"
-            },
-            @{
-                CompletionText = '-y';
-                ListItemText   = '-y';
-                ResultType     = 'ParameterName';
-                ToolTip        = "Don’t prompt before each invocation of the merge resolution program"
-            },
-            @{
-                CompletionText = '-h';
-                ListItemText   = '-h';
-                ResultType     = 'ParameterName';
-                ToolTip        = "show help";
-            }
-        )
+        $expected = @{
+            ListItemText = '-g';
+            ToolTip      = "--gui"
+        },
+        @{
+            ListItemText = '-O';
+            ToolTip      = "Process files in the order specified"
+        },
+        @{
+            ListItemText = '-y';
+            ToolTip      = "Don’t prompt before each invocation of the merge resolution program"
+        },
+        @{
+            ListItemText = '-h';
+            ToolTip      = "show help";
+        } | ConvertTo-Completion -ResultType ParameterName
         "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
@@ -54,25 +42,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--';
-                Expected = '--tool=', '--prompt', '--no-prompt', '--gui', '--no-gui' | ForEach-Object { 
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "$_"
-                    }
-                }
+                Expected = '--tool=', '--prompt', '--no-prompt', '--gui', '--no-gui' | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no-';
-                Expected = '--no-prompt', '--no-gui' | ForEach-Object { 
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "$_"
-                    }
-                }
+                Expected = '--no-prompt', '--no-gui' | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -84,46 +58,22 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             @{
                 Line     = '--tool=t';
                 Expected = 'tkdiff', 'tortoisemerge' | ForEach-Object {
-                    @{
-                        CompletionText = "--tool=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--tool=$_"
                 }
             },
             @{
                 Line     = '--tool=v';
                 Expected = 'vimdiff' | ForEach-Object {
-                    @{
-                        CompletionText = "--tool=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--tool=$_"
                 }
             },
             @{
                 Line     = '--tool t';
-                Expected = 'tkdiff', 'tortoisemerge' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'tkdiff', 'tortoisemerge' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--tool v';
-                Expected = 'vimdiff' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'vimdiff' | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

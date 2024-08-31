@@ -1,13 +1,11 @@
 using namespace System.Collections.Generic;
 using namespace System.IO;
 
-BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
-}
+. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
-        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
@@ -21,62 +19,42 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     It 'ShortOptions' {
-        $expected = @(
-            @{
-                CompletionText = '-3';
-                ListItemText   = '-3';
-                ResultType     = 'ParameterName';
-                ToolTip        = "attempt three-way merge, fall back on normal patch if that fails";
-            },
-            @{
-                CompletionText = '-C';
-                ListItemText   = '-C';
-                ResultType     = 'ParameterName';
-                ToolTip        = "ensure at least <n> lines of context match";
-            },
-            @{
-                CompletionText = '-N';
-                ListItemText   = '-N';
-                ResultType     = 'ParameterName';
-                ToolTip        = 'mark new files with `git add --intent-to-add`';
-            },
-            @{
-                CompletionText = '-p';
-                ListItemText   = '-p';
-                ResultType     = 'ParameterName';
-                ToolTip        = "remove <num> leading slashes from traditional diff paths";
-            },
-            @{
-                CompletionText = '-q';
-                ListItemText   = '-q';
-                ResultType     = 'ParameterName';
-                ToolTip        = "be more quiet";
-            },
-            @{
-                CompletionText = '-R';
-                ListItemText   = '-R';
-                ResultType     = 'ParameterName';
-                ToolTip        = "apply the patch in reverse";
-            },
-            @{
-                CompletionText = '-v';
-                ListItemText   = '-v';
-                ResultType     = 'ParameterName';
-                ToolTip        = "be more verbose";
-            },
-            @{
-                CompletionText = '-z';
-                ListItemText   = '-z';
-                ResultType     = 'ParameterName';
-                ToolTip        = "paths are separated with NUL character";
-            },
-            @{
-                CompletionText = '-h';
-                ListItemText   = '-h';
-                ResultType     = 'ParameterName';
-                ToolTip        = "show help";
-            }
-        )
+        $expected = @{
+            ListItemText = '-3';
+            ToolTip      = "attempt three-way merge, fall back on normal patch if that fails";
+        },
+        @{
+            ListItemText = '-C';
+            ToolTip      = "ensure at least <n> lines of context match";
+        },
+        @{
+            ListItemText = '-N';
+            ToolTip      = 'mark new files with `git add --intent-to-add`';
+        },
+        @{
+            ListItemText = '-p';
+            ToolTip      = "remove <num> leading slashes from traditional diff paths";
+        },
+        @{
+            ListItemText = '-q';
+            ToolTip      = "be more quiet";
+        },
+        @{
+            ListItemText = '-R';
+            ToolTip      = "apply the patch in reverse";
+        },
+        @{
+            ListItemText = '-v';
+            ToolTip      = "be more verbose";
+        },
+        @{
+            ListItemText = '-z';
+            ToolTip      = "paths are separated with NUL character";
+        },
+        @{
+            ListItemText = '-h';
+            ToolTip      = "show help";
+        } | ConvertTo-Completion -ResultType ParameterName
         "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
@@ -84,65 +62,41 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--al';
-                Expected = @(
-                    @{
-                        CompletionText = '--allow-overlap';
-                        ListItemText   = '--allow-overlap';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "allow overlapping hunks";
-                    },
-                    @{
-                        CompletionText = '--allow-empty';
-                        ListItemText   = '--allow-empty';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "don't return error for empty patches";
-                    }
-                )
+                Expected = @{
+                    ListItemText = '--allow-overlap';
+                    ToolTip      = "allow overlapping hunks";
+                },
+                @{
+                    ListItemText = '--allow-empty';
+                    ToolTip      = "don't return error for empty patches";
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--q';
-                Expected = @(
-                    @{
-                        CompletionText = '--quiet';
-                        ListItemText   = '--quiet';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "be more quiet";
-                    }
-                )
+                Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip "be more quiet"
             },
             @{
                 Line     = '--no-al';
-                Expected = @(
-                    @{
-                        CompletionText = '--no-allow-overlap';
-                        ListItemText   = '--no-allow-overlap';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "[NO] allow overlapping hunks";
-                    },
-                    @{
-                        CompletionText = '--no-allow-empty';
-                        ListItemText   = '--no-allow-empty';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "[NO] don't return error for empty patches";
-                    }
-                )
+                Expected = @{
+                    ListItemText = '--no-allow-overlap';
+                    ToolTip      = "[NO] allow overlapping hunks";
+                },
+                @{
+                    ListItemText = '--no-allow-empty';
+                    ToolTip      = "[NO] don't return error for empty patches";
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no';
-                Expected = @(
-                    @{
-                        CompletionText = '--no-add';
-                        ListItemText   = '--no-add';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "ignore additions made by the patch"
-                    },
-                    @{
-                        CompletionText = '--no-';
-                        ListItemText   = '--no-...';
-                        ResultType     = 'Text';
-                        ToolTip        = "--no-...";
-                    }
-                )
+                Expected = @{
+                    ListItemText = '--no-add';
+                    ToolTip      = "ignore additions made by the patch"
+                },
+                @{
+                    CompletionText = '--no-';
+                    ListItemText   = '--no-...';
+                    ResultType     = 'Text'
+                } | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -154,46 +108,22 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             @{
                 Line     = '--whitespace=';
                 Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ForEach-Object {
-                    @{
-                        CompletionText = "--whitespace=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--whitespace=$_"
                 }
             },
             @{
                 Line     = '--whitespace ';
-                Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--whitespace=w';
                 Expected = 'warn' | ForEach-Object {
-                    @{
-                        CompletionText = "--whitespace=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--whitespace=$_"
                 }
             },
             @{
                 Line     = '--whitespace w';
-                Expected = 'warn' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'warn' | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

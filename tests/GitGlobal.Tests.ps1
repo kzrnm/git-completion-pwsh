@@ -1,6 +1,4 @@
-BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
-}
+. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe 'GirGlobal' {
     BeforeAll {
@@ -21,89 +19,59 @@ Describe 'GirGlobal' {
     It '<line>' -ForEach @(
         @{
             Line     = "--ver";
-            Expected = @(
-                @{
-                    CompletionText = "--version";
-                    ListItemText   = "--version";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "Prints the Git suite version";
-                }
-            )
+            Expected = "--version" | ConvertTo-Completion -ResultType ParameterName -ToolTip "Prints the Git suite version"
         },
         @{
             Line     = "--attr-sourc";
-            Expected = @(
-                @{
-                    CompletionText = "--attr-source";
-                    ListItemText   = "--attr-source <tree-ish>";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "Read gitattributes from <tree-ish> instead of the worktree";
-                }
-            )
+            Expected = @{
+                CompletionText = "--attr-source";
+                ListItemText   = "--attr-source <tree-ish>";
+                ToolTip        = "Read gitattributes from <tree-ish> instead of the worktree";
+            } | ConvertTo-Completion -ResultType ParameterName
         },
         @{
             Line     = "-";
-            Expected = @(
-                @{
-                    CompletionText = "-v";
-                    ListItemText   = "-v";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "Prints the Git suite version";
-                },
-                @{
-                    CompletionText = "-h";
-                    ListItemText   = "-h";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "Prints the helps. If --all is given then all available commands are printed";
-                },
-                @{
-                    CompletionText = "-C";
-                    ListItemText   = "-C <path>";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "Run as if git was started in <path> instead of the current working directory";
-                },
-                @{
-                    CompletionText = "-c";
-                    ListItemText   = "-c <name>=<value>";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "Pass a configuration parameter to the command";
-                },
-                @{
-                    CompletionText = "-p";
-                    ListItemText   = "-p";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'Pipe all output into less (or if set, $PAGER) if standard output is a terminal';
-                },
-                @{
-                    CompletionText = "-P";
-                    ListItemText   = "-P";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "Do not pipe Git output into a pager";
-                }
-            )
+            Expected = @{
+                ListItemText = "-v";
+                ToolTip      = "Prints the Git suite version";
+            },
+            @{
+                ListItemText = "-h";
+                ToolTip      = "Prints the helps. If --all is given then all available commands are printed";
+            },
+            @{
+                CompletionText = "-C";
+                ListItemText   = "-C <path>";
+                ToolTip        = "Run as if git was started in <path> instead of the current working directory";
+            },
+            @{
+                CompletionText = "-c";
+                ListItemText   = "-c <name>=<value>";
+                ToolTip        = "Pass a configuration parameter to the command";
+            },
+            @{
+                ListItemText = "-p";
+                ToolTip      = 'Pipe all output into less (or if set, $PAGER) if standard output is a terminal';
+            },
+            @{
+                ListItemText = "-P";
+                ToolTip      = "Do not pipe Git output into a pager";
+            } | ConvertTo-Completion -ResultType ParameterName
         },
         @{
             Line     = "sw";
-            Expected = @(
-                @{
-                    CompletionText = "sw";
-                    ListItemText   = "sw";
-                    ResultType     = "Text";
-                    ToolTip        = "[alias] switch";
-                },
-                @{
-                    CompletionText = "swf";
-                    ListItemText   = "swf";
-                    ResultType     = "Text";
-                    ToolTip        = "[alias] sw -f";
-                },
-                @{
-                    CompletionText = "switch";
-                    ListItemText   = "switch";
-                    ResultType     = "Text";
-                    ToolTip        = "Switch branches";
-                }
-            )
+            Expected = @{
+                ListItemText = "sw";
+                ToolTip      = "[alias] switch";
+            },
+            @{
+                ListItemText = "swf";
+                ToolTip      = "[alias] sw -f";
+            },
+            @{
+                ListItemText = "switch";
+                ToolTip      = "Switch branches";
+            } | ConvertTo-Completion -ResultType Text
         },
         @{
             Line     = "--notmatch";
@@ -121,37 +89,27 @@ Describe 'GirGlobal' {
                     Expected = @{
                         $true  = @(
                             @{
-                                CompletionText = "whatchanged";
-                                ListItemText   = "whatchanged";
-                                ResultType     = 'Text';
-                                ToolTip        = "Show logs with differences each commit introduces";
+                                ListItemText = "whatchanged";
+                                ToolTip      = "Show logs with differences each commit introduces";
                             },
                             @{
-                                CompletionText = "worktree";
-                                ListItemText   = "worktree";
-                                ResultType     = 'Text';
-                                ToolTip        = "Manage multiple working trees";
+                                ListItemText = "worktree";
+                                ToolTip      = "Manage multiple working trees";
                             },
                             @{
-                                CompletionText = "write-tree";
-                                ListItemText   = "write-tree";
-                                ResultType     = 'Text';
-                                ToolTip        = "Create a tree object from the current index";
-                            }
+                                ListItemText = "write-tree";
+                                ToolTip      = "Create a tree object from the current index";
+                            } | ConvertTo-Completion -ResultType Text
                         )
                         $false = @(
                             @{
-                                CompletionText = "whatchanged";
-                                ListItemText   = "whatchanged";
-                                ResultType     = 'Text';
-                                ToolTip        = "Show logs with differences each commit introduces";
+                                ListItemText = "whatchanged";
+                                ToolTip      = "Show logs with differences each commit introduces";
                             },
                             @{
-                                CompletionText = "worktree";
-                                ListItemText   = "worktree";
-                                ResultType     = 'Text';
-                                ToolTip        = "Manage multiple working trees";
-                            }
+                                ListItemText = "worktree";
+                                ToolTip      = "Manage multiple working trees";
+                            } | ConvertTo-Completion -ResultType Text
                         )
                     }
                 }
@@ -174,58 +132,29 @@ Describe 'GirGlobal' {
                 Add      = @();
                 Exclude  = @();
                 Command  = 'wh';
-                Expected = @(
-                    @{
-                        CompletionText = "whatchanged";
-                        ListItemText   = "whatchanged";
-                        ResultType     = 'Text';
-                        ToolTip        = "Show logs with differences each commit introduces";
-                    }
-                )
+                Expected = "whatchanged" | ConvertTo-Completion -ResultType Text -ToolTip "Show logs with differences each commit introduces"
             },
             @{
                 Add      = 'why';
                 Exclude  = @();
                 Command  = 'wh';
-                Expected = @(
-                    @{
-                        CompletionText = "whatchanged";
-                        ListItemText   = "whatchanged";
-                        ResultType     = 'Text';
-                        ToolTip        = "Show logs with differences each commit introduces";
-                    },
-                    @{
-                        CompletionText = "why";
-                        ListItemText   = "why";
-                        ResultType     = 'Text';
-                        ToolTip        = "why";
-                    }
-                )
+                Expected = @{
+                    ListItemText   = "whatchanged";
+                    ToolTip        = "Show logs with differences each commit introduces";
+                },
+                @{
+                    ListItemText   = "why";
+                    ToolTip        = "why";
+                } | ConvertTo-Completion -ResultType Text
             },
             @{
                 Add      = @('why', 'who');
                 Exclude  = @();
                 Command  = 'wh';
-                Expected = @(
-                    @{
-                        CompletionText = "whatchanged";
+                Expected = @(@{
                         ListItemText   = "whatchanged";
-                        ResultType     = 'Text';
                         ToolTip        = "Show logs with differences each commit introduces";
-                    },
-                    @{
-                        CompletionText = "who";
-                        ListItemText   = "who";
-                        ResultType     = 'Text';
-                        ToolTip        = "who";
-                    },
-                    @{
-                        CompletionText = "why";
-                        ListItemText   = "why";
-                        ResultType     = 'Text';
-                        ToolTip        = "why";
-                    }
-                )
+                    }, "who", "why" | ConvertTo-Completion -ResultType Text)
             },
             @{
                 Add      = @();
@@ -237,40 +166,19 @@ Describe 'GirGlobal' {
                 Add      = 'why';
                 Exclude  = @('whatchanged', 'worktree');
                 Command  = 'w';
-                Expected = @(
-                    @{
-                        CompletionText = "why";
-                        ListItemText   = "why";
-                        ResultType     = 'Text';
-                        ToolTip        = "why";
-                    }
-                )
+                Expected = "why" | ConvertTo-Completion -ResultType Text
             },
             @{
                 Add      = @('why', 'who');
                 Exclude  = @('whatchanged', 'who');
                 Command  = 'wh';
-                Expected = @(
-                    @{
-                        CompletionText = "why";
-                        ListItemText   = "why";
-                        ResultType     = 'Text';
-                        ToolTip        = "why";
-                    }
-                )
+                Expected = "why" | ConvertTo-Completion -ResultType Text
             },
             @{
                 Add      = @('ls-files');
                 Exclude  = @();
                 Command  = 'ls';
-                Expected = @(
-                    @{
-                        CompletionText = "ls-files";
-                        ListItemText   = "ls-files";
-                        ResultType     = 'Text';
-                        ToolTip        = "Show information about files in the index and the working tree";
-                    }
-                )
+                Expected = "ls-files" | ConvertTo-Completion -ResultType Text -ToolTip "Show information about files in the index and the working tree"
             }
         ) {
             $GitCompletionSettings.AdditionalCommands = $Add

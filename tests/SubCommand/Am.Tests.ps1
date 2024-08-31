@@ -1,13 +1,11 @@
 using namespace System.Collections.Generic;
 using namespace System.IO;
 
-BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
-}
+. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
-        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
@@ -21,92 +19,62 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     It 'ShortOptions' {
-        $expected = @(
-            @{
-                CompletionText = '-3';
-                ListItemText   = '-3';
-                ResultType     = 'ParameterName';
-                ToolTip        = "allow fall back on 3way merging if needed";
-            },
-            @{
-                CompletionText = '-c';
-                ListItemText   = '-c';
-                ResultType     = 'ParameterName';
-                ToolTip        = "strip everything before a scissors line";
-            },
-            @{
-                CompletionText = '-C';
-                ListItemText   = '-C';
-                ResultType     = 'ParameterName';
-                ToolTip        = "pass it through git-apply";
-            },
-            @{
-                CompletionText = '-i';
-                ListItemText   = '-i';
-                ResultType     = 'ParameterName';
-                ToolTip        = "run interactively";
-            },
-            @{
-                CompletionText = '-k';
-                ListItemText   = '-k';
-                ResultType     = 'ParameterName';
-                ToolTip        = "pass -k flag to git-mailinfo";
-            },
-            @{
-                CompletionText = '-m';
-                ListItemText   = '-m';
-                ResultType     = 'ParameterName';
-                ToolTip        = "pass -m flag to git-mailinfo";
-            },
-            @{
-                CompletionText = '-n';
-                ListItemText   = '-n';
-                ResultType     = 'ParameterName';
-                ToolTip        = "bypass pre-applypatch and applypatch-msg hooks";
-            },
-            @{
-                CompletionText = '-p';
-                ListItemText   = '-p';
-                ResultType     = 'ParameterName';
-                ToolTip        = "pass it through git-apply";
-            },
-            @{
-                CompletionText = '-q';
-                ListItemText   = '-q';
-                ResultType     = 'ParameterName';
-                ToolTip        = "be quiet";
-            },
-            @{
-                CompletionText = '-r';
-                ListItemText   = '-r';
-                ResultType     = 'ParameterName';
-                ToolTip        = "synonyms for --continue";
-            },
-            @{
-                CompletionText = '-s';
-                ListItemText   = '-s';
-                ResultType     = 'ParameterName';
-                ToolTip        = "add a Signed-off-by trailer to the commit message";
-            },
-            @{
-                CompletionText = '-S';
-                ListItemText   = '-S';
-                ResultType     = 'ParameterName';
-                ToolTip        = "GPG-sign commits";
-            },
-            @{
-                CompletionText = '-u';
-                ListItemText   = '-u';
-                ResultType     = 'ParameterName';
-                ToolTip        = "recode into utf8 (default)";
-            },
-            @{
-                CompletionText = '-h';
-                ListItemText   = '-h';
-                ResultType     = 'ParameterName';
-                ToolTip        = "show help";
-            }
-        )
+        $expected = @{
+            ListItemText = '-3';
+            ToolTip      = "allow fall back on 3way merging if needed";
+        },
+        @{
+            ListItemText = '-c';
+            ToolTip      = "strip everything before a scissors line";
+        },
+        @{
+            ListItemText = '-C';
+            ToolTip      = "pass it through git-apply";
+        },
+        @{
+            ListItemText = '-i';
+            ToolTip      = "run interactively";
+        },
+        @{
+            ListItemText = '-k';
+            ToolTip      = "pass -k flag to git-mailinfo";
+        },
+        @{
+            ListItemText = '-m';
+            ToolTip      = "pass -m flag to git-mailinfo";
+        },
+        @{
+            ListItemText = '-n';
+            ToolTip      = "bypass pre-applypatch and applypatch-msg hooks";
+        },
+        @{
+            ListItemText = '-p';
+            ToolTip      = "pass it through git-apply";
+        },
+        @{
+            ListItemText = '-q';
+            ToolTip      = "be quiet";
+        },
+        @{
+            ListItemText = '-r';
+            ToolTip      = "synonyms for --continue";
+        },
+        @{
+            ListItemText = '-s';
+            ToolTip      = "add a Signed-off-by trailer to the commit message";
+        },
+        @{
+            ListItemText = '-S';
+            ToolTip      = "GPG-sign commits";
+        },
+        @{
+            ListItemText = '-u';
+            ToolTip      = "recode into utf8 (default)";
+        },
+        @{
+            ListItemText = '-h';
+            ToolTip      = "show help";
+        } | ConvertTo-Completion -ResultType ParameterName
         "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
@@ -114,71 +82,48 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--s';
-                Expected = @(
-                    @{
-                        CompletionText = '--signoff';
-                        ListItemText   = '--signoff';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "add a Signed-off-by trailer to the commit message";
-                    },
-                    @{
-                        CompletionText = '--scissors';
-                        ListItemText   = '--scissors';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "strip everything before a scissors line";
-                    }
-                )
+                Expected = @{
+                    ListItemText   = '--signoff';
+                    ToolTip        = "add a Signed-off-by trailer to the commit message";
+                },
+                @{
+                    ListItemText   = '--scissors';
+                    ToolTip        = "strip everything before a scissors line";
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--q';
-                Expected = @(
-                    @{
-                        CompletionText = '--quiet';
-                        ListItemText   = '--quiet';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "be quiet";
-                    },
-                    @{
-                        CompletionText = '--quoted-cr=';
-                        ListItemText   = '--quoted-cr=';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "pass it through git-mailinfo";
-                    }
-                )
+                Expected = @{
+                    ListItemText   = '--quiet';
+                    ToolTip        = "be quiet";
+                },
+                @{
+                    ListItemText   = '--quoted-cr=';
+                    ToolTip        = "pass it through git-mailinfo";
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no-s';
-                Expected = @(
-                    @{
-                        CompletionText = '--no-signoff';
-                        ListItemText   = '--no-signoff';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "[NO] add a Signed-off-by trailer to the commit message";
-                    },
-                    @{
-                        CompletionText = '--no-scissors';
-                        ListItemText   = '--no-scissors';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "[NO] strip everything before a scissors line";
-                    }
-                )
+                Expected = @{
+                    ListItemText   = '--no-signoff';
+                    ToolTip        = "[NO] add a Signed-off-by trailer to the commit message";
+                },
+                @{
+                    ListItemText   = '--no-scissors';
+                    ToolTip        = "[NO] strip everything before a scissors line";
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no';
-                Expected = @(
-                    @{
-                        CompletionText = '--no-verify';
-                        ListItemText   = '--no-verify';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "bypass pre-applypatch and applypatch-msg hooks"
-                    },
-                    @{
-                        CompletionText = '--no-';
-                        ListItemText   = '--no-...';
-                        ResultType     = 'Text';
-                        ToolTip        = "--no-...";
-                    }
-                )
+                Expected = @{
+                    ListItemText = '--no-verify';
+                    ToolTip      = "bypass pre-applypatch and applypatch-msg hooks"
+                },
+                @{
+                    CompletionText = '--no-';
+                    ListItemText   = '--no-...';
+                    ResultType     = 'Text'
+                } | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -190,46 +135,22 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             @{
                 Line     = '--whitespace=';
                 Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ForEach-Object {
-                    @{
-                        CompletionText = "--whitespace=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--whitespace=$_"
                 }
             },
             @{
                 Line     = '--whitespace ';
-                Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--whitespace=w';
                 Expected = 'warn' | ForEach-Object {
-                    @{
-                        CompletionText = "--whitespace=$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--whitespace=$_"
                 }
             },
             @{
                 Line     = '--whitespace w';
-                Expected = 'warn' | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                Expected = 'warn' | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -245,92 +166,62 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         }
 
         It 'ShortOptions' {
-            $expected = @(
-                @{
-                    CompletionText = '-3';
-                    ListItemText   = '-3';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "allow fall back on 3way merging if needed";
-                },
-                @{
-                    CompletionText = '-c';
-                    ListItemText   = '-c';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "strip everything before a scissors line";
-                },
-                @{
-                    CompletionText = '-C';
-                    ListItemText   = '-C';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "pass it through git-apply";
-                },
-                @{
-                    CompletionText = '-i';
-                    ListItemText   = '-i';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "run interactively";
-                },
-                @{
-                    CompletionText = '-k';
-                    ListItemText   = '-k';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "pass -k flag to git-mailinfo";
-                },
-                @{
-                    CompletionText = '-m';
-                    ListItemText   = '-m';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "pass -m flag to git-mailinfo";
-                },
-                @{
-                    CompletionText = '-n';
-                    ListItemText   = '-n';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "bypass pre-applypatch and applypatch-msg hooks";
-                },
-                @{
-                    CompletionText = '-p';
-                    ListItemText   = '-p';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "pass it through git-apply";
-                },
-                @{
-                    CompletionText = '-q';
-                    ListItemText   = '-q';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "be quiet";
-                },
-                @{
-                    CompletionText = '-r';
-                    ListItemText   = '-r';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "synonyms for --continue";
-                },
-                @{
-                    CompletionText = '-s';
-                    ListItemText   = '-s';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "add a Signed-off-by trailer to the commit message";
-                },
-                @{
-                    CompletionText = '-S';
-                    ListItemText   = '-S';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "GPG-sign commits";
-                },
-                @{
-                    CompletionText = '-u';
-                    ListItemText   = '-u';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "recode into utf8 (default)";
-                },
-                @{
-                    CompletionText = '-h';
-                    ListItemText   = '-h';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "show help";
-                }
-            )
+            $expected = @{
+                ListItemText = '-3';
+                ToolTip      = "allow fall back on 3way merging if needed";
+            },
+            @{
+                ListItemText = '-c';
+                ToolTip      = "strip everything before a scissors line";
+            },
+            @{
+                ListItemText = '-C';
+                ToolTip      = "pass it through git-apply";
+            },
+            @{
+                ListItemText = '-i';
+                ToolTip      = "run interactively";
+            },
+            @{
+                ListItemText = '-k';
+                ToolTip      = "pass -k flag to git-mailinfo";
+            },
+            @{
+                ListItemText = '-m';
+                ToolTip      = "pass -m flag to git-mailinfo";
+            },
+            @{
+                ListItemText = '-n';
+                ToolTip      = "bypass pre-applypatch and applypatch-msg hooks";
+            },
+            @{
+                ListItemText = '-p';
+                ToolTip      = "pass it through git-apply";
+            },
+            @{
+                ListItemText = '-q';
+                ToolTip      = "be quiet";
+            },
+            @{
+                ListItemText = '-r';
+                ToolTip      = "synonyms for --continue";
+            },
+            @{
+                ListItemText = '-s';
+                ToolTip      = "add a Signed-off-by trailer to the commit message";
+            },
+            @{
+                ListItemText = '-S';
+                ToolTip      = "GPG-sign commits";
+            },
+            @{
+                ListItemText = '-u';
+                ToolTip      = "recode into utf8 (default)";
+            },
+            @{
+                ListItemText = '-h';
+                ToolTip      = "show help";
+            } | ConvertTo-Completion -ResultType ParameterName
             "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
         }
 
@@ -338,31 +229,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Line>' -ForEach @(
                 @{
                     Line     = '--s';
-                    Expected = @(
-                        @{
-                            CompletionText = '--skip';
-                            ListItemText   = '--skip';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "skip the current patch";
-                        },
-                        @{
-                            CompletionText = '--show-current-patch';
-                            ListItemText   = '--show-current-patch';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "show the patch being applied";
-                        }
-                    )
+                    Expected = @{
+                        ListItemText = '--skip';
+                        ToolTip      = "skip the current patch";
+                    },
+                    @{
+                        ListItemText = '--show-current-patch';
+                        ToolTip      = "show the patch being applied";
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = '--q';
-                    Expected = @(
-                        @{
-                            CompletionText = '--quit';
-                            ListItemText   = '--quit';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "abort the patching operation but keep HEAD where it is";
-                        }
-                    )
+                    Expected = '--quit' | ConvertTo-Completion -ResultType ParameterName -ToolTip "abort the patching operation but keep HEAD where it is"
                 },
                 @{
                     Line     = '--no';
@@ -378,46 +256,22 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 @{
                     Line     = '--whitespace=';
                     Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ForEach-Object {
-                        @{
-                            CompletionText = "--whitespace=$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "$_";
-                        }
+                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--whitespace=$_"
                     }
                 },
                 @{
                     Line     = '--whitespace ';
-                    Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ForEach-Object {
-                        @{
-                            CompletionText = "$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "$_";
-                        }
-                    }
+                    Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--whitespace=w';
                     Expected = 'warn' | ForEach-Object {
-                        @{
-                            CompletionText = "--whitespace=$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "$_";
-                        }
+                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--whitespace=$_"
                     }
                 },
                 @{
                     Line     = '--whitespace w';
-                    Expected = 'warn' | ForEach-Object {
-                        @{
-                            CompletionText = "$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "$_";
-                        }
-                    }
+                    Expected = 'warn' | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

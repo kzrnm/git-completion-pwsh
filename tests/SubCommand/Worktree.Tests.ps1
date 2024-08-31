@@ -1,12 +1,10 @@
 using namespace System.Collections.Generic;
 
-BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
-}
+. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
-        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
@@ -29,73 +27,49 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     It 'Subcommands:<Line>' -ForEach @(
         @{
             Line     = ""
-            Expected = @(
-                @{
-                    CompletionText = 'add';
-                    ListItemText   = 'add';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'Create a worktree at <path> and checkout <commit-ish> into it';
-                },
-                @{
-                    CompletionText = 'prune';
-                    ListItemText   = 'prune';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'Prune worktree information';
-                },
-                @{
-                    CompletionText = 'list';
-                    ListItemText   = 'list';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'List details of each worktree';
-                },
-                @{
-                    CompletionText = 'lock';
-                    ListItemText   = 'lock';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'lock it to prevent its administrative files from being pruned automatically';
-                },
-                @{
-                    CompletionText = 'unlock';
-                    ListItemText   = 'unlock';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'Unlock a worktree';
-                },
-                @{
-                    CompletionText = 'move';
-                    ListItemText   = 'move';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'Move a worktree to a new location';
-                },
-                @{
-                    CompletionText = 'remove';
-                    ListItemText   = 'remove';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'Remove a worktree';
-                },
-                @{
-                    CompletionText = 'repair';
-                    ListItemText   = 'repair';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'Repair worktree administrative files';
-                }
-            )
+            Expected = @{
+                ListItemText = 'add';
+                ToolTip      = 'Create a worktree at <path> and checkout <commit-ish> into it';
+            },
+            @{
+                ListItemText = 'prune';
+                ToolTip      = 'Prune worktree information';
+            },
+            @{
+                ListItemText = 'list';
+                ToolTip      = 'List details of each worktree';
+            },
+            @{
+                ListItemText = 'lock';
+                ToolTip      = 'lock it to prevent its administrative files from being pruned automatically';
+            },
+            @{
+                ListItemText = 'unlock';
+                ToolTip      = 'Unlock a worktree';
+            },
+            @{
+                ListItemText = 'move';
+                ToolTip      = 'Move a worktree to a new location';
+            },
+            @{
+                ListItemText = 'remove';
+                ToolTip      = 'Remove a worktree';
+            },
+            @{
+                ListItemText = 'repair';
+                ToolTip      = 'Repair worktree administrative files';
+            } | ConvertTo-Completion -ResultType ParameterName
         },
         @{
             Line     = "re"
-            Expected = @(
-                @{
-                    CompletionText = 'remove';
-                    ListItemText   = 'remove';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'Remove a worktree';
-                },
-                @{
-                    CompletionText = 'repair';
-                    ListItemText   = 'repair';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'Repair worktree administrative files';
-                }
-            )
+            Expected = @{
+                ListItemText = 'remove';
+                ToolTip      = 'Remove a worktree';
+            },
+            @{
+                ListItemText = 'repair';
+                ToolTip      = 'Repair worktree administrative files';
+            } | ConvertTo-Completion -ResultType ParameterName
         }
     ) {
         "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -104,118 +78,48 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     It 'ShortOptions:<Subcommand>' -ForEach @(
         @{
             Subcommand = "remove"
-            Expected   = @(
-                @{
-                    CompletionText = "-f";
-                    ListItemText   = "-f";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "force removal even if worktree is dirty or locked";
-                },
-                @{
-                    CompletionText = "-h";
-                    ListItemText   = "-h";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "show help";
-                }
-            )
+            Expected   = @{
+                ListItemText = '-f';
+                ToolTip      = 'force removal even if worktree is dirty or locked';
+            },
+            @{
+                ListItemText = '-h';
+                ToolTip      = 'show help';
+            } | ConvertTo-Completion -ResultType ParameterName
         },
         @{
             Subcommand = "repair"
-            Expected   = @(
-                @{
-                    CompletionText = "-h";
-                    ListItemText   = "-h";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "show help";
-                }
-            )
+            Expected   = @{
+                ListItemText = '-h';
+                ToolTip      = 'show help';
+            } | ConvertTo-Completion -ResultType ParameterName
         }
     ) {
         "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
-    
-    Context 'WorktreePaths' {
+    Describe 'WorktreePaths' {
         It '<_>' -ForEach @('lock', 'remove', 'unlock', 'move') {
-            $expected = @(
-                @{
-                    CompletionText = $workTreePath1;
-                    ListItemText   = $workTreePath1;
-                    ResultType     = 'ParameterValue';
-                    ToolTip        = $workTreePath1;
-                },
-                @{
-                    CompletionText = $workTreePath2;
-                    ListItemText   = $workTreePath2;
-                    ResultType     = 'ParameterValue';
-                    ToolTip        = $workTreePath2;
-                }
-            )
+            $expected = @("$workTreePath1", "$workTreePath2") | ConvertTo-Completion -ResultType ParameterValue
             "git $Command $_ " | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
-    $refs = @(
-        @{
-            CompletionText = 'HEAD';
-            ListItemText   = 'HEAD';
-            ResultType     = 'ParameterValue';
-            ToolTip        = 'HEAD';
-        },
-        @{
-            CompletionText = 'brn';
-            ListItemText   = 'brn';
-            ResultType     = 'ParameterValue';
-            ToolTip        = 'brn';
-        },
-        @{
-            CompletionText = 'main';
-            ListItemText   = 'main';
-            ResultType     = 'ParameterValue';
-            ToolTip        = 'main';
-        },
-        @{
-            CompletionText = 'wk';
-            ListItemText   = 'wk';
-            ResultType     = 'ParameterValue';
-            ToolTip        = 'wk';
-        },
-        @{
-            CompletionText = 'wt';
-            ListItemText   = 'wt';
-            ResultType     = 'ParameterValue';
-            ToolTip        = 'wt';
-        }
-    )
-    $brn = @(
-        @{
-            CompletionText = 'brn';
-            ListItemText   = 'brn';
-            ResultType     = 'ParameterValue';
-            ToolTip        = 'brn';
-        }
-    )
+    $refs = 'HEAD', 'brn', 'main', 'wk', 'wt' | ConvertTo-Completion -ResultType ParameterValue
+    $brn = 'brn' | ConvertTo-Completion -ResultType ParameterValue
     It '<Line>' -ForEach @(
         @{
             Line     = "add --re"
             Expected = @(
-                @{
-                    CompletionText = '--reason=';
-                    ListItemText   = '--reason=';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'reason for locking'
-                }
+                '--reason=' | ConvertTo-Completion -ResultType ParameterName `
+                    -ToolTip 'reason for locking'
             )
         },
         @{
             Line     = "list --p"
             Expected = @(
-                @{
-                    CompletionText = '--porcelain';
-                    ListItemText   = '--porcelain';
-                    ResultType     = 'ParameterName';
-                    ToolTip        = 'machine-readable output'
-                }
+                '--porcelain' | ConvertTo-Completion -ResultType ParameterName `
+                    -ToolTip 'machine-readable output'
             )
         },
         @{

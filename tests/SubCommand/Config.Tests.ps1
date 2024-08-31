@@ -1,12 +1,10 @@
 using namespace System.Collections.Generic;
 
-BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
-}
+. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
-        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
@@ -26,85 +24,55 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     Describe 'Git2.46.0' {
         Describe 'ShortOptions' {
             It 'Root' {
-                "git $Command -" | Complete-FromLine | Should -BeCompletion @(
-                    @{
-                        CompletionText = "-h";
-                        ListItemText   = "-h";
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "show help";
-                    }
-                )
+                $expected = "-h" | ConvertTo-Completion -ResultType ParameterName -ToolTip "show help"
+                "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
             }
 
             It '<Line>' -ForEach @(
                 @{
                     Line     = 'get'
-                    Expected = @(
-                        @{
-                            CompletionText = "-f";
-                            ListItemText   = "-f";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "use given config file";
-                        },
-                        @{
-                            CompletionText = "-t";
-                            ListItemText   = "-t";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "value is given this type";
-                        },
-                        @{
-                            CompletionText = "-z";
-                            ListItemText   = "-z";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "terminate values with NUL byte";
-                        },
-                        @{
-                            CompletionText = "-h";
-                            ListItemText   = "-h";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "show help";
-                        }
-                    )
+                    Expected = @{
+                        ListItemText = "-f";
+                        ToolTip      = "use given config file";
+                    },
+                    @{
+                        ListItemText = "-t";
+                        ToolTip      = "value is given this type";
+                    },
+                    @{
+                        ListItemText = "-z";
+                        ToolTip      = "terminate values with NUL byte";
+                    },
+                    @{
+                        ListItemText = "-h";
+                        ToolTip      = "show help";
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = 'set'
-                    Expected = @(
-                        @{
-                            CompletionText = "-f";
-                            ListItemText   = "-f";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "use given config file";
-                        },
-                        @{
-                            CompletionText = "-t";
-                            ListItemText   = "-t";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "value is given this type";
-                        },
-                        @{
-                            CompletionText = "-h";
-                            ListItemText   = "-h";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "show help";
-                        }
-                    )
+                    Expected = @{
+                        ListItemText = "-f";
+                        ToolTip      = "use given config file";
+                    },
+                    @{
+                        ListItemText = "-t";
+                        ToolTip      = "value is given this type";
+                    },
+                    @{
+                        ListItemText = "-h";
+                        ToolTip      = "show help";
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = 'unset'
-                    Expected = @(
-                        @{
-                            CompletionText = "-f";
-                            ListItemText   = "-f";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "use given config file";
-                        },
-                        @{
-                            CompletionText = "-h";
-                            ListItemText   = "-h";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "show help";
-                        }
-                    )
+                    Expected = @{
+                        ListItemText = "-f";
+                        ToolTip      = "use given config file";
+                    },
+                    @{
+                        ListItemText = "-h";
+                        ToolTip      = "show help";
+                    } | ConvertTo-Completion -ResultType ParameterName
                 }
             ) {
                 "git $Command $Line -" | Complete-FromLine | Should -BeCompletion $Expected
@@ -115,61 +83,38 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Line>' -ForEach @(
                 @{
                     Line     = ''
-                    Expected = @(
-                        @{
-                            CompletionText = 'list';
-                            ListItemText   = 'list';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'List all variables set in config file';
-                        },
-                        @{
-                            CompletionText = 'get';
-                            ListItemText   = 'get';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'Emits the value of the specified key';
-                        },
-                        @{
-                            CompletionText = 'set';
-                            ListItemText   = 'set';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'Set value for one or more config options';
-                        },
-                        @{
-                            CompletionText = 'unset';
-                            ListItemText   = 'unset';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'Unset value for one or more config options';
-                        },
-                        @{
-                            CompletionText = 'rename-section';
-                            ListItemText   = 'rename-section';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'Rename the given section to a new name';
-                        },
-                        @{
-                            CompletionText = 'remove-section';
-                            ListItemText   = 'remove-section';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'Remove the given section from the configuration file';
-                        },
-                        @{
-                            CompletionText = 'edit';
-                            ListItemText   = 'edit';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'Opens an editor to modify the specified config file';
-                        }
-                    )
+                    Expected = @{
+                        ListItemText = 'list';
+                        ToolTip      = 'List all variables set in config file';
+                    },
+                    @{
+                        ListItemText = 'get';
+                        ToolTip      = 'Emits the value of the specified key';
+                    },
+                    @{
+                        ListItemText = 'set';
+                        ToolTip      = 'Set value for one or more config options';
+                    },
+                    @{
+                        ListItemText = 'unset';
+                        ToolTip      = 'Unset value for one or more config options';
+                    },
+                    @{
+                        ListItemText = 'rename-section';
+                        ToolTip      = 'Rename the given section to a new name';
+                    },
+                    @{
+                        ListItemText = 'remove-section';
+                        ToolTip      = 'Remove the given section from the configuration file';
+                    },
+                    @{
+                        ListItemText = 'edit';
+                        ToolTip      = 'Opens an editor to modify the specified config file';
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = 's'
-                    Expected = @(
-                        @{
-                            CompletionText = 'set';
-                            ListItemText   = 'set';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'Set value for one or more config options';
-                        }
-                    )
+                    Expected = 'set' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'Set value for one or more config options'
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $Expected
@@ -182,74 +127,41 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 @{
                     Line       = '--a';
                     Subcommand = 'get';
-                    Expected   = @(
-                        @{
-                            CompletionText = '--all';
-                            ListItemText   = '--all';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'return all values for multi-valued config options';
-                        }
-                    )
+                    Expected   = '--all' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'return all values for multi-valued config options'
                 },
                 @{
                     Line       = '--no-a';
                     Subcommand = 'get';
-                    Expected   = @(
-                        @{
-                            CompletionText = '--no-all';
-                            ListItemText   = '--no-all';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = '[NO] return all values for multi-valued config options';
-                        }
-                    )
+                    Expected   = '--no-all' | ConvertTo-Completion -ResultType ParameterName -ToolTip '[NO] return all values for multi-valued config options'
                 },
                 @{
                     Line       = '--a';
                     Subcommand = 'set';
-                    Expected   = @(
-                        @{
-                            CompletionText = '--all';
-                            ListItemText   = '--all';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'replace multi-valued config option with new value';
-                        },
-                        @{
-                            CompletionText = '--append';
-                            ListItemText   = '--append';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'add a new line without altering any existing values';
-                        }
-                    )
+                    Expected   = @{
+                        ListItemText = '--all';
+                        ToolTip      = 'replace multi-valued config option with new value';
+                    },
+                    @{
+                        ListItemText = '--append';
+                        ToolTip      = 'add a new line without altering any existing values';
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line       = '--no-a';
                     Subcommand = 'set';
-                    Expected   = @(
-                        @{
-                            CompletionText = '--no-all';
-                            ListItemText   = '--no-all';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = '[NO] replace multi-valued config option with new value';
-                        },
-                        @{
-                            CompletionText = '--no-append';
-                            ListItemText   = '--no-append';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = '[NO] add a new line without altering any existing values';
-                        }
-                    )
+                    Expected   = @{
+                        ListItemText = '--no-all';
+                        ToolTip      = '[NO] replace multi-valued config option with new value';
+                    },
+                    @{
+                        ListItemText = '--no-append';
+                        ToolTip      = '[NO] add a new line without altering any existing values';
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line       = '--ty';
                     Subcommand = 'set';
-                    Expected   = @(
-                        @{
-                            CompletionText = '--type=';
-                            ListItemText   = '--type=';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'value is given this type';
-                        }
-                    )
+                    Expected   = '--type=' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'value is given this type'
                 }
             ) {
                 "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $Expected
@@ -260,36 +172,15 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             Context '<Line>' -ForEach @(
                 @{
                     Line     = "--lo"
-                    Expected = @(
-                        @{
-                            CompletionText = "--local";
-                            ListItemText   = "--local";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "use repository config file";
-                        }
-                    )
+                    Expected = "--local" | ConvertTo-Completion -ResultType ParameterName -ToolTip "use repository config file"
                 },
                 @{
                     Line     = "--glo"
-                    Expected = @(
-                        @{
-                            CompletionText = "--global";
-                            ListItemText   = "--global";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "use global config file";
-                        }
-                    )
+                    Expected = "--global" | ConvertTo-Completion -ResultType ParameterName -ToolTip "use global config file"
                 },
                 @{
                     Line     = "--no-glo"
-                    Expected = @(
-                        @{
-                            CompletionText = "--no-global";
-                            ListItemText   = "--no-global";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "[NO] use global config file";
-                        }
-                    )
+                    Expected = "--no-global" | ConvertTo-Completion -ResultType ParameterName -ToolTip "[NO] use global config file"
                 }
             ) {
                 It '<_>' -ForEach @(
@@ -326,74 +217,31 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 @{
                     Option   = ""
                     Line     = "ali"
-                    Expected = @(
-                        @{
-                            CompletionText = "alias.sw";
-                            ListItemText   = "alias.sw";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.sw";
-                        },
-                        @{
-                            CompletionText = "alias.swf";
-                            ListItemText   = "alias.swf";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.swf";
-                        }
-                    )
+                    Expected =
+                    "alias.sw",
+                    "alias.swf" | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Option   = "--local"
                     Line     = "ali"
-                    Expected = @(
-                        @{
-                            CompletionText = "alias.sw";
-                            ListItemText   = "alias.sw";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.sw";
-                        },
-                        @{
-                            CompletionText = "alias.swf";
-                            ListItemText   = "alias.swf";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.swf";
-                        }
-                    )
+                    Expected =
+                    "alias.sw",
+                    "alias.swf" | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Option   = "--file test.config"
                     Line     = ""
-                    Expected = @(
-                        @{
-                            CompletionText = "alias.ll";
-                            ListItemText   = "alias.ll";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.ll";
-                        }
-                    )
+                    Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
                 },
                 @{
                     Option   = "--file=test.config"
                     Line     = ""
-                    Expected = @(
-                        @{
-                            CompletionText = "alias.ll";
-                            ListItemText   = "alias.ll";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.ll";
-                        }
-                    )
+                    Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
                 },
                 @{
                     Option   = "-f test.config"
                     Line     = ""
-                    Expected = @(
-                        @{
-                            CompletionText = "alias.ll";
-                            ListItemText   = "alias.ll";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.ll";
-                        }
-                    )
+                    Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
                 }
             ) {
                 It '<_>' -ForEach @('get', 'unset', 'get --no-url') {
@@ -455,109 +303,67 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         }
 
         It 'ShortOptions' {
-            "git $Command -" | Complete-FromLine | Should -BeCompletion @(
-                @{
-                    CompletionText = "-e";
-                    ListItemText   = "-e";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "open an editor";
-                },
-                @{
-                    CompletionText = "-f";
-                    ListItemText   = "-f";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "use given config file";
-                },
-                @{
-                    CompletionText = "-l";
-                    ListItemText   = "-l";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "list all";
-                },
-                @{
-                    CompletionText = "-z";
-                    ListItemText   = "-z";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "terminate values with NUL byte";
-                },
-                @{
-                    CompletionText = "-h";
-                    ListItemText   = "-h";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "show help";
-                }
-            )
+            $expected = @{
+                ListItemText = "-e";
+                ToolTip      = "open an editor";
+            },
+            @{
+                ListItemText = "-f";
+                ToolTip      = "use given config file";
+            },
+            @{
+                ListItemText = "-l";
+                ToolTip      = "list all";
+            },
+            @{
+                ListItemText = "-z";
+                ToolTip      = "terminate values with NUL byte";
+            },
+            @{
+                ListItemText = "-h";
+                ToolTip      = "show help";
+            } | ConvertTo-Completion -ResultType ParameterName
+            "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
         }
 
         Describe 'OptionOrVariable' {
             It '<Line>' -ForEach @(
                 @{
                     Line     = "pu";
-                    Expected = @(
-                        @{
-                            CompletionText = "pull.";
-                            ListItemText   = "pull.";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "pull.";
-                        },
-                        @{
-                            CompletionText = "push.";
-                            ListItemText   = "push.";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "push.";
-                        }
-                    );
+                    Expected = 
+                    "pull.",
+                    "push." | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = "--in"
-                    Expected = @(
-                        @{
-                            CompletionText = "--int";
-                            ListItemText   = "--int";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "value is decimal number";
-                        },
-                        @{
-                            CompletionText = "--includes";
-                            ListItemText   = "--includes";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "respect include directives on lookup";
-                        }
-                    )
+                    Expected = @{
+                        ListItemText = "--int";
+                        ToolTip      = "value is decimal number";
+                    },
+                    @{
+                        ListItemText = "--includes";
+                        ToolTip      = "respect include directives on lookup";
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = "--l"
-                    Expected = @(
-                        @{
-                            CompletionText = "--local";
-                            ListItemText   = "--local";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "use repository config file";
-                        },
-                        @{
-                            CompletionText = "--list";
-                            ListItemText   = "--list";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "--list";
-                        }
-                    )
+                    Expected = @{
+                        ListItemText = "--local";
+                        ToolTip      = "use repository config file";
+                    },
+                    @{
+                        ListItemText = "--list";
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = "--no-l"
-                    Expected = @(
-                        @{
-                            CompletionText = "--no-local";
-                            ListItemText   = "--no-local";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "[NO] use repository config file";
-                        },
-                        @{
-                            CompletionText = "--no-list";
-                            ListItemText   = "--no-list";
-                            ResultType     = 'ParameterName';
-                            ToolTip        = "--no-list";
-                        }
-                    )
+                    Expected = @{
+                        ListItemText = "--no-local";
+                        ToolTip      = "[NO] use repository config file";
+                    },
+                    @{
+                        ListItemText = "--no-list";
+                    } | ConvertTo-Completion -ResultType ParameterName
                 }
             ) { 
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -569,74 +375,31 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 @{
                     Option   = ""
                     Line     = "ali"
-                    Expected = @(
-                        @{
-                            CompletionText = "alias.sw";
-                            ListItemText   = "alias.sw";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.sw";
-                        },
-                        @{
-                            CompletionText = "alias.swf";
-                            ListItemText   = "alias.swf";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.swf";
-                        }
-                    )
+                    Expected =
+                    "alias.sw",
+                    "alias.swf" | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Option   = "--local"
                     Line     = "ali"
-                    Expected = @(
-                        @{
-                            CompletionText = "alias.sw";
-                            ListItemText   = "alias.sw";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.sw";
-                        },
-                        @{
-                            CompletionText = "alias.swf";
-                            ListItemText   = "alias.swf";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.swf";
-                        }
-                    )
+                    Expected =
+                    "alias.sw",
+                    "alias.swf" | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Option   = "--file test.config"
                     Line     = ""
-                    Expected = @(
-                        @{
-                            CompletionText = "alias.ll";
-                            ListItemText   = "alias.ll";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.ll";
-                        }
-                    )
+                    Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
                 },
                 @{
                     Option   = "--file=test.config"
                     Line     = ""
-                    Expected = @(
-                        @{
-                            CompletionText = "alias.ll";
-                            ListItemText   = "alias.ll";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.ll";
-                        }
-                    )
+                    Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
                 },
                 @{
                     Option   = "-f test.config"
                     Line     = ""
-                    Expected = @(
-                        @{
-                            CompletionText = "alias.ll";
-                            ListItemText   = "alias.ll";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "alias.ll";
-                        }
-                    )
+                    Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
                 }
             ) {
                 It '<_>' -ForEach @('--get', '--get-all', '--unset', '--unset-all') {

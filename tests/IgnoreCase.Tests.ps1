@@ -1,8 +1,6 @@
 using namespace System.Collections.Generic;
 
-BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
-}
+. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe 'IgnoreCase' {
     BeforeAll {
@@ -25,16 +23,8 @@ Describe 'IgnoreCase' {
             @{
                 Line     = 'git config set branch.M';
                 Expected = @{
-                    $true  = @(
-                        @{
-                            CompletionText = 'branch.main.';
-                            ListItemText   = 'branch.main.';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = 'branch.main.';
-                        }
-                    )
-                    $false = @(
-                    )
+                    $true  = 'branch.main.' | ConvertTo-Completion -ResultType ParameterName
+                    $false = @()
                 }
             }
         ) {

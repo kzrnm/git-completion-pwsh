@@ -1,8 +1,14 @@
 #Requires -Module Pester, git-completion
 
+using namespace System.Management.Automation;
+
 $ErrorActionPreference = 'Continue'
 
-function Convert-ToKebabCase {
+. "$PSScriptRoot/ConvertCompletion.ps1"
+
+$script:NoOptionsCompletion = '--no-...' | ConvertTo-Completion -ResultType Text -CompletionText '--no-'
+
+function ConvertTo-KebabCase {
     param (
         [Parameter(ValueFromPipeline)]
         [string]$Text
@@ -30,14 +36,6 @@ function Initialize-Home {
 }
 function Restore-Home {
     $env:HOME = $script:envHOMEBak
-
-    $script:GitCompletionSettings = @{
-        IgnoreCase         = $false;
-        ShowAllCommand     = $false;
-        ShowAllOptions     = $false;
-        AdditionalCommands = @();
-        ExcludeCommands    = @();
-    }
 }
 
 function Initialize-SimpleRepo {
@@ -92,7 +90,7 @@ function Initialize-Remote {
 }
 
 function Complete-FromLine {
-    [OutputType([System.Management.Automation.CompletionResult[]])]
+    [OutputType([CompletionResult[]])]
     param (
         [string][Parameter(ValueFromPipeline)] $line
     )
@@ -119,7 +117,7 @@ function buildFailedMessage {
     [OutputType([string[]])]
     param (
         $ActualValue,
-        [hashtable[]] $ExpectedValue
+        [array] $ExpectedValue
     )
 
     if (!$ActualValue) {
@@ -143,7 +141,7 @@ function buildFailedMessage {
 
     $Length = [math]::Max($ExpectedValue.Length, $ActualValue.Length)
     for ($i = 0; $i -lt $Length ; $i++) {
-        $a = [System.Management.Automation.CompletionResult]$ActualValue[$i]
+        $a = [CompletionResult]$ActualValue[$i]
         $e = $ExpectedValue[$i]
 
         if (
@@ -166,7 +164,7 @@ function Should-BeCompletion {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope = 'Function')]
     param(
         $ActualValue,
-        [hashtable[]] $ExpectedValue,
+        [array] $ExpectedValue,
         [string] $Because
     ) 
     <#
@@ -196,7 +194,8 @@ Add-ShouldOperator -Name BeCompletion `
     -Test ${function:Should-BeCompletion} `
     -SupportsArrayInput
 
-Export-ModuleMember -Function Complete-FromLine, Initialize-Home, Restore-Home,
-Convert-ToKebabCase,
-testRevList,
-Initialize-Remote, Initialize-SimpleRepo
+Export-ModuleMember `
+    -Function Complete-FromLine, Initialize-Home, Restore-Home, `
+    ConvertTo-KebabCase, ConvertTo-Completion, `
+    Initialize-Remote, Initialize-SimpleRepo `
+    -Variable 'NoOptionsCompletion'

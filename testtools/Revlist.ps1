@@ -12,28 +12,14 @@ Describe 'RemoteOrRefspec' {
                 'ordinary/main',
                 'origin/main',
                 'initial'
-            ) | ForEach-Object {
-                @{
-                    CompletionText = "$_";
-                    ListItemText   = "$_";
-                    ResultType     = 'ParameterValue';
-                    ToolTip        = "$_";
-                }
-            }
+            ) | ConvertTo-Completion -ResultType ParameterValue
         },
         @{
             Line     = 'o';
             Expected = @(
                 'ordinary/main',
                 'origin/main'
-            ) | ForEach-Object {
-                @{
-                    CompletionText = "$_";
-                    ListItemText   = "$_";
-                    ResultType     = 'ParameterValue';
-                    ToolTip        = "$_";
-                }
-            }
+            ) | ConvertTo-Completion -ResultType ParameterValue
         },
         @{
             Line     = '^';
@@ -45,28 +31,14 @@ Describe 'RemoteOrRefspec' {
                 'ordinary/main',
                 'origin/main',
                 'initial'
-            ) | ForEach-Object {
-                @{
-                    CompletionText = "^$_";
-                    ListItemText   = "^$_";
-                    ResultType     = 'ParameterValue';
-                    ToolTip        = "^$_";
-                }
-            }
+            ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
         },
         @{
             Line     = '^o';
             Expected = @(
                 'ordinary/main',
                 'origin/main'
-            ) | ForEach-Object {
-                @{
-                    CompletionText = "^$_";
-                    ListItemText   = "^$_";
-                    ResultType     = 'ParameterValue';
-                    ToolTip        = "^$_";
-                }
-            }
+            ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
         },
         @{
             Line     = 'HEAD...';
@@ -79,12 +51,7 @@ Describe 'RemoteOrRefspec' {
                 'origin/main',
                 'initial'
             ) | ForEach-Object {
-                @{
-                    CompletionText = "HEAD...$_";
-                    ListItemText   = "$_";
-                    ResultType     = 'ParameterValue';
-                    ToolTip        = "$_";
-                }
+                "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD...$_"
             }
         },
         @{
@@ -93,12 +60,7 @@ Describe 'RemoteOrRefspec' {
                 'ordinary/main',
                 'origin/main'
             ) | ForEach-Object {
-                @{
-                    CompletionText = "HEAD...$_";
-                    ListItemText   = "$_";
-                    ResultType     = 'ParameterValue';
-                    ToolTip        = "$_";
-                }
+                "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD...$_"
             }
         },
         @{
@@ -112,12 +74,7 @@ Describe 'RemoteOrRefspec' {
                 'origin/main',
                 'initial'
             ) | ForEach-Object {
-                @{
-                    CompletionText = "HEAD..$_";
-                    ListItemText   = "$_";
-                    ResultType     = 'ParameterValue';
-                    ToolTip        = "$_";
-                }
+                "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD..$_"
             }
         },
         @{
@@ -126,12 +83,7 @@ Describe 'RemoteOrRefspec' {
                 'ordinary/main',
                 'origin/main'
             ) | ForEach-Object {
-                @{
-                    CompletionText = "HEAD..$_";
-                    ListItemText   = "$_";
-                    ResultType     = 'ParameterValue';
-                    ToolTip        = "$_";
-                }
+                "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD..$_"
             }
         }
     ) {
@@ -144,15 +96,7 @@ Describe 'File' {
         @{
             Line     = 'brn..main:';
             Expected = @(
-                'Pwsh/' | ForEach-Object { 
-                    @{
-                        File           = $_
-                        CompletionText = "brn..main:$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ProviderItem';
-                    }
-                }) + @(
-                'hello.sh', 'initial.txt' | ForEach-Object { 
+                'Pwsh/', 'hello.sh', 'initial.txt' | ForEach-Object {
                     @{
                         File           = $_
                         CompletionText = "brn..main:$_";

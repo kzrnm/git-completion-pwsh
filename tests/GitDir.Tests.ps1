@@ -1,6 +1,4 @@
-BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
-}
+. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe 'GirDir' {
     BeforeAll {
@@ -26,74 +24,32 @@ Describe 'GirDir' {
         @{
             Location = '$TestDrive/home';
             Line     = 'git --git-dir ../gitRoot/.git -c branch.n';
-            Expected = @(
-                @{
-                    CompletionText = "branch.new.";
-                    ListItemText   = "branch.new.";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "branch.new.";
-                }
-            )
+            Expected = "branch.new." | ConvertTo-Completion -ResultType ParameterName
         },
         @{
             Location = '$TestDrive/home';
             Line     = 'git --git-dir ../gitRoot/.git -c ur';
-            Expected = @(
-                @{
-                    CompletionText = "url.";
-                    ListItemText   = "url.";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "url.";
-                }
-            )
+            Expected = "url." | ConvertTo-Completion -ResultType ParameterName
         },
         @{
             Location = '$TestDrive/home';
             Line     = 'git --git-dir=../gitRoot/.git -c branch.n';
-            Expected = @(
-                @{
-                    CompletionText = "branch.new.";
-                    ListItemText   = "branch.new.";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "branch.new.";
-                }
-            )
+            Expected = "branch.new." | ConvertTo-Completion -ResultType ParameterName
         },
         @{
             Location = '$TestDrive/home';
             Line     = 'git --git-dir=../gitRoot/.git -c ur';
-            Expected = @(
-                @{
-                    CompletionText = "url.";
-                    ListItemText   = "url.";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "url.";
-                }
-            )
+            Expected = "url." | ConvertTo-Completion -ResultType ParameterName
         },
         @{
             Location = '$TestDrive/gitRoot/.git';
             Line     = 'git --bare -c branch.n';
-            Expected = @(
-                @{
-                    CompletionText = "branch.new.";
-                    ListItemText   = "branch.new.";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "branch.new.";
-                }
-            )
+            Expected = "branch.new." | ConvertTo-Completion -ResultType ParameterName
         },
         @{
             Location = '$TestDrive/gitRoot/.git';
             Line     = 'git --bare -c ur';
-            Expected = @(
-                @{
-                    CompletionText = "url.";
-                    ListItemText   = "url.";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "url.";
-                }
-            )
+            Expected = "url." | ConvertTo-Completion -ResultType ParameterName
         }
     ) {
         Push-Location (Invoke-Expression "echo $Location")

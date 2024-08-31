@@ -1,12 +1,10 @@
 using namespace System.Collections.Generic;
 
-BeforeAll {
-    . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
-}
+. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
-        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
@@ -21,104 +19,70 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     It 'ShortOptions' {
-        $expected = @(
-            @{
-                CompletionText = '-4';
-                ListItemText   = '-4';
-                ResultType     = 'ParameterName';
-                ToolTip        = "use IPv4 addresses only";
-            },
-            @{
-                CompletionText = '-6';
-                ListItemText   = '-6';
-                ResultType     = 'ParameterName';
-                ToolTip        = "use IPv6 addresses only";
-            },
-            @{
-                CompletionText = '-a';
-                ListItemText   = '-a';
-                ResultType     = 'ParameterName';
-                ToolTip        = "append to .git/FETCH_HEAD instead of overwriting";
-            },
-            @{
-                CompletionText = '-f';
-                ListItemText   = '-f';
-                ResultType     = 'ParameterName';
-                ToolTip        = "force overwrite of local reference";
-            },
-            @{
-                CompletionText = '-j';
-                ListItemText   = '-j';
-                ResultType     = 'ParameterName';
-                ToolTip        = "number of submodules fetched in parallel";
-            },
-            @{
-                CompletionText = '-k';
-                ListItemText   = '-k';
-                ResultType     = 'ParameterName';
-                ToolTip        = "keep downloaded pack";
-            },
-            @{
-                CompletionText = '-m';
-                ListItemText   = '-m';
-                ResultType     = 'ParameterName';
-                ToolTip        = "fetch from multiple remotes";
-            },
-            @{
-                CompletionText = '-n';
-                ListItemText   = '-n';
-                ResultType     = 'ParameterName';
-                ToolTip        = "do not fetch all tags (--no-tags)";
-            },
-            @{
-                CompletionText = '-o';
-                ListItemText   = '-o';
-                ResultType     = 'ParameterName';
-                ToolTip        = "option to transmit";
-            },
-            @{
-                CompletionText = '-p';
-                ListItemText   = '-p';
-                ResultType     = 'ParameterName';
-                ToolTip        = "prune remote-tracking branches no longer on remote";
-            },
-            @{
-                CompletionText = '-P';
-                ListItemText   = '-P';
-                ResultType     = 'ParameterName';
-                ToolTip        = "prune local tags no longer on remote and clobber changed tags";
-            },
-            @{
-                CompletionText = '-q';
-                ListItemText   = '-q';
-                ResultType     = 'ParameterName';
-                ToolTip        = "be more quiet";
-            },
-            @{
-                CompletionText = '-t';
-                ListItemText   = '-t';
-                ResultType     = 'ParameterName';
-                ToolTip        = "fetch all tags and associated objects";
-            },
-            @{
-                CompletionText = '-u';
-                ListItemText   = '-u';
-                ResultType     = 'ParameterName';
-                ToolTip        = "allow updating of HEAD ref";
-            },
-            @{
-                CompletionText = '-v';
-                ListItemText   = '-v';
-                ResultType     = 'ParameterName';
-                ToolTip        = "be more verbose";
-            },
-            @{
-                CompletionText = '-h';
-                ListItemText   = '-h';
-                ResultType     = 'ParameterName';
-                ToolTip        = "show help";
-            }
-        )
+        $expected = @{
+            ListItemText = '-4';
+            ToolTip      = "use IPv4 addresses only";
+        },
+        @{
+            ListItemText = '-6';
+            ToolTip      = "use IPv6 addresses only";
+        },
+        @{
+            ListItemText = '-a';
+            ToolTip      = "append to .git/FETCH_HEAD instead of overwriting";
+        },
+        @{
+            ListItemText = '-f';
+            ToolTip      = "force overwrite of local reference";
+        },
+        @{
+            ListItemText = '-j';
+            ToolTip      = "number of submodules fetched in parallel";
+        },
+        @{
+            ListItemText = '-k';
+            ToolTip      = "keep downloaded pack";
+        },
+        @{
+            ListItemText = '-m';
+            ToolTip      = "fetch from multiple remotes";
+        },
+        @{
+            ListItemText = '-n';
+            ToolTip      = "do not fetch all tags (--no-tags)";
+        },
+        @{
+            ListItemText = '-o';
+            ToolTip      = "option to transmit";
+        },
+        @{
+            ListItemText = '-p';
+            ToolTip      = "prune remote-tracking branches no longer on remote";
+        },
+        @{
+            ListItemText = '-P';
+            ToolTip      = "prune local tags no longer on remote and clobber changed tags";
+        },
+        @{
+            ListItemText = '-q';
+            ToolTip      = "be more quiet";
+        },
+        @{
+            ListItemText = '-t';
+            ToolTip      = "fetch all tags and associated objects";
+        },
+        @{
+            ListItemText = '-u';
+            ToolTip      = "allow updating of HEAD ref";
+        },
+        @{
+            ListItemText = '-v';
+            ToolTip      = "be more verbose";
+        },
+        @{
+            ListItemText = '-h';
+            ToolTip      = "show help";
+        } | ConvertTo-Completion -ResultType ParameterName
         "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
@@ -126,54 +90,37 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--f';
-                Expected = @(
-                    @{
-                        CompletionText = '--force';
-                        ListItemText   = '--force';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "force overwrite of local reference";
-                    },
-                    @{
-                        CompletionText = '--filter=';
-                        ListItemText   = '--filter=';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "object filtering";
-                    }
-                )
+                Expected = @{
+                    ListItemText = '--force';
+                    ToolTip      = "force overwrite of local reference";
+                },
+                @{
+                    ListItemText = '--filter=';
+                    ToolTip      = "object filtering";
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no-f';
-                Expected = @(
-                    @{
-                        CompletionText = '--no-force';
-                        ListItemText   = '--no-force';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "[NO] force overwrite of local reference";
-                    },
-                    @{
-                        CompletionText = '--no-filter';
-                        ListItemText   = '--no-filter';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "[NO] object filtering";
-                    }
-                )
+                Expected = @{
+                    ListItemText = '--no-force';
+                    ToolTip      = "[NO] force overwrite of local reference";
+                },
+                @{
+                    ListItemText = '--no-filter';
+                    ToolTip      = "[NO] object filtering";
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no';
-                Expected = @(
-                    @{
-                        CompletionText = '--no-verbose';
-                        ListItemText   = '--no-verbose';
-                        ResultType     = 'ParameterName';
-                        ToolTip        = "[NO] be more verbose";
-                    },
-                    @{
-                        CompletionText = '--no-';
-                        ListItemText   = '--no-...';
-                        ResultType     = 'Text';
-                        ToolTip        = "--no-...";
-                    }
-                )
+                Expected = @{
+                    ListItemText = '--no-verbose';
+                    ToolTip      = "[NO] be more verbose";
+                },
+                @{
+                    CompletionText = '--no-';
+                    ListItemText   = '--no-...';
+                    ResultType     = 'Text'
+                } | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -185,70 +132,36 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             @{
                 Line     = '--recurse-submodules ';
                 Expected = @(
-                    @{
-                        CompletionText = 'yes';
-                        ListItemText   = 'yes';
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "yes";
-                    },
-                    @{
-                        CompletionText = 'on-demand';
-                        ListItemText   = 'on-demand';
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "on-demand";
-                    },
-                    @{
-                        CompletionText = 'no';
-                        ListItemText   = 'no';
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "no";
-                    }
+                    'yes',
+                    'on-demand',
+                    'no' | ConvertTo-Completion -ResultType ParameterValue
                 )
             },
             @{
                 Line     = '--recurse-submodules y';
-                Expected = @(
-                    @{
-                        CompletionText = 'yes';
-                        ListItemText   = 'yes';
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "yes";
-                    }
-                )
+                Expected = 'yes' | ConvertTo-Completion -ResultType ParameterValue -ToolTip "yes"
             },
             @{
                 Line     = '--recurse-submodules=';
-                Expected = @(
-                    @{
-                        CompletionText = '--recurse-submodules=yes';
-                        ListItemText   = 'yes';
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "yes";
-                    },
-                    @{
-                        CompletionText = '--recurse-submodules=on-demand';
-                        ListItemText   = 'on-demand';
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "on-demand";
-                    },
-                    @{
-                        CompletionText = '--recurse-submodules=no';
-                        ListItemText   = 'no';
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "no";
-                    }
-                )
+                Expected = @{
+                    CompletionText = '--recurse-submodules=yes';
+                    ListItemText   = 'yes';
+                },
+                @{
+                    CompletionText = '--recurse-submodules=on-demand';
+                    ListItemText   = 'on-demand';
+                },
+                @{
+                    CompletionText = '--recurse-submodules=no';
+                    ListItemText   = 'no';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--recurse-submodules=y';
-                Expected = @(
-                    @{
-                        CompletionText = '--recurse-submodules=yes';
-                        ListItemText   = 'yes';
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "yes";
-                    }
-                )
+                Expected = @{
+                    CompletionText = '--recurse-submodules=yes';
+                    ListItemText   = 'yes';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--multiple ';
@@ -256,28 +169,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     'grm',
                     'ordinary',
                     'origin'
-                ) | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--multiple or';
                 Expected = @(
                     'ordinary',
                     'origin'
-                ) | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--all ';
@@ -295,27 +194,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 Expected = @(
                     'HEAD:HEAD',
                     'main:main'
-                ) | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin m';
                 Expected = @(
                     'main:main'
-                ) | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin +';
@@ -323,12 +208,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     'HEAD:HEAD',
                     'main:main'
                 ) | ForEach-Object {
-                    @{
-                        CompletionText = "+$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "+$_"
                 }
             },
             @{
@@ -336,12 +216,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 Expected = @(
                     'main:main'
                 ) | ForEach-Object {
-                    @{
-                        CompletionText = "+$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "+$_"
                 }
             },
             @{
@@ -355,12 +230,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     'origin/main',
                     'initial'
                 ) | ForEach-Object {
-                    @{
-                        CompletionText = "left:$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "left:$_"
                 }
             },
             @{
@@ -368,12 +238,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 Expected = @(
                     'main'
                 ) | ForEach-Object {
-                    @{
-                        CompletionText = "left:$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
+                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "left:$_"
                 }
             },
             @{
@@ -381,14 +246,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 Expected = @(
                     'ordinary',
                     'origin'
-                ) | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '';
@@ -396,14 +254,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     'grm',
                     'ordinary',
                     'origin'
-                ) | ForEach-Object {
-                    @{
-                        CompletionText = "$_";
-                        ListItemText   = "$_";
-                        ResultType     = 'ParameterValue';
-                        ToolTip        = "$_";
-                    }
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
