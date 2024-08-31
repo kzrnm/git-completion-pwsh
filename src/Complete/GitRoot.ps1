@@ -198,7 +198,7 @@ function Complete-GitCommandLine {
         }
 
         switch -Wildcard -CaseSensitive ($Context.PreviousWord()) {
-            { $_ -cin @('-C', '--work-tree', '--git-dir') } {
+            { $_ -cin @('-C', '--work-tree', '--git-dir', '--') } {
                 # these need a path argument
                 return
             }

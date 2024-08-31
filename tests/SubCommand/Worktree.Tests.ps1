@@ -4,12 +4,12 @@ BeforeAll {
     . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
 
-Describe 'Worktree' {
+Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
-
         Push-Location $rootPath
         git init --initial-branch=main
         git commit -m "initial" --allow-empty
@@ -17,8 +17,8 @@ Describe 'Worktree' {
 
         $workTreePath1 = "$TestDrive/wkt".Replace('\', '/')
         $workTreePath2 = "$TestDrive/wkt2".Replace('\', '/')
-        git worktree add -B wk $workTreePath1
-        git worktree add -B wt $workTreePath2
+        git worktree add -B wk $workTreePath1 2>$null
+        git worktree add -B wt $workTreePath2 2>$null
     }
 
     AfterAll {
@@ -98,7 +98,7 @@ Describe 'Worktree' {
             )
         }
     ) {
-        "git worktree $Line" | Complete-FromLine | Should -BeCompletion $expected
+        "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
     }
 
     It 'ShortOptions:<Subcommand>' -ForEach @(
@@ -131,7 +131,7 @@ Describe 'Worktree' {
             )
         }
     ) {
-        "git worktree $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
+        "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
     
@@ -151,7 +151,7 @@ Describe 'Worktree' {
                     ToolTip        = $workTreePath2;
                 }
             )
-            "git worktree $_ " | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $_ " | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
@@ -299,6 +299,6 @@ Describe 'Worktree' {
             Expected = @()
         }
     ) {
-        "git worktree $Line" | Complete-FromLine | Should -BeCompletion $expected
+        "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
     }
 }

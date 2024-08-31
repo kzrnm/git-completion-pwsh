@@ -5,39 +5,15 @@ BeforeAll {
     . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
 
-Describe 'Show' {
+Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
         mkdir ($remotePath = "$TestDrive/gitRemote")
-
-        Push-Location $remotePath
-        git init --initial-branch=main
-        "Initial" | Out-File 'initial.txt'
-        "echo hello" | Out-File 'hello.sh'
-        git update-index --add --chmod=+x hello.sh
-        git add -A
-        git commit -m "initial"
-        Pop-Location
-
+        Initialize-Remote $rootPath $remotePath
         Push-Location $rootPath
-        git init --initial-branch=main
-
-        git remote add origin "$remotePath"
-        git remote add ordinary "$remotePath"
-        git remote add grm "$remotePath"
-
-        git config set remotes.default "origin grm"
-        git config set remotes.ors "origin ordinary"
-
-        git pull origin main
-        git fetch ordinary
-        git fetch grm
-        mkdir Pwsh
-        "echo world" | Out-File 'Pwsh/world.ps1'
-        git add -A
-        git commit -m "World"
     }
 
     AfterAll {
@@ -66,42 +42,10 @@ Describe 'Show' {
                 ToolTip        = "show help";
             }
         )
-        "git show -" | Complete-FromLine | Should -BeCompletion $expected
+        "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
     Describe 'DoubleDash' {
-        Context 'In Right' {
-            It '<Left>(cursor) <Right>' -ForEach @(
-                @{
-                    Left     = @('git', 'log', '--quiet');
-                    Right    = @('--');
-                    Expected = @(
-                        @{
-                            CompletionText = '--quiet';
-                            ListItemText   = '--quiet';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = '--quiet';
-                        }
-                    )
-                },
-                @{
-                    Left     = @('git', 'log', '--quiet');
-                    Right    = @('-- --all');
-                    Expected = @(
-                        @{
-                            CompletionText = '--quiet';
-                            ListItemText   = '--quiet';
-                            ResultType     = 'ParameterName';
-                            ToolTip        = '--quiet';
-                        }
-                    )
-                }
-            ) {
-                Complete-Git -Words ($Left + $Right) -CurrentIndex ($Left.Length - 1) | 
-                Should -BeCompletion $expected
-            }
-        }
-
         It '<Line>' -ForEach @(
             @{
                 Line     = 'src -- -';
@@ -116,7 +60,7 @@ Describe 'Show' {
                 Expected = @()
             }
         ) {
-            "git show $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
@@ -145,7 +89,7 @@ Describe 'Show' {
                 }
             }
         ) {
-            "git show $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
@@ -417,251 +361,11 @@ Describe 'Show' {
                 }
             }
         ) {
-            "git show $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
     Describe 'Revlist' {
-        Describe 'RemoteOrRefspec' {
-            It '<Line>' -ForEach @(
-                @{
-                    Line     = '';
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ForEach-Object {
-                        @{
-                            CompletionText = "$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "$_";
-                        }
-                    }
-                },
-                @{
-                    Line     = 'o';
-                    Expected = @(
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ForEach-Object {
-                        @{
-                            CompletionText = "$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "$_";
-                        }
-                    }
-                },
-                @{
-                    Line     = '^';
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ForEach-Object {
-                        @{
-                            CompletionText = "^$_";
-                            ListItemText   = "^$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "^$_";
-                        }
-                    }
-                },
-                @{
-                    Line     = '^o';
-                    Expected = @(
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ForEach-Object {
-                        @{
-                            CompletionText = "^$_";
-                            ListItemText   = "^$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "^$_";
-                        }
-                    }
-                },
-                @{
-                    Line     = 'HEAD...';
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ForEach-Object {
-                        @{
-                            CompletionText = "HEAD...$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "$_";
-                        }
-                    }
-                },
-                @{
-                    Line     = 'HEAD...o';
-                    Expected = @(
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ForEach-Object {
-                        @{
-                            CompletionText = "HEAD...$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "$_";
-                        }
-                    }
-                },
-                @{
-                    Line     = 'HEAD..';
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ForEach-Object {
-                        @{
-                            CompletionText = "HEAD..$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "$_";
-                        }
-                    }
-                },
-                @{
-                    Line     = 'HEAD..o';
-                    Expected = @(
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ForEach-Object {
-                        @{
-                            CompletionText = "HEAD..$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ParameterValue';
-                            ToolTip        = "$_";
-                        }
-                    }
-                }
-            ) {
-                "git show $Line" | Complete-FromLine | Should -BeCompletion $expected
-            }
-        }
-
-        Describe 'File' {
-            It '<Line>' -ForEach @(
-                @{
-                    Line     = 'brn..main:';
-                    Expected = @(
-                        'Pwsh/' | ForEach-Object { 
-                            @{
-                                File           = $_
-                                CompletionText = "brn..main:$_";
-                                ListItemText   = "$_";
-                                ResultType     = 'ProviderItem';
-                            }
-                        }) + @(
-                        'hello.sh', 'initial.txt' | ForEach-Object { 
-                            @{
-                                File           = $_
-                                CompletionText = "brn..main:$_";
-                                ListItemText   = "$_";
-                                ResultType     = 'ProviderItem';
-                            }
-                        })
-                },
-                @{
-                    Line     = 'brn..main:Pwsh/';
-                    Expected = @(
-                        @{
-                            File           = 'Pwsh/world.ps1'
-                            CompletionText = "brn..main:Pwsh/world.ps1";
-                            ListItemText   = "world.ps1";
-                            ResultType     = 'ProviderItem';
-                        }
-                    )
-                },
-                @{
-                    Line     = 'main:';
-                    Expected = 'Pwsh/', 'hello.sh', 'initial.txt' | ForEach-Object { 
-                        @{
-                            File           = $_
-                            CompletionText = "main:$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ProviderItem';
-                        }
-                    }
-                },
-                @{
-                    Line     = 'main:Pws';
-                    Expected = 'Pwsh/' | ForEach-Object { 
-                        @{
-                            File           = $_
-                            CompletionText = "main:$_";
-                            ListItemText   = "$_";
-                            ResultType     = 'ProviderItem';
-                        }
-                    }
-                },
-                @{
-                    Line     = 'main:Pwsh/';
-                    Expected = @(
-                        @{
-                            File           = 'Pwsh/world.ps1'
-                            CompletionText = "main:Pwsh/world.ps1";
-                            ListItemText   = "world.ps1";
-                            ResultType     = 'ProviderItem';
-                        }
-                    )
-                },
-                @{
-                    Line     = 'main:Pwsh/wo';
-                    Expected = @(
-                        @{
-                            File           = 'Pwsh/world.ps1'
-                            CompletionText = "main:Pwsh/world.ps1";
-                            ListItemText   = "world.ps1";
-                            ResultType     = 'ProviderItem';
-                        }
-                    )
-                },
-                @{
-                    Line     = 'main:./Pwsh/';
-                    Expected = @(
-                        @{
-                            File           = 'Pwsh/world.ps1'
-                            CompletionText = "main:./Pwsh/world.ps1";
-                            ListItemText   = "world.ps1";
-                            ResultType     = 'ProviderItem';
-                        }
-                    )
-                },
-                @{
-                    Line     = 'main:./Pwsh/wo';
-                    Expected = @(
-                        @{
-                            File           = 'Pwsh/world.ps1'
-                            CompletionText = "main:./Pwsh/world.ps1";
-                            ListItemText   = "world.ps1";
-                            ResultType     = 'ProviderItem';
-                        }
-                    )
-                }
-            ) {
-                foreach ($e in $expected) {
-                    $e.ToolTip = (Resolve-Path $e.File).Path.TrimEnd([Path]::AltDirectorySeparatorChar, [Path]::DirectorySeparatorChar)
-                }
-                "git show $Line" | Complete-FromLine | Should -BeCompletion $expected
-            }
-        }
+        . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_Revlist.ps1"
     }
 }

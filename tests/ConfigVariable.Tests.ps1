@@ -11,9 +11,9 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
 
         Push-Location $remotePath
         git init --initial-branch=main
-        git submodule add https://github.com/github/nagios-plugins-github.git sub
-        git submodule add https://github.com/github/nagios-plugins-github.git sum
-        git add -A
+        git submodule add https://github.com/github/nagios-plugins-github.git sub 2>$null
+        git submodule add https://github.com/github/nagios-plugins-github.git sum 2>$null
+        git add -A 2>$null
         git commit -m "initial"
         Pop-Location
 
@@ -24,9 +24,9 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
         git remote add ordinary "$remotePath"
         git remote add grm "$remotePath"
 
-        git pull origin main
-        git fetch ordinary
-        git fetch grm
+        git pull origin main 2>$null
+        git fetch ordinary 2>$null
+        git fetch grm 2>$null
 
         git branch -c master
         git branch -c develop

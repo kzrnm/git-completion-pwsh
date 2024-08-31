@@ -5,39 +5,14 @@ BeforeAll {
     . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
 
-Describe 'Mergetool' {
+Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
-        mkdir ($remotePath = "$TestDrive/gitRemote")
-
-        Push-Location $remotePath
-        git init --initial-branch=main
-        "Initial" | Out-File 'initial.txt'
-        "echo hello" | Out-File 'hello.sh'
-        git update-index --add --chmod=+x hello.sh
-        git add -A
-        git commit -m "initial"
-        Pop-Location
-
+        Initialize-SimpleRepo $rootPath
         Push-Location $rootPath
-        git init --initial-branch=main
-
-        git remote add origin "$remotePath"
-        git remote add ordinary "$remotePath"
-        git remote add grm "$remotePath"
-
-        git config set remotes.default "origin grm"
-        git config set remotes.ors "origin ordinary"
-
-        git pull origin main
-        git fetch ordinary
-        git fetch grm
-        mkdir Pwsh
-        "echo world" | Out-File 'Pwsh/world.ps1'
-        git add -A
-        git commit -m "World"
     }
 
     AfterAll {
@@ -72,7 +47,7 @@ Describe 'Mergetool' {
                 ToolTip        = "show help";
             }
         )
-        "git mergetool -" | Complete-FromLine | Should -BeCompletion $expected
+        "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
     Describe 'Options' {
@@ -100,7 +75,7 @@ Describe 'Mergetool' {
                 }
             }
         ) {
-            "git mergetool $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
@@ -151,7 +126,7 @@ Describe 'Mergetool' {
                 }
             }
         ) {
-            "git mergetool $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 }

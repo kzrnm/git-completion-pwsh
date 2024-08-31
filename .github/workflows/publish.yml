@@ -51,9 +51,9 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        shell: [pwsh, powershell]
-        exclude:
-          - os: ubuntu-latest
+        shell: [pwsh]
+        include:
+          - os: windows-latest
             shell: powershell
     runs-on: ${{ matrix.os }}
     steps:

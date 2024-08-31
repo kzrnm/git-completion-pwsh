@@ -14,13 +14,13 @@ function Complete-GitSubCommand-show {
         return Get-GitShortOptions $Context.command
     }
 
-    $result = completeShowOpts $Context
+    $result = Complete-Opts-show $Context
     if ($result) { return $result }
 
     gitCompleteRevlistFile $Current
 }
 
-function completeShowOpts {
+function Complete-Opts-show {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param (

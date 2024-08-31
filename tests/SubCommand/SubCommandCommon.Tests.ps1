@@ -4,8 +4,9 @@ BeforeAll {
     . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
 
-Describe 'SubCommandCommon-ls-files' {
+Describe 'SubCommandCommon-check-ignore' {
     BeforeAll {
+        Set-Variable 'Command' check-ignore
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
@@ -24,88 +25,28 @@ Describe 'SubCommandCommon-ls-files' {
         It '<_>' -ForEach @('', 'foo') {
             $expected = @(
                 @{
-                    CompletionText = "-c";
-                    ListItemText   = "-c";
+                    CompletionText = "-n";
+                    ListItemText   = "-n";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "show cached files in the output (default)";
+                    ToolTip        = "show non-matching input paths";
                 }, 
                 @{
-                    CompletionText = "-d";
-                    ListItemText   = "-d";
+                    CompletionText = "-q";
+                    ListItemText   = "-q";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "show deleted files in the output";
-                }, 
-                @{
-                    CompletionText = "-f";
-                    ListItemText   = "-f";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "use lowercase letters for 'fsmonitor clean' files";
-                }, 
-                @{
-                    CompletionText = "-i";
-                    ListItemText   = "-i";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "show ignored files in the output";
-                }, 
-                @{
-                    CompletionText = "-k";
-                    ListItemText   = "-k";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "show files on the filesystem that need to be removed";
-                }, 
-                @{
-                    CompletionText = "-m";
-                    ListItemText   = "-m";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "show modified files in the output";
-                }, 
-                @{
-                    CompletionText = "-o";
-                    ListItemText   = "-o";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "show other files in the output";
-                }, 
-                @{
-                    CompletionText = "-s";
-                    ListItemText   = "-s";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "show staged contents' object name in the output";
-                }, 
-                @{
-                    CompletionText = "-t";
-                    ListItemText   = "-t";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "identify the file status with tags";
-                }, 
-                @{
-                    CompletionText = "-u";
-                    ListItemText   = "-u";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "show unmerged files in the output";
+                    ToolTip        = "suppress progress reporting";
                 }, 
                 @{
                     CompletionText = "-v";
                     ListItemText   = "-v";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "use lowercase letters for 'assume unchanged' files";
-                }, 
-                @{
-                    CompletionText = "-x";
-                    ListItemText   = "-x";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "skip files matching pattern";
-                }, 
-                @{
-                    CompletionText = "-X";
-                    ListItemText   = "-X";
-                    ResultType     = 'ParameterName';
-                    ToolTip        = "read exclude patterns from <file>";
+                    ToolTip        = "be verbose";
                 },
                 @{
                     CompletionText = "-z";
                     ListItemText   = "-z";
                     ResultType     = 'ParameterName';
-                    ToolTip        = "separate paths with the NUL character";
+                    ToolTip        = "terminate input and output records by a NUL character";
                 },
                 @{
                     CompletionText = "-h";
@@ -114,20 +55,48 @@ Describe 'SubCommandCommon-ls-files' {
                     ToolTip        = "show help";
                 }
             )
-            "git ls-files $_ -" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $_ -" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
     Describe 'CommonOption' {
         It '<Line>' -ForEach @(
             @{
-                Line     = "--n"
+                Line     = "--q"
                 Expected = @(
                     @{
-                        CompletionText = "--no-cached";
-                        ListItemText   = "--no-cached";
+                        CompletionText = "--quiet";
+                        ListItemText   = "--quiet";
                         ResultType     = 'ParameterName';
-                        ToolTip        = "[NO] show cached files in the output (default)";
+                        ToolTip        = "suppress progress reporting";
+                    }
+                )
+            },
+            @{
+                Line     = "--v"
+                Expected = @(
+                    @{
+                        CompletionText = "--verbose";
+                        ListItemText   = "--verbose";
+                        ResultType     = 'ParameterName';
+                        ToolTip        = "be verbose";
+                    }
+                )
+            },
+            @{
+                Line     = "--no"
+                Expected = @(
+                    @{
+                        CompletionText = "--non-matching";
+                        ListItemText   = "--non-matching";
+                        ResultType     = 'ParameterName';
+                        ToolTip        = "show non-matching input paths";
+                    },
+                    @{
+                        CompletionText = "--no-index";
+                        ListItemText   = "--no-index";
+                        ResultType     = 'ParameterName';
+                        ToolTip        = "ignore index when checking";
                     },
                     @{
                         CompletionText = "--no-";
@@ -138,29 +107,42 @@ Describe 'SubCommandCommon-ls-files' {
                 )
             },
             @{
-                Line     = "--ign"
+                Line     = "--no-"
                 Expected = @(
                     @{
-                        CompletionText = "--ignored";
-                        ListItemText   = "--ignored";
+                        CompletionText = "--no-index";
+                        ListItemText   = "--no-index";
                         ResultType     = 'ParameterName';
-                        ToolTip        = "show ignored files in the output";
-                    }
-                )
-            },
-            @{
-                Line     = "--no-ign"
-                Expected = @(
+                        ToolTip        = "ignore index when checking";
+                    },
                     @{
-                        CompletionText = "--no-ignored";
-                        ListItemText   = "--no-ignored";
+                        CompletionText = "--no-quiet";
+                        ListItemText   = "--no-quiet";
                         ResultType     = 'ParameterName';
-                        ToolTip        = "[NO] show ignored files in the output";
-                    }
+                        ToolTip        = "[NO] suppress progress reporting";
+                    },
+                    @{
+                        CompletionText = "--no-verbose";
+                        ListItemText   = "--no-verbose";
+                        ResultType     = 'ParameterName';
+                        ToolTip        = "[NO] be verbose";
+                    },
+                    @{
+                        CompletionText = "--no-stdin";
+                        ListItemText   = "--no-stdin";
+                        ResultType     = 'ParameterName';
+                        ToolTip        = "[NO] read file names from stdin";
+                    },
+                    @{
+                        CompletionText = "--no-non-matching";
+                        ListItemText   = "--no-non-matching";
+                        ResultType     = 'ParameterName';
+                        ToolTip        = "[NO] show non-matching input paths";
+                    }   
                 )
             }
         ) {
-            "git ls-files $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 }

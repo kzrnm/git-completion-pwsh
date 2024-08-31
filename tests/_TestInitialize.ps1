@@ -8,6 +8,7 @@ function Test-GitVersion {
     }
 }
 
+$ErrorActionPreference = 'Continue'
 Test-GitVersion
 Import-Module "$PSScriptRoot/../src/git-completion.psd1" -Force
 Import-Module "$PSScriptRoot/_TestModule.psm1" -DisableNameChecking -Force

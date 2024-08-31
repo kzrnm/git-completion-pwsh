@@ -7,7 +7,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$SkipHeavyTest=$false; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "env": {
                 "GIT_COMPLETION_SHOW_ALL_COMMANDS": "1"
@@ -19,7 +19,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "env": {
                 "GIT_COMPLETION_SHOW_ALL_COMMANDS": "1"
@@ -34,7 +34,7 @@
                 "pwsh",
                 "-NoExit",
                 "-Command",
-                "Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "color": "terminal.ansiGreen",
             "icon": "terminal-ubuntu"

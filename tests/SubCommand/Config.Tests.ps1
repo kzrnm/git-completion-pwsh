@@ -4,8 +4,9 @@ BeforeAll {
     . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))tests/_TestInitialize.ps1"
 }
 
-Describe 'Config' {
+Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | Convert-ToKebabCase)
         Initialize-Home
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
@@ -25,7 +26,7 @@ Describe 'Config' {
     Describe 'Git2.46.0' {
         Describe 'ShortOptions' {
             It 'Root' {
-                "git config -" | Complete-FromLine | Should -BeCompletion @(
+                "git $Command -" | Complete-FromLine | Should -BeCompletion @(
                     @{
                         CompletionText = "-h";
                         ListItemText   = "-h";
@@ -106,7 +107,7 @@ Describe 'Config' {
                     )
                 }
             ) {
-                "git config $Line -" | Complete-FromLine | Should -BeCompletion $Expected
+                "git $Command $Line -" | Complete-FromLine | Should -BeCompletion $Expected
             }
         }
 
@@ -171,7 +172,7 @@ Describe 'Config' {
                     )
                 }
             ) {
-                "git config $Line" | Complete-FromLine | Should -BeCompletion $Expected
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $Expected
             }
         }
 
@@ -251,7 +252,7 @@ Describe 'Config' {
                     )
                 }
             ) {
-                "git config $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $Expected
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $Expected
             }
         }
 
@@ -296,7 +297,7 @@ Describe 'Config' {
                     "rename-section", "remove-section", "edit"
                 ) {
                     $Subcommand = $_ 
-                    "git config $Subcommand $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
+                    "git $Command $Subcommand $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
                 }
             }
         }
@@ -316,7 +317,7 @@ Describe 'Config' {
                     Expected = @()
                 }
             ) {
-                "git config $Line" | Complete-FromLine | Should -BeCompletion @()
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion @()
             }
         }
 
@@ -397,7 +398,7 @@ Describe 'Config' {
             ) {
                 It '<_>' -ForEach @('get', 'unset', 'get --no-url') {
                     $Subcommand = $_ 
-                    "git config $Subcommand $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
+                    "git $Command $Subcommand $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
                 }
             }
         }
@@ -454,7 +455,7 @@ Describe 'Config' {
         }
 
         It 'ShortOptions' {
-            "git config -" | Complete-FromLine | Should -BeCompletion @(
+            "git $Command -" | Complete-FromLine | Should -BeCompletion @(
                 @{
                     CompletionText = "-e";
                     ListItemText   = "-e";
@@ -559,7 +560,7 @@ Describe 'Config' {
                     )
                 }
             ) { 
-                "git config $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
             }
         }
 
@@ -640,7 +641,7 @@ Describe 'Config' {
             ) {
                 It '<_>' -ForEach @('--get', '--get-all', '--unset', '--unset-all') {
                     $GetOption = $_
-                    "git config $Option $GetOption $Line" | Complete-FromLine | Should -BeCompletion $expected
+                    "git $Command $Option $GetOption $Line" | Complete-FromLine | Should -BeCompletion $expected
                 }
             }
         }

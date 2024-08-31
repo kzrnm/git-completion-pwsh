@@ -9,6 +9,7 @@ class CommandLineContext {
 
     [int] $CurrentIndex = -1
     [int] $SubcommandLikeIndex = -1
+    [int] $DoubledashIndex = -1
 
     CommandLineContext (
         [string[]] $Words,
@@ -25,6 +26,10 @@ class CommandLineContext {
             if ($i -eq $CurrentIndex) { continue }
             $s = $Words[$i]
             switch -Wildcard -CaseSensitive ($s) {
+                '--' {
+                    $this.DoubledashIndex = $i
+                    break globalflag
+                }
                 '--git-dir=*' {
                     $this.gitDir = [DirectoryInfo]::new($s.Substring('--git-dir='.Length))
                     continue
@@ -68,16 +73,30 @@ class CommandLineContext {
             }
         }
 
+        if ($this.DoubledashIndex -ge 0) { return }
         if ($this.CommandIndex -lt 0) { return }
 
-        for ($i++; $i -lt $CurrentIndex; $i++) {
+        :subcommand for ($i++; $i -lt $CurrentIndex; $i++) {
             $s = $Words[$i]
             switch -Wildcard -CaseSensitive ($s) {
+                '--' {
+                    $this.DoubledashIndex = $i
+                    break subcommand
+                }
                 '-*' { continue }
                 default {
                     $this.SubcommandLikeIndex = $i
-                    return
+                    break subcommand
                 }
+            }
+        }
+
+        if ($this.DoubledashIndex -ge 0) { return }
+        for ($i++; $i -lt $Words.Length; $i++) {
+            if ($i -eq $CurrentIndex) { continue }
+            if ($Words[$i] -eq '--') {
+                $this.DoubledashIndex = $i
+                break
             }
         }
     }
@@ -101,12 +120,6 @@ class CommandLineContext {
 
     # __git_has_doubledash
     [bool] HasDoubledash() {
-        for ($i = 1; $i -lt $this.CurrentIndex; $i++) {
-            $w = $this.Words[$i]
-            if ($w -eq '--') {
-                return $true
-            }
-        }
-        return $false
+        return  (0 -le $this.DoubledashIndex) -and ($this.DoubledashIndex -lt $this.CurrentIndex)
     }
 }

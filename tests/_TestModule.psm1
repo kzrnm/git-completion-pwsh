@@ -1,5 +1,17 @@
 #Requires -Module Pester, git-completion
 
+$ErrorActionPreference = 'Continue'
+
+function Convert-ToKebabCase {
+    param (
+        [Parameter(ValueFromPipeline)]
+        [string]$Text
+    )
+    process {
+        ($Text -creplace '(?!^)([A-Z])', '-$1').ToLowerInvariant()
+    }
+}
+
 function Initialize-Home {
     $script:GitCompletionSettings = @{
         IgnoreCase         = $false;
@@ -26,6 +38,57 @@ function Restore-Home {
         AdditionalCommands = @();
         ExcludeCommands    = @();
     }
+}
+
+function Initialize-SimpleRepo {
+    [CmdletBinding(PositionalBinding)]
+    param(
+        $rootPath
+    )
+
+    Push-Location $rootPath
+    git init --initial-branch=main
+    git commit -m "initial" --allow-empty
+    "echo world" | Out-File 'world.ps1'
+    git add -A 2>$null
+    git commit -m "World"
+    Pop-Location
+}
+function Initialize-Remote {
+    [CmdletBinding(PositionalBinding)]
+    param(
+        $rootPath,
+        $remotePath
+    )
+
+    Push-Location $remotePath
+    git init --initial-branch=main
+    "Initial" | Out-File 'initial.txt'
+    "echo hello" | Out-File 'hello.sh'
+    git update-index --add --chmod=+x hello.sh
+    git add -A 2>$null
+    git commit -m "initial"
+    git tag initial
+    Pop-Location
+
+    Push-Location $rootPath
+    git init --initial-branch=main
+
+    git remote add origin "$remotePath"
+    git remote add ordinary "$remotePath"
+    git remote add grm "$remotePath"
+
+    git config set remotes.default "origin grm"
+    git config set remotes.ors "origin ordinary"
+
+    git pull origin main 2>$null
+    git fetch ordinary 2>$null
+    git fetch grm 2>$null
+    mkdir Pwsh
+    "echo world" | Out-File 'Pwsh/world.ps1'
+    git add -A 2>$null
+    git commit -m "World"
+    Pop-Location
 }
 
 function Complete-FromLine {
@@ -69,6 +132,9 @@ function buildFailedMessage {
             writeObjectLine $e -Suffix ','
         }
         return
+    }
+    elseif ($null -eq $ExpectedValue) {
+        "The expected collection is null."
     }
 
     if ($ActualValue.Count -ne $ExpectedValue.Count) {
@@ -130,4 +196,7 @@ Add-ShouldOperator -Name BeCompletion `
     -Test ${function:Should-BeCompletion} `
     -SupportsArrayInput
 
-Export-ModuleMember -Function Complete-FromLine, Initialize-Home, Restore-Home
+Export-ModuleMember -Function Complete-FromLine, Initialize-Home, Restore-Home,
+Convert-ToKebabCase,
+testRevList,
+Initialize-Remote, Initialize-SimpleRepo

@@ -14,13 +14,13 @@ function Complete-GitSubCommand-diff {
         return Get-GitShortOptions $Context.command
     }
 
-    $result = completeDiffOpts $Context
+    $result = Complete-Opts-diff $Context
     if ($result) { return $result }
 
     gitCompleteRevlistFile $Current
 }
 
-function completeDiffOpts {
+function Complete-Opts-diff {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param (
