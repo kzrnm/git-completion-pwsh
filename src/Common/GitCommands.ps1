@@ -556,3 +556,11 @@ function gitPrettyAliases() {
     param()
     gitGetConfigVariables pretty
 }
+
+function gitArchiveList {
+    [CmdletBinding()]
+    [OutputType([string[]])]
+    param ()
+
+    git archive --list
+}

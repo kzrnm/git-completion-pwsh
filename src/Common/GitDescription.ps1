@@ -198,6 +198,11 @@ function Convert-ToGitHelpOptions {
 
                 Write-HostParsing "`e[36m$coloredLong`e[0m" -NoNewline
             }
+            elseif ($line -match '^-NUM(.*)') {
+                $short = '-NUM'
+                $remaining = $Matches[1]
+                Write-HostParsing "`e[35m-NUM`e[0m" -NoNewline
+            }
             elseif ($line -match '^(-\S)(=?\[[^\]]+\])?(.*)') {
                 $short = $Matches[1]
                 $value = $Matches[2]

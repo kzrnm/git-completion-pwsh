@@ -82,4 +82,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
+
+    Describe 'Revlist' {
+        . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/Revlist.ps1" -Ref
+    }
 }

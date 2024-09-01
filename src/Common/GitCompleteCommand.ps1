@@ -1,5 +1,6 @@
 using namespace System.Management.Automation;
 
+$__BuiltinDescriptionBuilder = ([scriptblock] { Get-GitOptionsDescription $_ @Command })
 function gitCompleteResolveBuiltins {
     [OutputType([CompletionResult[]])]
     [CmdletBinding(PositionalBinding = $false)]
@@ -12,8 +13,17 @@ function gitCompleteResolveBuiltins {
         [string[]]
         $Command,
         [string[]]
+        $Include = $null,
+        [string[]]
         $Exclude = $null
     )
+
+    if ($Include) {
+        $Include += @(gitResolveBuiltins @Command)
+    }
+    else {
+        $Include = @(gitResolveBuiltins @Command)
+    }
 
     if ($Exclude) {
         $ex = [System.Collections.Generic.HashSet[string]]::new($Exclude.Length)
@@ -21,12 +31,12 @@ function gitCompleteResolveBuiltins {
             $ex.Add($e) | Out-Null
         }
 
-        gitResolveBuiltins @Command | Where-Object {
+        $Include | Where-Object {
             !$ex.Contains($_)
-        } | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ @Command }
+        } | gitcomp -Current $Current -DescriptionBuilder $__BuiltinDescriptionBuilder
     }
     else {
-        gitResolveBuiltins @Command | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ @Command }
+        $Include | gitcomp -Current $Current -DescriptionBuilder $__BuiltinDescriptionBuilder
     }
 }
 
