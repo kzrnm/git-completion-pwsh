@@ -7,6 +7,8 @@ param(
     [switch]$Raw
 )
 
+Import-Module "$PSScriptRoot/../src/git-completion.psd1" -Force
+
 $result = (Complete-Git -Words $Line)
 
 if ($Raw) { return $result }

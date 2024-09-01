@@ -476,10 +476,12 @@ function gitResolveBuiltins {
         $Command
     )
 
-    return (gitResolveBuiltinsImpl @Command -All:($script:GitCompletionSettings.ShowAllOptions) |
-        ForEach-Object { $_ -split "\s+" } |
-        Where-Object { $_ }
-    )
+    if (gitSupportParseoptHelper $Command[0]) {
+        return (gitResolveBuiltinsImpl @Command -All:([bool]$script:GitCompletionSettings.ShowAllOptions) |
+            ForEach-Object { $_ -split "\s+" } |
+            Where-Object { $_ }
+        )
+    }
 }
 
 function gitResolveBuiltinsImpl {
@@ -506,7 +508,7 @@ function gitSupportParseoptHelper {
     [OutputType([bool])]
     param([Parameter(Mandatory, Position = 0)][string]$Command)
     if (!$script:__git_support_parseopt_helper) {
-        $script:__git_support_parseopt_helper = [HashSet[string]]::new([string[]]((git --list-cmds=parseopt) -split '\s+' | Where-Object { $_ }))
+        $script:__git_support_parseopt_helper = [HashSet[string]]::new( -split ([string](git --list-cmds=parseopt)))
     }
 
     return $script:__git_support_parseopt_helper.Contains($Command)
