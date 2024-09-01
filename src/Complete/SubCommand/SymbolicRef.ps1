@@ -10,13 +10,15 @@ function Complete-GitSubCommand-symbolic-ref {
 
     [string] $Current = $Context.CurrentWord()
 
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command
-    }
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            return Get-GitShortOptions $Context.command
+        }
 
-    if ($Current.StartsWith('--')) {
-        gitCompleteResolveBuiltins $Context.command -Current $Current
-        return
+        if ($Current.StartsWith('--')) {
+            gitCompleteResolveBuiltins $Context.command -Current $Current
+            return
+        }
     }
 
     gitCompleteRefs $Context.CurrentWord()

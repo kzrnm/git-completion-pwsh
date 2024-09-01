@@ -9,30 +9,31 @@ function Complete-GitSubCommand-branch {
     )
 
     [string] $Current = $Context.CurrentWord()
-
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command
-    }
-
-    switch ($Context.PreviousWord()) {
-        '--set-upstream-to' {
-            return @(gitCompleteRefs $Current)            
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            return Get-GitShortOptions $Context.command
         }
-    }
 
-    if ($Current -cmatch '(--[^=]+)=(.*)') {
-        $key = $Matches[1]
-        switch ($key) {
+        switch ($Context.PreviousWord()) {
             '--set-upstream-to' {
-                $rt = @(gitCompleteRefs $Matches[2] -Prefix "$key=")
-                return $rt
+                return @(gitCompleteRefs $Current)            
             }
         }
-    }
 
-    if ($Current.StartsWith('--')) {
-        gitCompleteResolveBuiltins $Context.command -Current $Current
-        return
+        if ($Current -cmatch '(--[^=]+)=(.*)') {
+            $key = $Matches[1]
+            switch ($key) {
+                '--set-upstream-to' {
+                    $rt = @(gitCompleteRefs $Matches[2] -Prefix "$key=")
+                    return $rt
+                }
+            }
+        }
+
+        if ($Current.StartsWith('--')) {
+            gitCompleteResolveBuiltins $Context.command -Current $Current
+            return
+        }
     }
 
     $onlyLocalRef = $false

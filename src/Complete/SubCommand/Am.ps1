@@ -9,43 +9,44 @@ function Complete-GitSubCommand-am {
     )
 
     [string] $Current = $Context.CurrentWord()
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            return Get-GitShortOptions $Context.command
+        }
 
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command
-    }
-
-    $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
-        '--whitespace' { $script:gitWhitespacelist }
-        '--patch-format' { $script:gitPatchformat }
-    }
-
-    if ($prevCandidates) {
-        $prevCandidates | completeList -Current $Current -ResultType ParameterValue
-        return
-    }
-
-    if ($Current -cmatch '(--[^=]+)=.*') {
-        $key = $Matches[1]
-        $candidates = switch -CaseSensitive ($key) {
+        $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
             '--whitespace' { $script:gitWhitespacelist }
             '--patch-format' { $script:gitPatchformat }
-            '--show-current-patch' { $script:gitShowcurrentpatch }
-            '--quoted-cr' { $script:gitQuotedCr }
         }
 
-        if ($candidates) {
-            $candidates | completeList -Current $Current -Prefix "$key=" -ResultType ParameterValue -RemovePrefix
+        if ($prevCandidates) {
+            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
             return
         }
-    }
 
-    if (Test-Path "$(gitRepoPath)/rebase-apply" -PathType Container) {
-        $gitAmInprogressOptions | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.Command }
-        return
-    }
+        if ($Current -cmatch '(--[^=]+)=.*') {
+            $key = $Matches[1]
+            $candidates = switch -CaseSensitive ($key) {
+                '--whitespace' { $script:gitWhitespacelist }
+                '--patch-format' { $script:gitPatchformat }
+                '--show-current-patch' { $script:gitShowcurrentpatch }
+                '--quoted-cr' { $script:gitQuotedCr }
+            }
 
-    if ($Current.StartsWith('--')) {
-        gitCompleteResolveBuiltins $Context.Command -Current $Current -Exclude $gitAmInprogressOptions
-        return
+            if ($candidates) {
+                $candidates | completeList -Current $Current -Prefix "$key=" -ResultType ParameterValue -RemovePrefix
+                return
+            }
+        }
+
+        if (Test-Path "$(gitRepoPath)/rebase-apply" -PathType Container) {
+            $gitAmInprogressOptions | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.Command }
+            return
+        }
+
+        if ($Current.StartsWith('--')) {
+            gitCompleteResolveBuiltins $Context.Command -Current $Current -Exclude $gitAmInprogressOptions
+            return
+        }
     }
 }

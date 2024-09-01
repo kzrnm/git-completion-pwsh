@@ -11,29 +11,30 @@ function Complete-GitSubCommand-pull {
     [string] $Prev = $Context.PreviousWord()
     [string] $Current = $Context.CurrentWord()
 
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command
-    }
-
-    $result = gitCompleteStrategy -Current $Current -Prev $Prev
-    if ($null -ne $result) { return $result }
-
-    
-    switch ($Prev) {
-        '--recurse-submodules' {
-            $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
-            return
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            return Get-GitShortOptions $Context.command
         }
-    }
 
-    switch -Wildcard ($Current) {
-        '--recurse-submodules=*' { 
-            $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
-            return
+        $result = gitCompleteStrategy -Current $Current -Prev $Prev
+        if ($null -ne $result) { return $result }
+
+        switch ($Prev) {
+            '--recurse-submodules' {
+                $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
+                return
+            }
         }
-        '--*' {
-            gitCompleteResolveBuiltins $Context.command -Current $Current
-            return
+
+        switch -Wildcard ($Current) {
+            '--recurse-submodules=*' { 
+                $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
+                return
+            }
+            '--*' {
+                gitCompleteResolveBuiltins $Context.command -Current $Current
+                return
+            }
         }
     }
 

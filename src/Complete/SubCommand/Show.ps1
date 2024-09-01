@@ -7,6 +7,7 @@ function Complete-GitSubCommand-show {
         [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
+    if ($Context.HasDoubledash()) { return }
 
     [string] $Current = $Context.CurrentWord()
 

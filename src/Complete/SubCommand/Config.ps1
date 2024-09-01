@@ -79,19 +79,21 @@ function Complete-GitSubCommand-config-Git2_45 {
     )
     $Prev = $Context.PreviousWord()
     $Current = $Context.CurrentWord()
-
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command -Subcommand $subcommand
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            return Get-GitShortOptions $Context.command -Subcommand $subcommand
+        }
+        if ($Prev -in ('--get', '--get-all', '--unset', '--unset-all')) {
+            completeGitConfigGetSetVariables $Context
+            return
+        }
+        if ($Current.StartsWith('--')) {
+            gitCompleteResolveBuiltins $Context.command -Current $Current
+            return
+        }
     }
-
-    if ($Prev -in ('--get', '--get-all', '--unset', '--unset-all')) {
-        completeGitConfigGetSetVariables $Context
-    }
-    elseif ($Prev -like '*.*') {
+    if ($Prev -like '*.*') {
         completeConfigVariableValue -Current $Current -VarName $Prev
-    }
-    elseif ($Current.StartsWith('--')) {
-        gitCompleteResolveBuiltins $Context.command -Current $Current
     }
     else {
         completeConfigVariableName -Current $Current

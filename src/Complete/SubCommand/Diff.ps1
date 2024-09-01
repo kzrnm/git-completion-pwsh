@@ -7,6 +7,8 @@ function Complete-GitSubCommand-diff {
         [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
+    
+    if ($Context.HasDoubledash()) { return }
 
     [string] $Current = $Context.CurrentWord()
 
@@ -64,6 +66,4 @@ function Complete-Opts-diff {
         $script:gitDiffDifftoolOptions | completeList -Current $Current
         return
     }
-
-    return
 }

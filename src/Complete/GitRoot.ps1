@@ -181,7 +181,6 @@ function Complete-GitCommandLine {
 
     try {
         Set-Variable 'Context' $Context -Scope 'Script'
-        if ($Context.HasDoubledash()) { return }
 
         [string] $Current = $Context.CurrentWord()
         if ($Context.command) {

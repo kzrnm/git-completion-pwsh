@@ -9,16 +9,16 @@ function Complete-GitSubCommand-help {
     )
 
     [string] $Current = $Context.CurrentWord()
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            return Get-GitShortOptions $Context.command
+        }
 
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command
+        if ($Current.StartsWith('--')) {
+            gitCompleteResolveBuiltins $Context.command -Current $Current
+            return
+        }
     }
-
-    if ($Current.StartsWith('--')) {
-        gitCompleteResolveBuiltins $Context.command -Current $Current
-        return
-    }
-
 
     $aliases = @{}
     foreach ($a in (gitListAliases)) {

@@ -10,35 +10,36 @@ function Complete-GitSubCommand-fetch {
 
     [string] $Prev = $Context.PreviousWord()
     [string] $Current = $Context.CurrentWord()
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            return Get-GitShortOptions $Context.command
+        }
 
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command
-    }
+        $gitFetchFilters = "blob:none", "blob:limit=", "sparse:oid="
+        switch ($Prev) {
+            '--recurse-submodules' {
+                $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
+                return
+            }
+            '--filter' {
+                $gitFetchFilters | completeList -Current $Current -ResultType ParameterValue 
+                return
+            }
+        }
 
-    $gitFetchFilters = "blob:none", "blob:limit=", "sparse:oid="
-    switch ($Prev) {
-        '--recurse-submodules' {
-            $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
-            return
-        }
-        '--filter' {
-            $gitFetchFilters | completeList -Current $Current -ResultType ParameterValue 
-            return
-        }
-    }
-
-    switch -Wildcard ($Current) {
-        '--recurse-submodules=*' { 
-            $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
-            return
-        }
-        '--filter=*' {
-            $gitFetchFilters | completeList -Current $Current -ResultType ParameterValue -Prefix '--filter=' -RemovePrefix
-            return
-        }
-        '--*' {
-            gitCompleteResolveBuiltins $Context.command -Current $Current
-            return
+        switch -Wildcard ($Current) {
+            '--recurse-submodules=*' { 
+                $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
+                return
+            }
+            '--filter=*' {
+                $gitFetchFilters | completeList -Current $Current -ResultType ParameterValue -Prefix '--filter=' -RemovePrefix
+                return
+            }
+            '--*' {
+                gitCompleteResolveBuiltins $Context.command -Current $Current
+                return
+            }
         }
     }
     gitCompleteRemoteOrRefspec $Context

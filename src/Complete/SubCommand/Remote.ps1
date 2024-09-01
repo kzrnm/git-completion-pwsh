@@ -15,25 +15,27 @@ function Complete-GitSubCommand-remote {
     }
 
     if (!$subcommand) {
-        if ($Current -eq '-') {
-            Get-GitShortOptions $Context.command
-        }
-        elseif ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.command -Current $Current
-        }
-        else {
-            $subcommands | completeList -Current $Current -DescriptionBuilder { 
-                switch ($_) {
-                    'add' { 'Add a remote' }
-                    'get-url' { 'Retrieves the URLs for a remote' }
-                    'prune' { 'Deletes stale references' }
-                    'remove' { 'Remove the remote name' }
-                    'rename' { 'Rename the remote name' }
-                    'set-branches' { 'Changes the list of branches tracked by the named remote' }
-                    'set-head' { 'Sets or deletes the default branch for the named remote' }
-                    'set-url' { 'Changes URLs for the remote' }
-                    'show' { 'Gives some information' }
-                    'update' { 'Fetch updates for remotes or remote groups' }
+        if (!$Context.HasDoubledash()) {
+            if ($Current -eq '-') {
+                Get-GitShortOptions $Context.command
+            }
+            elseif ($Current.StartsWith('--')) {
+                gitCompleteResolveBuiltins $Context.command -Current $Current
+            }
+            else {
+                $subcommands | completeList -Current $Current -DescriptionBuilder { 
+                    switch ($_) {
+                        'add' { 'Add a remote' }
+                        'get-url' { 'Retrieves the URLs for a remote' }
+                        'prune' { 'Deletes stale references' }
+                        'remove' { 'Remove the remote name' }
+                        'rename' { 'Rename the remote name' }
+                        'set-branches' { 'Changes the list of branches tracked by the named remote' }
+                        'set-head' { 'Sets or deletes the default branch for the named remote' }
+                        'set-url' { 'Changes URLs for the remote' }
+                        'show' { 'Gives some information' }
+                        'update' { 'Fetch updates for remotes or remote groups' }
+                    }
                 }
             }
         }
@@ -41,13 +43,15 @@ function Complete-GitSubCommand-remote {
     }
     if ($subcommand -notin $subcommands) { return }
 
-    if ($Current -eq '-') {
-        Get-GitShortOptions $Context.command $subcommand
-        return
-    }
-    if ($Current.StartsWith('--')) {
-        gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
-        return
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            Get-GitShortOptions $Context.command $subcommand
+            return
+        }
+        if ($Current.StartsWith('--')) {
+            gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
+            return
+        }
     }
 
     switch ($subcommand) {

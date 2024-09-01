@@ -11,45 +11,47 @@ function Complete-GitSubCommand-push {
     [string] $Prev = $Context.PreviousWord()
     [string] $Current = $Context.CurrentWord()
 
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command
-    }
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            return Get-GitShortOptions $Context.command
+        }
 
-    switch ($Prev) {
-        '--repo' {
-            gitRemote | completeList -Current $Current -ResultType ParameterValue 
-            return
+        switch ($Prev) {
+            '--repo' {
+                gitRemote | completeList -Current $Current -ResultType ParameterValue 
+                return
+            }
+            '--recurse-submodules' {
+                $script:gitPushRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
+                return
+            }
         }
-        '--recurse-submodules' {
-            $script:gitPushRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
-            return
-        }
-    }
 
-    switch -Wildcard ($Current) {
-        '--repo=*' { 
-            gitRemote | completeList -Current $Current -ResultType ParameterValue -Prefix '--repo=' -RemovePrefix
-            return
-        }
-        '--recurse-submodules=*' { 
-            $script:gitPushRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
-            return
-        }
-        '--force-with-lease=*' {
-            $c = $Current.Substring('--force-with-lease='.Length)
-            if ($c.StartsWith('--')) { }
-            elseif ($c -like '*:*') {
+        switch -Wildcard ($Current) {
+            '--repo=*' { 
+                gitRemote | completeList -Current $Current -ResultType ParameterValue -Prefix '--repo=' -RemovePrefix
+                return
+            }
+            '--recurse-submodules=*' { 
+                $script:gitPushRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
+                return
+            }
+            '--force-with-lease=*' {
+                $c = $Current.Substring('--force-with-lease='.Length)
+                if ($c.StartsWith('--')) { }
+                elseif ($c -like '*:*') {
                 ($left, $right) = $c -split ":", 2
-                gitCompleteRefs -Current $right -Prefix "--force-with-lease=${left}:"
+                    gitCompleteRefs -Current $right -Prefix "--force-with-lease=${left}:"
+                }
+                else {
+                    gitCompleteRefs -Current $c -Prefix '--force-with-lease='
+                }
+                return
             }
-            else {
-                gitCompleteRefs -Current $c -Prefix '--force-with-lease='
+            '--*' {
+                gitCompleteResolveBuiltins $Context.command -Current $Current
+                return
             }
-            return
-        }
-        '--*' {
-            gitCompleteResolveBuiltins $Context.command -Current $Current
-            return
         }
     }
     gitCompleteRemoteOrRefspec $Context

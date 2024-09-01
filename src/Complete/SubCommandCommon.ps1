@@ -12,33 +12,36 @@ function Complete-GitSubCommandCommon {
     [string] $Subcommand = $Context.Subcommand()
 
     if ($Subcommand -and ($Subcommand -cnotlike '*[:/\]*')) {
-        if ($Current -eq '-') {
-            $result = Get-GitShortOptions $Command $Subcommand
-            if ($result) {
-                return $result
+        if (!$Context.HasDoubledash()) {
+            if ($Current -eq '-') {
+                $result = Get-GitShortOptions $Command $Subcommand
+                if ($result) {
+                    return $result
+                }
+                Get-GitShortOptions $Command
+                return
             }
-            Get-GitShortOptions $Command
-            return
-        }
-        if ($Current.StartsWith('--')) {
-            $result = gitCompleteResolveBuiltins $Command $Subcommand -Current $Current
-            if ($result) {
-                return $result
+            if ($Current.StartsWith('--')) {
+                $result = gitCompleteResolveBuiltins $Command $Subcommand -Current $Current
+                if ($result) {
+                    return $result
+                }
+                gitCompleteResolveBuiltins $Command -Current $Current
+                return
             }
-            gitCompleteResolveBuiltins $Command -Current $Current
-            return
         }
     }
     else {
-        if ($Current -eq '-') {
-            Get-GitShortOptions $Command
-            return
-        }
-        if (!$Current) {
-            gitCompleteResolveBuiltins $Command -Current $Current | Where-Object { !$_.CompletionText.StartsWith('-') }
-        }
-        else {
-            gitCompleteResolveBuiltins $Command -Current $Current
+        if (!$Context.HasDoubledash()) {
+            if ($Current -eq '-') {
+                Get-GitShortOptions $Command
+            }
+            elseif (!$Current) {
+                gitCompleteResolveBuiltins $Command -Current $Current | Where-Object { !$_.CompletionText.StartsWith('-') }
+            }
+            else {
+                gitCompleteResolveBuiltins $Command -Current $Current
+            }
         }
         return
     }

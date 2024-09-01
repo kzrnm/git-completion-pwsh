@@ -15,34 +15,36 @@ function Complete-GitSubCommand-worktree {
     $subcommands = gitResolveBuiltins $Context.command
 
     if (!$subcommand) {
-        if ($Current -eq '-') {
-            $script:__helpCompletion
-            return
-        }
-        else {
-            $subcommands | gitcomp -Current $Current -DescriptionBuilder { 
-                switch ($_) {
-                    "add" { 'Create a worktree at <path> and checkout <commit-ish> into it' }
-                    "prune" { 'Prune worktree information' }
-                    "list" { 'List details of each worktree' }
-                    "lock" { 'lock it to prevent its administrative files from being pruned automatically' }
-                    "unlock" { 'Unlock a worktree' }
-                    "move" { 'Move a worktree to a new location' }
-                    "remove" { 'Remove a worktree' }
-                    "repair" { 'Repair worktree administrative files' }
+        if (!$Context.HasDoubledash()) {
+            if ($Current -eq '-') {
+                $script:__helpCompletion
+            }
+            else {
+                $subcommands | gitcomp -Current $Current -DescriptionBuilder { 
+                    switch ($_) {
+                        "add" { 'Create a worktree at <path> and checkout <commit-ish> into it' }
+                        "prune" { 'Prune worktree information' }
+                        "list" { 'List details of each worktree' }
+                        "lock" { 'lock it to prevent its administrative files from being pruned automatically' }
+                        "unlock" { 'Unlock a worktree' }
+                        "move" { 'Move a worktree to a new location' }
+                        "remove" { 'Remove a worktree' }
+                        "repair" { 'Repair worktree administrative files' }
+                    }
                 }
             }
+        }
+        return
+    }
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            return Get-GitShortOptions $Context.command -Subcommand $subcommand
+        }
+
+        if ($Current.StartsWith('--')) {
+            gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
             return
         }
-    }
-
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command -Subcommand $subcommand
-    }
-
-    if ($Current.StartsWith('--')) {
-        gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
-        return
     }
 
     switch ($subcommand) {
@@ -58,7 +60,7 @@ function Complete-GitSubCommand-worktree {
             }
         }
         'add' {
-            if ($Prev -ieq '-b') {
+            if (($Prev -ieq '-b') -or ($Context.HasDoubledash())) {
                 gitCompleteRefs -Current $Current
                 return
             }

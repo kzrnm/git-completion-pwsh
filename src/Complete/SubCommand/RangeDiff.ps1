@@ -10,13 +10,14 @@ function Complete-GitSubCommand-range-diff {
 
     [string] $Current = $Context.CurrentWord()
 
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command
+    if (!$Context.HasDoubledash()) {
+        if ($Current -eq '-') {
+            return Get-GitShortOptions $Context.command
+        }
+
+        $result = Complete-Opts-range-diff $Context
+        if ($result) { return $result }
     }
-
-    $result = Complete-Opts-range-diff $Context
-    if ($result) { return $result }
-
     gitCompleteRevlistFile $Current
 }
 
