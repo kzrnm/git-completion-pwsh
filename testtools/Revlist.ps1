@@ -2,6 +2,7 @@ using namespace System.IO;
 
 [CmdletBinding(DefaultParameterSetName = 'All')]
 param(
+    [string]$Prefix = '',
     [Parameter(ParameterSetName = 'Separate')]
     [switch]$Ref,
     [Parameter(ParameterSetName = 'Separate')]
@@ -62,7 +63,7 @@ if ($Ref) {
                 ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
-            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Prefix$Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 }
@@ -117,7 +118,7 @@ if ($Refspec) {
                 }
             }
         ) {
-            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Prefix$Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 }
@@ -218,7 +219,7 @@ if ($File) {
             foreach ($e in $expected) {
                 $e.ToolTip = (Resolve-Path $e.File).Path.TrimEnd([Path]::AltDirectorySeparatorChar, [Path]::DirectorySeparatorChar)
             }
-            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Prefix$Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 }

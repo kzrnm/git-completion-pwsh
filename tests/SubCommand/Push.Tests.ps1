@@ -1,6 +1,6 @@
 using namespace System.Collections.Generic;
 
-. "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
+. "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
@@ -418,7 +418,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 'origin' | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
-            "git $Command $Line" | Complete-FromLine -RightInputs $Right | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine -Right $Right | Should -BeCompletion $expected
         }
     }
 }

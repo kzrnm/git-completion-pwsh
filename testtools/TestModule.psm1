@@ -93,11 +93,11 @@ function Complete-FromLine {
     [OutputType([CompletionResult[]])]
     param (
         [string][Parameter(ValueFromPipeline)] $line,
-        [string[]]$RightInputs = @()
+        [string[]]$Right = @()
     )
 
     $words = @($line -split '\s+')
-    return (Complete-Git -Words ($words + $RightInputs) -CurrentIndex ($words.Length - 1))
+    return (Complete-Git -Words ($words + $Right) -CurrentIndex ($words.Length - 1))
 }
 
 function writeObjectLine {
