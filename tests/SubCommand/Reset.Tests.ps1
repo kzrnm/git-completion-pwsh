@@ -1,0 +1,112 @@
+using namespace System.Collections.Generic;
+using namespace System.IO;
+
+. "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
+
+Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
+    BeforeAll {
+        Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
+        Initialize-Home
+
+        mkdir ($rootPath = "$TestDrive/gitRoot")
+        mkdir ($remotePath = "$TestDrive/gitRemote")
+        Initialize-Remote $rootPath $remotePath
+        Push-Location $rootPath
+    }
+
+    AfterAll {
+        Restore-Home
+        Pop-Location
+    }
+
+    It 'ShortOptions' {
+        $Expected = @{
+            ListItemText = '-N';
+            ToolTip      = "record only the fact that removed paths will be added later";
+        },
+        @{
+            ListItemText = '-p';
+            ToolTip      = "select hunks interactively";
+        },
+        @{
+            ListItemText = '-q';
+            ToolTip      = "be quiet, only report errors";
+        },
+        @{
+            ListItemText = '-z';
+            ToolTip      = "DEPRECATED (use --pathspec-file-nul instead): paths are separated with NUL character";
+        },
+        @{
+            ListItemText = '-h';
+            ToolTip      = "show help";
+        } | ConvertTo-Completion -ResultType ParameterName
+        "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
+    }
+
+    Describe 'Options' {
+        It '<Line>' -ForEach @(
+            @{
+                Line     = '--m';
+                Expected = @{
+                    ListItemText = '--mixed';
+                    ToolTip      = "reset HEAD and index";
+                },
+                @{
+                    ListItemText = '--merge';
+                    ToolTip      = "reset HEAD, index and working tree";
+                } | ConvertTo-Completion -ResultType ParameterName
+            },
+            @{
+                Line     = '--s';
+                Expected = @{
+                    ListItemText = '--soft';
+                    ToolTip      = "reset only HEAD";
+                },
+                @{
+                    ListItemText = '--stdin';
+                    ToolTip      = "DEPRECATED (use --pathspec-from-file=- instead): read paths from <stdin>";
+                } | ConvertTo-Completion -ResultType ParameterName
+            },
+            @{
+                Line     = '--path';
+                Expected = @{
+                    ListItemText = '--pathspec-from-file=';
+                    ToolTip      = "read pathspec from file";
+                },
+                @{
+                    ListItemText = '--pathspec-file-nul';
+                    ToolTip      = "with --pathspec-from-file, pathspec elements are separated with NUL character";
+                } | ConvertTo-Completion -ResultType ParameterName
+            },
+            @{
+                Line     = '--no-path';
+                Expected = @{
+                    ListItemText = '--no-pathspec-from-file';
+                    ToolTip      = "[NO] read pathspec from file";
+                },
+                @{
+                    ListItemText = '--no-pathspec-file-nul';
+                    ToolTip      = "[NO] with --pathspec-from-file, pathspec elements are separated with NUL character";
+                } | ConvertTo-Completion -ResultType ParameterName
+            }
+            @{
+                Line     = '--no';
+                Expected = @{
+                    ListItemText = '--no-refresh';
+                    ToolTip      = "skip refreshing the index after reset";
+                },
+                @{
+                    CompletionText = '--no-';
+                    ListItemText   = '--no-...';
+                    ResultType     = 'Text'
+                } | ConvertTo-Completion -ResultType ParameterName
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
+
+    Describe 'Revlist' {
+        . "${RepoRoot}testtools/Revlist.ps1" -Ref
+    }
+}
