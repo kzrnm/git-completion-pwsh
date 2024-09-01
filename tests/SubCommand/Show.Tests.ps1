@@ -12,6 +12,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         mkdir ($remotePath = "$TestDrive/gitRemote")
         Initialize-Remote $rootPath $remotePath
         Push-Location $rootPath
+        git config set pretty.changelog "format:* %H %s"
     }
 
     AfterAll {
@@ -184,7 +185,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             },
             @{
                 Line     = '--format=';
-                Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd' | ForEach-Object {
+                Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd', 'changelog' | ForEach-Object {
                     "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--format=$_"
                 }
             },
@@ -196,7 +197,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             },
             @{
                 Line     = '--pretty=';
-                Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd' | ForEach-Object {
+                Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd', 'changelog' | ForEach-Object {
                     "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--pretty=$_"
                 }
             }

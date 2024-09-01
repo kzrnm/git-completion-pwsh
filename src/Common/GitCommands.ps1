@@ -548,3 +548,11 @@ function gitPseudorefExists {
 
     return ((Get-Item "$repoPath/$ref" -ErrorAction Ignore) -is [System.IO.FileInfo])
 }
+
+# __git_pretty_aliases
+function gitPrettyAliases() {
+    [CmdletBinding()]
+    [OutputType([string[]])]
+    param()
+    gitGetConfigVariables pretty
+}

@@ -50,8 +50,9 @@ function Complete-Opts-show {
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
         $candidates = switch ($key) {
-            '--pretty' { $script:gitLogPrettyFormats }
-            '--format' { $script:gitLogPrettyFormats }
+            { $_ -in @('--pretty', '--format') } {
+                $script:gitLogPrettyFormats + @(gitPrettyAliases)
+            }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
             '--diff-merges' { $script:gitDiffMergesOpts }
             '--submodule' { $script:gitDiffSubmoduleFormats }

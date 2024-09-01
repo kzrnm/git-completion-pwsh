@@ -64,8 +64,9 @@ function Complete-Opts-log {
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
         $candidates = switch ($key) {
-            '--pretty' { $script:gitLogPrettyFormats }
-            '--format' { $script:gitLogPrettyFormats }
+            { $_ -in @('--pretty', '--format') } {
+                $script:gitLogPrettyFormats + @(gitPrettyAliases)
+            }
             '--date' { $script:gitLogDateFormats }
             '--decorate' { 'full', 'short', 'no' }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
