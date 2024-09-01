@@ -7,6 +7,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
+        $ErrorActionPreference = 'SilentlyContinue'
         mkdir ($rootPath = "$TestDrive/gitRoot")
         Push-Location $rootPath
         git init --initial-branch=main

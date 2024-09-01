@@ -4,6 +4,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
     BeforeAll {
         Initialize-Home
 
+        $ErrorActionPreference = 'SilentlyContinue'
         mkdir ($rootPath = "$TestDrive/gitRoot")
         mkdir ($remotePath = "$TestDrive/gitRemote")
 
@@ -35,8 +36,8 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
         Pop-Location
     }
 
-    Context 'Value' {
-        It '<line>' -ForEach @(
+    Describe 'Value' {
+        Describe '<line>' -ForEach @(
             @{
                 Line     = 'branch.main.remote=';
                 Expected = 'grm', 'ordinary', 'origin' | ForEach-Object {
@@ -371,12 +372,26 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                 Expected = @();
             }
         ) {
-            "git -c $line" | Complete-FromLine | Should -BeCompletion $expected
+            It 'Root' {
+                "git -c $line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+            It 'CloneLong' {
+                "git clone --config $line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+            It 'CloneLongEqual' {
+                "git clone --config=$line" | Complete-FromLine | Should -BeCompletion @($expected | ForEach-Object { 
+                        $_ | ConvertTo-Completion -ResultType $_.ResultType -CompletionText ("--config=" + $_.CompletionText)
+                    })
+            }
+
+            It 'CloneShort' {
+                "git clone -c $line" | Complete-FromLine | Should -BeCompletion $expected
+            }
         }
     }
 
-    Context 'Name' {
-        It '<line>' -ForEach @(
+    Describe 'Name' {
+        Describe '<line>' -ForEach @(
             @{
                 Line     = "pu";
                 Expected =
@@ -393,7 +408,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "branch.main.remote=";
                     ListItemText   = "branch.main.remote";
                     ToolTip        = "When on branch <main>, it tells git fetch and git push which remote to fetch from or push to";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "guitool.pwsh.";
@@ -446,7 +461,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "guitool.pwsh.title=";
                     ListItemText   = "guitool.pwsh.title";
                     ToolTip        = "Specifies the title to use for the prompt dialog";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "guitool.pwsh.r";
@@ -459,7 +474,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "guitool.pwsh.revUnmerged=";
                     ListItemText   = "guitool.pwsh.revUnmerged";
                     ToolTip        = "Show only unmerged branches in the revPrompt subdialog";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "difftool.pwsh.";
@@ -472,7 +487,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "difftool.pwsh.path=";
                     ListItemText   = "difftool.pwsh.path";
                     ToolTip        = "Override the path for the given tool";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "difftool.pwsh.c";
@@ -480,7 +495,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "difftool.pwsh.cmd=";
                     ListItemText   = "difftool.pwsh.cmd";
                     ToolTip        = "Specify the command to invoke the specified diff tool";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "man.pwsh.";
@@ -493,7 +508,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "man.pwsh.path=";
                     ListItemText   = "man.pwsh.path";
                     ToolTip        = "Override the path for the given tool that may be used to display help in the man format";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "man.pwsh.c";
@@ -501,7 +516,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "man.pwsh.cmd=";
                     ListItemText   = "man.pwsh.cmd";
                     ToolTip        = "Specify the command to invoke the specified man viewer";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "mergetool.pwsh.";
@@ -539,7 +554,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "mergetool.pwsh.useAutoMerge=";
                     ListItemText   = "mergetool.pwsh.useAutoMerge";
                     ToolTip        = "mergetool.pwsh.useAutoMerge";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "mergetool.pwsh.c";
@@ -547,7 +562,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "mergetool.pwsh.cmd=";
                     ListItemText   = "mergetool.pwsh.cmd";
                     ToolTip        = "Specify the command to invoke the specified merge tool";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "remote.pwsh.";
@@ -635,7 +650,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "remote.pwsh.vcs=";
                     ListItemText   = "remote.pwsh.vcs";
                     ToolTip        = "Setting this to a value <vcs> will cause Git to interact with the remote with the git-remote-<vcs> helper";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "remote.pwsh.u";
@@ -648,7 +663,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     CompletionText = "remote.pwsh.url=";
                     ListItemText   = "remote.pwsh.url";
                     ToolTip        = "remote.pwsh.url";
-                } | ConvertTo-Completion -ResultType ParameterName;
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "submodule.posh.";
@@ -873,11 +888,25 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                 Expected = @();
             }
         ) {
-            "git -c $line" | Complete-FromLine | Should -BeCompletion $expected
+            It 'Root' {
+                "git -c $line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+            It 'CloneLong' {
+                "git clone --config $line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+            It 'CloneLongEqual' {
+                "git clone --config=$line" | Complete-FromLine | Should -BeCompletion @($expected | ForEach-Object { 
+                        $_ | ConvertTo-Completion -ResultType $_.ResultType -CompletionText ("--config=" + $_.CompletionText)
+                    })
+            }
+
+            It 'CloneShort' {
+                "git clone -c $line" | Complete-FromLine | Should -BeCompletion $expected
+            }
         }
 
-        Context "Commands" {
-            Context 'WithAlias' {
+        Describe "Commands" {
+            Describe 'WithAlias' {
                 BeforeAll {
                     git config alias.pr 'pull origin'
                 }
@@ -885,7 +914,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                     git config --unset alias.pr
                 }
 
-                It '<line>' -ForEach @(
+                Describe '<line>' -ForEach @(
                     @{
                         Line     = "pager.pr";
                         Expected = @{
@@ -905,12 +934,26 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                         } | ConvertTo-Completion -ResultType ParameterName
                     }
                 ) {
-                    "git -c $line" | Complete-FromLine | Should -BeCompletion $expected
+                    It 'Root' {
+                        "git -c $line" | Complete-FromLine | Should -BeCompletion $expected
+                    }
+                    It 'CloneLong' {
+                        "git clone --config $line" | Complete-FromLine | Should -BeCompletion $expected
+                    }
+                    It 'CloneLongEqual' {
+                        "git clone --config=$line" | Complete-FromLine | Should -BeCompletion @($expected | ForEach-Object { 
+                                $_ | ConvertTo-Completion -ResultType $_.ResultType -CompletionText ("--config=" + $_.CompletionText)
+                            })
+                    }
+
+                    It 'CloneShort' {
+                        "git clone -c $line" | Complete-FromLine | Should -BeCompletion $expected
+                    }
                 }
             }
 
-            Context 'WithoutAlias' {
-                It '<line>' -ForEach @(
+            Describe 'WithoutAlias' {
+                Describe '<line>' -ForEach @(
                     @{
                         Line     = "pager.pr";
                         Expected = @{
@@ -925,7 +968,21 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
                         } | ConvertTo-Completion -ResultType ParameterName
                     }
                 ) {
-                    "git -c $line" | Complete-FromLine | Should -BeCompletion $expected
+                    It 'Root' {
+                        "git -c $line" | Complete-FromLine | Should -BeCompletion $expected
+                    }
+                    It 'CloneLong' {
+                        "git clone --config $line" | Complete-FromLine | Should -BeCompletion $expected
+                    }
+                    It 'CloneLongEqual' {
+                        "git clone --config=$line" | Complete-FromLine | Should -BeCompletion @($expected | ForEach-Object { 
+                                $_ | ConvertTo-Completion -ResultType $_.ResultType -CompletionText ("--config=" + $_.CompletionText)
+                            })
+                    }
+
+                    It 'CloneShort' {
+                        "git clone -c $line" | Complete-FromLine | Should -BeCompletion $expected
+                    }
                 }
             }
         }

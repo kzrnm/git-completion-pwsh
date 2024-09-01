@@ -33,7 +33,7 @@ function Complete-Opts-diff {
     # Skip prev
     # -L seems difficult to implement, so skip it.
     # -G, -S <- what is these? what is __git_complete_symbol?
-    $prevCandidates = switch ($Context.PreviousWord()) {
+    $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--diff-algorithm' { $script:gitDiffAlgorithms }
         '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
         '--color-moved-ws' { $script:gitColorMovedWsOpts }
@@ -46,7 +46,7 @@ function Complete-Opts-diff {
 
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
-        $candidates = switch ($key) {
+        $candidates = switch -CaseSensitive ($key) {
             '--diff-algorithm' { $script:gitDiffAlgorithms }
             '--submodule' { $script:gitDiffSubmoduleFormats }
             '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }

@@ -14,7 +14,7 @@ function Complete-GitSubCommand-archive {
         return Get-GitShortOptions $Context.command
     }
 
-    $prevCandidates = switch ($Context.PreviousWord()) {
+    $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--format' { (gitArchiveList) }
         '--remote' { (gitRemote) }
     }
@@ -26,7 +26,7 @@ function Complete-GitSubCommand-archive {
 
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
-        $candidates = switch ($key) {
+        $candidates = switch -CaseSensitive ($key) {
             '--format' { (gitArchiveList) }
             '--remote' { (gitRemote) }
         }

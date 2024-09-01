@@ -14,7 +14,7 @@ function Complete-GitSubCommand-difftool {
         return Get-GitShortOptions $Context.command
     }
 
-    $prevCandidates = switch ($Context.PreviousWord()) {
+    $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--tool' { ($gitMergetoolsCommon + @('kompare')) }
     }
 
@@ -25,7 +25,7 @@ function Complete-GitSubCommand-difftool {
 
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
-        $candidates = switch ($key) {
+        $candidates = switch -CaseSensitive ($key) {
             '--tool' { ($gitMergetoolsCommon + @('kompare')) }
         }
 

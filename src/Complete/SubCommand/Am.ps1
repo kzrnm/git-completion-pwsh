@@ -14,7 +14,7 @@ function Complete-GitSubCommand-am {
         return Get-GitShortOptions $Context.command
     }
 
-    $prevCandidates = switch ($Context.PreviousWord()) {
+    $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--whitespace' { $script:gitWhitespacelist }
         '--patch-format' { $script:gitPatchformat }
     }
@@ -26,7 +26,7 @@ function Complete-GitSubCommand-am {
 
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
-        $candidates = switch ($key) {
+        $candidates = switch -CaseSensitive ($key) {
             '--whitespace' { $script:gitWhitespacelist }
             '--patch-format' { $script:gitPatchformat }
             '--show-current-patch' { $script:gitShowcurrentpatch }

@@ -20,7 +20,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     It 'ShortOptions' {
-        $expected = $expected = @{
+        $expected = @{
             ListItemText = '-0';
             ToolTip      = "set compression level";
         },
@@ -75,7 +75,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         @{
             ListItemText = '-h';
             ToolTip      = "show help";
-        } | ConvertTo-Completion -ResultType ParameterName | ConvertTo-Completion -ResultType ParameterName
+        } | ConvertTo-Completion -ResultType ParameterName
         "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
     }
 

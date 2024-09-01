@@ -34,7 +34,7 @@ function Complete-GitSubCommand-mergetool {
         )
     }
 
-    $prevCandidates = switch ($Context.PreviousWord()) {
+    $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--tool' { ($gitMergetoolsCommon + @('tortoisemerge')) }
     }
 
@@ -44,7 +44,7 @@ function Complete-GitSubCommand-mergetool {
     }
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
-        $candidates = switch ($key) {
+        $candidates = switch -CaseSensitive ($key) {
             '--tool' { ($gitMergetoolsCommon + @('tortoisemerge')) }
         }
 

@@ -33,7 +33,7 @@ function Complete-Opts-show {
     # Skip prev
     # -L seems difficult to implement, so skip it.
     # -G, -S <- what is these? what is __git_complete_symbol?
-    $prevCandidates = switch ($Context.PreviousWord()) {
+    $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--diff-algorithm' { $script:gitDiffAlgorithms }
         '--diff-merges' { $script:gitDiffMergesOpts }
         '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
@@ -49,7 +49,7 @@ function Complete-Opts-show {
 
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
-        $candidates = switch ($key) {
+        $candidates = switch -CaseSensitive ($key) {
             { $_ -in @('--pretty', '--format') } {
                 $script:gitLogPrettyFormats + @(gitPrettyAliases)
             }

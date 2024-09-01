@@ -16,7 +16,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "function Invoke-Pester-Updated { Invoke-Pester -Output Detailed @(git diff-index HEAD --name-only --relative tests; git ls-files tests -o --exclude-standard) };$ErrorActionPreference = 'Stop'; Import-Module ./src/git-completion.psd1 -Force"
+                "function Invoke-Pester-Updated { Invoke-Pester -Output Detailed @(git diff-index HEAD --name-only --relative tests; git ls-files tests -o --exclude-standard) };$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$true;Import-Module ./src/git-completion.psd1 -Force"
             ],
             "icon": "terminal-powershell"
         },

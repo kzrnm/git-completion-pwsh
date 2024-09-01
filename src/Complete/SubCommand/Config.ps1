@@ -138,15 +138,16 @@ function gitConfigGetSetVariables {
 function completeConfigOptionVariableNameAndValue {
     [OutputType([CompletionResult[]])]
     param(
-        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [string] $Prefix = ''
     )
 
     if ($Current -match '(.*)=(.*)') {
         $VarName = $Matches[1]
-        return (completeConfigVariableValue -VarName $VarName -Prefix "$VarName=" -Current $Matches[2])
+        return (completeConfigVariableValue -VarName $VarName -Prefix "$Prefix$VarName=" -Current $Matches[2])
     }
     else {
-        return (completeConfigVariableName -Suffix "=" -Current $Current)
+        return (completeConfigVariableName -Prefix $Prefix -Suffix "=" -Current $Current)
     }
 }
 
@@ -350,6 +351,7 @@ function completeConfigVariableName {
     [OutputType([CompletionResult[]])]
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [string] $Prefix = '',
         [string] $Suffix = ''
     )
 
@@ -362,7 +364,7 @@ function completeConfigVariableName {
         $second = $Matches[2]
         gitSecondLevelConfigVarsForSection $section | ForEach-Object {
             "$section.$second.$_"
-        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        } | completeList -Current $Current -Prefix $Prefix -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "branch\.(.*)") {
@@ -371,7 +373,7 @@ function completeConfigVariableName {
         gitHeads -Current $second | ForEach-Object { "$section.$_." } | completeList -DescriptionBuilder $DescriptionBuilder
         gitFirstLevelConfigVarsForSection $section | ForEach-Object {
             "$section.$_"
-        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        } | completeList -Current $Current -Prefix $Prefix -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "pager\.(.*)") {
@@ -379,7 +381,7 @@ function completeConfigVariableName {
         $second = $Matches[1]
         gitAllCommands main others alias nohelpers | ForEach-Object {
             "$section.$_"
-        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        } | completeList -Current $Current -Prefix $Prefix -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "remote\.(.*)") {
@@ -390,11 +392,11 @@ function completeConfigVariableName {
             $_.StartsWith($second) 
         } | ForEach-Object {
             "$section.$_."
-        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
+        } | completeList -Current $Current -Prefix $Prefix -DescriptionBuilder $DescriptionBuilder
 
         gitFirstLevelConfigVarsForSection $section | ForEach-Object {
             "$section.$_"
-        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        } | completeList -Current $Current -Prefix $Prefix -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "submodule\.(.*)") {
@@ -408,20 +410,20 @@ function completeConfigVariableName {
                 $sub = $Matches[1]
                 "$section.$sub."
             }
-        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
+        } | completeList -Current $Current -Prefix $Prefix -DescriptionBuilder $DescriptionBuilder
 
         gitFirstLevelConfigVarsForSection $section | ForEach-Object {
             "$section.$_"
-        } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        } | completeList -Current $Current -Prefix $Prefix -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     if ($Current -match "([^\.]*)\.(.*)") {
         $section = $Matches[1]
-        gitConfigVars | Where-Object { !$_.EndsWith('.') } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
+        gitConfigVars | Where-Object { !$_.EndsWith('.') } | completeList -Current $Current -Prefix $Prefix -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix
         return
     }
     else {
-        gitConfigSections | ForEach-Object { "$_." } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder
+        gitConfigSections | ForEach-Object { "$_." } | completeList -Current $Current -Prefix $Prefix -DescriptionBuilder $DescriptionBuilder
     }
     return
 }

@@ -1,6 +1,6 @@
 using namespace System.Management.Automation;
 
-function Complete-GitSubCommand-apply {
+function Complete-GitSubCommand-clone {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -14,8 +14,11 @@ function Complete-GitSubCommand-apply {
         return Get-GitShortOptions $Context.command
     }
 
-    $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
-        '--whitespace' { $script:gitWhitespacelist }
+    switch -Regex -CaseSensitive ($Context.PreviousWord()) {
+        { $_ -cin @('-c', '--config') } {
+            completeConfigOptionVariableNameAndValue $Current
+            return
+        }
     }
 
     if ($prevCandidates) {
@@ -23,15 +26,14 @@ function Complete-GitSubCommand-apply {
         return
     }
 
-    if ($Current -cmatch '(--[^=]+)=.*') {
+    if ($Current -cmatch '(--[^=]+)=(.*)') {
         $key = $Matches[1]
-        $candidates = switch -CaseSensitive ($key) {
-            '--whitespace' { $script:gitWhitespacelist }
-        }
-
-        if ($candidates) {
-            $candidates | completeList -Current $Current -Prefix "$key=" -ResultType ParameterValue -RemovePrefix
-            return
+        $value = $Matches[2]
+        switch -CaseSensitive ($key) {
+            '--config' {
+                completeConfigOptionVariableNameAndValue $value
+                return
+            }
         }
     }
 

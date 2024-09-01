@@ -1,16 +1,5 @@
 using namespace System.Management.Automation;
 
-function Complete-GitSubCommand-whatchanged {
-    [CmdletBinding(PositionalBinding = $false)]
-    [OutputType([CompletionResult[]])]
-    param(
-        [CommandLineContext]
-        [Parameter(Position = 0, Mandatory)]$Context
-    )
-    $Context.command = 'log'
-    Complete-GitSubCommand-log $Context
-}
-
 function Complete-GitSubCommand-log {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
@@ -30,6 +19,8 @@ function Complete-GitSubCommand-log {
     gitCompleteRevlistFile $Current
 }
 
+Set-Alias Complete-GitSubCommand-whatchanged Complete-GitSubCommand-log
+
 # __git_complete_log_opts
 # Complete porcelain (i.e. not git-rev-list) options and at least some
 # option arguments accepted by git-log.  Note that this same set of options
@@ -47,7 +38,7 @@ function Complete-Opts-log {
     # Skip prev
     # -L seems difficult to implement, so skip it.
     # -G, -S <- what is these? what is __git_complete_symbol?
-    $prevCandidates = switch ($Context.PreviousWord()) {
+    $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--date' { $script:gitLogDateFormats }
         '--diff-algorithm' { $script:gitDiffAlgorithms }
         '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
@@ -63,7 +54,7 @@ function Complete-Opts-log {
 
     if ($Current -cmatch '(--[^=]+)=.*') {
         $key = $Matches[1]
-        $candidates = switch ($key) {
+        $candidates = switch -CaseSensitive ($key) {
             { $_ -in @('--pretty', '--format') } {
                 $script:gitLogPrettyFormats + @(gitPrettyAliases)
             }
