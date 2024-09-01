@@ -153,3 +153,37 @@ function gitcomp {
         }   
     }
 }
+
+function buildWords {
+    [CmdletBinding(PositionalBinding)]
+    param($wordToComplete, $CommandAst, $CursorPosition, $CommandName)
+
+    $ws = [System.Collections.Generic.List[string]]::new($CommandAst.CommandElements.Count + 2)
+    $ws.Add($CommandName)
+
+    $CurrentIndex = 0
+
+    for ($i = 1; $i -lt $CommandAst.CommandElements.Count; $i++) {
+        $extent = $CommandAst.CommandElements[$i].Extent
+        if ($CurrentIndex) {
+            $ws.Add($extent.Text)
+        }
+        elseif ($CursorPosition -le $extent.EndOffset) {
+            $ws.Add($wordToComplete)
+            $CurrentIndex = $i
+            if ($CursorPosition -lt $extent.StartOffset) {
+                $ws.Add($extent.Text)
+            }
+        }
+        else {
+            $ws.Add($extent.Text)
+        }
+    }
+
+    if (!$CurrentIndex) {
+        $CurrentIndex = $ws.Count
+        $ws.Add('')
+    }
+
+    return $ws.ToArray(), $CurrentIndex
+}

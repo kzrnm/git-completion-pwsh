@@ -12,7 +12,6 @@ function Complete-Git {
     return Complete-GitCommandLine ([CommandLineContext]::new($Words, $CurrentIndex))
 }
 
-
 class CommandOption {
     [string] $Short
     [string] $Long

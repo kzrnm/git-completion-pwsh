@@ -97,7 +97,15 @@ function Complete-FromLine {
     )
 
     $words = @($line -split '\s+')
-    return (Complete-Git -Words ($words + $Right) -CurrentIndex ($words.Length - 1))
+    if ($words[0] -eq 'gitk') {
+        return (Complete-Gitk -Words ($words + $Right) -CurrentIndex ($words.Length - 1))
+    }
+    elseif ($words[0] -eq 'git') {
+        return (Complete-Git -Words ($words + $Right) -CurrentIndex ($words.Length - 1))
+    }
+    else {
+        throw 'Invalid input'
+    }
 }
 
 function writeObjectLine {
