@@ -156,7 +156,7 @@ function gitcomp {
 
 function buildWords {
     [CmdletBinding(PositionalBinding)]
-    param($wordToComplete, $CommandAst, $CursorPosition, $CommandName)
+    param($CommandAst, $CursorPosition, $CommandName)
 
     $ws = [System.Collections.Generic.List[string]]::new($CommandAst.CommandElements.Count + 2)
     $ws.Add($CommandName)
@@ -164,20 +164,22 @@ function buildWords {
     $CurrentIndex = 0
 
     for ($i = 1; $i -lt $CommandAst.CommandElements.Count; $i++) {
-        $extent = $CommandAst.CommandElements[$i].Extent
-        if ($CurrentIndex) {
-            $ws.Add($extent.Text)
-        }
-        elseif ($CursorPosition -le $extent.EndOffset) {
-            $ws.Add($wordToComplete)
-            $CurrentIndex = $i
-            if ($CursorPosition -lt $extent.StartOffset) {
-                $ws.Add($extent.Text)
-            }
+        $cmd = $CommandAst.CommandElements[$i]
+        $extent = $cmd.Extent
+        if ($null -eq $cmd.Value) {
+            $text = $extent.Text
         }
         else {
-            $ws.Add($extent.Text)
+            $text = $cmd.Value
         }
+
+        if (!$CurrentIndex -and ($CursorPosition -le $extent.EndOffset)) {
+            $CurrentIndex = $i
+            if ($CursorPosition -le $extent.StartOffset) {
+                $ws.Add('')
+            }
+        }
+        $ws.Add($text)
     }
 
     if (!$CurrentIndex) {

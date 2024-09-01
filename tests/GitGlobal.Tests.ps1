@@ -30,6 +30,10 @@ Describe 'GirGlobal' {
             } | ConvertTo-Completion -ResultType ParameterName
         },
         @{
+            Line     = "-NO";
+            Expected = @()
+        },
+        @{
             Line     = "-";
             Expected = @{
                 ListItemText = "-v";
