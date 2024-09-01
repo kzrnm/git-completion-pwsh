@@ -12,11 +12,12 @@ $result = (Complete-Git -Words $Line)
 if ($Raw) { return $result }
 if ($Text) { return $result | ForEach-Object ListItemText }
 
-($result | ForEach-Object {
-    '@{',
-    "CompletionText='$($_.CompletionText)';",
-    "ListItemText='$($_.ListItemText)';",
-    "ResultType='$($_.ResultType)';",
-    "ToolTip=`"$($_.ToolTip)`";",
-    '}' -join "`n"
-}) -join ",`n"
+'$expected = ' + (($result | ForEach-Object {
+            '@{',
+            # "CompletionText='$($_.CompletionText)';",
+            "ListItemText='$($_.ListItemText)';",
+            # "ResultType='$($_.ResultType)';",
+            "ToolTip=`"$($_.ToolTip)`";",
+            '}' -join "`n"
+        }) -join ",`n"
+) + '|ConvertTo-Completion -ResultType ParameterName'
