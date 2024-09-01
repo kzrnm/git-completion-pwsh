@@ -409,17 +409,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     Describe 'Middle' {
-        It '<Left>(cursor) <Right>' -ForEach @(
+        It '<Line>(cursor) <Right>' -ForEach @(
             @{
-                Left     = @('git', 'push', 'o');
+                Line     = 'o';
                 Right    = @('main');
                 Expected = 
                 'ordinary',
                 'origin' | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
-            Complete-Git -Words ($Left + $Right) -CurrentIndex ($Left.Length - 1) | 
-            Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine -RightInputs $Right | Should -BeCompletion $expected
         }
     }
 }

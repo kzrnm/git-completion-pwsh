@@ -188,7 +188,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     "rename-section", "remove-section", "edit"
                 ) {
                     $Subcommand = $_ 
-                    "git $Command $Subcommand $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
+                    "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
                 }
             }
         }
@@ -213,40 +213,40 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         }
 
         Describe 'VariableSubcommand' {
-            Context '<Option> <Line>' -ForEach @(
+            Context '<Line>' -ForEach @(
                 @{
-                    Option   = ""
                     Line     = "ali"
                     Expected =
                     "alias.sw",
                     "alias.swf" | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
-                    Option   = "--local"
-                    Line     = "ali"
+                    Line     = "--local ali"
                     Expected =
                     "alias.sw",
                     "alias.swf" | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
-                    Option   = "--file test.config"
-                    Line     = ""
+                    Line     = "--file test.config "
                     Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
                 },
                 @{
-                    Option   = "--file=test.config"
-                    Line     = ""
+                    Line     = "--file=test.config "
                     Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
                 },
                 @{
-                    Option   = "-f test.config"
-                    Line     = ""
+                    Line     = "-f test.config "
                     Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
                 }
             ) {
-                It '<_>' -ForEach @('get', 'unset', 'get --no-url') {
-                    $Subcommand = $_ 
-                    "git $Command $Subcommand $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
+                Describe '<Subcommand>' -ForEach ('get', 'unset' | ForEach-Object { @{Subcommand = $_ } }) {
+                    It 'Left' {
+                        "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+                    }
+
+                    It 'Right' {
+                        "git $Command $Subcommand $Line" | Complete-FromLine -RightInputs @('--', '--global') | Should -BeCompletion $expected
+                    }
                 }
             }
         }
@@ -402,8 +402,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
                 }
             ) {
-                It '<_>' -ForEach @('--get', '--get-all', '--unset', '--unset-all') {
-                    $GetOption = $_
+                It '<GetOption>' -ForEach ('--get', '--get-all', '--unset', '--unset-all' | ForEach-Object { @{GetOption = $_; } }) {
                     "git $Command $Option $GetOption $Line" | Complete-FromLine | Should -BeCompletion $expected
                 }
             }

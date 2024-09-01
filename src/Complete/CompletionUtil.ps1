@@ -59,27 +59,6 @@ function completeList {
     }
 }
 
-function filterCompletionResult {
-    [OutputType([CompletionResult[]])]
-    param (
-        [Parameter(Mandatory)]
-        [AllowEmptyString()]
-        [string]
-        $Current,
-        [Parameter(ValueFromPipeline)]
-        $Completion
-    )
-
-    process {
-        if (($Completion -is [CompletionResult]) -and $Completion.ListItemText.StartsWith($Current)) {
-            return $Completion
-        }
-        elseif (($Completion -is [string]) -and $Completion.StartsWith($Current)) {
-            return $Completion
-        }
-    }
-}
-
 # Generates completion reply, appending a space to possible completion words,
 # if necessary.
 # It accepts 1 to 4 arguments:

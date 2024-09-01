@@ -56,8 +56,8 @@ function Complete-GitSubCommand-config {
     }
 
     switch ($subcommand) {
-        'get' { completeGitConfigGetSetVariables $Context -Current $Current }
-        'unset' { completeGitConfigGetSetVariables $Context -Current $Current }
+        'get' { completeGitConfigGetSetVariables $Context }
+        'unset' { completeGitConfigGetSetVariables $Context }
         'set' {
             if ($Prev -like '*.*') {
                 completeConfigVariableValue -VarName $Prev -Current $Current
@@ -85,7 +85,7 @@ function Complete-GitSubCommand-config-Git2_45 {
     }
 
     if ($Prev -in ('--get', '--get-all', '--unset', '--unset-all')) {
-        completeGitConfigGetSetVariables $Context -Current $Current
+        completeGitConfigGetSetVariables $Context
     }
     elseif ($Prev -like '*.*') {
         completeConfigVariableValue -Current $Current -VarName $Prev
@@ -102,20 +102,11 @@ function completeGitConfigGetSetVariables {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([string[]])]
     param(
-        [Parameter(Position = 0, Mandatory)][CommandLineContext]$Context,
-        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+        [Parameter(Position = 0, Mandatory)][CommandLineContext]$Context
     )
-    
-    gitConfigGetSetVariables $Context | filterCompletionResult -Current $Current | ForEach-Object {
-        $desc = Get-GitConfigVariableDescription $_
-        if (!$desc) { $desc = $_ }
 
-        [CompletionResult]::new(
-            $_,
-            $_,
-            'ParameterValue',
-            $desc
-        )
+    gitConfigGetSetVariables $Context | completeList -Current $Context.CurrentWord() -ResultType ParameterValue -DescriptionBuilder {
+        Get-GitConfigVariableDescription $_
     }
 }
 
@@ -128,7 +119,7 @@ function gitConfigGetSetVariables {
     )
     $file = @()
     $prev = ''
-    for ($i = $Context.Words.Length - 1; $i -gt $Context.commandIndex ; $i--) {
+    for ($i = $Context.DoubledashIndex - 1; $i -gt $Context.CommandIndex; $i--) {
         $word = $Context.Words[$i]
         if (($word -in @('--system', '--global', '--local')) -or ($word -like "--file=*")) {
             $file = @($word)
@@ -377,7 +368,7 @@ function completeConfigVariableName {
     if ($Current -match "branch\.(.*)") {
         $section = 'branch'
         $second = $Matches[1]
-        gitHeads -Current $second | ForEach-Object { "$section.$_."} | completeList -DescriptionBuilder $DescriptionBuilder
+        gitHeads -Current $second | ForEach-Object { "$section.$_." } | completeList -DescriptionBuilder $DescriptionBuilder
         gitFirstLevelConfigVarsForSection $section | ForEach-Object {
             "$section.$_"
         } | completeList -Current $Current -DescriptionBuilder $DescriptionBuilder -Suffix $Suffix

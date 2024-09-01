@@ -99,6 +99,9 @@ class CommandLineContext {
                 break
             }
         }
+
+        if ($this.DoubledashIndex -ge 0) { return }
+        $this.DoubledashIndex = $Words.Length
     }
 
     [string] Subcommand() {
@@ -120,6 +123,6 @@ class CommandLineContext {
 
     # __git_has_doubledash
     [bool] HasDoubledash() {
-        return  (0 -le $this.DoubledashIndex) -and ($this.DoubledashIndex -lt $this.CurrentIndex)
+        return $this.DoubledashIndex -lt $this.CurrentIndex
     }
 }

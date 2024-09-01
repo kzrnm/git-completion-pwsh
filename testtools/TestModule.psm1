@@ -92,10 +92,12 @@ function Initialize-Remote {
 function Complete-FromLine {
     [OutputType([CompletionResult[]])]
     param (
-        [string][Parameter(ValueFromPipeline)] $line
+        [string][Parameter(ValueFromPipeline)] $line,
+        [string[]]$RightInputs = @()
     )
 
-    return (Complete-Git -Words ($line -split '\s+'))
+    $words = @($line -split '\s+')
+    return (Complete-Git -Words ($words + $RightInputs) -CurrentIndex ($words.Length - 1))
 }
 
 function writeObjectLine {

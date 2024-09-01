@@ -62,7 +62,8 @@ function gitCompleteRemoteOrRefspec {
     $c = 1
     if ($Command -eq 'remote') { $c++ }
 
-    for ($i = $Context.commandIndex + $c; $i -lt $Context.CurrentIndex; $i++) {
+    for ($i = $Context.commandIndex + $c; $i -lt $Context.DoubledashIndex; $i++) {
+        if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
         if ($w -eq '--mirror') {
             if ($Command -eq 'push') {
@@ -86,7 +87,7 @@ function gitCompleteRemoteOrRefspec {
             $noCompleteRefspec = $true
             break
         }
-        elseif (!$w.StartsWith('--')) {
+        elseif (($i -lt $Context.CurrentIndex) -and !$w.StartsWith('--')) {
             $remote = $w
             break
         }
