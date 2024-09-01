@@ -26,7 +26,7 @@ Describe 'FileCompleter' {
         Pop-Location
     }
 
-    It 'Prefix:<Prefix>, Current:<Current>' -ForEach @(
+    It 'Prefix:<Prefix>,Current:<Current>' -ForEach @(
         @{
             Prefix   = '';
             Current  = 'Aquarion Evol';

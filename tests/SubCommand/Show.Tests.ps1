@@ -20,6 +20,46 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = '--quiet';
+                    Right    = @('--');
+                    Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--quiet'
+                },
+                @{
+                    Left     = '--quiet';
+                    Right    = @('-- --all');
+                    Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--quiet'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'src -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- --';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- ';
+                Expected = @()
+            },
+            @{
+                Line     = '-- ';
+                Expected = @()
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
+
     It 'ShortOptions' {
         $expected = @{
             ListItemText = '-L';
@@ -34,25 +74,6 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             ToolTip      = "show help";
         } | ConvertTo-Completion -ResultType ParameterName
         "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
-    }
-
-    Describe 'DoubleDash' {
-        It '<Line>' -ForEach @(
-            @{
-                Line     = 'src -- -';
-                Expected = @()
-            },
-            @{
-                Line     = 'src -- ';
-                Expected = @()
-            },
-            @{
-                Line     = '-- ';
-                Expected = @()
-            }
-        ) {
-            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
-        }
     }
 
     Describe 'Options' {

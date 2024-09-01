@@ -18,6 +18,42 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = '--delete';
+                    Right    = @('--');
+                    Expected = '--delete' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'delete symbolic ref'
+                },
+                @{
+                    Left     = '--delete';
+                    Right    = @('-- --all');
+                    Expected = '--delete' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'delete symbolic ref'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'src -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- --';
+                Expected = @()
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+
+        Describe 'Revlist' {
+            . "${RepoRoot}testtools/Revlist.ps1" -Ref -Prefix '-- '
+        }
+    }
+
     It 'ShortOptions' {
         $expected = @{
             ListItemText = '-d';

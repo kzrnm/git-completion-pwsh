@@ -62,7 +62,7 @@ function gitCompleteRemoteOrRefspec {
     $c = 1
     if ($Command -eq 'remote') { $c++ }
 
-    for ($i = $Context.commandIndex + $c; $i -lt $Context.DoubledashIndex; $i++) {
+    for ($i = $Context.commandIndex + $c; $i -lt $Context.Words.Length; $i++) {
         if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
         if ($w -eq '--mirror') {

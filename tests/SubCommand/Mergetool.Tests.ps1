@@ -18,6 +18,46 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = '--gui';
+                    Right    = @('--');
+                    Expected = '--gui' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--gui'
+                },
+                @{
+                    Left     = '--gui';
+                    Right    = @('-- --all');
+                    Expected = '--gui' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--gui'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'src -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- --';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- ';
+                Expected = @()
+            },
+            @{
+                Line     = '-- ';
+                Expected = @()
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
+
     It 'ShortOptions' {
         $expected = @{
             ListItemText = '-g';

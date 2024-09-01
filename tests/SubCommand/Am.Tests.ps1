@@ -18,6 +18,46 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = '--3way';
+                    Right    = @('--');
+                    Expected = '--3way' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'allow fall back on 3way merging if needed'
+                },
+                @{
+                    Left     = '--3way';
+                    Right    = @('-- --all');
+                    Expected = '--3way' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'allow fall back on 3way merging if needed'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'src -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- --';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- ';
+                Expected = @()
+            },
+            @{
+                Line     = '-- ';
+                Expected = @()
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
+
     It 'ShortOptions' {
         $expected = @{
             ListItemText = '-3';

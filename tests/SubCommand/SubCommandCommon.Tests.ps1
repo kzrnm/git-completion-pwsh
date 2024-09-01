@@ -18,6 +18,45 @@ Describe 'SubCommandCommon-check-ignore' {
         Pop-Location
     }
 
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = '--quiet';
+                    Right    = @('--');
+                    Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'suppress progress reporting'
+                },
+                @{
+                    Left     = '--quiet';
+                    Right    = @('-- --all');
+                    Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'suppress progress reporting'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'src -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- --';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- ';
+                Expected = @()
+            },
+            @{
+                Line     = '-- ';
+                Expected = @()
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
 
     Describe 'ShortOptions' {
         It '<_>' -ForEach @('', 'foo') {

@@ -21,6 +21,25 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     Describe '<Command>' -ForEach @('help', '--help' | ForEach-Object { @{Command = $_ } }) {
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = '--verbose';
+                        Right    = @('--');
+                        Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'print command description'
+                    },
+                    @{
+                        Left     = '--verbose';
+                        Right    = @('-- --all');
+                        Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'print command description'
+                    }
+                ) {
+                    "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+        }
+
         It 'ShortOptions' {
             $Expected = @{
                 ListItemText = '-a';
@@ -102,7 +121,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         }
 
         Describe 'Commands' {
-            It '<Line>' -ForEach @(
+            Describe '<Line>' -ForEach @(
                 @{
                     Line     = 'sw';
                     Expected =
@@ -120,7 +139,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     } | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
-                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+                It '_' {
+                    "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+                }
+                It 'DoubleDash' {
+                    "git $Command -- $Line" | Complete-FromLine | Should -BeCompletion $expected
+                }
             }
         }
     }

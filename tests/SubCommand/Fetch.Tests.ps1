@@ -18,6 +18,62 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = '--quiet';
+                    Right    = @('--');
+                    Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be more quiet'
+                },
+                @{
+                    Left     = '--quiet';
+                    Right    = @('-- --all');
+                    Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be more quiet'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'origin -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'origin -- --';
+                Expected = @()
+            },
+            @{
+                Line     = '-- -';
+                Expected = @()
+            },
+            @{
+                Line     = '-- --';
+                Expected = @()
+            },
+            @{
+                Line     = '-- --recurse-submodules ';
+                Expected = @(
+                    'grm',
+                    'ordinary',
+                    'origin'
+                ) | ConvertTo-Completion -ResultType ParameterValue
+            }
+            @{
+                Line     = '-- ';
+                Expected = @(
+                    'grm',
+                    'ordinary',
+                    'origin'
+                ) | ConvertTo-Completion -ResultType ParameterValue
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
+
     It 'ShortOptions' {
         $expected = @{
             ListItemText = '-4';

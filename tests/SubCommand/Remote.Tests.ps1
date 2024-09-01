@@ -18,14 +18,50 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
     Describe '_' {
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = '--verbose';
+                        Right    = @('--');
+                        Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be verbose; must be placed before a subcommand'
+                    },
+                    @{
+                        Left     = '--verbose';
+                        Right    = @('-- --all');
+                        Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be verbose; must be placed before a subcommand'
+                    }
+                ) {
+                    "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '-- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- ';
+                    Expected = @()
+                }
+            ) {
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
         It 'ShortOptions' {
             $expected = @{
-                ListItemText   = '-v';
-                ToolTip        = "be verbose; must be placed before a subcommand";
+                ListItemText = '-v';
+                ToolTip      = "be verbose; must be placed before a subcommand";
             },
             @{
-                ListItemText   = '-h';
-                ToolTip        = "show help";
+                ListItemText = '-h';
+                ToolTip      = "show help";
             } | ConvertTo-Completion -ResultType ParameterName
             "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
         }
@@ -98,22 +134,62 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             Set-Variable Subcommand 'add'
         }
 
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = '--fetch';
+                        Right    = @('--');
+                        Expected = '--fetch' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'fetch the remote branches'
+                    },
+                    @{
+                        Left     = '--fetch';
+                        Right    = @('-- --all');
+                        Expected = '--fetch' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'fetch the remote branches'
+                    }
+                ) {
+                    "git $Command $Subcommand $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '-- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- --';
+                    Expected = @()
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
         It 'ShortOptions' {
             $expected = @{
-                ListItemText   = '-f';
-                ToolTip        = "fetch the remote branches";
+                ListItemText = '-f';
+                ToolTip      = "fetch the remote branches";
             },
             @{
-                ListItemText   = '-m';
-                ToolTip        = "master branch";
+                ListItemText = '-m';
+                ToolTip      = "master branch";
             },
             @{
-                ListItemText   = '-t';
-                ToolTip        = "branch(es) to track";
+                ListItemText = '-t';
+                ToolTip      = "branch(es) to track";
             },
             @{
-                ListItemText   = '-h';
-                ToolTip        = "show help";
+                ListItemText = '-h';
+                ToolTip      = "show help";
             } | ConvertTo-Completion -ResultType ParameterName
             "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
         }
@@ -184,14 +260,60 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             Set-Variable Subcommand 'prune'
         }
 
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = '--dry-run';
+                        Right    = @('--');
+                        Expected = '--dry-run' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'dry run'
+                    },
+                    @{
+                        Left     = '--dry-run';
+                        Right    = @('-- --all');
+                        Expected = '--dry-run' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'dry run'
+                    }
+                ) {
+                    "git $Command $Subcommand $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = 'src -- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'src -- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'src -- ';
+                    Expected =
+                    'grm',
+                    'ordinary',
+                    'origin' | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Line     = '-- ';
+                    Expected =
+                    'grm',
+                    'ordinary',
+                    'origin' | ConvertTo-Completion -ResultType ParameterValue
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
         It 'ShortOptions' {
             $expected = @{
-                ListItemText   = '-n';
-                ToolTip        = "dry run";
+                ListItemText = '-n';
+                ToolTip      = "dry run";
             },
             @{
-                ListItemText   = '-h';
-                ToolTip        = "show help";
+                ListItemText = '-h';
+                ToolTip      = "show help";
             } | ConvertTo-Completion -ResultType ParameterName
             "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
         }
@@ -244,6 +366,35 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             Set-Variable Subcommand 'remove'
         }
 
+        Describe 'DoubleDash' {
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = 'src -- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'src -- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- ';
+                    Expected =
+                    'grm',
+                    'ordinary',
+                    'origin' | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Line     = 'src -- ';
+                    Expected =
+                    'grm',
+                    'ordinary',
+                    'origin' | ConvertTo-Completion -ResultType ParameterValue
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
         It 'ShortOptions' {
             $expected = '-h' | ConvertTo-Completion -ResultType ParameterName -ToolTip "show help"
             "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
@@ -284,6 +435,52 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     Describe 'rename' {
         BeforeAll {
             Set-Variable Subcommand 'rename'
+        }
+
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = '--progress';
+                        Right    = @('--');
+                        Expected = '--progress' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'force progress reporting'
+                    },
+                    @{
+                        Left     = '--progress';
+                        Right    = @('-- --all');
+                        Expected = '--progress' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'force progress reporting'
+                    }
+                ) {
+                    "git $Command $Subcommand $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = 'src -- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'src -- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- ';
+                    Expected =
+                    'grm',
+                    'ordinary',
+                    'origin' | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Line     = 'src -- ';
+                    Expected =
+                    'grm',
+                    'ordinary',
+                    'origin' | ConvertTo-Completion -ResultType ParameterValue
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
         }
 
         It 'ShortOptions' {
@@ -339,18 +536,58 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             Set-Variable Subcommand 'set-head'
         }
 
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = '--delete';
+                        Right    = @('--');
+                        Expected = '--delete' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'delete refs/remotes/<name>/HEAD'
+                    },
+                    @{
+                        Left     = '--delete';
+                        Right    = @('-- --all');
+                        Expected = '--delete' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'delete refs/remotes/<name>/HEAD'
+                    }
+                ) {
+                    "git $Command $Subcommand $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '-- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- --';
+                    Expected = @()
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
         It 'ShortOptions' {
             $expected = @{
-                ListItemText   = '-a';
-                ToolTip        = "set refs/remotes/<name>/HEAD according to remote";
+                ListItemText = '-a';
+                ToolTip      = "set refs/remotes/<name>/HEAD according to remote";
             },
             @{
-                ListItemText   = '-d';
-                ToolTip        = "delete refs/remotes/<name>/HEAD";
+                ListItemText = '-d';
+                ToolTip      = "delete refs/remotes/<name>/HEAD";
             },
             @{
-                ListItemText   = '-h';
-                ToolTip        = "show help";
+                ListItemText = '-h';
+                ToolTip      = "show help";
             } | ConvertTo-Completion -ResultType ParameterName
             "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
         }
@@ -382,7 +619,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         }
 
         Describe 'RemoteOrRefspec' {
-            It '<Line>' -ForEach @(
+            Describe '<Line>' -ForEach @(
                 @{
                     Line     = 'origin ';
                     Expected =
@@ -440,7 +677,15 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     'origin' | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
-                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+                Describe 'DoubleDash' {
+                    It '<DoubleDash>' -ForEach @('--', '--quiet --' | ForEach-Object { @{DoubleDash = $_; } }) {
+                        "git $Command $Subcommand $DoubleDash $Line" | Complete-FromLine | Should -BeCompletion $expected
+                    }
+                }
+    
+                It '_' {
+                    "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+                }
             }
         }
     }
@@ -448,6 +693,46 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     Describe 'set-branches' {
         BeforeAll {
             Set-Variable Subcommand 'set-branches'
+        }
+
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = '--add';
+                        Right    = @('--');
+                        Expected = '--add' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'add branch'
+                    },
+                    @{
+                        Left     = '--add';
+                        Right    = @('-- --all');
+                        Expected = '--add' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'add branch'
+                    }
+                ) {
+                    "git $Command $Subcommand $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '-- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- --';
+                    Expected = @()
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
         }
 
         It 'ShortOptions' {
@@ -482,7 +767,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         }
 
         Describe 'RemoteOrRefspec' {
-            It '<Line>' -ForEach @(
+            Describe '<Line>' -ForEach @(
                 @{
                     Line     = 'origin ';
                     Expected =
@@ -540,7 +825,15 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     'origin' | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
-                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+                Describe 'DoubleDash' {
+                    It '<DoubleDash>' -ForEach @('--', '--quiet --' | ForEach-Object { @{DoubleDash = $_; } }) {
+                        "git $Command $Subcommand $DoubleDash $Line" | Complete-FromLine | Should -BeCompletion $expected
+                    }
+                }
+    
+                It '_' {
+                    "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+                }
             }
         }
     }
@@ -548,6 +841,53 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     Describe 'get-url' {
         BeforeAll {
             Set-Variable Subcommand 'get-url'
+        }
+
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = '--all';
+                        Right    = @('--');
+                        Expected = '--all' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'return all URLs'
+                    },
+                    @{
+                        Left     = '--all';
+                        Right    = @('-- --all');
+                        Expected = '--all' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'return all URLs'
+                    }
+                ) {
+                    "git $Command $Subcommand $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '-- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- ';
+                    Expected =
+                    'grm',
+                    'ordinary',
+                    'origin' | ConvertTo-Completion -ResultType ParameterValue
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
         }
 
         It 'ShortOptions' {
@@ -608,6 +948,53 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             Set-Variable Subcommand 'set-url'
         }
 
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = '--add';
+                        Right    = @('--');
+                        Expected = '--add' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'add URL'
+                    },
+                    @{
+                        Left     = '--add';
+                        Right    = @('-- --all');
+                        Expected = '--add' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'add URL'
+                    }
+                ) {
+                    "git $Command $Subcommand $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '-- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- ';
+                    Expected =
+                    'grm',
+                    'ordinary',
+                    'origin' | ConvertTo-Completion -ResultType ParameterValue
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
         It 'ShortOptions' {
             $expected = '-h' | ConvertTo-Completion -ResultType ParameterName -ToolTip "show help"
             "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
@@ -666,6 +1053,29 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             Set-Variable Subcommand 'show'
         }
 
+        Describe 'DoubleDash' {
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '-- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- --';
+                    Expected = @()
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
         It 'ShortOptions' {
             $expected = @{
                 ListItemText = '-n';
@@ -713,6 +1123,55 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     Describe 'update' {
         BeforeAll {
             Set-Variable Subcommand 'update'
+        }
+
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = '--prune';
+                        Right    = @('--');
+                        Expected = '--prune' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'prune remotes after fetching'
+                    },
+                    @{
+                        Left     = '--prune';
+                        Right    = @('-- --all');
+                        Expected = '--prune' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'prune remotes after fetching'
+                    }
+                ) {
+                    "git $Command $Subcommand $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '-- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- -';
+                    Expected = @()
+                },
+                @{
+                    Line     = 'origin -- --';
+                    Expected = @()
+                },
+                @{
+                    Line     = '-- ';
+                    Expected =
+                    'grm',
+                    'ordinary',
+                    'origin',
+                    'default',
+                    'ors' | ConvertTo-Completion -ResultType ParameterValue
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
         }
 
         It 'ShortOptions' {

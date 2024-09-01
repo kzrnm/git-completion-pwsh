@@ -20,6 +20,7 @@ function Complete-GitSubCommand-config {
     $subcommands = gitResolveBuiltins $Context.command
     [string] $subcommand = $Context.SubcommandWithoutGlobalOption()
     if ($subcommand -notin $subcommands) {
+        if ($Context.HasDoubledash()) { return }
         if ($Current -eq '-') {
             $script:__helpCompletion
             return

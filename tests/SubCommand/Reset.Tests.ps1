@@ -19,6 +19,46 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = '--quiet';
+                    Right    = @('--');
+                    Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be quiet, only report errors'
+                },
+                @{
+                    Left     = '--quiet';
+                    Right    = @('-- --all');
+                    Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be quiet, only report errors'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'src -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- --';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- ';
+                Expected = @()
+            },
+            @{
+                Line     = '-- ';
+                Expected = @()
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
+
     It 'ShortOptions' {
         $Expected = @{
             ListItemText = '-N';

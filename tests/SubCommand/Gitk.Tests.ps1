@@ -20,7 +20,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     Describe 'DoubleDash' {
-        Context 'In Right' {
+        Describe 'InRight' {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = @('gitk', '--left-o');
@@ -41,6 +41,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         It '<Line>' -ForEach @(
             @{
                 Line     = 'src -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- --';
                 Expected = @()
             },
             @{

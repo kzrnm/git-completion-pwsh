@@ -19,6 +19,46 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = 'create';
+                    Right    = @('--');
+                    Expected = 'create' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'create'
+                },
+                @{
+                    Left     = 'create';
+                    Right    = @('-- --all');
+                    Expected = 'create' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'create'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'src -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- --';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- ';
+                Expected = @()
+            },
+            @{
+                Line     = '-- ';
+                Expected = @()
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
+
     It 'create' {
         "git $Command create " | Complete-FromLine | Should -BeCompletion @()
     }
@@ -26,5 +66,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     Describe 'Revlist' {
         . "${RepoRoot}testtools/Revlist.ps1" -Prefix 'create foo '
         . "${RepoRoot}testtools/Revlist.ps1" -Prefix 'create foo -q '
+        . "${RepoRoot}testtools/Revlist.ps1" -Prefix 'create -- foo '
+        . "${RepoRoot}testtools/Revlist.ps1" -Prefix 'create -- -q '
+        . "${RepoRoot}testtools/Revlist.ps1" -Prefix 'create foo -- '
     }
 }

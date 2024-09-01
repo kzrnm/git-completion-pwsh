@@ -20,38 +20,21 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     Describe '<Command>' -ForEach ('log', 'whatchanged' | ForEach-Object { @{Command = $_ } }) {
-        It 'ShortOptions' {
-            $expected = @{
-                ListItemText = '-L';
-                ToolTip      = "trace the evolution of line range <start>,<end> or function :<funcname> in <file>"
-            },
-            @{
-                ListItemText = '-q';
-                ToolTip      = "suppress diff output"
-            },
-            @{
-                ListItemText = '-h';
-                ToolTip      = "show help";
-            } | ConvertTo-Completion -ResultType ParameterName
-            "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
-        }
-
         Describe 'DoubleDash' {
-            Context 'In Right' {
+            Describe 'InRight' {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
-                        Left     = @('git', 'log', '--quiet');
+                        Left     = '--quiet';
                         Right    = @('--');
                         Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--quiet'
                     },
                     @{
-                        Left     = @('git', 'log', '--quiet');
+                        Left     = '--quiet';
                         Right    = @('-- --all');
                         Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--quiet'
                     }
                 ) {
-                    Complete-Git -Words ($Left + $Right) -CurrentIndex ($Left.Length - 1) | 
-                    Should -BeCompletion $expected
+                    "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
                 }
             }
 
@@ -71,6 +54,22 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
             }
+        }
+
+        It 'ShortOptions' {
+            $expected = @{
+                ListItemText = '-L';
+                ToolTip      = "trace the evolution of line range <start>,<end> or function :<funcname> in <file>"
+            },
+            @{
+                ListItemText = '-q';
+                ToolTip      = "suppress diff output"
+            },
+            @{
+                ListItemText = '-h';
+                ToolTip      = "show help";
+            } | ConvertTo-Completion -ResultType ParameterName
+            "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
         }
 
         Describe 'Options' {

@@ -19,6 +19,42 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = '--list';
+                    Right    = @('--');
+                    Expected = '--list' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'list supported archive formats'
+                },
+                @{
+                    Left     = '--list';
+                    Right    = @('-- --all');
+                    Expected = '--list' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'list supported archive formats'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'src -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- --';
+                Expected = @()
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+
+        Describe 'Revlist' {
+            . "${RepoRoot}testtools/Revlist.ps1" -Ref -Prefix '-- '
+        }
+    }
+
     It 'ShortOptions' {
         $expected = @{
             ListItemText = '-0';

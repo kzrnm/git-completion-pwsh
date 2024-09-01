@@ -19,6 +19,69 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     Describe 'Git2.46.0' {
+        Describe 'DoubleDash' {
+            Describe 'InRight' {
+                It '<Left>(cursor) <Right>' -ForEach @(
+                    @{
+                        Left     = 'get --local';
+                        Right    = @('--');
+                        Expected = '--local' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'use repository config file'
+                    },
+                    @{
+                        Left     = 'get --local';
+                        Right    = @('-- --all');
+                        Expected = '--local' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'use repository config file'
+                    }
+                ) {
+                    "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+                }
+            }
+    
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '-- ';
+                    Expected = @()
+                }
+            ) {
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+
+            Describe 'Subcommands' {
+                It '<Line>' -ForEach @(
+                    @{
+                        Line     = 'get -- alias.swf';
+                        Expected = 'alias.swf' | ConvertTo-Completion -ResultType ParameterValue
+                    },
+                    @{
+                        Line     = 'unset -- alias.swf';
+                        Expected = 'alias.swf' | ConvertTo-Completion -ResultType ParameterValue
+                    },
+                    @{
+                        Line     = "get --file test.config -- alias.ll"
+                        Expected = "alias.ll" | ConvertTo-Completion -ResultType ParameterValue -ToolTip "alias.ll"
+                    },
+                    @{
+                        Line     = "get -- --file test.config alias.ll"
+                        Expected = @()
+                    },
+                    @{
+                        Line     = 'set -- col';
+                        Expected = 
+                        "color.",
+                        "column." | ConvertTo-Completion -ResultType ParameterName
+                    },
+                    @{
+                        Line     = 'set -- color.pager ';
+                        Expected = 
+                        "false",
+                        "true" | ConvertTo-Completion -ResultType ParameterValue
+                    }
+                ) {
+                    "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+                }
+            }
+        }
+
         Describe 'ShortOptions' {
             It 'Root' {
                 $expected = "-h" | ConvertTo-Completion -ResultType ParameterName -ToolTip "show help"
@@ -120,21 +183,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
 
         Describe 'Subcommand' {
-            It '<Subcommand> <Line>' -ForEach @(
+            It '<Line>' -ForEach @(
                 @{
-                    Line       = '--a';
-                    Subcommand = 'get';
-                    Expected   = '--all' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'return all values for multi-valued config options'
+                    Line     = 'get --a';
+                    Expected = '--all' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'return all values for multi-valued config options'
                 },
                 @{
-                    Line       = '--no-a';
-                    Subcommand = 'get';
-                    Expected   = '--no-all' | ConvertTo-Completion -ResultType ParameterName -ToolTip '[NO] return all values for multi-valued config options'
+                    Line     = 'get --no-a';
+                    Expected = '--no-all' | ConvertTo-Completion -ResultType ParameterName -ToolTip '[NO] return all values for multi-valued config options'
                 },
                 @{
-                    Line       = '--a';
-                    Subcommand = 'set';
-                    Expected   = @{
+                    Line     = 'set --a';
+                    Expected = @{
                         ListItemText = '--all';
                         ToolTip      = 'replace multi-valued config option with new value';
                     },
@@ -144,9 +204,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
-                    Line       = '--no-a';
-                    Subcommand = 'set';
-                    Expected   = @{
+                    Line     = 'set --no-a';
+                    Expected = @{
                         ListItemText = '--no-all';
                         ToolTip      = '[NO] replace multi-valued config option with new value';
                     },
@@ -156,9 +215,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
-                    Line       = '--ty';
-                    Subcommand = 'set';
-                    Expected   = '--type=' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'value is given this type'
+                    Line     = 'set --ty';
+                    Expected = '--type=' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'value is given this type'
                 }
             ) {
                 "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $Expected

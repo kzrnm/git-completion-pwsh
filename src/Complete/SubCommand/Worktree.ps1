@@ -48,30 +48,39 @@ function Complete-GitSubCommand-worktree {
     }
 
     switch ($subcommand) {
-        'lock' { return gitCompleteWorktreePaths $Current }
-        'remove' { return gitCompleteWorktreePaths $Current }
-        'unlock' { return gitCompleteWorktreePaths $Current }
+        { $_ -cin 'lock', 'remove', 'unlock' } { return gitCompleteWorktreePaths $Current }
         'move' {
-            if ($Context.CurrentIndex -eq ($Context.commandIndex + 2)) {
-                return gitCompleteWorktreePaths $Current
-            }
-            else {
+            if ($Context.DoubledashIndex -lt ($Context.CurrentIndex - 1)) {
                 return @()
             }
+
+            for ($i = $Context.CommandIndex + 2; $i -lt $Context.CurrentIndex; $i++) {
+                switch -Wildcard ($Context.Words[$i]) {
+                    '-*' { }
+                    Default { return @() }
+                }
+            }
+
+            gitCompleteWorktreePaths $Current
+            return
         }
         'add' {
-            if (($Prev -ieq '-b') -or ($Context.HasDoubledash())) {
-                gitCompleteRefs -Current $Current
+            if ($Prev -ieq '-b') {
+                gitCompleteRefs $Current
                 return
             }
 
-            for ($i = 3; $i -lt $Context.CurrentIndex; $i++) {
+            if ($Context.DoubledashIndex -lt ($Context.CurrentIndex - 1)) {
+                gitCompleteRefs $Current
+                return
+            }
+
+            for ($i = $Context.CommandIndex + 2; $i -lt $Context.CurrentIndex; $i++) {
                 switch -Wildcard ($Context.Words[$i]) {
-                    '-b' { $i++ }
-                    '--reason' { $i++ }
+                    { $_ -iin @('-b', '--reason') } { $i++ }
                     '-*' { }
                     Default {
-                        gitCompleteRefs -Current $Current
+                        gitCompleteRefs $Current
                         return
                     }
                 }

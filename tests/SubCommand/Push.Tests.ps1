@@ -18,6 +18,46 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = '--quiet';
+                    Right    = @('--');
+                    Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be more quiet'
+                },
+                @{
+                    Left     = '--quiet';
+                    Right    = @('-- --all');
+                    Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be more quiet'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = '-- -';
+                Expected = @()
+            },
+            @{
+                Line     = '-- --';
+                Expected = @()
+            },
+            @{
+                Line     = 'origin -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'origin -- --';
+                Expected = @()
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
+
     It 'ShortOptions' {
         $expected = @{
             ListItemText = '-4';
@@ -305,7 +345,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     Describe 'RemoteOrRefspec' {
-        It '<Line>' -ForEach @(
+        Describe '<Line>' -ForEach @(
             @{
                 Line     = 'origin ';
                 Expected = 
@@ -404,7 +444,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 'refs/heads/main' | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
-            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            
+            Describe 'DoubleDash' {
+                It '<DoubleDash>' -ForEach @('--', '--quiet --' | ForEach-Object { @{DoubleDash = $_; } }) {
+                    "git $Command $DoubleDash $Line" | Complete-FromLine | Should -BeCompletion $expected
+                }
+            }
+
+            It '_' {
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
         }
     }
 

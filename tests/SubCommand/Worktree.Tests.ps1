@@ -25,89 +25,182 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
-    It 'Subcommands:<Line>' -ForEach @(
-        @{
-            Line     = ""
-            Expected = @{
-                ListItemText = 'add';
-                ToolTip      = 'Create a worktree at <path> and checkout <commit-ish> into it';
+    $refs = 'HEAD', 'brn', 'main', 'wk', 'wt' | ConvertTo-Completion -ResultType ParameterValue
+    $brn = 'brn' | ConvertTo-Completion -ResultType ParameterValue
+
+    Describe 'Subcommands' {
+        It '<Line>' -ForEach @(
+            @{
+                Line     = ""
+                Expected = @{
+                    ListItemText = 'add';
+                    ToolTip      = 'Create a worktree at <path> and checkout <commit-ish> into it';
+                },
+                @{
+                    ListItemText = 'prune';
+                    ToolTip      = 'Prune worktree information';
+                },
+                @{
+                    ListItemText = 'list';
+                    ToolTip      = 'List details of each worktree';
+                },
+                @{
+                    ListItemText = 'lock';
+                    ToolTip      = 'lock it to prevent its administrative files from being pruned automatically';
+                },
+                @{
+                    ListItemText = 'unlock';
+                    ToolTip      = 'Unlock a worktree';
+                },
+                @{
+                    ListItemText = 'move';
+                    ToolTip      = 'Move a worktree to a new location';
+                },
+                @{
+                    ListItemText = 'remove';
+                    ToolTip      = 'Remove a worktree';
+                },
+                @{
+                    ListItemText = 'repair';
+                    ToolTip      = 'Repair worktree administrative files';
+                } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
-                ListItemText = 'prune';
-                ToolTip      = 'Prune worktree information';
-            },
-            @{
-                ListItemText = 'list';
-                ToolTip      = 'List details of each worktree';
-            },
-            @{
-                ListItemText = 'lock';
-                ToolTip      = 'lock it to prevent its administrative files from being pruned automatically';
-            },
-            @{
-                ListItemText = 'unlock';
-                ToolTip      = 'Unlock a worktree';
-            },
-            @{
-                ListItemText = 'move';
-                ToolTip      = 'Move a worktree to a new location';
-            },
-            @{
-                ListItemText = 'remove';
-                ToolTip      = 'Remove a worktree';
-            },
-            @{
-                ListItemText = 'repair';
-                ToolTip      = 'Repair worktree administrative files';
-            } | ConvertTo-Completion -ResultType ParameterName
-        },
-        @{
-            Line     = "re"
-            Expected = @{
-                ListItemText = 'remove';
-                ToolTip      = 'Remove a worktree';
-            },
-            @{
-                ListItemText = 'repair';
-                ToolTip      = 'Repair worktree administrative files';
-            } | ConvertTo-Completion -ResultType ParameterName
+                Line     = "re"
+                Expected = @{
+                    ListItemText = 'remove';
+                    ToolTip      = 'Remove a worktree';
+                },
+                @{
+                    ListItemText = 'repair';
+                    ToolTip      = 'Repair worktree administrative files';
+                } | ConvertTo-Completion -ResultType ParameterName
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
-    ) {
-        "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
     }
 
-    It 'ShortOptions:<Subcommand>' -ForEach @(
-        @{
-            Subcommand = "remove"
-            Expected   = @{
-                ListItemText = '-f';
-                ToolTip      = 'force removal even if worktree is dirty or locked';
+    Describe 'DoubleDash' {
+        Describe 'InRight' {
+            It '<Left>(cursor) <Right>' -ForEach @(
+                @{
+                    Left     = 'add --re';
+                    Right    = @('--');
+                    Expected = '--reason=' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'reason for locking'
+                },
+                @{
+                    Left     = 'add --re';
+                    Right    = @('-- --all');
+                    Expected = '--reason=' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'reason for locking'
+                },
+                @{
+                    Left     = 'prune --ver';
+                    Right    = @('--');
+                    Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'report pruned working trees'
+                },
+                @{
+                    Left     = 'prune --ver';
+                    Right    = @('-- --all');
+                    Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'report pruned working trees'
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
+            }
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'src -- -';
+                Expected = @()
             },
             @{
-                ListItemText = '-h';
-                ToolTip      = 'show help';
-            } | ConvertTo-Completion -ResultType ParameterName
-        },
-        @{
-            Subcommand = "repair"
-            Expected   = @{
-                ListItemText = '-h';
-                ToolTip      = 'show help';
-            } | ConvertTo-Completion -ResultType ParameterName
+                Line     = 'src -- --';
+                Expected = @()
+            },
+            @{
+                Line     = 'src -- ';
+                Expected = @()
+            },
+            @{
+                Line     = '-- ';
+                Expected = @()
+            },
+            @{
+                Line     = 'add -- -';
+                Expected = @()
+            },
+            @{
+                Line     = 'add -- ';
+                Expected = @()
+            },
+            @{
+                Line     = 'add src -- ';
+                Expected = $refs
+            },
+            @{
+                Line     = 'add -- src ';
+                Expected = $refs
+            },
+            @{
+                Line     = 'add -- -b ';
+                Expected = $refs
+            },
+            @{
+                Line     = 'add -- --reason ';
+                Expected = $refs
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
-    ) {
-        "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
-    Describe 'WorktreePaths' {
-        It '<_>' -ForEach @('lock', 'remove', 'unlock', 'move') {
-            $expected = @("$workTreePath1", "$workTreePath2") | ConvertTo-Completion -ResultType ParameterValue
+    Describe 'ShortOptions' {
+        It '<Subcommand>' -ForEach @(
+            @{
+                Subcommand = "remove"
+                Expected   = @{
+                    ListItemText = '-f';
+                    ToolTip      = 'force removal even if worktree is dirty or locked';
+                },
+                @{
+                    ListItemText = '-h';
+                    ToolTip      = 'show help';
+                } | ConvertTo-Completion -ResultType ParameterName
+            },
+            @{
+                Subcommand = "repair"
+                Expected   = @{
+                    ListItemText = '-h';
+                    ToolTip      = 'show help';
+                } | ConvertTo-Completion -ResultType ParameterName
+            }
+        ) {
+            "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
+
+    Describe 'Files' {
+        It '<_>' -ForEach @('prune', 'list', 'repair') {
+            $expected = @()
             "git $Command $_ " | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
-    $refs = 'HEAD', 'brn', 'main', 'wk', 'wt' | ConvertTo-Completion -ResultType ParameterValue
-    $brn = 'brn' | ConvertTo-Completion -ResultType ParameterValue
+    Describe 'WorktreePaths' {
+        Describe '<Subcommand>' -ForEach @('lock', 'remove', 'unlock', 'move' | ForEach-Object { @{Subcommand = $_ } }) {
+            It 'DoubleDash' {
+                $expected = @("$workTreePath1", "$workTreePath2") | ConvertTo-Completion -ResultType ParameterValue
+                "git $Command $Subcommand -- " | Complete-FromLine | Should -BeCompletion $expected
+            }
+
+            It '_' {
+                $expected = @("$workTreePath1", "$workTreePath2") | ConvertTo-Completion -ResultType ParameterValue
+                "git $Command $Subcommand " | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+    }
+
     It '<Line>' -ForEach @(
         @{
             Line     = "add --re"
@@ -201,6 +294,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         },
         @{
             Line     = "move foo "
+            Expected = @()
+        },
+        @{
+            Line     = "move foo -- "
+            Expected = @()
+        },
+        @{
+            Line     = "move -- foo "
             Expected = @()
         }
     ) {
