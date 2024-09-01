@@ -9,11 +9,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
         mkdir ($rootPath = "$TestDrive/gitRoot")
 
+        Initialize-SimpleRepo $rootPath
         Push-Location $rootPath
-        git init --initial-branch=main
-        git config alias.sw "switch"
-        git config alias.swf "sw -f"
-        git config --file test.config alias.ll "!ls"
     }
 
     AfterAll {

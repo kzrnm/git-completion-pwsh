@@ -50,6 +50,9 @@ function Initialize-SimpleRepo {
     "echo world" | Out-File 'world.ps1'
     git add -A 2>$null
     git commit -m "World"
+    git config alias.sw "switch"
+    git config alias.swf "sw -f"
+    git config --file test.config alias.ll "!ls"
     Pop-Location
 }
 function Initialize-Remote {
