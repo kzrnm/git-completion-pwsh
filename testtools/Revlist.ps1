@@ -25,7 +25,7 @@ if ($Ref) {
     Describe 'Ref' {
         It '<Line>' -ForEach @(
             @{
-                Line     = '';
+                Line     = "${Prefix}";
                 Expected = @(
                     'HEAD',
                     'FETCH_HEAD',
@@ -37,14 +37,14 @@ if ($Ref) {
                 ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
-                Line     = 'o';
+                Line     = "${Prefix}o";
                 Expected = @(
                     'ordinary/main',
                     'origin/main'
                 ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
-                Line     = '^';
+                Line     = "${Prefix}^";
                 Expected = @(
                     'HEAD',
                     'FETCH_HEAD',
@@ -56,14 +56,14 @@ if ($Ref) {
                 ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
-                Line     = '^o';
+                Line     = "${Prefix}^o";
                 Expected = @(
                     'ordinary/main',
                     'origin/main'
                 ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
-            "git $Command $Prefix$Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 }
@@ -72,7 +72,7 @@ if ($Refspec) {
     Describe 'Refspec' {
         It '<Line>' -ForEach @(
             @{
-                Line     = 'HEAD...';
+                Line     = "${Prefix}HEAD...";
                 Expected = @(
                     'HEAD',
                     'FETCH_HEAD',
@@ -86,7 +86,7 @@ if ($Refspec) {
                 }
             },
             @{
-                Line     = 'HEAD...o';
+                Line     = "${Prefix}HEAD...o";
                 Expected = @(
                     'ordinary/main',
                     'origin/main'
@@ -95,7 +95,7 @@ if ($Refspec) {
                 }
             },
             @{
-                Line     = 'HEAD..';
+                Line     = "${Prefix}HEAD..";
                 Expected = @(
                     'HEAD',
                     'FETCH_HEAD',
@@ -109,7 +109,7 @@ if ($Refspec) {
                 }
             },
             @{
-                Line     = 'HEAD..o';
+                Line     = "${Prefix}HEAD..o";
                 Expected = @(
                     'ordinary/main',
                     'origin/main'
@@ -118,7 +118,7 @@ if ($Refspec) {
                 }
             }
         ) {
-            "git $Command $Prefix$Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 }
@@ -127,7 +127,7 @@ if ($File) {
     Describe 'File' {
         It '<Line>' -ForEach @(
             @{
-                Line     = 'brn..main:';
+                Line     = "${Prefix}brn..main:";
                 Expected = @(
                     'Pwsh/', 'hello.sh', 'initial.txt' | ForEach-Object {
                         @{
@@ -139,7 +139,7 @@ if ($File) {
                     })
             },
             @{
-                Line     = 'brn..main:Pwsh/';
+                Line     = "${Prefix}brn..main:Pwsh/";
                 Expected = @(
                     @{
                         File           = 'Pwsh/world.ps1'
@@ -150,7 +150,7 @@ if ($File) {
                 )
             },
             @{
-                Line     = 'main:';
+                Line     = "${Prefix}main:";
                 Expected = 'Pwsh/', 'hello.sh', 'initial.txt' | ForEach-Object { 
                     @{
                         File           = $_
@@ -161,7 +161,7 @@ if ($File) {
                 }
             },
             @{
-                Line     = 'main:Pws';
+                Line     = "${Prefix}main:Pws";
                 Expected = 'Pwsh/' | ForEach-Object { 
                     @{
                         File           = $_
@@ -172,7 +172,7 @@ if ($File) {
                 }
             },
             @{
-                Line     = 'main:Pwsh/';
+                Line     = "${Prefix}main:Pwsh/";
                 Expected = @(
                     @{
                         File           = 'Pwsh/world.ps1'
@@ -183,7 +183,7 @@ if ($File) {
                 )
             },
             @{
-                Line     = 'main:Pwsh/wo';
+                Line     = "${Prefix}main:Pwsh/wo";
                 Expected = @(
                     @{
                         File           = 'Pwsh/world.ps1'
@@ -194,7 +194,7 @@ if ($File) {
                 )
             },
             @{
-                Line     = 'main:./Pwsh/';
+                Line     = "${Prefix}main:./Pwsh/";
                 Expected = @(
                     @{
                         File           = 'Pwsh/world.ps1'
@@ -205,7 +205,7 @@ if ($File) {
                 )
             },
             @{
-                Line     = 'main:./Pwsh/wo';
+                Line     = "${Prefix}main:./Pwsh/wo";
                 Expected = @(
                     @{
                         File           = 'Pwsh/world.ps1'
@@ -219,7 +219,7 @@ if ($File) {
             foreach ($e in $expected) {
                 $e.ToolTip = (Resolve-Path $e.File).Path.TrimEnd([Path]::AltDirectorySeparatorChar, [Path]::DirectorySeparatorChar)
             }
-            "git $Command $Prefix$Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 }
