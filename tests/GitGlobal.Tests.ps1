@@ -143,12 +143,12 @@ Describe 'GirGlobal' {
                 Exclude  = @();
                 Command  = 'wh';
                 Expected = @{
-                    ListItemText   = "whatchanged";
-                    ToolTip        = "Show logs with differences each commit introduces";
+                    ListItemText = "whatchanged";
+                    ToolTip      = "Show logs with differences each commit introduces";
                 },
                 @{
-                    ListItemText   = "why";
-                    ToolTip        = "why";
+                    ListItemText = "why";
+                    ToolTip      = "why";
                 } | ConvertTo-Completion -ResultType Text
             },
             @{
@@ -156,8 +156,8 @@ Describe 'GirGlobal' {
                 Exclude  = @();
                 Command  = 'wh';
                 Expected = @(@{
-                        ListItemText   = "whatchanged";
-                        ToolTip        = "Show logs with differences each commit introduces";
+                        ListItemText = "whatchanged";
+                        ToolTip      = "Show logs with differences each commit introduces";
                     }, "who", "why" | ConvertTo-Completion -ResultType Text)
             },
             @{
@@ -190,9 +190,10 @@ Describe 'GirGlobal' {
 
             "git $Command" | Complete-FromLine | Should -BeCompletion $Expected
         }
-    }
 
-    AfterEach {
-        $GitCompletionSettings.ShowAllCommand = $false
+        AfterEach {
+            $GitCompletionSettings.AdditionalCommands = @()
+            $GitCompletionSettings.ExcludeCommands = @()
+        }
     }
 }

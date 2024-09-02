@@ -2,7 +2,7 @@ using namespace System.Collections.Generic;
 
 . "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
-Describe 'IgnoreCase' {
+Describe 'ShowAllOptions' {
     BeforeAll {
         Initialize-Home
 
@@ -18,24 +18,31 @@ Describe 'IgnoreCase' {
         Pop-Location
     }
 
-    Describe 'gitHeads' {
+    Describe 'Options' {
         Describe '<Line>' -ForEach @(
             @{
-                Line     = 'git config set branch.M';
+                Line     = 'commit --allo';
                 Expected = @{
-                    $true  = 'branch.main.' | ConvertTo-Completion -ResultType ParameterName
+                    $true  = '--allow-empty', '--allow-empty-message' | ConvertTo-Completion -ResultType ParameterName
+                    $false = @()
+                }
+            },
+            @{
+                Line     = 'add --wa';
+                Expected = @{
+                    $true  = '--warn-embedded-repo' | ConvertTo-Completion -ResultType ParameterName
                     $false = @()
                 }
             }
         ) {
             It '<_>'  -ForEach @($true, $false) {
-                $GitCompletionSettings.IgnoreCase = $_
-                "$Line" | Complete-FromLine | Should -BeCompletion $Expected[$_]
+                $GitCompletionSettings.ShowAllOptions = $_
+                "git $Line" | Complete-FromLine | Should -BeCompletion $Expected[$_]
             }
         }
 
         AfterAll {
-            $GitCompletionSettings.IgnoreCase = $false
+            $GitCompletionSettings.ShowAllOptions = $false
         }
     }
 }
