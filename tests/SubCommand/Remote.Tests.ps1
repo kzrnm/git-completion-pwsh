@@ -23,12 +23,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = '--verbose';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be verbose; must be placed before a subcommand'
                     },
                     @{
                         Left     = '--verbose';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be verbose; must be placed before a subcommand'
                     }
                 ) {
@@ -139,12 +139,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = '--fetch';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--fetch' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'fetch the remote branches'
                     },
                     @{
                         Left     = '--fetch';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--fetch' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'fetch the remote branches'
                     }
                 ) {
@@ -265,12 +265,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = '--dry-run';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--dry-run' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'dry run'
                     },
                     @{
                         Left     = '--dry-run';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--dry-run' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'dry run'
                     }
                 ) {
@@ -442,12 +442,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = '--progress';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--progress' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'force progress reporting'
                     },
                     @{
                         Left     = '--progress';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--progress' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'force progress reporting'
                     }
                 ) {
@@ -541,12 +541,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = '--delete';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--delete' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'delete refs/remotes/<name>/HEAD'
                     },
                     @{
                         Left     = '--delete';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--delete' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'delete refs/remotes/<name>/HEAD'
                     }
                 ) {
@@ -700,12 +700,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = '--add';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--add' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'add branch'
                     },
                     @{
                         Left     = '--add';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--add' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'add branch'
                     }
                 ) {
@@ -848,12 +848,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = '--all';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--all' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'return all URLs'
                     },
                     @{
                         Left     = '--all';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--all' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'return all URLs'
                     }
                 ) {
@@ -953,12 +953,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = '--add';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--add' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'add URL'
                     },
                     @{
                         Left     = '--add';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--add' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'add URL'
                     }
                 ) {
@@ -1130,12 +1130,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = '--prune';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--prune' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'prune remotes after fetching'
                     },
                     @{
                         Left     = '--prune';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--prune' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'prune remotes after fetching'
                     }
                 ) {

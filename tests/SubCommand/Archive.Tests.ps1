@@ -24,12 +24,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = '--list';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--list' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'list supported archive formats'
                 },
                 @{
                     Left     = '--list';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--list' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'list supported archive formats'
                 }
             ) {

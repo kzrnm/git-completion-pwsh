@@ -23,12 +23,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = '--3way';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--3way' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'attempt three-way merge, fall back on normal patch if that fails'
                 },
                 @{
                     Left     = '--3way';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--3way' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'attempt three-way merge, fall back on normal patch if that fails'
                 }
             ) {

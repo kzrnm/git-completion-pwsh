@@ -24,12 +24,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = '--quiet';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'suppress informational messages'
                 },
                 @{
                     Left     = '--quiet';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'suppress informational messages'
                 }
             ) {
@@ -242,7 +242,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
             It 'Right' {
                 $Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue
-                "git $Command " | Complete-FromLine -Right @($Option) | Should -BeCompletion $expected
+                "git $Command " | Complete-FromLine -Right " $Option" | Should -BeCompletion $expected
             }
         }
     }

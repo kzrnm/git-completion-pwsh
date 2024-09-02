@@ -24,12 +24,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = '--debug';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--debug' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'debug search strategy on stderr'
                 },
                 @{
                     Left     = '--debug';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--debug' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'debug search strategy on stderr'
                 }
             ) {

@@ -23,12 +23,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = '--gui';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--gui' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--gui'
                 },
                 @{
                     Left     = '--gui';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--gui' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--gui'
                 }
             ) {

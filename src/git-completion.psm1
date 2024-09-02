@@ -6,14 +6,11 @@ Export-ModuleMember -Variable 'GitCompletionSettings'
 
 Register-ArgumentCompleter -CommandName gitk -Native -ScriptBlock {
     param($wordToComplete, $CommandAst, $CursorPosition)
-
-    $words, $CurrentIndex = buildWords $CommandAst $CursorPosition 'gitk'
-    return (Complete-Gitk -Words $words -CurrentIndex $CurrentIndex)
+    $CommandAst>"$PSScriptRoot/../debug.log"
+    return (Complete-Gitk -CommandAst $CommandAst -CursorPosition $CursorPosition)
 }
 
 Register-ArgumentCompleter -CommandName git -Native -ScriptBlock {
     param($wordToComplete, $CommandAst, $CursorPosition)
-
-    $words, $CurrentIndex = buildWords $CommandAst $CursorPosition 'git'
-    return (Complete-Git -Words $words -CurrentIndex $CurrentIndex)
+    return (Complete-Git -CommandAst $CommandAst -CursorPosition $CursorPosition)
 }

@@ -24,12 +24,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = @('gitk', '--left-o');
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--left-only' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--left-only'
                 },
                 @{
                     Left     = @('gitk', '--left-o');
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--left-only' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--left-only'
                 }
             ) {

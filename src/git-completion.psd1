@@ -27,7 +27,7 @@
     # CompanyName       = 'kzrnm'
 
     # Copyright statement for this module
-    Copyright         = '(c) kzrnm. All rights reserved.'
+    Copyright         = ' (c) kzrnm. All rights reserved.'
 
     # Description of the functionality provided by this module
     Description       = 'Tab Completion for Git command'

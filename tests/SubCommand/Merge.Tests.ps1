@@ -24,12 +24,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = '--quiet';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be more quiet'
                 },
                 @{
                     Left     = '--quiet';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'be more quiet'
                 }
             ) {

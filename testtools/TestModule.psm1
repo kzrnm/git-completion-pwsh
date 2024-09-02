@@ -96,19 +96,24 @@ function Complete-FromLine {
     [OutputType([CompletionResult[]])]
     param (
         [string][Parameter(ValueFromPipeline)] $line,
-        [string[]]$Right = @()
+        [string]$Right = ' '
     )
 
-    $words = @($line -split '\s+')
-    if ($words[0] -eq 'gitk') {
-        return (Complete-Gitk -Words ($words + $Right) -CurrentIndex ($words.Length - 1))
+    switch -Wildcard ($line) {
+        'gitk *' {
+            Set-Alias Complete Complete-Gitk -Scope Local
+            break
+        }
+        'git *' {
+            Set-Alias Complete Complete-Git -Scope Local
+            break
+        }
+        Default { throw 'Invalid input' }
     }
-    elseif ($words[0] -eq 'git') {
-        return (Complete-Git -Words ($words + $Right) -CurrentIndex ($words.Length - 1))
-    }
-    else {
-        throw 'Invalid input'
-    }
+
+    $CommandAst = [System.Management.Automation.Language.Parser]::ParseInput($line + $Right, [ref]$null, [ref]$null).EndBlock.Statements.PipelineElements
+    $CursorPosition = $line.Length
+    return (Complete -CommandAst $CommandAst -CursorPosition $CursorPosition)
 }
 
 function writeObjectLine {

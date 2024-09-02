@@ -23,12 +23,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = '--delete';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--delete' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'delete symbolic ref'
                 },
                 @{
                     Left     = '--delete';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--delete' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'delete symbolic ref'
                 }
             ) {

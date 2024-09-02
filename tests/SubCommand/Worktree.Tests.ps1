@@ -86,22 +86,22 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = 'add --re';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--reason=' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'reason for locking'
                 },
                 @{
                     Left     = 'add --re';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--reason=' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'reason for locking'
                 },
                 @{
                     Left     = 'prune --ver';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'report pruned working trees'
                 },
                 @{
                     Left     = 'prune --ver';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'report pruned working trees'
                 }
             ) {

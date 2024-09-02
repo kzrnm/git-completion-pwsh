@@ -24,12 +24,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = '--no-prefix';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--no-prefix' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--no-prefix'
                 },
                 @{
                     Left     = '--no-prefix';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--no-prefix' | ConvertTo-Completion -ResultType ParameterName -ToolTip '--no-prefix'
                 }
             ) {

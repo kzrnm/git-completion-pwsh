@@ -26,12 +26,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = '--verbose';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'print command description'
                     },
                     @{
                         Left     = '--verbose';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--verbose' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'print command description'
                     }
                 ) {

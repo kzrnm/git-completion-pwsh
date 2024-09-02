@@ -156,14 +156,13 @@ function gitcomp {
 
 function buildWords {
     [CmdletBinding(PositionalBinding)]
-    param($CommandAst, $CursorPosition, $CommandName)
+    param($CommandAst, $CursorPosition)
 
     $ws = [System.Collections.Generic.List[string]]::new($CommandAst.CommandElements.Count + 2)
-    $ws.Add($CommandName)
 
     $CurrentIndex = 0
 
-    for ($i = 1; $i -lt $CommandAst.CommandElements.Count; $i++) {
+    for ($i = 0; $i -lt $CommandAst.CommandElements.Count; $i++) {
         $cmd = $CommandAst.CommandElements[$i]
         $extent = $cmd.Extent
         if ($null -eq $cmd.Value) {

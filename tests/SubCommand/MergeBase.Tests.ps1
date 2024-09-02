@@ -24,12 +24,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = '--all';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--all' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'output all common ancestors'
                 },
                 @{
                     Left     = '--all';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--all' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'output all common ancestors'
                 }
             ) {

@@ -24,12 +24,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 It '<Left>(cursor) <Right>' -ForEach @(
                     @{
                         Left     = 'get --local';
-                        Right    = @('--');
+                        Right    = ' --';
                         Expected = '--local' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'use repository config file'
                     },
                     @{
                         Left     = 'get --local';
-                        Right    = @('-- --all');
+                        Right    = ' -- --all';
                         Expected = '--local' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'use repository config file'
                     }
                 ) {
@@ -300,7 +300,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     }
 
                     It 'Right' {
-                        "git $Command $Subcommand $Line" | Complete-FromLine -Right @('--', '--global') | Should -BeCompletion $expected
+                        "git $Command $Subcommand $Line" | Complete-FromLine -Right ' -- --global' | Should -BeCompletion $expected
                     }
                 }
             }

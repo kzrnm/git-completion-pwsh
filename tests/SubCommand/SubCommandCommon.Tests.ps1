@@ -23,12 +23,12 @@ Describe 'SubCommandCommon-check-ignore' {
             It '<Left>(cursor) <Right>' -ForEach @(
                 @{
                     Left     = '--quiet';
-                    Right    = @('--');
+                    Right    = ' --';
                     Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'suppress progress reporting'
                 },
                 @{
                     Left     = '--quiet';
-                    Right    = @('-- --all');
+                    Right    = ' -- --all';
                     Expected = '--quiet' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'suppress progress reporting'
                 }
             ) {
