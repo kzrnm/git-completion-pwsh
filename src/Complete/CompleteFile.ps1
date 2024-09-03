@@ -1,7 +1,7 @@
 using namespace System.Management.Automation;
 using namespace System.IO;
 
-function dequote {
+function escapeSeparator {
     param (
         [Parameter(Position = 0, ValueFromPipeline)]
         [string]
@@ -13,7 +13,7 @@ function dequote {
     }
 }
 
-function completeFile {
+function completeLocalFile {
     param (
         [Parameter(ValueFromPipeline)]
         [string]
@@ -64,10 +64,10 @@ function completeCurrentDirectory {
     )
 
     $lx = $Current.LastIndexOfAny(@([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar))
-    $left = $Current.Substring(0, $lx + 1) | dequote
+    $left = $Current.Substring(0, $lx + 1) | escapeSeparator
 
     Get-ChildItem "$Current*" | ForEach-Object {
-        $name = $_.Name | dequote
+        $name = $_.Name | escapeSeparator
         if ($_ -is [System.IO.DirectoryInfo]) {
             [CompletionResult]::new(
                 "${Prefix}${left}${name}/",

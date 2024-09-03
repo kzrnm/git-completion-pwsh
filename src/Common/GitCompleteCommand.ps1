@@ -277,7 +277,7 @@ function gitCompleteRevlistFile {
                 }
             }
 
-            gitLsTreeFile "$ls" | completeFile -Current $CurrentFile -Prefix $Prefix -BaseDir $BaseDir -RemovePrefix
+            gitLsTreeFile "$ls" | completeLocalFile -Current $CurrentFile -Prefix $Prefix -BaseDir $BaseDir -RemovePrefix
             return
         }
         '(?<prefix>.*\.{2,3})(?<current>.*)' {
