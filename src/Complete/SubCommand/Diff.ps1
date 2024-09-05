@@ -46,8 +46,9 @@ function Complete-Opts-diff {
         return
     }
 
-    if ($Current -cmatch '(--[^=]+)=.*') {
+    if ($Current -cmatch '(--[^=]+)=(.*)') {
         $key = $Matches[1]
+        $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
             '--diff-algorithm' { $script:gitDiffAlgorithms }
             '--submodule' { $script:gitDiffSubmoduleFormats }
@@ -57,7 +58,7 @@ function Complete-Opts-diff {
         }
 
         if ($candidates) {
-            $candidates | completeList -Current $Current -Prefix "$key=" -ResultType ParameterValue -RemovePrefix
+            $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }

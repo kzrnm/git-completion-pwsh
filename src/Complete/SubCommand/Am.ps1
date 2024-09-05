@@ -24,8 +24,9 @@ function Complete-GitSubCommand-am {
             return
         }
 
-        if ($Current -cmatch '(--[^=]+)=.*') {
+        if ($Current -cmatch '(--[^=]+)=(.*)') {
             $key = $Matches[1]
+            $value = $Matches[2]
             $candidates = switch -CaseSensitive ($key) {
                 '--whitespace' { $script:gitWhitespacelist }
                 '--patch-format' { $script:gitPatchformat }
@@ -34,7 +35,7 @@ function Complete-GitSubCommand-am {
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $Current -Prefix "$key=" -ResultType ParameterValue -RemovePrefix
+                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }

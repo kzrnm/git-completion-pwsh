@@ -22,7 +22,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     Describe '<Command>' -ForEach ('log', 'whatchanged' | ForEach-Object { @{Command = $_ } }) {
         Describe 'DoubleDash' {
             Describe 'InRight' {
-                It '<Left>(cursor) <Right>' -ForEach @(
+                It '<Left>(cursor)<Right>' -ForEach @(
                     @{
                         Left     = '--quiet';
                         Right    = ' --';

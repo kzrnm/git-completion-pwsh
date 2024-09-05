@@ -1,0 +1,2 @@
+[string]$script:DirectorySeparatorChars = ((@([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) | Sort-Object -Unique) -join '')
+[string]$script:DirectorySeparatorCharsRegex = "$($DirectorySeparatorChars.Replace('\', '\\'))"

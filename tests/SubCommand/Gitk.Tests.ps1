@@ -21,7 +21,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
     Describe 'DoubleDash' {
         Describe 'InRight' {
-            It '<Left>(cursor) <Right>' -ForEach @(
+            It '<Left>(cursor)<Right>' -ForEach @(
                 @{
                     Left     = @('gitk', '--left-o');
                     Right    = ' --';

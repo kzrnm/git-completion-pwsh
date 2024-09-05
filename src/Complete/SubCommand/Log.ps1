@@ -54,8 +54,9 @@ function Complete-Opts-log {
 
     if (!$Current.StartsWith('--')) { return @() }
 
-    if ($Current -cmatch '(--[^=]+)=.*') {
+    if ($Current -cmatch '(--[^=]+)=(.*)') {
         $key = $Matches[1]
+        $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
             { $_ -in @('--pretty', '--format') } {
                 $script:gitLogPrettyFormats + @(gitPrettyAliases)
@@ -70,7 +71,7 @@ function Complete-Opts-log {
         }
 
         if ($candidates) {
-            $candidates | completeList -Current $Current -Prefix "$key=" -ResultType ParameterValue -RemovePrefix
+            $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }

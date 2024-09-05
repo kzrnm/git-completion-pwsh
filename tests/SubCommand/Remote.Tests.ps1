@@ -20,7 +20,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     Describe '_' {
         Describe 'DoubleDash' {
             Describe 'InRight' {
-                It '<Left>(cursor) <Right>' -ForEach @(
+                It '<Left>(cursor)<Right>' -ForEach @(
                     @{
                         Left     = '--verbose';
                         Right    = ' --';
@@ -136,7 +136,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
         Describe 'DoubleDash' {
             Describe 'InRight' {
-                It '<Left>(cursor) <Right>' -ForEach @(
+                It '<Left>(cursor)<Right>' -ForEach @(
                     @{
                         Left     = '--fetch';
                         Right    = ' --';
@@ -262,7 +262,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
         Describe 'DoubleDash' {
             Describe 'InRight' {
-                It '<Left>(cursor) <Right>' -ForEach @(
+                It '<Left>(cursor)<Right>' -ForEach @(
                     @{
                         Left     = '--dry-run';
                         Right    = ' --';
@@ -439,7 +439,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
         Describe 'DoubleDash' {
             Describe 'InRight' {
-                It '<Left>(cursor) <Right>' -ForEach @(
+                It '<Left>(cursor)<Right>' -ForEach @(
                     @{
                         Left     = '--progress';
                         Right    = ' --';
@@ -538,7 +538,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
         Describe 'DoubleDash' {
             Describe 'InRight' {
-                It '<Left>(cursor) <Right>' -ForEach @(
+                It '<Left>(cursor)<Right>' -ForEach @(
                     @{
                         Left     = '--delete';
                         Right    = ' --';
@@ -697,7 +697,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
         Describe 'DoubleDash' {
             Describe 'InRight' {
-                It '<Left>(cursor) <Right>' -ForEach @(
+                It '<Left>(cursor)<Right>' -ForEach @(
                     @{
                         Left     = '--add';
                         Right    = ' --';
@@ -845,7 +845,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
         Describe 'DoubleDash' {
             Describe 'InRight' {
-                It '<Left>(cursor) <Right>' -ForEach @(
+                It '<Left>(cursor)<Right>' -ForEach @(
                     @{
                         Left     = '--all';
                         Right    = ' --';
@@ -950,7 +950,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
         Describe 'DoubleDash' {
             Describe 'InRight' {
-                It '<Left>(cursor) <Right>' -ForEach @(
+                It '<Left>(cursor)<Right>' -ForEach @(
                     @{
                         Left     = '--add';
                         Right    = ' --';
@@ -1127,7 +1127,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
         Describe 'DoubleDash' {
             Describe 'InRight' {
-                It '<Left>(cursor) <Right>' -ForEach @(
+                It '<Left>(cursor)<Right>' -ForEach @(
                     @{
                         Left     = '--prune';
                         Right    = ' --';

@@ -9,19 +9,26 @@ function __git {
 
     $Context = Get-Variable 'Context' -ValueOnly -Scope 'Script' -ErrorAction Ignore
     $gitDir = $Context.gitDir
-    $gitCArgs = $Context.gitCArgs
+    $gitArgs = $Context.gitCArgs
 
     if ($GitDirOverride) {
-        $gitDirOption = "--git-dir=$GitDirOverride"
+        $gitArgs = @("--git-dir=$GitDirOverride") + $Context.gitCArgs
     }
     elseif ($gitDir) {
-        $gitDirOption = "--git-dir=$gitDir"
+        $gitArgs = @("--git-dir=$gitDir") + $Context.gitCArgs
     }
     else {
-        $gitDirOption = $null
+        $gitArgs = $Context.gitCArgs
     }
 
-    git $gitDirOption @gitCArgs @OrdinaryArgs
+    $OutputEncodingBak = [Console]::OutputEncoding
+    try {
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+        git @gitArgs @OrdinaryArgs
+    }
+    finally {
+        [Console]::OutputEncoding = $OutputEncodingBak
+    }
 }
 
 $script:__gitVersion = $null
@@ -470,14 +477,22 @@ function gitRefs {
 # __git_resolve_builtins 
 function gitResolveBuiltins {
     [OutputType([string[]])]
+    [CmdletBinding(DefaultParameterSetName = 'Default')]
     param(
         [Parameter(Mandatory, ValueFromRemainingArguments)]
         [string[]]
-        $Command
+        $Command,
+        [Parameter(ParameterSetName = 'All')]
+        [switch]
+        $All
     )
 
+    if ($PSCmdlet.ParameterSetName -eq 'Default') {
+        $All = [bool]$script:GitCompletionSettings.ShowAllOptions
+    }
+
     if (gitSupportParseoptHelper $Command[0]) {
-        return (gitResolveBuiltinsImpl @Command -All:([bool]$script:GitCompletionSettings.ShowAllOptions) |
+        return (gitResolveBuiltinsImpl @Command -All:([bool]$All) |
             ForEach-Object { $_ -split "\s+" } |
             Where-Object { $_ }
         )
@@ -498,7 +513,7 @@ function gitResolveBuiltinsImpl {
         $completionHelper = '--git-completion-helper'
     }
 
-    return (__git @Command $completionHelper)
+    return (git @Command $completionHelper)
 }
 
 
@@ -564,5 +579,45 @@ function gitArchiveList {
     [OutputType([string[]])]
     param ()
 
-    git archive --list
+    __git archive --list
+}
+
+# __git_index_files
+# __git_ls_files_helper
+function gitIndexFiles {
+    [CmdletBinding()]
+    [OutputType([string[]])]
+    param (
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [string]
+        $Current,
+        [Parameter(Mandatory)]
+        [string[]]
+        $Options
+    )
+
+    $BaseDir = ''
+    if ($Current -cmatch "^(?<prefix>(\.{1,2}[$DirectorySeparatorCharsRegex]+)+)(?<path>.*?)$") {
+        $BaseDir = $Matches['prefix']
+        $BaseDirOpts = @('-C', $BaseDir)
+        $Current = $Matches['path']
+    }
+    else {
+        $BaseDirOpts = @()
+    }
+
+    $Current = $Current.Replace('\', '\\')
+    $results = if (($Options.Length -eq 1) -and ($Options[0] -ceq '--committable')) {
+        __git @BaseDirOpts diff-index -z --name-only --relative HEAD '--' "$Current*"
+    }
+    else {
+        __git @BaseDirOpts ls-files -z --exclude-standard @Options '--' "$Current*"
+    }
+
+    foreach ($file in "$results".Split("`0")) {
+        if ($file) {
+            "$BaseDir$file"
+        }
+    }
 }

@@ -4,22 +4,22 @@ Describe 'FileCompleter' {
     BeforeAll {
         . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))src/Complete/CompleteFile.ps1"
 
-        New-Item "$TestDrive/Root" -ItemType Directory
+        New-Item "$TestDrive/gitRoot" -ItemType Directory
         New-Item "$TestDrive/aurora" -ItemType Directory
         New-Item "$TestDrive/aurora/canada" -ItemType File
         New-Item "$TestDrive/uncle" -ItemType File
         New-Item "$TestDrive/aunt" -ItemType File
 
-        New-Item "$TestDrive/Root/漢字" -ItemType Directory
-        New-Item "$TestDrive/Root/漢``'帝　国'" -ItemType File
-        New-Item "$TestDrive/Root/Deava" -ItemType File
-        New-Item "$TestDrive/Root/Aquarion Evol" -ItemType Directory
-        New-Item "$TestDrive/Root/Aquarion Evol/Evol" -ItemType File
-        New-Item "$TestDrive/Root/Aquarion Evol/Gepard" -ItemType File
-        New-Item "$TestDrive/Root/Aquarion Evol/Gepada" -ItemType File
-        New-Item "$TestDrive/Root/Aquarion Evol/Ancient" -ItemType Directory
+        New-Item "$TestDrive/gitRoot/漢字" -ItemType Directory
+        New-Item "$TestDrive/gitRoot/漢``'帝　国'" -ItemType File
+        New-Item "$TestDrive/gitRoot/Deava" -ItemType File
+        New-Item "$TestDrive/gitRoot/Aquarion Evol" -ItemType Directory
+        New-Item "$TestDrive/gitRoot/Aquarion Evol/Evol" -ItemType File
+        New-Item "$TestDrive/gitRoot/Aquarion Evol/Gepard" -ItemType File
+        New-Item "$TestDrive/gitRoot/Aquarion Evol/Gepada" -ItemType File
+        New-Item "$TestDrive/gitRoot/Aquarion Evol/Ancient" -ItemType Directory
 
-        Push-Location "$TestDrive/Root"
+        Push-Location "$TestDrive/gitRoot"
     }
 
     AfterAll {
@@ -33,7 +33,7 @@ Describe 'FileCompleter' {
             Expected = @{
                 CompletionText = 'Aquarion` Evol/';
                 ListItemText   = 'Aquarion Evol/';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol";
             } | ConvertTo-Completion -ResultType ProviderItem
         },
         @{
@@ -42,7 +42,7 @@ Describe 'FileCompleter' {
             Expected = @{
                 CompletionText = 'Path=Aquarion` Evol/';
                 ListItemText   = 'Aquarion Evol/';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol";
             } | ConvertTo-Completion -ResultType ProviderItem
         },
         @{
@@ -51,22 +51,22 @@ Describe 'FileCompleter' {
             Expected = @{
                 CompletionText = 'Aquarion` Evol/Ancient/';
                 ListItemText   = 'Ancient/';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol/Ancient";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol/Ancient";
             },
             @{
                 CompletionText = 'Aquarion` Evol/Evol';
                 ListItemText   = 'Evol';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol/Evol";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol/Evol";
             },
             @{
                 CompletionText = 'Aquarion` Evol/Gepada';
                 ListItemText   = 'Gepada';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol/Gepada";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol/Gepada";
             },
             @{
                 CompletionText = 'Aquarion` Evol/Gepard';
                 ListItemText   = 'Gepard';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol/Gepard";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol/Gepard";
             } | ConvertTo-Completion -ResultType ProviderItem
         },
         @{
@@ -75,22 +75,22 @@ Describe 'FileCompleter' {
             Expected = @{
                 CompletionText = 'Path=Aquarion` Evol/Ancient/';
                 ListItemText   = 'Ancient/';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol/Ancient";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol/Ancient";
             },
             @{
                 CompletionText = 'Path=Aquarion` Evol/Evol';
                 ListItemText   = 'Evol';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol/Evol";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol/Evol";
             },
             @{
                 CompletionText = 'Path=Aquarion` Evol/Gepada';
                 ListItemText   = 'Gepada';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol/Gepada";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol/Gepada";
             },
             @{
                 CompletionText = 'Path=Aquarion` Evol/Gepard';
                 ListItemText   = 'Gepard';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol/Gepard";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol/Gepard";
             } | ConvertTo-Completion -ResultType ProviderItem
         },
         @{
@@ -99,12 +99,12 @@ Describe 'FileCompleter' {
             Expected = @{
                 CompletionText = '漢字/';
                 ListItemText   = '漢字/';
-                TestDriveFile  = "TestDrive:/Root/漢字";
+                TestDriveFile  = "TestDrive:/gitRoot/漢字";
             },
             @{
                 CompletionText = '漢```''帝`　国`''';
                 ListItemText   = "漢``'帝　国'";
-                TestDriveFile  = "TestDrive:/Root/漢``'帝　国'";
+                TestDriveFile  = "TestDrive:/gitRoot/漢``'帝　国'";
             } | ConvertTo-Completion -ResultType ProviderItem
         },
         @{
@@ -113,12 +113,12 @@ Describe 'FileCompleter' {
             Expected = @{
                 CompletionText = 'Path=漢字/';
                 ListItemText   = '漢字/';
-                TestDriveFile  = "TestDrive:/Root/漢字";
+                TestDriveFile  = "TestDrive:/gitRoot/漢字";
             },
             @{
                 CompletionText = 'Path=漢```''帝`　国`''';
                 ListItemText   = "漢``'帝　国'";
-                TestDriveFile  = "TestDrive:/Root/漢``'帝　国'";
+                TestDriveFile  = "TestDrive:/gitRoot/漢``'帝　国'";
             } | ConvertTo-Completion -ResultType ProviderItem
         },
         @{
@@ -130,9 +130,9 @@ Describe 'FileCompleter' {
                 TestDriveFile  = "TestDrive:/aurora";
             },
             @{
-                CompletionText = '../Root/';
-                ListItemText   = 'Root/';
-                TestDriveFile  = "TestDrive:/Root";
+                CompletionText = '../gitRoot/';
+                ListItemText   = 'gitRoot/';
+                TestDriveFile  = "TestDrive:/gitRoot";
             },
             @{
                 CompletionText = '../aunt';
@@ -154,9 +154,9 @@ Describe 'FileCompleter' {
                 TestDriveFile  = "TestDrive:/aurora";
             },
             @{
-                CompletionText = 'Path=../Root/';
-                ListItemText   = 'Root/';
-                TestDriveFile  = "TestDrive:/Root";
+                CompletionText = 'Path=../gitRoot/';
+                ListItemText   = 'gitRoot/';
+                TestDriveFile  = "TestDrive:/gitRoot";
             },
             @{
                 CompletionText = 'Path=../aunt';
@@ -175,22 +175,22 @@ Describe 'FileCompleter' {
             Expected = @{
                 CompletionText = 'Aquarion` Evol/';
                 ListItemText   = 'Aquarion Evol/';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol";
             },
             @{
                 CompletionText = '漢字/';
                 ListItemText   = '漢字/';
-                TestDriveFile  = "TestDrive:/Root/漢字";
+                TestDriveFile  = "TestDrive:/gitRoot/漢字";
             },
             @{
                 CompletionText = 'Deava';
                 ListItemText   = 'Deava';
-                TestDriveFile  = "TestDrive:/Root/Deava";
+                TestDriveFile  = "TestDrive:/gitRoot/Deava";
             },
             @{
                 CompletionText = '漢```''帝`　国`''';
                 ListItemText   = "漢``'帝　国'";
-                TestDriveFile  = "TestDrive:/Root/漢``'帝　国'";
+                TestDriveFile  = "TestDrive:/gitRoot/漢``'帝　国'";
             } | ConvertTo-Completion -ResultType ProviderItem
         },
         @{
@@ -199,22 +199,22 @@ Describe 'FileCompleter' {
             Expected = @{
                 CompletionText = 'Path=Aquarion` Evol/';
                 ListItemText   = 'Aquarion Evol/';
-                TestDriveFile  = "TestDrive:/Root/Aquarion Evol";
+                TestDriveFile  = "TestDrive:/gitRoot/Aquarion Evol";
             },
             @{
                 CompletionText = 'Path=漢字/';
                 ListItemText   = '漢字/';
-                TestDriveFile  = "TestDrive:/Root/漢字";
+                TestDriveFile  = "TestDrive:/gitRoot/漢字";
             },
             @{
                 CompletionText = 'Path=Deava';
                 ListItemText   = 'Deava';
-                TestDriveFile  = "TestDrive:/Root/Deava";
+                TestDriveFile  = "TestDrive:/gitRoot/Deava";
             },
             @{
                 CompletionText = 'Path=漢```''帝`　国`''';
                 ListItemText   = "漢``'帝　国'";
-                TestDriveFile  = "TestDrive:/Root/漢``'帝　国'";
+                TestDriveFile  = "TestDrive:/gitRoot/漢``'帝　国'";
             } | ConvertTo-Completion -ResultType ProviderItem
         },
         @{

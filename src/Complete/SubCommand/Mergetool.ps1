@@ -43,14 +43,15 @@ function Complete-GitSubCommand-mergetool {
             $prevCandidates | completeList -Current $Current -ResultType ParameterValue
             return
         }
-        if ($Current -cmatch '(--[^=]+)=.*') {
+        if ($Current -cmatch '(--[^=]+)=(.*)') {
             $key = $Matches[1]
+            $value = $Matches[2]
             $candidates = switch -CaseSensitive ($key) {
                 '--tool' { ($gitMergetoolsCommon + @('tortoisemerge')) }
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $Current -Prefix "$key=" -ResultType ParameterValue -RemovePrefix
+                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }

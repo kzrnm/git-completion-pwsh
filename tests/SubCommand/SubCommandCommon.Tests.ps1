@@ -20,7 +20,7 @@ Describe 'SubCommandCommon-check-ignore' {
 
     Describe 'DoubleDash' {
         Describe 'InRight' {
-            It '<Left>(cursor) <Right>' -ForEach @(
+            It '<Left>(cursor)<Right>' -ForEach @(
                 @{
                     Left     = '--quiet';
                     Right    = ' --';

@@ -1,6 +1,7 @@
+using namespace System.Collections.Generic;
 using namespace System.Management.Automation;
 
-function Complete-GitSubCommand-difftool {
+function Complete-GitSubCommand-add {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -15,7 +16,7 @@ function Complete-GitSubCommand-difftool {
         }
 
         $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
-            '--tool' { ($gitMergetoolsCommon + @('kompare')) }
+            '--chmod' { '+x', '-x' }
         }
 
         if ($prevCandidates) {
@@ -27,7 +28,7 @@ function Complete-GitSubCommand-difftool {
             $key = $Matches[1]
             $value = $Matches[2]
             $candidates = switch -CaseSensitive ($key) {
-                '--tool' { ($gitMergetoolsCommon + @('kompare')) }
+                '--chmod' { '+x', '-x' }
             }
 
             if ($candidates) {
@@ -37,11 +38,30 @@ function Complete-GitSubCommand-difftool {
         }
 
         if ($Current.StartsWith('--')) {
-            $gitDiffDifftoolOptions | completeList -Current $Current
             gitCompleteResolveBuiltins $Context.command -Current $Current
             return
         }
     }
 
-    gitCompleteRevlistFile $Current
+    $completeOpt = '--others', '--modified', '--no-empty-directory'
+    $skipOptions = [System.Collections.Generic.List[string]]::new()
+    foreach ($opt in (gitResolveBuiltins $Context.command -All)) {
+        if ($opt.EndsWith('=')) {
+            $skipOptions.Add($opt)
+        }
+    }
+    $UsedPaths = [System.Collections.Generic.List[string]]::new($Context.Words.Length)
+    for ($i = $Context.commandIndex + 1; $i -lt $Context.Words.Length; $i++) {
+        if ($i -eq $Context.CurrentIndex) { continue }
+        $w = $Context.Words[$i]
+        if ($w -cin @('-u', '--update')) {
+            $completeOpt = @('--modified')
+        }
+        elseif ($skipOptions.Contains($w)) { $i++ }
+        elseif (!$w.StartsWith('-') -or ($i -gt $Context.DoubledashIndex)) {
+            $UsedPaths.Add($w)
+        }
+    }
+
+    gitCompleteIndexFile -Current $Current -Options $completeOpt -Exclude $UsedPaths -LeadingDash:($Context.HasDoubledash())
 }

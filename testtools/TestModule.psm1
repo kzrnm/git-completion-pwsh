@@ -1,4 +1,4 @@
-#Requires -Module Pester, git-completion
+﻿#Requires -Module Pester, git-completion
 
 using namespace System.Management.Automation;
 
@@ -47,7 +47,8 @@ function Initialize-SimpleRepo {
     Push-Location $rootPath
     git init --initial-branch=main
     git commit -m "initial" --allow-empty
-    "echo world" | Out-File 'world.ps1'
+    mkdir Pwsh | Out-Null
+    "echo world" | Out-File 'Pwsh/world.ps1' | Out-Null
     git add -A 2>$null
     git commit -m "World"
     git config alias.sw "switch"
@@ -89,6 +90,41 @@ function Initialize-Remote {
     "echo world" | Out-File 'Pwsh/world.ps1'
     git add -A 2>$null
     git commit -m "World"
+    Pop-Location
+}
+
+function Initialize-FilesRepo {
+    [CmdletBinding(PositionalBinding)]
+    param(
+        $rootPath,
+        $remotePath
+    )
+
+    if ($remotePath) {
+        Initialize-Remote $rootPath $remotePath
+    }
+    else {
+        Initialize-SimpleRepo $rootPath
+    }
+
+    Push-Location $rootPath
+    New-Item "$TestDrive/gitRoot/Dr.Wily" -ItemType File
+    New-Item "$TestDrive/gitRoot/Aquarion Evol" -ItemType Directory
+    New-Item "$TestDrive/gitRoot/Aquarion Evol/Evol" -ItemType File
+    New-Item "$TestDrive/gitRoot/Aquarion Evol/Ancient" -ItemType Directory
+    New-Item "$TestDrive/gitRoot/Aquarion Evol/Ancient/Soler" -ItemType File
+    git add "$TestDrive/gitRoot/Dr.Wily" "$TestDrive/gitRoot/Aquarion Evol/"
+    git commit -m "Start"
+    'X' > "$TestDrive/gitRoot/Dr.Wily"
+    'LOVE' > "$TestDrive/gitRoot/Aquarion Evol/Evol"
+
+    New-Item "$TestDrive/gitRoot/Pwsh/OptionLike/-foo.ps1" -ItemType File -Force
+    New-Item "$TestDrive/gitRoot/Pwsh/L1/L2/🏪.ps1" -ItemType File -Force
+    New-Item "$TestDrive/gitRoot/漢字" -ItemType Directory
+    New-Item "$TestDrive/gitRoot/漢``'帝　国'" -ItemType File
+    New-Item "$TestDrive/gitRoot/Deava" -ItemType File
+    New-Item "$TestDrive/gitRoot/Aquarion Evol/Gepard" -ItemType File
+    New-Item "$TestDrive/gitRoot/Aquarion Evol/Gepada" -ItemType File
     Pop-Location
 }
 
@@ -215,5 +251,5 @@ Add-ShouldOperator -Name BeCompletion `
 Export-ModuleMember `
     -Function Complete-FromLine, Initialize-Home, Restore-Home, `
     ConvertTo-KebabCase, ConvertTo-Completion, `
-    Initialize-Remote, Initialize-SimpleRepo `
+    Initialize-Remote, Initialize-SimpleRepo, Initialize-FilesRepo `
     -Variable 'NoOptionsCompletion'

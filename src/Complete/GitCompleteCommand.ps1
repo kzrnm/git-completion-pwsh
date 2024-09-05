@@ -238,6 +238,36 @@ function gitCompleteStrategy {
     return $null
 }
 
+<#
+.SYNOPSIS
+    __git_complete_index_file
+.DESCRIPTION
+    __git_complete_index_file
+    complete index files by ls-file.
+.PARAMETER Options
+    The options to to pass to ls-file.
+    The exception is --committable, which finds the files appropriate commit.
+#>
+function gitCompleteIndexFile {
+    [OutputType([CompletionResult[]])]
+    param(
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [string]
+        $Current,
+        [Parameter(Mandatory)]
+        [string[]]
+        $Options,
+        [Parameter()]
+        [string[]]
+        $Exclude,
+        [switch]
+        $LeadingDash
+    )
+
+    gitIndexFiles -Options $Options -Current $Current | Sort-Object -Unique | completeFilteredFiles -Exclude $Exclude -LeadingDash:$LeadingDash
+}
+
 # __git_complete_revlist
 # __git_complete_file
 # __git_complete_revlist_file
