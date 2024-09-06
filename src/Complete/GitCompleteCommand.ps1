@@ -256,7 +256,7 @@ function gitCompleteIndexFile {
         [string]
         $Current,
         [Parameter(Mandatory)]
-        [string[]]
+        [IndexFilesOptions]
         $Options,
         [Parameter()]
         [string[]]

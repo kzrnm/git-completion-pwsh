@@ -1,6 +1,6 @@
 . "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
-Describe 'Resolve-GitAlias' {
+Describe 'Resolve-GitAlias' -Tag Alias {
     BeforeAll {
         Initialize-Home
 

@@ -54,7 +54,6 @@ function Complete-GitSubCommand-restore {
     }
 
     if (gitPseudorefExists HEAD) {
-        $completeOpt = @('--modified')
         $skipOptions = [System.Collections.Generic.List[string]]::new()
         foreach ($opt in (gitResolveBuiltins $Context.command -All)) {
             if ($opt.EndsWith('=')) {
@@ -71,6 +70,6 @@ function Complete-GitSubCommand-restore {
             }
         }
 
-        gitCompleteIndexFile -Current $Current -Options $completeOpt -Exclude $UsedPaths -LeadingDash:($Context.HasDoubledash())
+        gitCompleteIndexFile -Current $Current -Options Modified -Exclude $UsedPaths -LeadingDash:($Context.HasDoubledash())
     }
 }

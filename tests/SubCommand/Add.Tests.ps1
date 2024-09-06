@@ -3,7 +3,7 @@ using namespace System.IO;
 
 . "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
-Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
+Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
     BeforeAll {
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home

@@ -2,7 +2,7 @@ using namespace System.Collections.Generic;
 
 . "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
-Describe 'IgnoreCase' {
+Describe 'IgnoreCase' -Tag Settings {
     BeforeAll {
         Initialize-Home
 

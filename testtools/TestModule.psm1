@@ -48,7 +48,9 @@ function Initialize-SimpleRepo {
     git init --initial-branch=main
     git commit -m "initial" --allow-empty
     mkdir Pwsh | Out-Null
-    "echo world" | Out-File 'Pwsh/world.ps1' | Out-Null
+    'Pwsh/ign*' > 'Pwsh/ignored'
+    'Pwsh/ign*' | Out-File '.gitignore' -Encoding ascii
+    'echo world' > 'Pwsh/world.ps1'
     git add -A 2>$null
     git commit -m "World"
     git config alias.sw "switch"
@@ -65,8 +67,8 @@ function Initialize-Remote {
 
     Push-Location $remotePath
     git init --initial-branch=main
-    "Initial" | Out-File 'initial.txt'
-    "echo hello" | Out-File 'hello.sh'
+    "Initial" > 'initial.txt'
+    "echo hello" > 'hello.sh'
     git update-index --add --chmod=+x hello.sh
     git add -A 2>$null
     git commit -m "initial"
@@ -87,7 +89,10 @@ function Initialize-Remote {
     git fetch ordinary 2>$null
     git fetch grm 2>$null
     mkdir Pwsh
-    "echo world" | Out-File 'Pwsh/world.ps1'
+
+    'Pwsh/ign*' > 'Pwsh/ignored'
+    'Pwsh/ign*' | Out-File '.gitignore' -Encoding ascii
+    'echo world' > 'Pwsh/world.ps1'
     git add -A 2>$null
     git commit -m "World"
     Pop-Location

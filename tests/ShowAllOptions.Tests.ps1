@@ -2,7 +2,7 @@ using namespace System.Collections.Generic;
 
 . "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
-Describe 'ShowAllOptions' {
+Describe 'ShowAllOptions' -Tag Settings {
     BeforeAll {
         Initialize-Home
 

@@ -1,6 +1,6 @@
 ﻿. "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
-Describe 'FileCompleter' {
+Describe 'FileCompleter' -Tag File {
     BeforeAll {
         . "$($PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))src/Complete/CompleteFile.ps1"
 

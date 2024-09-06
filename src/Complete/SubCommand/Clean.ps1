@@ -1,7 +1,7 @@
 using namespace System.Collections.Generic;
 using namespace System.Management.Automation;
 
-function Complete-GitSubCommand-add {
+function Complete-GitSubCommand-clean {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -15,49 +15,28 @@ function Complete-GitSubCommand-add {
             return Get-GitShortOptions $Context.command
         }
 
-        $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
-            '--chmod' { '+x', '-x' }
-        }
-
-        if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
-            return
-        }
-
-        if ($Current -cmatch '(--[^=]+)=(.*)') {
-            $key = $Matches[1]
-            $value = $Matches[2]
-            $candidates = switch -CaseSensitive ($key) {
-                '--chmod' { '+x', '-x' }
-            }
-
-            if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
-                return
-            }
-        }
-
         if ($Current.StartsWith('--')) {
             gitCompleteResolveBuiltins $Context.command -Current $Current
             return
         }
     }
 
-    $completeOpt = [IndexFilesOptions]::Updated
     $skipOptions = [System.Collections.Generic.List[string]]::new()
     foreach ($opt in (gitResolveBuiltins $Context.command -All)) {
         if ($opt.EndsWith('=')) {
             $skipOptions.Add($opt)
         }
     }
+
+    $completeOpt = [IndexFilesOptions]::Untracked
     $UsedPaths = [System.Collections.Generic.List[string]]::new($Context.Words.Length)
-    for ($i = $Context.commandIndex + 1; $i -lt $Context.Words.Length; $i++) {
+    for ($i = $Context.CommandIndex + 1; $i -lt $Context.Words.Length; $i++) {
         if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
-        if ($w -cin @('-u', '--update')) {
-            $completeOpt = [IndexFilesOptions]::Modified
+        if ($skipOptions.Contains($w)) { $i++ }
+        elseif ($w -ceq '-X') {
+            $completeOpt = [IndexFilesOptions]::Ignored
         }
-        elseif ($skipOptions.Contains($w)) { $i++ }
         elseif (!$w.StartsWith('-') -or ($i -gt $Context.DoubledashIndex)) {
             $UsedPaths.Add($w)
         }

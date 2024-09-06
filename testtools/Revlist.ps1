@@ -129,7 +129,7 @@ if ($File) {
             @{
                 Line     = "${Prefix}brn..main:";
                 Expected = @(
-                    'Pwsh/', 'hello.sh', 'initial.txt' | ForEach-Object {
+                    'Pwsh/', '.gitignore', 'hello.sh', 'initial.txt' | ForEach-Object {
                         @{
                             File           = $_
                             CompletionText = "brn..main:$_";
@@ -142,6 +142,12 @@ if ($File) {
                 Line     = "${Prefix}brn..main:Pwsh/";
                 Expected = @(
                     @{
+                        File           = 'Pwsh/ignored'
+                        CompletionText = "brn..main:Pwsh/ignored";
+                        ListItemText   = "ignored";
+                        ResultType     = 'ProviderItem';
+                    },
+                    @{
                         File           = 'Pwsh/world.ps1'
                         CompletionText = "brn..main:Pwsh/world.ps1";
                         ListItemText   = "world.ps1";
@@ -151,7 +157,7 @@ if ($File) {
             },
             @{
                 Line     = "${Prefix}main:";
-                Expected = 'Pwsh/', 'hello.sh', 'initial.txt' | ForEach-Object { 
+                Expected = '.gitignore', 'Pwsh/', 'hello.sh', 'initial.txt' | ForEach-Object { 
                     @{
                         File           = $_
                         CompletionText = "main:$_";
@@ -196,6 +202,12 @@ if ($File) {
             @{
                 Line     = "${Prefix}main:./Pwsh/";
                 Expected = @(
+                    @{
+                        File           = 'Pwsh/ignored'
+                        CompletionText = "main:./Pwsh/ignored";
+                        ListItemText   = "ignored";
+                        ResultType     = 'ProviderItem';
+                    },
                     @{
                         File           = 'Pwsh/world.ps1'
                         CompletionText = "main:./Pwsh/world.ps1";

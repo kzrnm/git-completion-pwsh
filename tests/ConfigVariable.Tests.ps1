@@ -1,6 +1,6 @@
 ﻿. "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
-Describe 'ConfigVariable' -Skip:$SkipHeavyTest {
+Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
     BeforeAll {
         Initialize-Home
 
