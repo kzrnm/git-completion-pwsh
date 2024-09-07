@@ -138,7 +138,7 @@ function Complete-FromLine {
     [OutputType([CompletionResult[]])]
     param (
         [string][Parameter(ValueFromPipeline)] $line,
-        [string]$Right = ' '
+        [string]$Right = ''
     )
 
     switch -Wildcard ($line) {

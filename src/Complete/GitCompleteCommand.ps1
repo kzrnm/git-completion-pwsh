@@ -1,5 +1,16 @@
 using namespace System.Management.Automation;
 
+function gitCompletStashList {
+    gitStashList | ForEach-Object {
+        [CompletionResult]::new(
+            "'$($_.Name)'",
+            $_.Name,
+            'ParameterValue',
+            $_.Message
+        )
+    }
+}
+
 $__BuiltinDescriptionBuilder = ([scriptblock] { Get-GitOptionsDescription $_ @Command })
 function gitCompleteResolveBuiltins {
     [OutputType([CompletionResult[]])]

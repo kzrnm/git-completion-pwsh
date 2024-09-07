@@ -279,9 +279,7 @@ function completeConfigVariableValue {
                     'histogram',
                     'ParameterValue',
                     'This algorithm extends the patience algorithm to "support low-occurrence common elements"'
-                ) | Where-Object {
-                    $_.ListItemText.StartsWith($Current)
-                }
+                ) | filterCompletionResult $Current
             )
         }
         "http.proxyAuthMethod" {
@@ -315,9 +313,7 @@ function completeConfigVariableValue {
                     'ntlm',
                     'ParameterValue',
                     'NTLM authentication (compare the --ntlm option of curl)'
-                ) | Where-Object {
-                    $_.ListItemText.StartsWith($Current)
-                }
+                ) | filterCompletionResult $Current
             )
         }
         "help.format" {

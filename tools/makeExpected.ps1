@@ -1,19 +1,19 @@
 param(
-    [CmdletBinding(DefaultParameterSetName = 'Raw')]
-    [Parameter(ValueFromRemainingArguments)][string[]]$Line,
-    [Parameter(Mandatory, ParameterSetName = 'Text')]
-    [switch]$Text,
-    [Parameter(ParameterSetName = 'Raw')]
-    [switch]$Raw
+    [CmdletBinding(DefaultParameterSetName = 'Split')]
+    [Parameter(ValueFromRemainingArguments, ParameterSetName = 'Split')]
+    [string[]]$Line,
+    [Parameter(Mandatory, ParameterSetName = 'String')]
+    [string]$Current
 )
 
 Import-Module "$PSScriptRoot/../src/git-completion.psd1" -Force
 
-$result = (Complete-Git -Words $Line)
-
-if ($Raw) { return $result }
-if ($Text) { return $result | ForEach-Object ListItemText }
-
+$result = if ($PSCmdlet.ParameterSetName -eq 'Split') {
+    Complete-Git -Words $Line
+}
+else {
+    . "$PSScriptRoot/run.ps1" $Current
+}
 'Expected = ' + (($result | ForEach-Object {
             if ($_.ListItemText -ne $_.ToolTip) {
                 '@{',
@@ -21,6 +21,14 @@ if ($Text) { return $result | ForEach-Object ListItemText }
                 "ListItemText='$($_.ListItemText)';",
                 # "ResultType='$($_.ResultType)';",
                 "ToolTip=`"$($_.ToolTip)`";",
+                '}' -join "`n"
+            }
+            elseif ($_.ListItemText -eq '--no-...') {
+                
+                '@{',
+                "CompletionText='--no-';",
+                "ListItemText='--no-...';",
+                "ResultType='Text';",
                 '}' -join "`n"
             }
             else {

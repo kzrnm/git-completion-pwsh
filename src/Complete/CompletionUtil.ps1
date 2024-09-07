@@ -59,6 +59,23 @@ function completeList {
     }
 }
 
+function filterCompletionResult {
+    param (
+        [Parameter(ValueFromPipeline)]
+        [CompletionResult]
+        $Completion,
+        [Parameter(Position = 0)]
+        [string]
+        $Current = ''
+    )
+
+    process {
+        if ($Completion.ListItemText.StartsWith($Current)) {
+            $Completion
+        }
+    }
+}
+
 # Generates completion reply, appending a space to possible completion words,
 # if necessary.
 # It accepts 1 to 4 arguments:

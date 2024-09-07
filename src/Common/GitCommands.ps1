@@ -513,7 +513,7 @@ function gitResolveBuiltinsImpl {
         $completionHelper = '--git-completion-helper'
     }
 
-    return (git @Command $completionHelper)
+    return (git @Command $completionHelper 2>$null)
 }
 
 
@@ -580,4 +580,18 @@ function gitArchiveList {
     param ()
 
     __git archive --list
+}
+
+function gitStashList {
+    [CmdletBinding()]
+    [OutputType([PSCustomObject[]])]
+    param ()
+    foreach ($line in ((git stash list -z) -split '\0')) {
+        if ($line -match '^([^:]+): ?(.*?)$') {
+            [PSCustomObject]@{
+                Name    = $Matches[1]
+                Message = $Matches[2]
+            }
+        }
+    }
 }
