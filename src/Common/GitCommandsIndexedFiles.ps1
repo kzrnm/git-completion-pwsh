@@ -16,19 +16,25 @@ function gitIndexFiles {
         [AllowEmptyString()]
         [string]
         $Current,
+        [string]
+        $BaseDir = '',
         [Parameter(Mandatory)]
         [IndexFilesOptions]
         $Options
     )
 
-    $BaseDir = ''
-    if ($Current -cmatch "^(?<prefix>(\.{1,2}[$DirectorySeparatorCharsRegex]+)+)(?<path>.*?)$") {
-        $BaseDir = $Matches['prefix']
-        $BaseDirOpts = @('-C', $BaseDir)
-        $Current = $Matches['path']
+    $BaseDirOpts = if ($BaseDir) {
+        @('-C', $BaseDir)
     }
     else {
-        $BaseDirOpts = @()
+        @()
+    }
+
+    $Pattern = if ($Current) {
+        "$Current*"
+    }
+    else {
+        '.'
     }
 
     $Current = $Current.Replace('\', '\\')
@@ -37,22 +43,26 @@ function gitIndexFiles {
         Modified { '--modified' }
         Untracked { '--others', '--directory' }
         Ignored {
-            $a = __git @BaseDirOpts ls-files -z --others --directory '--' "$Current*"
-            $b = __git @BaseDirOpts ls-files -z --exclude-standard --others --directory '--' "$Current*"
+            $a = __git @BaseDirOpts ls-files -z --others --directory '--' $Pattern
+            $b = __git @BaseDirOpts ls-files -z --exclude-standard --others --directory '--' $Pattern
             $a = @("$a".Split("`0"))
             $b = @("$b".Split("`0"))
 
             $files = Compare-Object $a $b
-            return $files | ForEach-Object InputObject | Sort-Object
+            return $files | ForEach-Object InputObject | ForEach-Object {
+                if ($_) {
+                    "$BaseDir$_"
+                }
+            } | Sort-Object
         }
         Committable {
-            $results = __git @BaseDirOpts diff-index -z --name-only --relative HEAD '--' "$Current*"
+            $results = __git @BaseDirOpts diff-index -z --name-only --relative HEAD '--' $Pattern
         }
     }
 
     if ($lsFilesOptions) {
         $lsFilesOptions = @($lsFilesOptions)
-        $results = __git @BaseDirOpts ls-files -z --exclude-standard @lsFilesOptions '--' "$Current*"
+        $results = __git @BaseDirOpts ls-files -z --exclude-standard @lsFilesOptions '--' $Pattern
     }
 
     foreach ($file in "$results".Split("`0")) {

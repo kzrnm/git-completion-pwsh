@@ -89,7 +89,7 @@ function completeCurrentDirectory {
     return
 }
 
-function completeFilteredFiles {
+function filterFiles {
     [CmdletBinding()]
     [OutputType([CompletionResult[]])]
     param (
@@ -97,12 +97,8 @@ function completeFilteredFiles {
         [AllowEmptyCollection()]
         [string]
         $Candidate,
-        [string]
-        $Prefix = '',
         [string[]]
-        $Exclude = @(),
-        [switch]
-        $LeadingDash
+        $Exclude = @()
     )
     begin {
         $ex = [HashSet[string]]::new($Exclude.Length)
@@ -113,15 +109,73 @@ function completeFilteredFiles {
 
     process {
         if (!$ex.Contains($ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Candidate))) {
-            $Completion = ($Prefix + $_)
-            if (!$LeadingDash -and ($_.StartsWith('-')) -and ($Prefix -eq '')) {
+            $Candidate
+        }
+    }
+}
+
+function completeFromFileList {
+    [CmdletBinding()]
+    [OutputType([CompletionResult[]])]
+    param (
+        [Parameter(ValueFromPipeline)]
+        [AllowEmptyCollection()]
+        [string]
+        $Candidate,
+        [string]
+        $Prefix = '',
+        [switch]
+        $LeadingDash
+    )
+    begin {
+        [string]$Prev = ''
+    }
+
+    process {
+        if (!$Candidate) {}
+        elseif (!$Prev) {
+            $Prev = $Candidate
+        }
+        else {
+            $CommonPrefixLength = $Prefix.Length
+            for ($i = $Prefix.Length; $i -lt $Prev.Length; $i++) {
+                if ($Candidate[$i] -cne $Prev[$i]) {
+                    if ($CommonPrefixLength -gt $Prefix.Length) {
+                        $Prev = $Prev.Substring(0, $CommonPrefixLength)
+                    }
+                    else {
+                        $Completion = $Prev
+                        if (!$LeadingDash -and ($Prev.StartsWith('-'))) {
+                            $Completion = "./$Completion"
+                        }
+                        [CompletionResult]::new(
+                            ($Completion | escapeSpecialChar),
+                            $Prev,
+                            'ProviderItem',
+                            $Prev
+                        )
+                        $Prev = $Candidate
+                    }
+                    break
+                }
+                elseif ($Candidate[$i] -cin @([Path]::DirectorySeparatorChar, [Path]::AltDirectorySeparatorChar)) {
+                    $CommonPrefixLength = $i + 1
+                }
+            }
+        }
+    }
+
+    end {
+        if ($Prev) {
+            $Completion = $Prev
+            if (!$LeadingDash -and ($Prev.StartsWith('-'))) {
                 $Completion = "./$Completion"
             }
             [CompletionResult]::new(
                 ($Completion | escapeSpecialChar),
-                $_,
+                $Prev,
                 'ProviderItem',
-                $_
+                $Prev
             )
         }
     }

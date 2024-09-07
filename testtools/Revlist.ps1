@@ -120,7 +120,7 @@ if ($File) {
         It '<Line>' -ForEach @(
             @{
                 Line     = "${Prefix}brn..main:";
-                Expected = @(
+                Expected = if ($IsWindows -or ($PSVersionTable.PSEdition -eq 'Desktop')) {
                     'Pwsh/', '.gitignore', 'hello.sh', 'initial.txt' | ForEach-Object {
                         @{
                             File           = $_
@@ -128,7 +128,18 @@ if ($File) {
                             ListItemText   = "$_";
                             ResultType     = 'ProviderItem';
                         }
-                    })
+                    }
+                }
+                else {
+                    'Pwsh/', 'hello.sh', 'initial.txt' | ForEach-Object {
+                        @{
+                            File           = $_
+                            CompletionText = "brn..main:$_";
+                            ListItemText   = "$_";
+                            ResultType     = 'ProviderItem';
+                        }
+                    }
+                }
             },
             @{
                 Line     = "${Prefix}brn..main:Pwsh/";

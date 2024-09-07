@@ -60,26 +60,31 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
     }
 
     It 'ShortOptions' {
-        $Expected = @{
-            ListItemText = '-N';
-            ToolTip      = "record only the fact that removed paths will be added later";
-        },
-        @{
-            ListItemText = '-p';
-            ToolTip      = "select hunks interactively";
-        },
-        @{
-            ListItemText = '-q';
-            ToolTip      = "be quiet, only report errors";
-        },
-        @{
-            ListItemText = '-z';
-            ToolTip      = "DEPRECATED (use --pathspec-file-nul instead): paths are separated with NUL character";
-        },
-        @{
-            ListItemText = '-h';
-            ToolTip      = "show help";
-        } | ConvertTo-Completion -ResultType ParameterName
+        function expectedFunc {
+            @{
+                ListItemText = '-N';
+                ToolTip      = "record only the fact that removed paths will be added later";
+            }
+            @{
+                ListItemText = '-p';
+                ToolTip      = "select hunks interactively";
+            }
+            @{
+                ListItemText = '-q';
+                ToolTip      = "be quiet, only report errors";
+            }
+            if ($IsWindows -or ($PSVersionTable.PSEdition -eq 'Desktop')) {
+                @{
+                    ListItemText = '-z';
+                    ToolTip      = "DEPRECATED (use --pathspec-file-nul instead): paths are separated with NUL character";
+                }
+            }
+            @{
+                ListItemText = '-h';
+                ToolTip      = "show help";
+            }
+        }
+        $Expected = expectedFunc | ConvertTo-Completion -ResultType ParameterName
         "git $Command -" | Complete-FromLine | Should -BeCompletion $expected
     }
 
@@ -97,14 +102,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
-                Line     = '--s';
+                Line     = '--h';
                 Expected = @{
-                    ListItemText = '--soft';
-                    ToolTip      = "reset only HEAD";
-                },
-                @{
-                    ListItemText = '--stdin';
-                    ToolTip      = "DEPRECATED (use --pathspec-from-file=- instead): read paths from <stdin>";
+                    ListItemText = '--hard';
+                    ToolTip      = "reset HEAD, index and working tree";
                 } | ConvertTo-Completion -ResultType ParameterName
             },
             @{

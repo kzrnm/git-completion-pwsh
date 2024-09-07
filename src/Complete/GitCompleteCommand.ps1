@@ -258,7 +258,17 @@ function gitCompleteIndexFile {
         $LeadingDash
     )
 
-    gitIndexFiles -Options $Options -Current $Current | Sort-Object -Unique | completeFilteredFiles -Exclude $Exclude -LeadingDash:$LeadingDash
+    if ($Current -cmatch "^(?<prefix>.*[$DirectorySeparatorCharsRegex])(?<path>.*?)$") {
+        $BaseDir = $Matches['prefix']
+        $Current = $Matches['path']
+    }
+    else {
+        $BaseDir = ''
+    }
+    gitIndexFiles -Options $Options -Current $Current -BaseDir $BaseDir |
+    filterFiles -Exclude $Exclude |
+    Sort-Object -Unique |
+    completeFromFileList -Prefix $BaseDir -LeadingDash:$LeadingDash
 }
 
 # __git_complete_revlist

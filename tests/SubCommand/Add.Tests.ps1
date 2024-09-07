@@ -155,14 +155,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
             @{
                 Line     = ' ';
                 Expected = (
-                    ('Evol', 'Gepada', 'Gepard' |
-                    ForEach-Object {
+                    @(
                         @{
-                            CompletionText = "Aquarion`` Evol/$_";
-                            ListItemText   = "Aquarion Evol/$_"
-                        }
-                    }) + @(
-                        'Deava', 'Dr.Wily', 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'test.config', @{
+                            CompletionText = "Aquarion`` Evol/";
+                            ListItemText   = "Aquarion Evol/"
+                        },
+                        'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
                             CompletionText = '漢```''帝`　国`''';
                             ListItemText   = '漢`''帝　国''';
                         }
@@ -172,14 +170,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
             @{
                 Line     = 'A ';
                 Expected = (
-                    ('Evol', 'Gepada', 'Gepard' |
-                    ForEach-Object {
+                    @(
                         @{
-                            CompletionText = "Aquarion`` Evol/$_";
-                            ListItemText   = "Aquarion Evol/$_"
-                        }
-                    }) + @(
-                        'Deava', 'Dr.Wily', 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'test.config', @{
+                            CompletionText = "Aquarion`` Evol/";
+                            ListItemText   = "Aquarion Evol/"
+                        },
+                        'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
                             CompletionText = '漢```''帝`　国`''';
                             ListItemText   = '漢`''帝　国''';
                         }
@@ -188,7 +184,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
             },
             @{
                 Line     = 'Pws';
-                Expected = 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                Expected = 'Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
                 Line     = 'Pwsh/';
@@ -237,23 +233,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
             @{
                 Line     = '漢```''帝`　国`'' ';
                 Expected = (
-                    ('Evol', 'Gepada', 'Gepard' |
-                    ForEach-Object {
+                    @(
                         @{
-                            CompletionText = "Aquarion`` Evol/$_";
-                            ListItemText   = "Aquarion Evol/$_"
-                        }
-                    }) + @('Deava', 'Dr.Wily', 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'test.config')
+                            CompletionText = "Aquarion`` Evol/";
+                            ListItemText   = "Aquarion Evol/"
+                        }, 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config')
                 ) | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
                 Line     = 'Aquarion` Evol';
-                Expected = 'Evol', 'Gepada', 'Gepard' |
-                ForEach-Object {
-                    @{
-                        CompletionText = "Aquarion`` Evol/$_";
-                        ListItemText   = "Aquarion Evol/$_"
-                    }
+                Expected = @{
+                    CompletionText = "Aquarion`` Evol/";
+                    ListItemText   = "Aquarion Evol/"
                 } | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
@@ -271,14 +262,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                 Expected = @{
                     CompletionText = 'Aquarion` Evol/Gepard';
                     ListItemText   = 'Aquarion Evol/Gepard';
-                }, 'Deava', 'Dr.Wily', 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'test.config', @{
+                }, 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
                     CompletionText = '漢```''帝`　国`''';
                     ListItemText   = '漢`''帝　国''';
                 } | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
                 Line     = 'Aquarion` Evol/Evol Aquarion` Evol/Gepada Aquarion` Evol/Gepard ';
-                Expected = 'Deava', 'Dr.Wily', 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'test.config', @{
+                Expected = 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
                     CompletionText = '漢```''帝`　国`''';
                     ListItemText   = '漢`''帝　国''';
                 } | ConvertTo-Completion -ResultType ProviderItem
@@ -328,15 +319,15 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                 @{
                     Left     = ' ';
                     Right    = ' 漢```''帝`　国`'' ';
-                    Expected = (
-                        ('Evol', 'Gepada', 'Gepard' |
-                        ForEach-Object {
-                            @{
-                                CompletionText = "Aquarion`` Evol/$_";
-                                ListItemText   = "Aquarion Evol/$_"
-                            }
-                        }) + @('Deava', 'Dr.Wily', 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'test.config')
-                    ) | ConvertTo-Completion -ResultType ProviderItem
+                    Expected = 
+                    @{
+                        CompletionText = "Aquarion`` Evol/";
+                        ListItemText   = "Aquarion Evol/"
+                    },
+                    'Deava',
+                    'Dr.Wily',
+                    'Pwsh/',
+                    'test.config' | ConvertTo-Completion -ResultType ProviderItem
                 },
                 @{
                     Left     = 'De';
@@ -414,14 +405,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                 It 'ParentParent' {
                     $Line = '../../'
                     $Expected = (
-                        ('Evol', 'Gepada', 'Gepard' |
-                        ForEach-Object {
+                        @(
                             @{
-                                CompletionText = "../../Aquarion`` Evol/$_";
-                                ListItemText   = "../../Aquarion Evol/$_"
-                            }
-                        }) + @(
-                            '../../Deava', '../../Dr.Wily', '../../Pwsh/L1/L2/🏪.ps1', '../../Pwsh/OptionLike/-foo.ps1', '../../test.config', @{
+                                CompletionText = "../../Aquarion`` Evol/";
+                                ListItemText   = "../../Aquarion Evol/"
+                            },
+                            '../../Deava', '../../Dr.Wily', '../../Pwsh/', '../../test.config', @{
                                 CompletionText = '../../漢```''帝`　国`''';
                                 ListItemText   = '../../漢`''帝　国''';
                             }

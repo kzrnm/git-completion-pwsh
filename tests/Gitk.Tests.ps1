@@ -170,7 +170,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             It '<Line>' -ForEach @(
                 @{
                     Line     = 'brn..main:';
-                    Expected = @(
+                    Expected = if ($IsWindows -or ($PSVersionTable.PSEdition -eq 'Desktop')) {
                         'Pwsh/', '.gitignore', 'hello.sh', 'initial.txt' | ForEach-Object {
                             @{
                                 File           = $_
@@ -178,7 +178,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                                 ListItemText   = "$_";
                                 ResultType     = 'ProviderItem';
                             }
-                        })
+                        }
+                    }
+                    else {
+                        'Pwsh/', 'hello.sh', 'initial.txt' | ForEach-Object {
+                            @{
+                                File           = $_
+                                CompletionText = "brn..main:$_";
+                                ListItemText   = "$_";
+                                ResultType     = 'ProviderItem';
+                            }
+                        }
+                    }
                 },
                 @{
                     Line     = 'brn..main:Pwsh/';

@@ -127,24 +127,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
         It '<Line>' -ForEach @(
             @{
                 Line     = ' ';
-                Expected = (
-                    ('Gepada', 'Gepard' |
-                    ForEach-Object {
-                        @{
-                            CompletionText = "Aquarion`` Evol/$_";
-                            ListItemText   = "Aquarion Evol/$_"
-                        }
-                    }) + @(
-                        'Deava',
-                        'Pwsh/L1/',
-                        'test.config',
-                        @{
-                            CompletionText = '漢```''帝`　国`''';
-                            ListItemText   = '漢`''帝　国''';
-                        },
-                        '漢字/'
-                    )
-                ) | ConvertTo-Completion -ResultType ProviderItem
+                Expected =
+                @{
+                    CompletionText = "Aquarion`` Evol/";
+                    ListItemText   = "Aquarion Evol/"
+                },
+                'Deava',
+                'Pwsh/L1/',
+                'test.config',
+                @{
+                    CompletionText = '漢```''帝`　国`''';
+                    ListItemText   = '漢`''帝　国''';
+                },
+                '漢字/' | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
                 Line     = '-X Pwsh/i';
