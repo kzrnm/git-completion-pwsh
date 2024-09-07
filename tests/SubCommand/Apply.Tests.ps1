@@ -147,9 +147,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--whitespace=';
-                Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--whitespace=$_"
-                }
+                Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--whitespace=$_" }
             },
             @{
                 Line     = '--whitespace ';
@@ -157,9 +155,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             },
             @{
                 Line     = '--whitespace=w';
-                Expected = 'warn' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--whitespace=$_"
-                }
+                Expected = 'warn' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--whitespace=$_" }
             },
             @{
                 Line     = '--whitespace w';

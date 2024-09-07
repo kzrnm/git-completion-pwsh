@@ -15,7 +15,7 @@ function Resolve-GitAlias {
                 return $null
             }
 
-            $aliasValue = ([string[]](Invoke-Expression "echo $resolved -- --")) -NotLike "-*"
+            $aliasValue = ([string[]](Invoke-Expression "echo $resolved -- --")) -NotLike '-*'
             $AliasCommand = $aliasValue[0]
             if ($AliasCommand) {
                 Resolve-GitAlias $AliasCommand -ActualCommand

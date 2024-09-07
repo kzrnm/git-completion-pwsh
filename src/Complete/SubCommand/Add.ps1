@@ -11,9 +11,8 @@ function Complete-GitSubCommand-add {
 
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
         $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
             '--chmod' { '+x', '-x' }
@@ -54,7 +53,7 @@ function Complete-GitSubCommand-add {
     for ($i = $Context.commandIndex + 1; $i -lt $Context.Words.Length; $i++) {
         if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
-        if ($w -cin @('-u', '--update')) {
+        if ($w -cmatch '^-([^-]*u[^-]*|-update)$') {
             $completeOpt = [IndexFilesOptions]::Modified
         }
         elseif ($skipOptions.Contains($w)) { $i++ }

@@ -164,7 +164,7 @@ function Convert-ToGitHelpOptions {
         if ($short) {
             if ($short -ceq '-NUM') {
                 0..9 | ForEach-Object {
-                    $shortDescriptions["-$_"] = $Description.Replace('NUM', "$_")
+                    $shortDescriptions["$_"] = $Description.Replace('NUM', "$_")
                 }
             }
             else {
@@ -184,7 +184,7 @@ function Convert-ToGitHelpOptions {
             $line = $Matches[2]
             $long = $null
             $short = $null
-            if ($line -match '^((-[^-])(,?\s*))?(--\S+)(.*)') {
+            if ($line -match '^(-([^-])(,?\s*))?(--\S+)(.*)') {
                 $short = $Matches[2]
                 if ($short) {
                     Write-HostParsing "`e[35m$($short)`e[0m$($Matches[3])" -NoNewline
@@ -203,7 +203,7 @@ function Convert-ToGitHelpOptions {
                 $remaining = $Matches[1]
                 Write-HostParsing "`e[35m-NUM`e[0m" -NoNewline
             }
-            elseif ($line -match '^(-\S)(=?\[[^\]]+\])?(.*)') {
+            elseif ($line -match '^-(\S)(=?\[[^\]]+\])?(.*)') {
                 $short = $Matches[1]
                 $value = $Matches[2]
                 $remaining = $Matches[3]
@@ -288,15 +288,32 @@ function Get-GitShortOptions {
         [Parameter(Position = 1)]
         [string]
         $Subcommand = '',
-        [switch]$SkipHelp
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [string]
+        $Current
     )
 
-    $gh = Get-GitHelp $Command
-    if ($gh) {
-        $gh.ShortOptions($Subcommand)
-    }
-    if (!$SkipHelp) {
-        $__helpCompletion
+    if ($Current -cmatch '^(-([^-]*))(?!-)') {
+        $Prev = $Matches[1]
+        $Exists = $Matches[2]
+        $gh = (Get-GitHelp $Command)
+        if ($gh) {
+            $gh.ShortOptions($Subcommand) | Where-Object {
+                !$Exists.Contains($_.Key)
+            } | ForEach-Object {
+                $key = $_.Key
+                [CompletionResult]::new(
+                    "$Prev$key",
+                    "-$key",
+                    'ParameterName',
+                    $_.Description
+                )
+            }
+        }
+        if ($Current -eq '-') {
+            $__helpCompletion
+        }
     }
 }
 
@@ -331,24 +348,29 @@ function Get-GitOptionsDescription {
     return $null
 }
 
+class GitHelpShortOption {
+    [string] $Key;
+    [string] $Description;
+
+    GitHelpShortOption([string]$Key, [string]$Description) {
+        $this.Key = $Key
+        $this.Description = $Description
+    }
+}
+
 class GitHelpOptions {
     [string]$Subcommand;
     [Dictionary[string, string]]$Long;
     [Dictionary[string, string]]$Short;
 
-    [CompletionResult[]]$_shortOptionsCache = $null;
+    [GitHelpShortOption[]]$_shortOptionsCache = $null;
 
-    [CompletionResult[]] ShortOptions() {
+    [GitHelpShortOption[]] ShortOptions() {
         if ($null -ne $this._shortOptionsCache) { return $this._shortOptionsCache }
 
         $ret = $this.Short.GetEnumerator() | ForEach-Object {
-            [CompletionResult]::new(
-                $_.Key,
-                $_.Key,
-                'ParameterName',
-                $_.Value
-            )
-        } | Sort-Object ListItemText -CaseSensitive
+            [GitHelpShortOption]::new($_.Key, $_.Value)
+        } | Sort-Object Key -CaseSensitive
 
         if ($null -eq $ret) {
             return ($this._shortOptionsCache = @()) 
@@ -373,7 +395,7 @@ class GitHelp {
         }
     }
 
-    [CompletionResult[]] ShortOptions([string]$Subcommand) {
+    [GitHelpShortOption[]] ShortOptions([string]$Subcommand) {
         $opt = $null
         if (!$this.Options.TryGetValue($Subcommand, [ref]$opt)) {
             $opt = $this.Options['']

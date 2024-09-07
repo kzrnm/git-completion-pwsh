@@ -5,7 +5,7 @@
             "name": "PowerShell: Complete Git Command",
             "type": "PowerShell",
             "request": "launch",
-            "script": "${workspaceFolder}/tools/makeExpected.ps1 -- ${input:commandLine}",
+            "script": "${workspaceFolder}/tools/run.ps1 '${input:commandLine}'",
             "createTemporaryIntegratedConsole": true,
             "attachDotnetDebugger": true
         },

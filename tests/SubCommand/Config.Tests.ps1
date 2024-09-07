@@ -327,10 +327,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 Mock Get-GitHelp {
                     $short = [Dictionary[string, string]]::new()
                     (
-                        @{Key = "-e"; Value = "open an editor"; },
-                        @{Key = "-f"; Value = "use given config file"; },
-                        @{Key = "-l"; Value = "list all"; },
-                        @{Key = "-z"; Value = "terminate values with NUL byte"; }
+                        @{Key = "e"; Value = "open an editor"; },
+                        @{Key = "f"; Value = "use given config file"; },
+                        @{Key = "l"; Value = "list all"; },
+                        @{Key = "z"; Value = "terminate values with NUL byte"; }
                     ) | ForEach-Object {
                         $short[$_.Key] = $_.Value
                     }

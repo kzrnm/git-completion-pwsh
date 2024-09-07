@@ -11,14 +11,13 @@ function Complete-GitSubCommand-restore {
 
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
 
         $conflictCandidates = 'diff3', 'merge', 'zdiff3'
         $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
-            { $_ -cin @('-s', '--source') } {
+            { $_ -cmatch '^-([^-]*s|-source)$' } {
                 gitCompleteRefs -Current $Current
                 return
             }

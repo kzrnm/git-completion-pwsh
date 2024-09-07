@@ -26,9 +26,8 @@ function Complete-GitSubCommand-reflog {
     }
 
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.Command $subcommand
-        }
+        $shortOpts = Get-GitShortOptions $Context.Command $subcommand -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
         if ($Current.StartsWith('--')) {
             if ($subcommand -eq 'show') {

@@ -182,9 +182,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Expected = @(
                         'octopus',
                         'ours'
-                    ) | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--strategy=$_"
-                    }
+                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy=$_" }
                 },
                 @{
                     Line     = '--strategy-option ';
@@ -219,9 +217,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Expected = @(
                         'renormalize',
                         'rename-threshold='
-                    ) | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--strategy-option=$_"
-                    }
+                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

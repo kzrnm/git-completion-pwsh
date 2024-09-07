@@ -11,9 +11,8 @@ function Complete-GitSubCommand-merge {
     [string] $Current = $Context.CurrentWord()
 
     if (!$Context.HasDoubledash()) { 
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
         $result = gitCompleteStrategy -Current $Current -Prev $Context.PreviousWord()
         if ($null -ne $result) { return $result }

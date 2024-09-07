@@ -137,7 +137,6 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                     }) + @(
                         'Deava',
                         'Pwsh/L1/',
-                        'Pwsh/OptionLike/',
                         'test.config',
                         @{
                             CompletionText = '漢```''帝`　国`''';

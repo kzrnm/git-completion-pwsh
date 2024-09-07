@@ -172,16 +172,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
                 'grm/main',
                 'ordinary/main',
                 'origin/main',
-                'initial' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--source=$_"
-                }
+                'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--source=$_" }
             },
             @{
                 Line     = '--source=m';
                 Expected =
-                'main' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--source=$_"
-                }
+                'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--source=$_" }
             },
             @{
                 Line     = '--conflict ';
@@ -196,16 +192,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
             @{
                 Line     = '--conflict=';
                 Expected =
-                'diff3', 'merge', 'zdiff3' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--conflict=$_"
-                }
+                'diff3', 'merge', 'zdiff3' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--conflict=$_" }
             },
             @{
                 Line     = '--conflict=z';
                 Expected =
-                'zdiff3' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--conflict=$_"
-                }
+                'zdiff3' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--conflict=$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -220,7 +212,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
                     CompletionText = "Aquarion`` Evol/Evol";
                     ListItemText   = "Aquarion Evol/Evol"
                 },
-                'Dr.Wily' | ConvertTo-Completion -ResultType ProviderItem
+                'Dr.Wily', 'Pwsh/OptionLike/-foo.ps1' | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
                 Line     = 'D';

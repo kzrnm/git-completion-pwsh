@@ -113,17 +113,18 @@ function Initialize-FilesRepo {
     }
 
     Push-Location $rootPath
+    New-Item "$TestDrive/gitRoot/Pwsh/OptionLike/-foo.ps1" -ItemType File -Force
     New-Item "$TestDrive/gitRoot/Dr.Wily" -ItemType File
     New-Item "$TestDrive/gitRoot/Aquarion Evol" -ItemType Directory
     New-Item "$TestDrive/gitRoot/Aquarion Evol/Evol" -ItemType File
     New-Item "$TestDrive/gitRoot/Aquarion Evol/Ancient" -ItemType Directory
     New-Item "$TestDrive/gitRoot/Aquarion Evol/Ancient/Soler" -ItemType File
-    git add "$TestDrive/gitRoot/Dr.Wily" "$TestDrive/gitRoot/Aquarion Evol/"
+    git add "$TestDrive/gitRoot/Dr.Wily" "$TestDrive/gitRoot/Aquarion Evol/" "$TestDrive/gitRoot/Pwsh/OptionLike/-foo.ps1"
     git commit -m "Start"
     'X' > "$TestDrive/gitRoot/Dr.Wily"
     'LOVE' > "$TestDrive/gitRoot/Aquarion Evol/Evol"
+    '-bar' > "$TestDrive/gitRoot/Pwsh/OptionLike/-foo.ps1"
 
-    New-Item "$TestDrive/gitRoot/Pwsh/OptionLike/-foo.ps1" -ItemType File -Force
     New-Item "$TestDrive/gitRoot/Pwsh/L1/L2/🏪.ps1" -ItemType File -Force
     New-Item "$TestDrive/gitRoot/漢字" -ItemType Directory
     New-Item "$TestDrive/gitRoot/漢``'帝　国'" -ItemType File

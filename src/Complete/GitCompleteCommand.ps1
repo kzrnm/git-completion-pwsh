@@ -65,31 +65,24 @@ function gitCompleteRemoteOrRefspec {
     for ($i = $Context.commandIndex + $c; $i -lt $Context.Words.Length; $i++) {
         if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
-        if ($w -eq '--mirror') {
-            if ($Command -eq 'push') {
-                $noCompleteRefspec = $true
-            }
+        if (($i -lt $Context.CurrentIndex) -and !$w.StartsWith('-')) {
+            $remote = $w
+            break
         }
-        elseif ($w -in '-d', '--delete') {
-            if ($Command -eq 'push') {
-                $lhs = $false
-            }
-        }
-        elseif ($w -eq '--all') {
-            if ($Command -eq 'push') {
-                $noCompleteRefspec = $true
-            }
-            elseif ($Command -eq 'fetch') {
-                return 
-            }
-        }
-        elseif ($w -eq '--multiple') {
+        if ($w -eq '--multiple') {
             $noCompleteRefspec = $true
             break
         }
-        elseif (($i -lt $Context.CurrentIndex) -and !$w.StartsWith('--')) {
-            $remote = $w
-            break
+        elseif ($Command -eq 'push') {
+            if ($w -cin '--mirror', '--all') {
+                $noCompleteRefspec = $true
+            }
+            elseif ($w -cmatch '^-([^-]*d[^-]*|-delete)$') {
+                $lhs = $false
+            }
+        }
+        elseif (($Command -eq 'fetch') -and ($w -eq '--all')) {
+            return
         }
     }
 
@@ -216,11 +209,11 @@ function gitCompleteStrategy {
         'rename-threshold='
     )
 
-    if ($Prev -cin @('-s', '--strategy')) {
+    if ($Prev -cmatch '^-([^-]*s|-strategy)$') {
         gitListMergeStrategies | completeList -Current $Current -ResultType ParameterValue 
         return
     }
-    elseif ($Prev -cin @('-X', '--strategy-option')) {
+    elseif ($Prev -cmatch '^-([^-]*X|-strategy-option)$') {
         $gitMergeStrategyOptions | completeList -Current $Current -ResultType ParameterValue 
         return
     }

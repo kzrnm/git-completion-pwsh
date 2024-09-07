@@ -171,9 +171,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--format=';
-                Expected = 'tar', 'tgz', 'tar.gz', 'zip' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--format=$_"
-                }
+                Expected = 'tar', 'tgz', 'tar.gz', 'zip' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--format=$_" }
             },
             @{
                 Line     = '--format ';
@@ -181,9 +179,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--format=t';
-                Expected = 'tar', 'tgz', 'tar.gz' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--format=$_"
-                }
+                Expected = 'tar', 'tgz', 'tar.gz' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--format=$_" }
             },
             @{
                 Line     = '--format t';
@@ -191,9 +187,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--remote=';
-                Expected = 'grm', 'ordinary', 'origin' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--remote=$_"
-                }
+                Expected = 'grm', 'ordinary', 'origin' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--remote=$_" }
             },
             @{
                 Line     = '--remote ';
@@ -201,9 +195,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--remote=o';
-                Expected = 'ordinary', 'origin' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--remote=$_"
-                }
+                Expected = 'ordinary', 'origin' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--remote=$_" }
             },
             @{
                 Line     = '--remote o';

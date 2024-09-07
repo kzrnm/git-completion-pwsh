@@ -11,9 +11,8 @@ function Complete-GitSubCommand-range-diff {
     [string] $Current = $Context.CurrentWord()
 
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
         $result = Complete-Opts-range-diff $Context
         if ($result) { return $result }

@@ -11,11 +11,10 @@ function Complete-GitSubCommand-clone {
     [string] $Current = $Context.CurrentWord()
 
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
-        if ($Context.PreviousWord() -cin @('-c', '--config')) {
+        if ($Context.PreviousWord() -cmatch '^-([^-]*c|-config)$') {
             completeConfigOptionVariableNameAndValue $Current
             return
         }

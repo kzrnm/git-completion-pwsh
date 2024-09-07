@@ -12,9 +12,8 @@ function Complete-GitSubCommand-push {
     [string] $Current = $Context.CurrentWord()
 
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
         switch ($Prev) {
             '--repo' {

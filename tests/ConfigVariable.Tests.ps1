@@ -40,171 +40,143 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
         Describe '<line>' -ForEach @(
             @{
                 Line     = 'branch.main.remote=';
-                Expected = 'grm', 'ordinary', 'origin' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "branch.main.remote=$_"
-                }
+                Expected = 'grm', 'ordinary', 'origin' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.remote=$_" }
             },
             @{
                 Line     = 'branch.main.remote=or';
-                Expected = 'ordinary', 'origin' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "branch.main.remote=$_"
-                }
+                Expected = 'ordinary', 'origin' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.remote=$_" }
             },
             @{
                 Line     = 'branch.main.pushremote=';
-                Expected = 'grm', 'ordinary', 'origin' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "branch.main.pushremote=$_"
-                }
+                Expected = 'grm', 'ordinary', 'origin' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.pushremote=$_" }
             },
             @{
                 Line     = 'branch.main.pushremote=or';
-                Expected = 'ordinary', 'origin' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "branch.main.pushremote=$_"
-                }
+                Expected = 'ordinary', 'origin' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.pushremote=$_" }
             },
             @{
                 Line     = 'branch.main.pushdefault=';
-                Expected = 'grm', 'ordinary', 'origin' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "branch.main.pushdefault=$_"
-                }
+                Expected = 'grm', 'ordinary', 'origin' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.pushdefault=$_" }
             },
             @{
                 Line     = 'branch.main.pushdefault=or';
-                Expected = 'ordinary', 'origin' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "branch.main.pushdefault=$_"
-                }
+                Expected = 'ordinary', 'origin' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.pushdefault=$_" }
             },
             @{
                 Line     = 'remote.pushdefault=';
-                Expected = 'grm', 'ordinary', 'origin' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "remote.pushdefault=$_"
-                }
+                Expected = 'grm', 'ordinary', 'origin' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "remote.pushdefault=$_" }
             },
             @{
                 Line     = 'remote.pushdefault=or';
-                Expected = 'ordinary', 'origin' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "remote.pushdefault=$_"
-                }
+                Expected = 'ordinary', 'origin' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "remote.pushdefault=$_" }
             },
             @{
                 Line     = 'branch.main.merge=';
-                Expected = 'HEAD', 'FETCH_HEAD', 'develop', 'main', 'master', 'grm/main', 'ordinary/main', 'origin/main' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "branch.main.merge=$_"
-                }
+                Expected = 'HEAD', 'FETCH_HEAD', 'develop', 'main', 'master', 'grm/main', 'ordinary/main', 'origin/main' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.merge=$_" }
             },
             @{
                 Line     = 'branch.main.merge=or';
-                Expected = 'ordinary/main', 'origin/main' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "branch.main.merge=$_"
-                }
+                Expected = 'ordinary/main', 'origin/main' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.merge=$_" }
             },
             @{
                 Line     = 'branch.main.rebase=';
-                Expected = 'false', 'true', 'merges', 'interactive' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "branch.main.rebase=$_"
-                }
+                Expected = 'false', 'true', 'merges', 'interactive' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.rebase=$_" }
             },
             @{
                 Line     = 'branch.main.rebase=t';
-                Expected = 'true' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "branch.main.rebase=$_"
-                }
+                Expected = 'true' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.rebase=$_" }
             },
             @{
                 Line     = 'remote.origin.fetch=';
-                Expected = 'refs/heads' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "remote.origin.fetch=$_"
-                }
+                Expected = 'refs/heads' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "remote.origin.fetch=$_" }
             },
             @{
                 Line     = 'remote.origin.fetch=r';
-                Expected = 'refs/heads/main:refs/remotes/origin/main' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "remote.origin.fetch=$_"
-                }
+                Expected = 'refs/heads/main:refs/remotes/origin/main' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "remote.origin.fetch=$_" }
             },
             @{
                 Line     = 'pull.twohead=';
-                Expected = 'octopus', 'ours', 'recursive', 'resolve', 'subtree' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "pull.twohead=$_"
-                }
+                Expected = 'octopus', 'ours', 'recursive', 'resolve', 'subtree' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "pull.twohead=$_" }
             },
             @{
                 Line     = 'pull.twohead=r';
-                Expected = 'recursive', 'resolve' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "pull.twohead=$_"
-                }
+                Expected = 'recursive', 'resolve' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "pull.twohead=$_" }
             },
             @{
                 Line     = 'pull.octopus=';
-                Expected = 'octopus', 'ours', 'recursive', 'resolve', 'subtree' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "pull.octopus=$_"
-                }
+                Expected = 'octopus', 'ours', 'recursive', 'resolve', 'subtree' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "pull.octopus=$_" }
             },
             @{
                 Line     = 'pull.octopus=r';
-                Expected = 'recursive', 'resolve' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "pull.octopus=$_"
-                }
+                Expected = 'recursive', 'resolve' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "pull.octopus=$_" }
             },
             @{
                 Line     = 'color.pager=';
-                Expected = 'false', 'true' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "color.pager=$_"
-                }
+                Expected = 'false', 'true' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "color.pager=$_" }
             },
             @{
                 Line     = 'color.pager=t';
-                Expected = 'true' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "color.pager=$_"
-                }
+                Expected = 'true' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "color.pager=$_" }
             },
             @{
                 Line     = 'color.diff.old=';
-                Expected = 'normal', 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'bold', 'dim', 'ul', 'blink', 'reverse' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "color.diff.old=$_"
-                }
+                Expected = 'normal', 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'bold', 'dim', 'ul', 'blink', 'reverse' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "color.diff.old=$_" }
             },
             @{
                 Line     = 'color.diff.old=r';
-                Expected = 'red', 'reverse' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "color.diff.old=$_"
-                }
+                Expected = 'red', 'reverse' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "color.diff.old=$_" }
             },
             @{
                 Line     = 'color.remote.hint=';
-                Expected = 'normal', 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'bold', 'dim', 'ul', 'blink', 'reverse' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "color.remote.hint=$_"
-                }
+                Expected = 'normal', 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'bold', 'dim', 'ul', 'blink', 'reverse' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "color.remote.hint=$_" }
             },
             @{
                 Line     = 'color.remote.hint=r';
-                Expected = 'red', 'reverse' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "color.remote.hint=$_"
-                }
+                Expected = 'red', 'reverse' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "color.remote.hint=$_" }
             },
             @{
                 Line     = 'color.advice=';
-                Expected = 'false', 'true', 'always', 'never', 'auto' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "color.advice=$_"
-                }
+                Expected = 'false', 'true', 'always', 'never', 'auto' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "color.advice=$_" }
             },
             @{
                 Line     = 'color.advice=a';
-                Expected = 'always', 'auto' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "color.advice=$_"
-                }
+                Expected = 'always', 'auto' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "color.advice=$_" }
             },
             @{
                 Line     = 'color.push=';
-                Expected = 'false', 'true', 'always', 'never', 'auto' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "color.push=$_"
-                }
+                Expected = 'false', 'true', 'always', 'never', 'auto' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "color.push=$_" }
             },
             @{
                 Line     = 'color.push=a';
-                Expected = 'always', 'auto' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "color.push=$_"
-                }
+                Expected = 'always', 'auto' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "color.push=$_" }
             },
             @{
                 Line     = 'diff.algorithm=';
@@ -249,15 +221,13 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
             },
             @{
                 Line     = 'diff.submodule=';
-                Expected = 'diff', 'log', 'short' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "diff.submodule=$_"
-                }
+                Expected = 'diff', 'log', 'short' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.submodule=$_" }
             },
             @{
                 Line     = 'diff.submodule=d';
-                Expected = 'diff' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "diff.submodule=$_"
-                }
+                Expected = 'diff' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.submodule=$_" }
             },
             @{
                 Line     = 'http.proxyAuthMethod=';
@@ -297,75 +267,63 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
             },
             @{
                 Line     = 'help.format=';
-                Expected = 'man', 'info', 'web', 'html' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "help.format=$_"
-                }
+                Expected = 'man', 'info', 'web', 'html' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "help.format=$_" }
             },
             @{
                 Line     = 'help.format=m';
-                Expected = 'man' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "help.format=$_"
-                }
+                Expected = 'man' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "help.format=$_" }
             },
             @{
                 Line     = 'log.date=';
-                Expected = 'relative', 'iso8601', 'iso8601-strict', 'rfc2822', 'short', 'local', 'default', 'human', 'raw', 'unix', 'auto:', 'format:' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "log.date=$_"
-                }
+                Expected = 'relative', 'iso8601', 'iso8601-strict', 'rfc2822', 'short', 'local', 'default', 'human', 'raw', 'unix', 'auto:', 'format:' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "log.date=$_" }
             },
             @{
                 Line     = 'log.date=i';
-                Expected = 'iso8601', 'iso8601-strict' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "log.date=$_"
-                }
+                Expected = 'iso8601', 'iso8601-strict' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "log.date=$_" }
             },
             @{
                 Line     = 'sendemail.aliasfiletype=';
-                Expected = 'mutt', 'mailrc', 'pine', 'elm', 'gnus' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "sendemail.aliasfiletype=$_"
-                }
+                Expected = 'mutt', 'mailrc', 'pine', 'elm', 'gnus' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.aliasfiletype=$_" }
             },
             @{
                 Line     = 'sendemail.aliasfiletype=m';
-                Expected = 'mutt', 'mailrc' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "sendemail.aliasfiletype=$_"
-                }
+                Expected = 'mutt', 'mailrc' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.aliasfiletype=$_" }
             },
             @{
                 Line     = 'sendemail.confirm=';
-                Expected = 'always', 'never', 'auto', 'cc', 'compose' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "sendemail.confirm=$_"
-                }
+                Expected = 'always', 'never', 'auto', 'cc', 'compose' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.confirm=$_" }
             },
             @{
                 Line     = 'sendemail.confirm=a';
-                Expected = 'always', 'auto' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "sendemail.confirm=$_"
-                }
+                Expected = 'always', 'auto' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.confirm=$_" }
             },
             @{
                 Line     = 'sendemail.suppresscc=';
-                Expected = 'author', 'self', 'cc', 'bodycc', 'sob', 'cccmd', 'body', 'all' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "sendemail.suppresscc=$_"
-                }
+                Expected = 'author', 'self', 'cc', 'bodycc', 'sob', 'cccmd', 'body', 'all' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.suppresscc=$_" }
             },
             @{
                 Line     = 'sendemail.suppresscc=a';
-                Expected = 'author', 'all' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "sendemail.suppresscc=$_"
-                }
+                Expected = 'author', 'all' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.suppresscc=$_" }
             },
             @{
                 Line     = 'sendemail.transferencoding=';
-                Expected = '7bit', '8bit', 'quoted-printable', 'base64' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "sendemail.transferencoding=$_"
-                }
+                Expected = '7bit', '8bit', 'quoted-printable', 'base64' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.transferencoding=$_" }
             },
             @{
                 Line     = 'sendemail.transferencoding=7';
-                Expected = '7bit' | ForEach-Object {
-                    $_ | ConvertTo-Completion -ResultType ParameterValue -CompletionText "sendemail.transferencoding=$_"
-                }
+                Expected = '7bit' |
+                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.transferencoding=$_" }
             },
             @{
                 Line     = 'branch.main.notmatch=';

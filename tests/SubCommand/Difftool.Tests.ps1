@@ -155,15 +155,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--tool=k';
-                Expected = 'kdiff3', 'kompare' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--tool=$_"
-                }
+                Expected = 'kdiff3', 'kompare' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--tool=$_" }
             },
             @{
                 Line     = '--tool=v';
-                Expected = 'vimdiff' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--tool=$_"
-                }
+                Expected = 'vimdiff' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--tool=$_" }
             },
             @{
                 Line     = '--tool k';

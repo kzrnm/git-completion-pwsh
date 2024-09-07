@@ -81,18 +81,14 @@ if ($Refspec) {
                     'ordinary/main',
                     'origin/main',
                     'initial'
-                ) | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD...$_"
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD...$_" }
             },
             @{
                 Line     = "${Prefix}HEAD...o";
                 Expected = @(
                     'ordinary/main',
                     'origin/main'
-                ) | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD...$_"
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD...$_" }
             },
             @{
                 Line     = "${Prefix}HEAD..";
@@ -104,18 +100,14 @@ if ($Refspec) {
                     'ordinary/main',
                     'origin/main',
                     'initial'
-                ) | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD..$_"
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD..$_" }
             },
             @{
                 Line     = "${Prefix}HEAD..o";
                 Expected = @(
                     'ordinary/main',
                     'origin/main'
-                ) | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD..$_"
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD..$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

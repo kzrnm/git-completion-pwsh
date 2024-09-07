@@ -11,9 +11,8 @@ function Complete-GitSubCommand-show {
 
     [string] $Current = $Context.CurrentWord()
 
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command
-    }
+    $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+    if ($shortOpts) { return $shortOpts }
 
     $result = Complete-Opts-show $Context
     if ($result) { return $result }

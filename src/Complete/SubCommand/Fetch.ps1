@@ -11,9 +11,8 @@ function Complete-GitSubCommand-fetch {
     [string] $Prev = $Context.PreviousWord()
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
         $gitFetchFilters = "blob:none", "blob:limit=", "sparse:oid="
         switch ($Prev) {

@@ -99,27 +99,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 },
                 @{
                     Line     = '--ws-error-highlight=d';
-                    Expected = 'default' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--ws-error-highlight=$_"
-                    }
+                    Expected = 'default' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
                 },
                 @{
                     Line     = '--ws-error-highlight=';
-                    Expected = 'context', 'old', 'new', 'all', 'default' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--ws-error-highlight=$_"
-                    }
+                    Expected = 'context', 'old', 'new', 'all', 'default' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
                 },
                 @{
                     Line     = '--no-walk=u';
-                    Expected = 'unsorted' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--no-walk=$_"
-                    }
+                    Expected = 'unsorted' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--no-walk=$_" }
                 },
                 @{
                     Line     = '--no-walk=';
-                    Expected = 'sorted', 'unsorted' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--no-walk=$_"
-                    }
+                    Expected = 'sorted', 'unsorted' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--no-walk=$_" }
                 },
                 @{
                     Line     = '--diff-merges o';
@@ -131,27 +123,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 },
                 @{
                     Line     = '--diff-merges=o';
-                    Expected = 'off', 'on' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--diff-merges=$_"
-                    }
+                    Expected = 'off', 'on' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-merges=$_" }
                 },
                 @{
                     Line     = '--diff-merges=';
-                    Expected = 'off', 'none', 'on', 'first-parent', '1', 'separate', 'm', 'combined', 'c', 'dense-combined', 'cc', 'remerge', 'r' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--diff-merges=$_"
-                    }
+                    Expected = 'off', 'none', 'on', 'first-parent', '1', 'separate', 'm', 'combined', 'c', 'dense-combined', 'cc', 'remerge', 'r' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-merges=$_" }
                 },
                 @{
                     Line     = '--submodule=d';
-                    Expected = 'diff' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--submodule=$_"
-                    }
+                    Expected = 'diff' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
                 },
                 @{
                     Line     = '--submodule=';
-                    Expected = 'diff', 'log', 'short' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--submodule=$_"
-                    }
+                    Expected = 'diff', 'log', 'short' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
                 },
                 @{
                     Line     = '--diff-algorithm m';
@@ -163,27 +147,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 },
                 @{
                     Line     = '--diff-algorithm=m';
-                    Expected = 'myers', 'minimal' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--diff-algorithm=$_"
-                    }
+                    Expected = 'myers', 'minimal' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
                 },
                 @{
                     Line     = '--diff-algorithm=';
-                    Expected = 'myers', 'minimal', 'patience', 'histogram' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--diff-algorithm=$_"
-                    }
+                    Expected = 'myers', 'minimal', 'patience', 'histogram' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
                 },
                 @{
                     Line     = '--decorate=f';
-                    Expected = 'full' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--decorate=$_"
-                    }
+                    Expected = 'full' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--decorate=$_" }
                 },
                 @{
                     Line     = '--decorate=';
-                    Expected = 'full', 'short', 'no' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--decorate=$_"
-                    }
+                    Expected = 'full', 'short', 'no' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--decorate=$_" }
                 },
                 @{
                     Line     = '--date iso';
@@ -195,39 +171,27 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 },
                 @{
                     Line     = '--date=iso';
-                    Expected = 'iso8601', 'iso8601-strict' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--date=$_"
-                    }
+                    Expected = 'iso8601', 'iso8601-strict' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--date=$_" }
                 },
                 @{
                     Line     = '--date=';
-                    Expected = 'relative', 'iso8601', 'iso8601-strict', 'rfc2822', 'short', 'local', 'default', 'human', 'raw', 'unix', 'auto:', 'format:' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--date=$_"
-                    }
+                    Expected = 'relative', 'iso8601', 'iso8601-strict', 'rfc2822', 'short', 'local', 'default', 'human', 'raw', 'unix', 'auto:', 'format:' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--date=$_" }
                 },
                 @{
                     Line     = '--format=m';
-                    Expected = 'medium', 'mboxrd' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--format=$_"
-                    }
+                    Expected = 'medium', 'mboxrd' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--format=$_" }
                 },
                 @{
                     Line     = '--format=';
-                    Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd', 'changelog' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--format=$_"
-                    }
+                    Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd', 'changelog' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--format=$_" }
                 },
                 @{
                     Line     = '--pretty=f';
-                    Expected = 'full', 'fuller', 'format:' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--pretty=$_"
-                    }
+                    Expected = 'full', 'fuller', 'format:' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--pretty=$_" }
                 },
                 @{
                     Line     = '--pretty=';
-                    Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd', 'changelog' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--pretty=$_"
-                    }
+                    Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd', 'changelog' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--pretty=$_" }
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

@@ -16,9 +16,8 @@ function Complete-GitSubCommand-remote {
 
     if (!$subcommand) {
         if (!$Context.HasDoubledash()) {
-            if ($Current -eq '-') {
-                Get-GitShortOptions $Context.command
-            }
+            $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+            if ($shortOpts) { return $shortOpts }
             elseif ($Current.StartsWith('--')) {
                 gitCompleteResolveBuiltins $Context.command -Current $Current
             }
@@ -44,10 +43,8 @@ function Complete-GitSubCommand-remote {
     if ($subcommand -notin $subcommands) { return }
 
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            Get-GitShortOptions $Context.command $subcommand
-            return
-        }
+        $shortOpts = Get-GitShortOptions $Context.command $subcommand -Current $Current
+        if ($shortOpts) { return $shortOpts }
         if ($Current.StartsWith('--')) {
             gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
             return

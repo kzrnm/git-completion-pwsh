@@ -634,15 +634,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Line     = 'origin +';
                     Expected =
                     'HEAD',
-                    'main' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "+$_"
-                    }
+                    'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
                 },
                 @{
                     Line     = 'origin +m';
-                    Expected = 'main' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "+$_"
-                    }
+                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
                 },
                 @{
                     Line     = 'origin left:';
@@ -653,15 +649,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'grm/main',
                     'ordinary/main',
                     'origin/main',
-                    'initial' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "left:$_"
-                    }
+                    'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
                 },
                 @{
                     Line     = 'origin left:m';
-                    Expected = 'main' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "left:$_"
-                    }
+                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
                 },
                 @{
                     Line     = 'or';
@@ -782,15 +774,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Line     = 'origin +';
                     Expected =
                     'HEAD',
-                    'main' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "+$_"
-                    }
+                    'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
                 },
                 @{
                     Line     = 'origin +m';
-                    Expected = 'main' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "+$_"
-                    }
+                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
                 },
                 @{
                     Line     = 'origin left:';
@@ -801,15 +789,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'grm/main',
                     'ordinary/main',
                     'origin/main',
-                    'initial' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "left:$_"
-                    }
+                    'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
                 },
                 @{
                     Line     = 'origin left:m';
-                    Expected = 'main' | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "left:$_"
-                    }
+                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
                 },
                 @{
                     Line     = 'or';

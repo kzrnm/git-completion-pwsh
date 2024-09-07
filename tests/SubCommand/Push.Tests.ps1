@@ -217,17 +217,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'grm/main',
                 'ordinary/main',
                 'origin/main',
-                'initial' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--force-with-lease=$_"
-                }
+                'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
             },
             @{
                 Line     = '--force-with-lease=or';
                 Expected = 
                 'ordinary/main',
-                'origin/main' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--force-with-lease=$_"
-                }
+                'origin/main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
             },
             @{
                 Line     = '--force-with-lease=ma:';
@@ -238,17 +234,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'grm/main',
                 'ordinary/main',
                 'origin/main',
-                'initial' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--force-with-lease=ma:$_"
-                }
+                'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
             },
             @{
                 Line     = '--force-with-lease=ma:or';
                 Expected = 
                 'ordinary/main',
-                'origin/main' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--force-with-lease=ma:$_"
-                }
+                'origin/main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
             },
             @{
                 Line     = '--recurse-submodules ';
@@ -389,32 +381,24 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'grm/main',
                 'ordinary/main',
                 'origin/main',
-                'initial' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "+$_"
-                }
+                'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin +o';
                 Expected = 
                 'ordinary/main',
-                'origin/main' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "+$_"
-                }
+                'origin/main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin left:';
                 Expected = 
                 'HEAD',
-                'main' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "left:$_"
-                }
+                'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'origin left:m';
                 Expected = 
-                'main' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "left:$_"
-                }
+                'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'or';

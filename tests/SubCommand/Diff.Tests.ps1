@@ -138,27 +138,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--color-moved-ws=i';
-                Expected = 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--color-moved-ws=$_"
-                }
+                Expected = 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
             },
             @{
                 Line     = '--color-moved-ws=';
-                Expected = 'no', 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space', 'allow-indentation-change' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--color-moved-ws=$_"
-                }
+                Expected = 'no', 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space', 'allow-indentation-change' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
             },
             @{
                 Line     = '--color-moved=d';
-                Expected = 'default', 'dimmed-zebra'  | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--color-moved=$_"
-                }
+                Expected = 'default', 'dimmed-zebra'  | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
             },
             @{
                 Line     = '--color-moved=';
-                Expected = 'no', 'default', 'plain', 'blocks', 'zebra', 'dimmed-zebra' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--color-moved=$_"
-                }
+                Expected = 'no', 'default', 'plain', 'blocks', 'zebra', 'dimmed-zebra' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
             },
             @{
                 Line     = '--ws-error-highlight d';
@@ -170,27 +162,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--ws-error-highlight=d';
-                Expected = 'default' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--ws-error-highlight=$_"
-                }
+                Expected = 'default' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
             },
             @{
                 Line     = '--ws-error-highlight=';
-                Expected = 'context', 'old', 'new', 'all', 'default' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--ws-error-highlight=$_"
-                }
+                Expected = 'context', 'old', 'new', 'all', 'default' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
             },
             @{
                 Line     = '--submodule=d';
-                Expected = 'diff' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--submodule=$_"
-                }
+                Expected = 'diff' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
             },
             @{
                 Line     = '--submodule=';
-                Expected = 'diff', 'log', 'short' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--submodule=$_"
-                }
+                Expected = 'diff', 'log', 'short' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
             },
             @{
                 Line     = '--diff-algorithm m';
@@ -202,15 +186,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--diff-algorithm=m';
-                Expected = 'myers', 'minimal' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--diff-algorithm=$_"
-                }
+                Expected = 'myers', 'minimal' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
             },
             @{
                 Line     = '--diff-algorithm=';
-                Expected = 'myers', 'minimal', 'patience', 'histogram' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--diff-algorithm=$_"
-                }
+                Expected = 'myers', 'minimal', 'patience', 'histogram' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

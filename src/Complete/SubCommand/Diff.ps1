@@ -12,9 +12,8 @@ function Complete-GitSubCommand-diff {
 
     [string] $Current = $Context.CurrentWord()
 
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command
-    }
+    $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+    if ($shortOpts) { return $shortOpts }
 
     $result = Complete-Opts-diff $Context
     if ($result) { return $result }

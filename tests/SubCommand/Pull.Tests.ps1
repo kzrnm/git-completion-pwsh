@@ -213,9 +213,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Expected = @(
                         'octopus',
                         'ours'
-                    ) | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--strategy=$_"
-                    }
+                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy=$_" }
                 },
                 @{
                     Line     = '--strategy-option ';
@@ -250,9 +248,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Expected = @(
                         'renormalize',
                         'rename-threshold='
-                    ) | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--strategy-option=$_"
-                    }
+                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -318,17 +314,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 Expected = @(
                     'HEAD',
                     'main'
-                ) | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "+$_"
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin +m';
                 Expected = @(
                     'main'
-                ) | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "+$_"
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin left:';
@@ -340,17 +332,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'ordinary/main',
                     'origin/main',
                     'initial'
-                ) | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "left:$_"
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'origin left:m';
                 Expected = @(
                     'main'
-                ) | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "left:$_"
-                }
+                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'or';

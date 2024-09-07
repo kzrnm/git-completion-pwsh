@@ -185,38 +185,30 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'grm/main',
                 'ordinary/main',
                 'origin/main',
-                'initial' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--set-upstream-to=$_"
-                }
+                'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
             },
             @{
                 Line     = '--set-upstream-to=o';
                 Expected =
                 'ordinary/main',
-                'origin/main' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--set-upstream-to=$_"
-                }
+                'origin/main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
             },
             @{
                 Line     = '--set-upstream-to=^';
                 Expected =
-                'HEAD',
-                'FETCH_HEAD',
-                'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ForEach-Object {
-                    "^$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--set-upstream-to=^$_"
-                }
+                '^HEAD',
+                '^FETCH_HEAD',
+                '^main',
+                '^grm/main',
+                '^ordinary/main',
+                '^origin/main',
+                '^initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
             },
             @{
                 Line     = '--set-upstream-to=^o';
                 Expected =
-                'ordinary/main',
-                'origin/main' | ForEach-Object {
-                    "^$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--set-upstream-to=^$_"
-                }
+                '^ordinary/main',
+                '^origin/main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -244,6 +236,35 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 $Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue
                 "git $Command " | Complete-FromLine -Right " $Option" | Should -BeCompletion $expected
             }
+
+            It 'Remote:<Remote>' -ForEach @('--remotes', '-r' | ForEach-Object { @{Remote = $_; } }) {
+                $Expected =
+                'HEAD',
+                'FETCH_HEAD',
+                'main',
+                'grm/main',
+                'ordinary/main',
+                'origin/main',
+                'initial' | ConvertTo-Completion -ResultType ParameterValue
+                "git $Command $Remote $Option " | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
+        It 'RemoteShort' -ForEach @(
+            'd', 'D', 'm', 'M', 'c', 'C' | ForEach-Object { 
+                @{Option = "-r$_"; },
+                @{Option = "-$_r"; }
+            }
+        ) {
+            $Expected =
+            'HEAD',
+            'FETCH_HEAD',
+            'main',
+            'grm/main',
+            'ordinary/main',
+            'origin/main',
+            'initial' | ConvertTo-Completion -ResultType ParameterValue
+            "git $Command $Option " | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 }

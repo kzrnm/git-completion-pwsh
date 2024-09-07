@@ -37,9 +37,8 @@ function Complete-GitSubCommand-worktree {
         return
     }
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command -Subcommand $subcommand
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Subcommand $subcommand -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
         if ($Current.StartsWith('--')) {
             gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
@@ -65,7 +64,7 @@ function Complete-GitSubCommand-worktree {
             return
         }
         'add' {
-            if ($Prev -ieq '-b') {
+            if ($Prev -imatch '^-[^-]*b$') {
                 gitCompleteRefs $Current
                 return
             }
@@ -77,7 +76,7 @@ function Complete-GitSubCommand-worktree {
 
             for ($i = $Context.CommandIndex + 2; $i -lt $Context.CurrentIndex; $i++) {
                 switch -Wildcard ($Context.Words[$i]) {
-                    { $_ -iin @('-b', '--reason') } { $i++ }
+                    { $_ -cmatch '^-([^-]*[bB]|-reason)$' } { $i++ }
                     '-*' { }
                     Default {
                         gitCompleteRefs $Current

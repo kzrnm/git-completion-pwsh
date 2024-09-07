@@ -41,9 +41,8 @@ function Complete-GitSubCommand-config {
         }
     }
     
-    if ($Current -eq '-') {
-        return Get-GitShortOptions $Context.command -Subcommand $subcommand
-    }
+    $shortOpts = Get-GitShortOptions $Context.command -Subcommand $subcommand -Current $Current
+    if ($shortOpts) { return $shortOpts }
 
     if ($Current.StartsWith('--')) {
         gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
@@ -81,9 +80,8 @@ function Complete-GitSubCommand-config-Git2_45 {
     $Prev = $Context.PreviousWord()
     $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command -Subcommand $subcommand
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Subcommand $subcommand -Current $Current
+        if ($shortOpts) { return $shortOpts }
         if ($Prev -in ('--get', '--get-all', '--unset', '--unset-all')) {
             completeGitConfigGetSetVariables $Context
             return
@@ -128,8 +126,8 @@ function gitConfigGetSetVariables {
             $file = @($word)
             break
         }
-        elseif ($word -in @('-f', '--file')) {
-            $file = @($word, $prev)
+        elseif ($word -cmatch '^-([^-]*f|-file)$') {
+            $file = @('--file', $prev)
         }
         $prev = $word
     }

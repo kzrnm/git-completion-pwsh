@@ -131,9 +131,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--chmod=';
-                Expected = '+x', '-x' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--chmod=$_"
-                }
+                Expected = '+x', '-x' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--chmod=$_" }
             },
             @{
                 Line     = '--chmod ';
@@ -141,9 +139,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
             },
             @{
                 Line     = '--chmod=+';
-                Expected = '+x' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--chmod=$_"
-                }
+                Expected = '+x' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--chmod=$_" }
             },
             @{
                 Line     = '--chmod +';
@@ -199,7 +195,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                 Expected = 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1' | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
-                Line     = 'Pwsh/L1/';
+                Line     = 'Pwsh/L1/L2/🏪.ps1';
                 Expected = 'Pwsh/L1/L2/🏪.ps1' | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
@@ -293,7 +289,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                     CompletionText = "Aquarion`` Evol/Evol";
                     ListItemText   = "Aquarion Evol/Evol"
                 },
-                'Dr.Wily' | ConvertTo-Completion -ResultType ProviderItem
+                'Dr.Wily', 'Pwsh/OptionLike/-foo.ps1' | ConvertTo-Completion -ResultType ProviderItem
             }
             @{
                 Line     = '-u ';
@@ -301,7 +297,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                     CompletionText = "Aquarion`` Evol/Evol";
                     ListItemText   = "Aquarion Evol/Evol"
                 },
-                'Dr.Wily' | ConvertTo-Completion -ResultType ProviderItem
+                'Dr.Wily', 'Pwsh/OptionLike/-foo.ps1' | ConvertTo-Completion -ResultType ProviderItem
             }
             @{
                 Line     = '--update Aquarion` Evol/';

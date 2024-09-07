@@ -97,15 +97,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--tool=t';
-                Expected = 'tkdiff', 'tortoisemerge' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--tool=$_"
-                }
+                Expected = 'tkdiff', 'tortoisemerge' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--tool=$_" }
             },
             @{
                 Line     = '--tool=v';
-                Expected = 'vimdiff' | ForEach-Object {
-                    "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "--tool=$_"
-                }
+                Expected = 'vimdiff' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--tool=$_" }
             },
             @{
                 Line     = '--tool t';

@@ -11,9 +11,8 @@ function Complete-GitSubCommand-clean {
 
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
         if ($Current.StartsWith('--')) {
             gitCompleteResolveBuiltins $Context.command -Current $Current
@@ -34,7 +33,7 @@ function Complete-GitSubCommand-clean {
         if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
         if ($skipOptions.Contains($w)) { $i++ }
-        elseif ($w -ceq '-X') {
+        elseif ($w -cmatch '^-[^-]*X$') {
             $completeOpt = [IndexFilesOptions]::Ignored
         }
         elseif (!$w.StartsWith('-') -or ($i -gt $Context.DoubledashIndex)) {

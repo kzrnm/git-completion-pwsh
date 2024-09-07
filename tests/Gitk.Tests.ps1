@@ -133,18 +133,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         'ordinary/main',
                         'origin/main',
                         'initial'
-                    ) | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD...$_"
-                    }
+                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD...$_" }
                 },
                 @{
                     Line     = 'HEAD...o';
                     Expected = @(
                         'ordinary/main',
                         'origin/main'
-                    ) | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD...$_"
-                    }
+                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD...$_" }
                 },
                 @{
                     Line     = 'HEAD..';
@@ -156,18 +152,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         'ordinary/main',
                         'origin/main',
                         'initial'
-                    ) | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD..$_"
-                    }
+                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD..$_" }
                 },
                 @{
                     Line     = 'HEAD..o';
                     Expected = @(
                         'ordinary/main',
                         'origin/main'
-                    ) | ForEach-Object {
-                        "$_" | ConvertTo-Completion -ResultType ParameterValue -CompletionText "HEAD..$_"
-                    }
+                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD..$_" }
                 }
             ) {
                 "gitk $Prefix$Line" | Complete-FromLine | Should -BeCompletion $expected

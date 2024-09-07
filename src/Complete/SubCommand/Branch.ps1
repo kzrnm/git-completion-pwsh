@@ -10,9 +10,8 @@ function Complete-GitSubCommand-branch {
 
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        if ($Current -eq '-') {
-            return Get-GitShortOptions $Context.command
-        }
+        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        if ($shortOpts) { return $shortOpts }
 
         switch ($Context.PreviousWord()) {
             '--set-upstream-to' {
@@ -41,10 +40,10 @@ function Complete-GitSubCommand-branch {
     for ($i = $Context.commandIndex + 1; $i -lt $Context.DoubledashIndex; $i++) {
         if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
-        if ($w -cin @('-d', '-D', '--delete', '-m', '-M', '--move', '-c', '-C', '--copy')) {
+        if ($w -cmatch '^-([^-]*[dDmMcC][^-]*|-delete|-move|-copy)$') {
             $onlyLocalRef = $true
         }
-        elseif ($w -cin @('-r', '--remotes')) {
+        if ($w -cmatch '^-([^-]*r[^-]*|-remotes)$') {
             $hasR = $true
         }
     }

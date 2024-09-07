@@ -13,12 +13,10 @@ function Complete-GitSubCommandCommon {
 
     if ($Subcommand -and ($Subcommand -cnotlike '*[:/\]*')) {
         if (!$Context.HasDoubledash()) {
-            if ($Current -eq '-') {
-                $result = Get-GitShortOptions $Command $Subcommand
-                if ($result) {
-                    return $result
-                }
-                Get-GitShortOptions $Command
+            if ($Current -cmatch '^-[^-]?') {
+                $shortOpts = Get-GitShortOptions $Command $Subcommand -Current $Current
+                if ($shortOpts) { return $shortOpts }
+                Get-GitShortOptions $Command -Current $Current
                 return
             }
             if ($Current.StartsWith('--')) {
@@ -33,9 +31,8 @@ function Complete-GitSubCommandCommon {
     }
     else {
         if (!$Context.HasDoubledash()) {
-            if ($Current -eq '-') {
-                Get-GitShortOptions $Command
-            }
+            $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
+            if ($shortOpts) { return $shortOpts }
             elseif (!$Current) {
                 gitCompleteResolveBuiltins $Command -Current $Current | Where-Object { !$_.CompletionText.StartsWith('-') }
             }
