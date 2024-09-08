@@ -624,21 +624,21 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Line     = 'origin ';
                     Expected =
                     'HEAD',
-                    'main' | ConvertTo-Completion -ResultType ParameterValue
+                    'develop' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
-                    Line     = 'origin m';
-                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue
+                    Line     = 'origin d';
+                    Expected = 'develop' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'origin +';
                     Expected =
                     'HEAD',
-                    'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                    'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
                 },
                 @{
-                    Line     = 'origin +m';
-                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                    Line     = 'origin +d';
+                    Expected = 'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
                 },
                 @{
                     Line     = 'origin left:';
@@ -646,10 +646,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
-                    'grm/main',
-                    'ordinary/main',
-                    'origin/main',
-                    'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
                 },
                 @{
                     Line     = 'origin left:m';
@@ -764,21 +765,21 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Line     = 'origin ';
                     Expected =
                     'HEAD',
-                    'main' | ConvertTo-Completion -ResultType ParameterValue
+                    'develop' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
-                    Line     = 'origin m';
-                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue
+                    Line     = 'origin d';
+                    Expected = 'develop' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'origin +';
                     Expected =
                     'HEAD',
-                    'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                    'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
                 },
                 @{
-                    Line     = 'origin +m';
-                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                    Line     = 'origin +d';
+                    Expected = 'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
                 },
                 @{
                     Line     = 'origin left:';
@@ -786,10 +787,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
-                    'grm/main',
-                    'ordinary/main',
-                    'origin/main',
-                    'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
                 },
                 @{
                     Line     = 'origin left:m';

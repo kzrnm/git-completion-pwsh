@@ -249,26 +249,26 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 Line     = 'origin ';
                 Expected = @(
                     'HEAD:HEAD',
-                    'main:main'
+                    'develop:develop'
                 ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
-                Line     = 'origin m';
+                Line     = 'origin d';
                 Expected = @(
-                    'main:main'
+                    'develop:develop'
                 ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin +';
                 Expected = @(
                     'HEAD:HEAD',
-                    'main:main'
+                    'develop:develop'
                 ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
-                Line     = 'origin +m';
+                Line     = 'origin +d';
                 Expected = @(
-                    'main:main'
+                    'develop:develop'
                 ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
@@ -277,10 +277,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
-                    'grm/main',
-                    'ordinary/main',
-                    'origin/main',
-                    'initial'
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta'
                 ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{

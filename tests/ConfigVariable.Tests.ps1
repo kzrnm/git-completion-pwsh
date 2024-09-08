@@ -9,26 +9,41 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
         mkdir ($remotePath = "$TestDrive/gitRemote")
 
         Push-Location $remotePath
-        git init --initial-branch=main
+        git init --initial-branch=develop
+        "Initial" > 'initial.txt'
+        "echo hello" > 'hello.sh'
+        git update-index --add --chmod=+x hello.sh
         git submodule add https://github.com/github/nagios-plugins-github.git sub 2>$null
         git submodule add https://github.com/github/nagios-plugins-github.git sum 2>$null
         git add -A 2>$null
         git commit -m "initial"
+        git tag initial
         Pop-Location
-
+    
         Push-Location $rootPath
         git init --initial-branch=main
-
+    
         git remote add origin "$remotePath"
         git remote add ordinary "$remotePath"
         git remote add grm "$remotePath"
-
-        git pull origin main 2>$null
-        git fetch ordinary 2>$null
-        git fetch grm 2>$null
-
+    
+        git config set remotes.default "origin grm"
+        git config set remotes.ors "origin ordinary"
+    
+        git fetch --recurse-submodules origin 2>$null
+        git fetch --recurse-submodules ordinary 2>$null
+        git fetch --recurse-submodules grm 2>$null
+        git reset origin/develop --hard 2>$null
+        git tag zeta
+        mkdir Pwsh
+    
+        'Pwsh/ign*' > 'Pwsh/ignored'
+        'Pwsh/ign*' | Out-File '.gitignore' -Encoding ascii
+        'echo world' > 'Pwsh/world.ps1'
+        git add -A 2>$null
+        git commit -m "World"
         git branch -c master
-        git branch -c develop
+        git branch -c dev
     }
 
     AfterAll {
@@ -80,12 +95,12 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
             },
             @{
                 Line     = 'branch.main.merge=';
-                Expected = 'HEAD', 'FETCH_HEAD', 'develop', 'main', 'master', 'grm/main', 'ordinary/main', 'origin/main' |
+                Expected = 'HEAD', 'FETCH_HEAD', 'dev', 'main', 'master', 'grm/develop', 'ordinary/develop', 'origin/develop', 'initial', 'zeta' |
                 ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.merge=$_" }
             },
             @{
                 Line     = 'branch.main.merge=or';
-                Expected = 'ordinary/main', 'origin/main' |
+                Expected = 'ordinary/develop', 'origin/develop' |
                 ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.merge=$_" }
             },
             @{
@@ -105,7 +120,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
             },
             @{
                 Line     = 'remote.origin.fetch=r';
-                Expected = 'refs/heads/main:refs/remotes/origin/main' |
+                Expected = 'refs/heads/develop:refs/remotes/origin/develop' |
                 ConvertTo-Completion -ResultType ParameterValue -CompletionText { "remote.origin.fetch=$_" }
             },
             @{
@@ -693,7 +708,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
             @{
                 Line     = "branch.";
                 Expected =
-                "branch.develop.",
+                "branch.dev.",
                 "branch.main.",
                 @{
                     ListItemText = "branch.master.";

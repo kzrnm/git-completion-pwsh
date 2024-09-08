@@ -80,41 +80,39 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             It '<Line>' -ForEach @(
                 @{
                     Line     = '';
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main',
-                        'initial'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 
+                    'HEAD',
+                    'FETCH_HEAD',
+                    'main',
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'o';
-                    Expected = @(
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 
+                    'ordinary/develop',
+                    'origin/develop' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '^';
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main',
-                        'initial'
-                    ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
+                    Expected =
+                    'HEAD',
+                    'FETCH_HEAD',
+                    'main',
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '^o';
-                    Expected = @(
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
+                    Expected =
+                    'ordinary/develop',
+                    'origin/develop' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
                 "gitk $Prefix$Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -125,41 +123,39 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             It '<Line>' -ForEach @(
                 @{
                     Line     = 'HEAD...';
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main',
-                        'initial'
-                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD...$_" }
+                    Expected =
+                    'HEAD',
+                    'FETCH_HEAD',
+                    'main',
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD...$_" }
                 },
                 @{
                     Line     = 'HEAD...o';
-                    Expected = @(
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD...$_" }
+                    Expected =
+                    'ordinary/develop',
+                    'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD...$_" }
                 },
                 @{
                     Line     = 'HEAD..';
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main',
-                        'initial'
-                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD..$_" }
+                    Expected =
+                    'HEAD',
+                    'FETCH_HEAD',
+                    'main',
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD..$_" }
                 },
                 @{
                     Line     = 'HEAD..o';
-                    Expected = @(
-                        'ordinary/main',
-                        'origin/main'
-                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD..$_" }
+                    Expected =
+                    'ordinary/develop',
+                    'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD..$_" }
                 }
             ) {
                 "gitk $Prefix$Line" | Complete-FromLine | Should -BeCompletion $expected

@@ -66,7 +66,7 @@ function Initialize-Remote {
     )
 
     Push-Location $remotePath
-    git init --initial-branch=main
+    git init --initial-branch=develop
     "Initial" > 'initial.txt'
     "echo hello" > 'hello.sh'
     git update-index --add --chmod=+x hello.sh
@@ -85,9 +85,11 @@ function Initialize-Remote {
     git config set remotes.default "origin grm"
     git config set remotes.ors "origin ordinary"
 
-    git pull origin main 2>$null
+    git fetch origin 2>$null
     git fetch ordinary 2>$null
     git fetch grm 2>$null
+    git reset origin/develop --hard 2>$null
+    git tag zeta
     mkdir Pwsh
 
     'Pwsh/ign*' > 'Pwsh/ignored'

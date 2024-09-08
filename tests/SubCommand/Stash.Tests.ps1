@@ -5,6 +5,7 @@ using namespace System.IO;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, File {
     BeforeAll {
+        $ErrorActionPreference = 'SilentlyContinue'
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
@@ -471,17 +472,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         'FETCH_HEAD',
                         'ORIG_HEAD',
                         'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main',
-                        'initial'
+                        'grm/develop',
+                        'ordinary/develop',
+                        'origin/develop',
+                        'initial',
+                        'zeta'
                     ) | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = "o";
                     Expected = @(
-                        'ordinary/main',
-                        'origin/main'
+                        'ordinary/develop',
+                        'origin/develop'
                     ) | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
@@ -491,17 +493,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         'FETCH_HEAD',
                         'ORIG_HEAD',
                         'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main',
-                        'initial'
+                        'grm/develop',
+                        'ordinary/develop',
+                        'origin/develop',
+                        'initial',
+                        'zeta'
                     ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = "^o";
                     Expected = @(
-                        'ordinary/main',
-                        'origin/main'
+                        'ordinary/develop',
+                        'origin/develop'
                     ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {

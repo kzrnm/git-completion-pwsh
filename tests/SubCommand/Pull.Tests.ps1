@@ -176,79 +176,71 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             It '<Line>' -ForEach @(
                 @{
                     Line     = '-s ';
-                    Expected = @(
-                        'octopus',
-                        'ours',
-                        'recursive',
-                        'resolve',
-                        'subtree'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 
+                    'octopus',
+                    'ours',
+                    'recursive',
+                    'resolve',
+                    'subtree' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '-s o';
-                    Expected = @(
-                        'octopus',
-                        'ours'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 
+                    'octopus',
+                    'ours' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy ';
-                    Expected = @(
-                        'octopus',
-                        'ours',
-                        'recursive',
-                        'resolve',
-                        'subtree'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 
+                    'octopus',
+                    'ours',
+                    'recursive',
+                    'resolve',
+                    'subtree' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy o';
-                    Expected = @(
-                        'octopus',
-                        'ours'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 
+                    'octopus',
+                    'ours' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy=o';
-                    Expected = @(
-                        'octopus',
-                        'ours'
-                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy=$_" }
+                    Expected = 
+                    'octopus',
+                    'ours' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy=$_" }
                 },
                 @{
                     Line     = '--strategy-option ';
-                    Expected = @(
-                        'ours',
-                        'theirs',
-                        'subtree',
-                        'subtree=',
-                        'patience',
-                        'histogram',
-                        'diff-algorithm=',
-                        'ignore-space-change',
-                        'ignore-all-space',
-                        'ignore-space-at-eol',
-                        'renormalize',
-                        'no-renormalize',
-                        'no-renames',
-                        'find-renames',
-                        'find-renames=',
-                        'rename-threshold='
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 
+                    'ours',
+                    'theirs',
+                    'subtree',
+                    'subtree=',
+                    'patience',
+                    'histogram',
+                    'diff-algorithm=',
+                    'ignore-space-change',
+                    'ignore-all-space',
+                    'ignore-space-at-eol',
+                    'renormalize',
+                    'no-renormalize',
+                    'no-renames',
+                    'find-renames',
+                    'find-renames=',
+                    'rename-threshold=' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy-option r';
-                    Expected = @(
-                        'renormalize',
-                        'rename-threshold='
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 
+                    'renormalize',
+                    'rename-threshold=' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy-option=r';
-                    Expected = @(
-                        'renormalize',
-                        'rename-threshold='
-                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
+                    Expected = 
+                    'renormalize',
+                    'rename-threshold=' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -298,62 +290,55 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         Describe '<Line>' -ForEach @(
             @{
                 Line     = 'origin ';
-                Expected = @(
-                    'HEAD',
-                    'main'
-                ) | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 
+                'HEAD',
+                'develop' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
-                Line     = 'origin m';
-                Expected = @(
-                    'main'
-                ) | ConvertTo-Completion -ResultType ParameterValue
+                Line     = 'origin d';
+                Expected = 
+                'develop' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin +';
-                Expected = @(
-                    'HEAD',
-                    'main'
-                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                Expected = 
+                'HEAD',
+                'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
-                Line     = 'origin +m';
-                Expected = @(
-                    'main'
-                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                Line     = 'origin +d';
+                Expected = 
+                'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin left:';
-                Expected = @(
-                    'HEAD',
-                    'FETCH_HEAD',
-                    'main',
-                    'grm/main',
-                    'ordinary/main',
-                    'origin/main',
-                    'initial'
-                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
+                Expected = 
+                'HEAD',
+                'FETCH_HEAD',
+                'main',
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'origin left:m';
-                Expected = @(
-                    'main'
-                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
+                Expected = 
+                'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'or';
-                Expected = @(
-                    'ordinary',
-                    'origin'
-                ) | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 
+                'ordinary',
+                'origin' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '';
-                Expected = @(
-                    'grm',
-                    'ordinary',
-                    'origin'
-                ) | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 
+                'grm',
+                'ordinary',
+                'origin' | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
             Describe 'DoubleDash' {

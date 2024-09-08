@@ -214,16 +214,17 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
             },
             @{
                 Line     = '--force-with-lease=or';
                 Expected = 
-                'ordinary/main',
-                'origin/main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
+                'ordinary/develop',
+                'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
             },
             @{
                 Line     = '--force-with-lease=ma:';
@@ -231,16 +232,17 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
             },
             @{
                 Line     = '--force-with-lease=ma:or';
                 Expected = 
-                'ordinary/main',
-                'origin/main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
+                'ordinary/develop',
+                'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
             },
             @{
                 Line     = '--recurse-submodules ';
@@ -344,16 +346,17 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ConvertTo-Completion -ResultType ParameterValue
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin o';
                 Expected = 
-                'ordinary/main',
-                'origin/main' | ConvertTo-Completion -ResultType ParameterValue
+                'ordinary/develop',
+                'origin/develop' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin ^';
@@ -361,16 +364,17 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin ^o';
                 Expected = 
-                'ordinary/main',
-                'origin/main' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
+                'ordinary/develop',
+                'origin/develop' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin +';
@@ -378,27 +382,28 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin +o';
                 Expected = 
-                'ordinary/main',
-                'origin/main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                'ordinary/develop',
+                'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin left:';
                 Expected = 
                 'HEAD',
-                'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
+                'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
-                Line     = 'origin left:m';
+                Line     = 'origin left:d';
                 Expected = 
-                'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
+                'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'or';
@@ -417,10 +422,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 Line     = 'origin refs';
                 Expected = 
                 'refs/heads/main',
-                'refs/remotes/grm/main',
-                'refs/remotes/ordinary/main',
-                'refs/remotes/origin/main',
-                'refs/tags/initial' | ConvertTo-Completion -ResultType ParameterValue
+                'refs/remotes/grm/develop',
+                'refs/remotes/ordinary/develop',
+                'refs/remotes/origin/develop',
+                'refs/tags/initial',
+                'refs/tags/zeta' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin refs/h';

@@ -30,17 +30,18 @@ if ($Ref) {
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
-                    'grm/main',
-                    'ordinary/main',
-                    'origin/main',
-                    'initial'
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta'
                 ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = "${Prefix}o";
                 Expected = @(
-                    'ordinary/main',
-                    'origin/main'
+                    'ordinary/develop',
+                    'origin/develop'
                 ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
@@ -49,17 +50,18 @@ if ($Ref) {
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
-                    'grm/main',
-                    'ordinary/main',
-                    'origin/main',
-                    'initial'
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta'
                 ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = "${Prefix}^o";
                 Expected = @(
-                    'ordinary/main',
-                    'origin/main'
+                    'ordinary/develop',
+                    'origin/develop'
                 ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
@@ -77,17 +79,18 @@ if ($Refspec) {
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
-                    'grm/main',
-                    'ordinary/main',
-                    'origin/main',
-                    'initial'
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta'
                 ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD...$_" }
             },
             @{
                 Line     = "${Prefix}HEAD...o";
                 Expected = @(
-                    'ordinary/main',
-                    'origin/main'
+                    'ordinary/develop',
+                    'origin/develop'
                 ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD...$_" }
             },
             @{
@@ -96,17 +99,18 @@ if ($Refspec) {
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
-                    'grm/main',
-                    'ordinary/main',
-                    'origin/main',
-                    'initial'
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta'
                 ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD..$_" }
             },
             @{
                 Line     = "${Prefix}HEAD..o";
                 Expected = @(
-                    'ordinary/main',
-                    'origin/main'
+                    'ordinary/develop',
+                    'origin/develop'
                 ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "HEAD..$_" }
             }
         ) {

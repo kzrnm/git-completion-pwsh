@@ -122,10 +122,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         'HEAD',
                         'FETCH_HEAD',
                         'main',
-                        'grm/main',
-                        'ordinary/main',
-                        'origin/main',
-                        'initial' | ConvertTo-Completion -ResultType ParameterValue
+                        'grm/develop',
+                        'ordinary/develop',
+                        'origin/develop',
+                        'initial',
+                        'zeta' | ConvertTo-Completion -ResultType ParameterValue
                     )
                 },
                 @{
@@ -146,8 +147,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 @{
                     Line     = ' o';
                     Expected = @(
-                        'ordinary/main',
-                        'origin/main' | ConvertTo-Completion -ResultType ParameterValue
+                        'ordinary/develop',
+                        'origin/develop' | ConvertTo-Completion -ResultType ParameterValue
                     )
                 }
             ) {
@@ -164,8 +165,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
             @{
                 Line     = "o";
                 Expected = @(
-                    'ordinary/main',
-                    'origin/main'
+                    'ordinary/develop',
+                    'origin/develop'
                 ) | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
@@ -174,17 +175,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
-                    'grm/main',
-                    'ordinary/main',
-                    'origin/main',
-                    'initial'
+                    'grm/develop',
+                    'ordinary/develop',
+                    'origin/develop',
+                    'initial',
+                    'zeta'
                 ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = "^o";
                 Expected = @(
-                    'ordinary/main',
-                    'origin/main'
+                    'ordinary/develop',
+                    'origin/develop'
                 ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {

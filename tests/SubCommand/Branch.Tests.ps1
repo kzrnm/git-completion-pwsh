@@ -182,16 +182,17 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
             },
             @{
                 Line     = '--set-upstream-to=o';
                 Expected =
-                'ordinary/main',
-                'origin/main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
+                'ordinary/develop',
+                'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
             },
             @{
                 Line     = '--set-upstream-to=^';
@@ -199,16 +200,17 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 '^HEAD',
                 '^FETCH_HEAD',
                 '^main',
-                '^grm/main',
-                '^ordinary/main',
-                '^origin/main',
-                '^initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
+                '^grm/develop',
+                '^ordinary/develop',
+                '^origin/develop',
+                '^initial',
+                '^zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
             },
             @{
                 Line     = '--set-upstream-to=^o';
                 Expected =
-                '^ordinary/main',
-                '^origin/main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
+                '^ordinary/develop',
+                '^origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -242,10 +244,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ConvertTo-Completion -ResultType ParameterValue
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ConvertTo-Completion -ResultType ParameterValue
                 "git $Command $Remote $Option " | Complete-FromLine | Should -BeCompletion $expected
             }
         }
@@ -260,10 +263,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             'HEAD',
             'FETCH_HEAD',
             'main',
-            'grm/main',
-            'ordinary/main',
-            'origin/main',
-            'initial' | ConvertTo-Completion -ResultType ParameterValue
+            'grm/develop',
+            'ordinary/develop',
+            'origin/develop',
+            'initial',
+            'zeta' | ConvertTo-Completion -ResultType ParameterValue
             "git $Command $Option " | Complete-FromLine | Should -BeCompletion $expected
         }
     }

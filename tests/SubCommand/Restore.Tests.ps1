@@ -136,16 +136,17 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ConvertTo-Completion -ResultType ParameterValue
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-s ^o';
                 Expected = 
-                '^ordinary/main',
-                '^origin/main' | ConvertTo-Completion -ResultType ParameterValue
+                '^ordinary/develop',
+                '^origin/develop' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--source ';
@@ -153,10 +154,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ConvertTo-Completion -ResultType ParameterValue
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--source ^m';
@@ -169,10 +171,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
-                'grm/main',
-                'ordinary/main',
-                'origin/main',
-                'initial' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--source=$_" }
+                'grm/develop',
+                'ordinary/develop',
+                'origin/develop',
+                'initial',
+                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--source=$_" }
             },
             @{
                 Line     = '--source=m';

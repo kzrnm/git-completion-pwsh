@@ -401,7 +401,7 @@ function completeConfigVariableName {
         $second = $Matches[1]
         $gitTopPath = (__git rev-parse --show-toplevel)
 
-        __git config -f "$gitTopPath/.gitmodules" --name-only --list |
+        __git config -f "$gitTopPath/.gitmodules" --name-only --list 2>$null |
         ForEach-Object {
             if ($_ -match 'submodule\.(.*)\.path') {
                 $sub = $Matches[1]
