@@ -55,4 +55,20 @@ Describe 'GirDir' {
         Push-Location (Invoke-Expression "echo $Location")
         $Line | Complete-FromLine | Should -BeCompletion $Expected
     }
+
+    It '<Location>:<Line>2' -ForEach @(
+        @{
+            Location = '$TestDrive/home';
+            Line     = 'git --git-dir ../gitRoot/.git -c branch.n';
+            Expected = "branch.new." | ConvertTo-Completion -ResultType ParameterName
+        },
+        @{
+            Location = '$TestDrive/home';
+            Line     = 'git --git-dir=../gitRoot/.git -c branch.n';
+            Expected = "branch.new." | ConvertTo-Completion -ResultType ParameterName
+        }
+    ) {
+        Push-Location (Invoke-Expression "echo $Location")
+        $Line | Complete-FromLine | Should -BeCompletion $Expected
+    }
 }

@@ -74,6 +74,18 @@ function gitListAliases {
     }
 }
 
+function gitParseShellArgs {
+    [OutputType([string[]])]
+    param (
+        [Parameter(Mandatory, Position = 0)]
+        [string]
+        $Line
+    )
+
+    $cmd = "!printf '%s\n' $($Line.Replace("`n", ' '))"
+    return (git -c alias.cmp-shell-args=$cmd cmp-shell-args)
+}
+
 function gitGetAlias {
     [OutputType([string])]
     param(
