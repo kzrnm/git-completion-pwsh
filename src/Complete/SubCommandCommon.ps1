@@ -13,7 +13,7 @@ function Complete-GitSubCommandCommon {
 
     if ($Subcommand -and ($Subcommand -cnotlike '*[:/\]*')) {
         if (!$Context.HasDoubledash()) {
-            if ($Current -cmatch '^-[^-]?') {
+            if ($Current -cmatch '^-[^-]*$') {
                 $shortOpts = Get-GitShortOptions $Command $Subcommand -Current $Current
                 if ($shortOpts) { return $shortOpts }
                 Get-GitShortOptions $Command -Current $Current

@@ -85,7 +85,7 @@ Describe 'SubCommandCommon-check-ignore' {
     }
 
     Describe 'CommonOption' {
-        It '<Line>' -ForEach @(
+        Describe '<Line>' -ForEach @(
             @{
                 Line     = "--q"
                 Expected = "--quiet" | ConvertTo-Completion -ResultType ParameterName -ToolTip "suppress progress reporting";
@@ -133,7 +133,18 @@ Describe 'SubCommandCommon-check-ignore' {
                 } | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
-            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            
+            It '<SubcommandLike>' -ForEach @(
+                '', 'foo' | ForEach-Object {
+                    @{
+                        SubcommandLike = $_;
+                        Line           = $Line;
+                        Expected       = $Expected;
+                    }
+                }
+            ) {
+                "git $Command $SubcommandLike $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
         }
     }
 }
