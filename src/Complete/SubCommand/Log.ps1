@@ -15,7 +15,7 @@ function Complete-GitSubCommand-log {
     $shortOpts = Get-GitShortOptions $Context.command -Current $Current
     if ($shortOpts) { return $shortOpts }
 
-    $result = Complete-Opts-log $Context
+    $result = gitCompleteLogOpts $Context
     if ($result) { return $result }
     gitCompleteRevlistFile $Current
 }
@@ -26,7 +26,7 @@ Set-Alias Complete-GitSubCommand-whatchanged Complete-GitSubCommand-log
 # Complete porcelain (i.e. not git-rev-list) options and at least some
 # option arguments accepted by git-log.  Note that this same set of options
 # are also accepted by some other git commands besides git-log.
-function Complete-Opts-log {
+function gitCompleteLogOpts {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param (
