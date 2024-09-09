@@ -36,14 +36,14 @@ function completeCherryPickOrRevert {
     
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
-        if ($shortOpts) { return $shortOpts }
-
         if(gitPseudorefExists $InProgressRef){
             $gitCherryPickInprogressOptions | gitcomp -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.Command }
             return
         }
-    
+
+        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        if ($shortOpts) { return $shortOpts }
+
         $result = gitCompleteStrategy -Current $Current -Prev $Context.PreviousWord()
         if ($null -ne $result) { return $result }
 

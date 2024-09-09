@@ -71,7 +71,11 @@ function Initialize-Remote {
     git update-index --add --chmod=+x hello.sh
     git add -A 2>$null
     git commit -m "initial"
-    git tag initial
+    (0..10) > Number.txt
+    git add Number.txt
+    git commit -m zeta
+    git tag zeta
+    git reset HEAD~ --hard
     Pop-Location
 
     Push-Location $rootPath
@@ -84,11 +88,11 @@ function Initialize-Remote {
     git config set remotes.default "origin grm"
     git config set remotes.ors "origin ordinary"
 
-    git fetch origin 2>$null
+    git fetch origin --tags 2>$null
     git fetch ordinary 2>$null
     git fetch grm 2>$null
     git reset origin/develop --hard 2>$null
-    git tag zeta
+    git tag initial
     mkdir Pwsh
 
     'Pwsh/ign*' > 'Pwsh/ignored'

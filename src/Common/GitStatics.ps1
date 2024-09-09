@@ -101,3 +101,6 @@ $script:gitCherryPickInprogressOptions = '--continue', '--quit', '--abort', '--s
 $script:gitConflictSolver = 'diff3', 'merge', 'zdiff3'
 
 $script:gitUntrackedFileModes = 'all', 'no', 'normal'
+
+$script:gitRebaseInprogressOptions = '--continue', '--skip', '--abort', '--quit', '--show-current-patch'
+$script:gitRebaseInteractiveInprogressOptions = $script:gitRebaseInprogressOptions + '--edit-todo'

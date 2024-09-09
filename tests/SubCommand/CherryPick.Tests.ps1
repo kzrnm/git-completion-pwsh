@@ -259,6 +259,25 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
+                    Line     = '-';
+                    Expected = @{
+                        ListItemText = '--continue'
+                        ToolTip      = 'resume revert or cherry-pick sequence';
+                    },
+                    @{
+                        ListItemText = '--quit'
+                        ToolTip      = 'end revert or cherry-pick sequence';
+                    },
+                    @{
+                        ListItemText = '--abort'
+                        ToolTip      = 'cancel revert or cherry-pick sequence';
+                    },
+                    @{
+                        ListItemText = '--skip'
+                        ToolTip      = 'skip current commit and continue';
+                    } | ConvertTo-Completion -ResultType ParameterName
+                },
+                @{
                     Line     = '--';
                     Expected = @{
                         ListItemText = '--continue'
