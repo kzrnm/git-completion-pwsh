@@ -147,9 +147,10 @@ function gitCompleteRemoteOrRefspec {
 }
 
 function gitCompleteRefs {
+    [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
-        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
+        [Parameter(Mandatory, Position = 0)][AllowEmptyString()][string] $Current,
         [string] $Remote = "",
         [string] $Prefix = "",
         [string] $Suffix = "",

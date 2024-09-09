@@ -96,5 +96,6 @@ $script:gitShowcurrentpatch = 'diff', 'raw'
 $script:gitAmInprogressOptions = '--skip', '--continue', '--resolved', '--abort', '--quit', '--show-current-patch'
 $script:gitQuotedCr = 'nowarn', 'warn', 'strip'
 
+$script:gitCherryPickInprogressOptions = '--continue', '--quit', '--abort', '--skip'
 
 $script:gitConflictSolver = 'diff3', 'merge', 'zdiff3'

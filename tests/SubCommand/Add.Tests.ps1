@@ -104,6 +104,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                 } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
+                Line     = '--c';
+                Expected = @{
+                    ListItemText = '--chmod=';
+                    ToolTip      = "override the executable bit of the listed files";
+                } | ConvertTo-Completion -ResultType ParameterName
+            },
+            @{
                 Line     = '--no-al';
                 Expected = @{
                     ListItemText = '--no-all';
