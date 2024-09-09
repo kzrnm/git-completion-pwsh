@@ -1,4 +1,5 @@
 enum IndexFilesOptions {
+    Cached
     Updated
     Modified
     Untracked
@@ -39,6 +40,7 @@ function gitIndexFiles {
 
     $Current = $Current.Replace('\', '\\')
     $lsFilesOptions = switch ($Options) {
+        Cached { '--cached' }
         Updated { '--others', '--modified', '--no-empty-directory' } 
         Modified { '--modified' }
         Untracked { '--others', '--directory' }

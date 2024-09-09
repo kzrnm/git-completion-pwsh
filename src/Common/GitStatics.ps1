@@ -99,3 +99,5 @@ $script:gitQuotedCr = 'nowarn', 'warn', 'strip'
 $script:gitCherryPickInprogressOptions = '--continue', '--quit', '--abort', '--skip'
 
 $script:gitConflictSolver = 'diff3', 'merge', 'zdiff3'
+
+$script:gitUntrackedFileModes = 'all', 'no', 'normal'

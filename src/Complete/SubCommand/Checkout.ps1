@@ -14,7 +14,7 @@ function Complete-GitSubCommand-checkout {
         if ($shortOpts) { return $shortOpts }
 
         $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
-            { $_ -cin '-b', '-B', '--orphan' } {
+            { $_ -cmatch '^-([^-]*[bB]|-orphan)$' } {
                 gitCompleteRefs $Current -Mode heads -dwim:(checkoutDefaultDwimMode $Context)
                 return
             }
@@ -61,10 +61,10 @@ function Complete-GitSubCommand-checkout {
 
         for ($i = $Context.CommandIndex + 1; $i -lt $Context.DoubledashIndex; $i++) {
             $w = $Context.Words[$i]
-            if ($w -cin '-b', '-B', '-d', '--detach', '--orphan') {
+            if ($w -cmatch '^-([^-]*[bBd][^-]*|-detach|-orphan)$') {
                 $startPoint = $true
             }
-            elseif ($w -cin '-t', '--track') {
+            elseif ($w -cmatch '^-([^-]*t[^-]*|-track)$') {
                 $remoteHead = $true
             }
         }

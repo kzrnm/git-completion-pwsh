@@ -13,7 +13,7 @@ function Complete-GitSubCommand-switch {
         if ($shortOpts) { return $shortOpts }
 
         $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
-            { $_ -cin '-c', '-C', '--orphan' } {
+            { $_ -cmatch '^-([^-]*[cC]|-orphan)$' } {
                 gitCompleteRefs -Current $Current -Mode heads -dwim:(checkoutDefaultDwimMode $Context)
                 return
             }
@@ -67,10 +67,10 @@ function Complete-GitSubCommand-switch {
             # the branch name.
             return
         }
-        elseif ($w -cin '-c', '-C', '-d', '--detach') {
+        elseif ($w -cmatch '^-([^-]*[cCd][^-]*|-detach)$') {
             $startPoint = $true
         }
-        elseif ($w -cin '-t', '--track') {
+        elseif ($w -cmatch '^-([^-]*t[^-]*|-track)$') {
             $remoteHead = $true
         }
     }
