@@ -14,14 +14,12 @@ function Complete-GitSubCommand-restore {
         $shortOpts = Get-GitShortOptions $Context.command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
-
-        $conflictCandidates = 'diff3', 'merge', 'zdiff3'
         $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
             { $_ -cmatch '^-([^-]*s|-source)$' } {
                 gitCompleteRefs -Current $Current
                 return
             }
-            '--conflict' { $conflictCandidates }
+            '--conflict' { $gitConflictSolver }
         }
 
         if ($prevCandidates) {
@@ -37,7 +35,7 @@ function Complete-GitSubCommand-restore {
                     gitCompleteRefs -Current $value -Prefix "$key="
                     return
                 }
-                '--conflict' { $conflictCandidates }
+                '--conflict' { $gitConflictSolver }
             }
 
             if ($candidates) {

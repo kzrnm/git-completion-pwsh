@@ -4,6 +4,7 @@ $script:GitCompletionSettings = [PSCustomObject]@{
     ShowAllOptions     = ($env:GIT_COMPLETION_SHOW_ALL -and ($env:GIT_COMPLETION_SHOW_ALL -ne '0'));
     ShowAllCommand     = ($env:GIT_COMPLETION_SHOW_ALL_COMMANDS -and ($env:GIT_COMPLETION_SHOW_ALL_COMMANDS -ne '0'));
     IgnoreCase         = ($env:GIT_COMPLETION_IGNORE_CASE -and ($env:GIT_COMPLETION_IGNORE_CASE -ne '0'));
+    CheckoutNoGuess    = ($env:GIT_COMPLETION_CHECKOUT_NO_GUESS -and ($env:GIT_COMPLETION_CHECKOUT_NO_GUESS -ne '0'));
 
     AdditionalCommands = [string[]]@()
     ExcludeCommands    = [string[]]@()

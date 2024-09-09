@@ -95,3 +95,6 @@ $script:gitPatchformat = 'mbox', 'stgit', 'stgit-series', 'hg', 'mboxrd'
 $script:gitShowcurrentpatch = 'diff', 'raw'
 $script:gitAmInprogressOptions = '--skip', '--continue', '--resolved', '--abort', '--quit', '--show-current-patch'
 $script:gitQuotedCr = 'nowarn', 'warn', 'strip'
+
+
+$script:gitConflictSolver = 'diff3', 'merge', 'zdiff3'

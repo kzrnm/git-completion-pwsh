@@ -23,13 +23,12 @@ function Initialize-Home {
         IgnoreCase         = $false;
         ShowAllCommand     = $false;
         ShowAllOptions     = $false;
+        CheckoutNoGuess    = $false
         AdditionalCommands = @();
         ExcludeCommands    = @();
     }
 
     $script:envHOMEBak = $env:HOME
-    $env:GIT_COMPLETION_SHOW_ALL = ''
-    $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = ''
 
     mkdir ($env:HOME = "$TestDrive/home")
     "[user]`nemail = Kitazato@example.com`nname = 1000yen" | Out-File "$env:HOME/.gitconfig" -Encoding ascii

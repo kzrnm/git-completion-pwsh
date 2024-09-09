@@ -349,8 +349,9 @@ function gitDwimRemoteHeads {
         $ignoreCase `
         "refs/remotes/*/$Current*" "refs/remotes/*/$Current*/**" | 
     Group-Object |
-    Where-Object Count -EQ 1 |
-    Select-Object -ExpandProperty Name
+    Where-Object Count -gt 0 |
+    Select-Object -ExpandProperty Name |
+    Where-Object { $_ }
 }
 
 
