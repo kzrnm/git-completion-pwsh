@@ -26,6 +26,12 @@ Describe 'FileCompleter' -Tag File {
         Pop-Location
     }
 
+    BeforeEach {
+        foreach ($e in $Expected) {
+            $e.ToolTip = (Get-item ($e.TestDriveFile -creplace '^TestDrive:', $TestDrive)).FullName
+        }
+    }
+
     It 'Prefix:<Prefix>,Current:<Current>' -ForEach @(
         @{
             Prefix   = '';
@@ -223,9 +229,6 @@ Describe 'FileCompleter' -Tag File {
             Expected = @()
         }
     ) {
-        foreach ($e in $Expected) {
-            $e.ToolTip = (Get-item ($e.TestDriveFile -creplace '^TestDrive:', $TestDrive)).FullName
-        }
         completeCurrentDirectory $Current -Prefix $Prefix | Should -BeCompletion $Expected
     }
 }

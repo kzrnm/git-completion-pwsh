@@ -12,6 +12,7 @@ function Test-GitVersion {
 $ErrorActionPreference = 'Continue'
 Test-GitVersion
 . "$PSScriptRoot/ConvertCompletion.ps1"
+. "$PSScriptRoot/Revlist.ps1"
 
 BeforeAll {
     Import-Module "$PSScriptRoot/../src/git-completion.psd1" -Force

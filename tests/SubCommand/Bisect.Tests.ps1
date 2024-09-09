@@ -65,49 +65,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             }
         }
 
-        Describe 'Ref' -ForEach @('start' | ForEach-Object { @{Subcommand = $_ } }) {
-            It '<Line>' -ForEach @(
-                @{
-                    Line     = "";
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/develop',
-                        'ordinary/develop',
-                        'origin/develop',
-                        'initial',
-                        'zeta'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
-                },
-                @{
-                    Line     = "o";
-                    Expected = @(
-                        'ordinary/develop',
-                        'origin/develop'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
-                },
-                @{
-                    Line     = "^";
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/develop',
-                        'ordinary/develop',
-                        'origin/develop',
-                        'initial',
-                        'zeta'
-                    ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
-                },
-                @{
-                    Line     = "^o";
-                    Expected = @(
-                        'ordinary/develop',
-                        'origin/develop'
-                    ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
-                }
-            ) {
+        Describe '<Subcommand>' -ForEach @('start' | ForEach-Object { @{Subcommand = $_ } }) {
+            Describe-Revlist -Ref {
                 "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
             }
         }
@@ -184,49 +143,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             "git $Command " | Complete-FromLine | Should -BeCompletion $Expected
         }
 
-        Describe '<Subcommand>:Ref' -ForEach @('start', $Bad, $Good, 'reset', 'skip' | ForEach-Object { @{Subcommand = $_ } }) {
-            It '<Line>' -ForEach @(
-                @{
-                    Line     = "";
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/develop',
-                        'ordinary/develop',
-                        'origin/develop',
-                        'initial',
-                        'zeta'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
-                },
-                @{
-                    Line     = "o";
-                    Expected = @(
-                        'ordinary/develop',
-                        'origin/develop'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
-                },
-                @{
-                    Line     = "^";
-                    Expected = @(
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/develop',
-                        'ordinary/develop',
-                        'origin/develop',
-                        'initial',
-                        'zeta'
-                    ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
-                },
-                @{
-                    Line     = "^o";
-                    Expected = @(
-                        'ordinary/develop',
-                        'origin/develop'
-                    ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
-                }
-            ) {
+        Describe '<Subcommand>' -ForEach @('start', $Bad, $Good, 'reset', 'skip' | ForEach-Object { @{Subcommand = $_ } }) {
+            Describe-Revlist -Ref {
                 "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
             }
         }

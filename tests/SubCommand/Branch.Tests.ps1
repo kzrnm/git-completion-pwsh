@@ -50,9 +50,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
 
-        Describe 'Revlist' {
-            . "${RepoRoot}testtools/Revlist.ps1" -Ref -Prefix '-- '
-        }
+        Describe-Revlist -Ref
     }
 
     It 'ShortOptions' {
@@ -216,14 +214,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
 
-        Describe '--set-upstream-to ' {
-            . "${RepoRoot}testtools/Revlist.ps1" -Ref -Prefix '--set-upstream-to '
+        Describe-Revlist -Ref {
+            "git $Command --set-upstream-to $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
-    Describe 'Revlist' {
-        . "${RepoRoot}testtools/Revlist.ps1" -Ref
-    }
+    Describe-Revlist -Ref
 
     Describe 'OnlyLocalRef' {
         Describe '<Option>' -ForEach @(

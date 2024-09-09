@@ -49,8 +49,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
 
-        Describe 'Revlist' {
-            . "${RepoRoot}testtools/Revlist.ps1" -Ref -Prefix '-- '
+        Describe-Revlist -Ref {
+            "git $Command -- $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
@@ -119,7 +119,5 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         }
     }
 
-    Describe 'Revlist' {
-        . "${RepoRoot}testtools/Revlist.ps1" -Ref
-    }
+    Describe-Revlist -Ref
 }

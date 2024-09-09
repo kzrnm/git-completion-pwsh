@@ -152,6 +152,27 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
             @{
                 Line     = 'D';
                 Expected = 'Deava' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = '-- ';
+                Expected =
+                @{
+                    CompletionText = "Aquarion`` Evol/";
+                    ListItemText   = "Aquarion Evol/"
+                },
+                'Deava',
+                'Pwsh/L1/',
+                'test.config',
+                @{
+                    CompletionText = '漢```''帝`　国`''';
+                    ListItemText   = '漢`''帝　国''';
+                },
+                '漢字/' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = '-- D';
+                Expected =
+                'Deava' | ConvertTo-Completion -ResultType ProviderItem
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

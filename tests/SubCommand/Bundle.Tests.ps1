@@ -63,11 +63,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         "git $Command create " | Complete-FromLine | Should -BeCompletion @()
     }
 
-    Describe 'Revlist' {
-        . "${RepoRoot}testtools/Revlist.ps1" -Prefix 'create foo '
-        . "${RepoRoot}testtools/Revlist.ps1" -Prefix 'create foo -q '
-        . "${RepoRoot}testtools/Revlist.ps1" -Prefix 'create -- foo '
-        . "${RepoRoot}testtools/Revlist.ps1" -Prefix 'create -- -q '
-        . "${RepoRoot}testtools/Revlist.ps1" -Prefix 'create foo -- '
+    Describe-Revlist {
+        "git $Command create foo $Line" | Complete-FromLine | Should -BeCompletion $expected
+        "git $Command create foo -q $Line" | Complete-FromLine | Should -BeCompletion $expected
+        "git $Command create -- foo $Line" | Complete-FromLine | Should -BeCompletion $expected
+        "git $Command create -- -q $Line" | Complete-FromLine | Should -BeCompletion $expected
+        "git $Command create foo -- $Line" | Complete-FromLine | Should -BeCompletion $expected
     }
 }

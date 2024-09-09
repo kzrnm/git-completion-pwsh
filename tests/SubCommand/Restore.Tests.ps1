@@ -129,59 +129,17 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
     }
 
     Describe 'OptionValue' {
+        Describe '<Option>' -ForEach @('-s ', '--source ' | ForEach-Object { @{Option = $_ } }) {
+            Describe-Revlist -Ref {
+                "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+        Describe '--source' {
+            Describe-Revlist -Ref -CompletionPrefix "--source=" {
+                "git $Command --source=$Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
         It '<Line>' -ForEach @(
-            @{
-                Line     = '-s ';
-                Expected = 
-                'HEAD',
-                'FETCH_HEAD',
-                'main',
-                'grm/develop',
-                'ordinary/develop',
-                'origin/develop',
-                'initial',
-                'zeta' | ConvertTo-Completion -ResultType ParameterValue
-            },
-            @{
-                Line     = '-s ^o';
-                Expected = 
-                '^ordinary/develop',
-                '^origin/develop' | ConvertTo-Completion -ResultType ParameterValue
-            },
-            @{
-                Line     = '--source ';
-                Expected = 
-                'HEAD',
-                'FETCH_HEAD',
-                'main',
-                'grm/develop',
-                'ordinary/develop',
-                'origin/develop',
-                'initial',
-                'zeta' | ConvertTo-Completion -ResultType ParameterValue
-            },
-            @{
-                Line     = '--source ^m';
-                Expected = 
-                '^main' | ConvertTo-Completion -ResultType ParameterValue
-            },
-            @{
-                Line     = '--source=';
-                Expected =
-                'HEAD',
-                'FETCH_HEAD',
-                'main',
-                'grm/develop',
-                'ordinary/develop',
-                'origin/develop',
-                'initial',
-                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--source=$_" }
-            },
-            @{
-                Line     = '--source=m';
-                Expected =
-                'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--source=$_" }
-            },
             @{
                 Line     = '--conflict ';
                 Expected = 
@@ -219,6 +177,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
             },
             @{
                 Line     = 'D';
+                Expected = 'Dr.Wily' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = '-- ';
+                Expected = @{
+                    CompletionText = "Aquarion`` Evol/Evol";
+                    ListItemText   = "Aquarion Evol/Evol"
+                },
+                'Dr.Wily', 'Pwsh/OptionLike/-foo.ps1' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = '-- D';
                 Expected = 'Dr.Wily' | ConvertTo-Completion -ResultType ProviderItem
             }
         ) {

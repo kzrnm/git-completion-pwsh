@@ -49,9 +49,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
-
-        Describe 'Revlist' {
-            . "${RepoRoot}testtools/Revlist.ps1" -Ref -Prefix 'show -- '
+        Describe-Revlist -Ref {
+            "git $Command show -- $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
@@ -198,9 +197,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         BeforeAll {
             Set-Variable Subcommand 'list'
         }
-
-        Describe 'Revlist' {
-            . "${RepoRoot}testtools/Revlist.ps1" -Ref -Prefix 'list '
+        Describe-Revlist -Ref {
+            "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
 
         It 'ShortOptions' {
@@ -227,9 +225,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         BeforeAll {
             Set-Variable Subcommand 'expire'
         }
-
-        Describe 'Revlist' {
-            . "${RepoRoot}testtools/Revlist.ps1" -Ref -Prefix 'expire '
+        Describe-Revlist -Ref {
+            "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
 
         It 'ShortOptions' {
@@ -282,9 +279,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         BeforeAll {
             Set-Variable Subcommand 'delete'
         }
-
-        Describe 'Revlist' {
-            . "${RepoRoot}testtools/Revlist.ps1" -Ref -Prefix 'delete '
+        Describe-Revlist -Ref {
+            "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
 
         It 'ShortOptions' {
@@ -337,9 +333,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         BeforeAll {
             Set-Variable Subcommand 'exists'
         }
-
-        Describe 'Revlist' {
-            . "${RepoRoot}testtools/Revlist.ps1" -Ref -Prefix 'exists '
+        Describe-Revlist -Ref {
+            "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
 
         It 'ShortOptions' {

@@ -147,7 +147,5 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         }
     }
 
-    Describe 'Revlist' {
-        . "${RepoRoot}testtools/Revlist.ps1" -Ref
-    }
+    Describe-Revlist -Ref
 }
