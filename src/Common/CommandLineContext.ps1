@@ -15,16 +15,19 @@ class CommandLineContext {
         [string[]] $Words,
         [int] $CurrentIndex
     ) {
-        $this.Words = $Words
         $this.CurrentIndex = $CurrentIndex
 
         $this.gitDir = $null
         $this.gitCArgs = @()
         $this.Command = ''
+        $this.InitWords($Words, 1)
+    }
 
-        :globalflag for ($i = 1; $i -lt $Words.Length; $i++) {
-            if ($i -eq $CurrentIndex) { continue }
-            $s = $Words[$i]
+    hidden InitWords([string[]]$wds, [int]$start) {
+        $this.Words = $wds
+        :globalflag for ($i = $start; $i -lt $wds.Length; $i++) {
+            if ($i -eq $this.CurrentIndex) { continue }
+            $s = $wds[$i]
             switch -Wildcard -CaseSensitive ($s) {
                 '--' {
                     $this.DoubledashIndex = $i
@@ -36,7 +39,7 @@ class CommandLineContext {
                 }
                 '--git-dir' {
                     ++$i
-                    if (($i -lt $this.Words.Count) -and ($i -ne $CurrentIndex)) {
+                    if (($i -lt $this.Words.Count) -and ($i -ne $this.CurrentIndex)) {
                         $this.gitDir = [DirectoryInfo]::new($this.Words[$i])
                     }
                     continue
@@ -46,7 +49,7 @@ class CommandLineContext {
                     continue
                 }
                 '--help' {
-                    if ($i -lt $CurrentIndex) {
+                    if ($i -lt $this.CurrentIndex) {
                         $this.Command = 'help'
                         $this.CommandIndex = $i
                     }
@@ -64,7 +67,7 @@ class CommandLineContext {
                     continue
                 }
                 default {
-                    if ($i -lt $CurrentIndex) {
+                    if ($i -lt $this.CurrentIndex) {
                         $this.Command = $s
                         $this.CommandIndex = $i
                     }
@@ -76,8 +79,8 @@ class CommandLineContext {
         if ($this.DoubledashIndex -ge 0) { return }
         if ($this.CommandIndex -lt 0) { return }
 
-        :subcommand for ($i++; $i -lt $CurrentIndex; $i++) {
-            $s = $Words[$i]
+        :subcommand for ($i++; $i -lt $this.CurrentIndex; $i++) {
+            $s = $wds[$i]
             switch -Wildcard -CaseSensitive ($s) {
                 '--' {
                     $this.DoubledashIndex = $i
@@ -92,16 +95,16 @@ class CommandLineContext {
         }
 
         if ($this.DoubledashIndex -ge 0) { return }
-        for ($i++; $i -lt $Words.Length; $i++) {
-            if ($i -eq $CurrentIndex) { continue }
-            if ($Words[$i] -eq '--') {
+        for ($i++; $i -lt $wds.Length; $i++) {
+            if ($i -eq $this.CurrentIndex) { continue }
+            if ($wds[$i] -eq '--') {
                 $this.DoubledashIndex = $i
                 break
             }
         }
 
         if ($this.DoubledashIndex -ge 0) { return }
-        $this.DoubledashIndex = $Words.Length
+        $this.DoubledashIndex = $wds.Length
     }
 
     [string] Subcommand() {
@@ -124,5 +127,35 @@ class CommandLineContext {
     # __git_has_doubledash
     [bool] HasDoubledash() {
         return $this.DoubledashIndex -lt $this.CurrentIndex
+    }
+
+    [bool] ReplaceCommand([string[]]$NewCommand) {
+        if ($this.CommandIndex -le 0) { return $false }
+        $additionalSize = $NewCommand.Length - 1
+
+        $wds = New-Object string[] ($this.Words.Length + $additionalSize)
+        [array]::Copy(
+            $this.Words,
+            0,
+            $wds,
+            0,
+            $this.CommandIndex) | Out-Null
+        [array]::Copy($NewCommand,
+            0,
+            $wds,
+            $this.CommandIndex,
+            $NewCommand.Length) | Out-Null
+        [array]::Copy(
+            $this.Words,
+            $this.CommandIndex + 1,
+            $wds,
+            $this.CommandIndex + $NewCommand.Length,
+            $this.Words.Length - $this.CommandIndex - 1) | Out-Null
+
+        $this.CurrentIndex += $additionalSize
+        $this.SubcommandLikeIndex = -1
+        $this.DoubledashIndex = -1
+        $this.InitWords($wds, $this.CommandIndex)
+        return $true
     }
 }

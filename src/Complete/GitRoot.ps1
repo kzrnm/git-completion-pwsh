@@ -197,33 +197,15 @@ function resolveAliasContext {
         [CommandLineContext][Parameter(Position = 0, Mandatory)]$Context
     )
     # Avoid infinite loop
-    for ($i = 20; $Context -and $Context.Command -and $i; $i--) {
+    for ($i = 20; $Context.Command -and $i; $i--) {
         $aliasValue = gitGetAlias $Context.Command
         if (!$aliasValue) {
             return $Context
         }
         [string[]]$resolved = gitParseShellArgs $aliasValue
-        $additionalSize = $resolved.Length - 1
-
-        $words = New-Object string[] ($Context.Words.Length + $additionalSize)
-        [array]::Copy(
-            $Context.Words,
-            0,
-            $words,
-            0,
-            $Context.CommandIndex) | Out-Null
-        [array]::Copy($resolved,
-            0,
-            $words,
-            $Context.CommandIndex,
-            $resolved.Length) | Out-Null
-        [array]::Copy(
-            $Context.Words,
-            $Context.CommandIndex + 1,
-            $words,
-            $Context.CommandIndex + $resolved.Length,
-            $Context.Words.Length - $Context.CommandIndex - 1) | Out-Null
-        $Context = [CommandLineContext]::new($words, $Context.CurrentIndex + $additionalSize)
+        if (!$Context.ReplaceCommand($resolved)) {
+            break
+        }
     }
     return $Context
 }
