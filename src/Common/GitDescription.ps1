@@ -269,7 +269,7 @@ function Get-GitHelp {
     }
     $Options.Add($opt)
 
-    $Subcommands = (__git $Command --git-completion-helper-all) -split '\s+'
+    $Subcommands = @(__git $Command --git-completion-helper-all 2>$null) -split '\s+'
     foreach ($Subcommand in $Subcommands) {
         if ($Subcommand.StartsWith('-')) { continue }
         [GitHelpOptions]$opt = Convert-ToGitHelpOptions (Invoke-Expression "git $Command $Subcommand -h 2>&1" -ErrorAction Ignore) -ShowParser:$ShowParser

@@ -1,0 +1,57 @@
+using namespace System.Management.Automation;
+
+function Complete-GitSubCommand-send-email {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([CompletionResult[]])]
+    param(
+        [CommandLineContext]
+        [Parameter(Position = 0, Mandatory)]$Context
+    )
+
+    [string] $Current = $Context.CurrentWord()
+    if (!$Context.HasDoubledash()) {
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
+        if ($shortOpts) { return $shortOpts }
+
+        $prevCandidates = switch -CaseSensitive -Regex ($Context.PreviousWord()) {
+            '^--(to|cc|bcc|from)$' { @(__git send-email --dump-aliases) }
+            '^--smtp-encryption$' { 'ssl', 'tls' }
+            '^--suppress-cc$' { $gitSendEmailSuppressccOptions }
+            '^--confirm$' { $gitSendEmailConfirmOptions }
+        }
+
+        if ($prevCandidates) {
+            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+            return
+        }
+
+        if ($Current -cmatch '(--[^=]+)=(.*)') {
+            $key = $Matches[1]
+            $value = $Matches[2]
+            $candidates = switch -CaseSensitive -Regex ($key) {
+                '^--thread$' { 'deep', 'shallow' }
+                '^--(to|cc|bcc|from)$' { @(__git send-email --dump-aliases) }
+                '^--smtp-encryption$' { 'ssl', 'tls' }
+                '^--suppress-cc$' { $gitSendEmailSuppressccOptions }
+                '^--confirm$' { $gitSendEmailConfirmOptions }
+            }
+
+            if ($candidates) {
+                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                return
+            }
+        }
+
+        if ($Current.StartsWith('--')) {
+            $gitFormatPatchExtraOptions | completeList -Current $Current -DescriptionBuilder { 
+                Get-GitOptionsDescription $_ 'send-email'
+            }
+            @(gitResolveBuiltins $Context.Command) | completeList -Current $Current -DescriptionBuilder {
+                Get-GitOptionsDescription $_ 'send-email'
+            }
+            return
+        }
+    }
+
+    gitCompleteRevlist $Current
+}

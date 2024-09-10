@@ -131,7 +131,6 @@ function gitcomp {
         $cw = "$Candidate$Suffix"
         $c = "$Prefix$cw"
 
-
         switch ($Type) {
             -1 {  }
             1 { 

@@ -507,7 +507,7 @@ function gitResolveBuiltins {
     }
 
     if (!$Check -or (gitSupportParseoptHelper $Command[0])) {
-        return (gitResolveBuiltinsImpl @Command -All:([bool]$All) |
+        return @(gitResolveBuiltinsImpl @Command -All:([bool]$All) |
             ForEach-Object { $_ -split "\s+" } |
             Where-Object { $_ }
         )
