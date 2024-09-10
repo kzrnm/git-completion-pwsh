@@ -288,7 +288,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                         ListItemText   = "Aquarion Evol/Evol"
                     },
                     'Dr.Wily', 'Pwsh/OptionLike/-foo.ps1' | ConvertTo-Completion -ResultType ProviderItem
-                }
+                },
                 @{
                     Line     = '-u ';
                     Expected = @{
@@ -296,7 +296,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                         ListItemText   = "Aquarion Evol/Evol"
                     },
                     'Dr.Wily', 'Pwsh/OptionLike/-foo.ps1' | ConvertTo-Completion -ResultType ProviderItem
-                }
+                },
                 @{
                     Line     = '--update Aquarion` Evol/';
                     Expected = 'Evol' |
@@ -306,7 +306,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                             ListItemText   = "Aquarion Evol/$_"
                         }
                     } | ConvertTo-Completion -ResultType ProviderItem
-                }
+                },
                 @{
                     Line     = '-u Aquarion` Evol/';
                     Expected = 'Evol' |
