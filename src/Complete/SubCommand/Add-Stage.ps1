@@ -64,3 +64,5 @@ function Complete-GitSubCommand-add {
 
     gitCompleteIndexFile -Current $Current -Options $completeOpt -Exclude $UsedPaths -LeadingDash:($Context.HasDoubledash())
 }
+
+Set-Alias Complete-GitSubCommand-stage Complete-GitSubCommand-add
