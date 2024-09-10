@@ -34,7 +34,7 @@ function Complete-GitSubCommandCommon {
             $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
             if ($shortOpts) { return $shortOpts }
             elseif (!$Current) {
-                gitCompleteResolveBuiltins $Command -Current $Current | Where-Object { !$_.CompletionText.StartsWith('-') } -Check
+                gitCompleteResolveBuiltins $Command -Current $Current -Check | Where-Object { !$_.CompletionText.StartsWith('-') }
             }
             else {
                 gitCompleteResolveBuiltins $Command -Current $Current -Check

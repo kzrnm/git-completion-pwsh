@@ -50,7 +50,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
 
-        Describe-Revlist -Ref
+        Describe-Revlist -Ref {
+            "git $Command -- $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
     }
 
     It 'ShortOptions' {
