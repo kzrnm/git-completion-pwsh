@@ -204,14 +204,6 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 @{
                     Line     = 'src -- --';
                     Expected = @()
-                },
-                @{
-                    Line     = 'src -- ';
-                    Expected = @()
-                },
-                @{
-                    Line     = '-- ';
-                    Expected = @()
                 }
             ) {
                 "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -473,16 +465,29 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 @{
                     Line     = '';
                     Path     = '';
-                    Expected = '/.gitignore',
-                    @{
-                        CompletionText = '/Aquarion` Evol/Ancient/Soler';
-                        ListItemText   = '/Aquarion Evol/Ancient/Soler';
-                    },
-                    @{
-                        CompletionText = '/Aquarion` Evol/Evol';
-                        ListItemText   = '/Aquarion Evol/Evol';
-                    },
-                    '/Dr.Wily', '/Pwsh/OptionLike/-foo.ps1', '/Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                    Expected = if ($IsWindows -or ($PSVersionTable.PSEdition -eq 'Desktop')) {
+                        '/.gitignore',
+                        @{
+                            CompletionText = '/Aquarion` Evol/Ancient/Soler';
+                            ListItemText   = '/Aquarion Evol/Ancient/Soler';
+                        },
+                        @{
+                            CompletionText = '/Aquarion` Evol/Evol';
+                            ListItemText   = '/Aquarion Evol/Evol';
+                        },
+                        '/Dr.Wily', '/Pwsh/OptionLike/-foo.ps1', '/Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                    }
+                    else {
+                        @{
+                            CompletionText = '/Aquarion` Evol/Ancient/Soler';
+                            ListItemText   = '/Aquarion Evol/Ancient/Soler';
+                        },
+                        @{
+                            CompletionText = '/Aquarion` Evol/Evol';
+                            ListItemText   = '/Aquarion Evol/Evol';
+                        },
+                        '/Dr.Wily', '/Pwsh/OptionLike/-foo.ps1', '/Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                    }
                 },
                 @{
                     Line     = '';

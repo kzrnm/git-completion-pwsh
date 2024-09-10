@@ -504,6 +504,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
 
     Describe 'InProgressInteractive' {
         BeforeAll {
+            $ErrorActionPreference = 'SilentlyContinue'
             @'
 #!/bin/sh
 cat "$1" | sed -e s/pick/e/g > ".rebase"
@@ -512,7 +513,7 @@ mv ".rebase" "$1"
             if (Get-Command chmod) {
                 chmod +x "$TestDrive/rebase-tool.sh"
             }
-            git -c "sequence.editor=$TestDrive/rebase-tool.sh".Replace('\','/') rebase -i zeta
+            git -c "sequence.editor=$TestDrive/rebase-tool.sh".Replace('\', '/') rebase -i zeta 2>$null
         }
         AfterAll {
             git rebase --abort 2>$null

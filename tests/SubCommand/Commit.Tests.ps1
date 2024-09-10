@@ -382,7 +382,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
             BeforeAll {
                 mkdir ($initialPath = "$TestDrive/gitRoot/Initial")
                 Push-Location $initialPath
-                git init
+                git init --initial-branch=trunk
                 New-Item "$TestDrive/gitRoot/Initial/Evol" -ItemType File
                 New-Item "$TestDrive/gitRoot/Initial/Ancient" -ItemType Directory
                 New-Item "$TestDrive/gitRoot/Initial/Ancient/Soler" -ItemType File
