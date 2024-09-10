@@ -26,7 +26,7 @@ function Complete-GitSubCommand-rm {
             $skipOptions.Add($opt) | Out-Null
         }
     }
-    $UsedPaths = [System.Collections.Generic.List[string]]::new($Context.Words.Length)
+    $UsedPaths = [List[string]]::new($Context.Words.Length)
     for ($i = $Context.CommandIndex + 1; $i -lt $Context.Words.Length; $i++) {
         if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
