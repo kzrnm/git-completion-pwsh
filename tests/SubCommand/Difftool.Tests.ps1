@@ -137,17 +137,37 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     ListItemText = "--no-trust-exit-code";
                     ToolTip      = "[NO] make 'git-difftool' exit when an invoked diff tool returns a non-zero exit code"
                 } | ConvertTo-Completion -ResultType ParameterName
+            },
+            @{
+                Line     = '--no';
+                Expected = '--no-index',
+                '--no-color',
+                '--no-renames',
+                '--no-color-moved',
+                '--no-color-moved-ws',
+                '--no-relative',
+                '--no-ext-diff',
+                '--no-prefix',
+                '--no-indent-heuristic',
+                '--no-textconv',
+                '--no-patch',
+                '--no-stat',
+                @{
+                    ListItemText = '--no-prompt';
+                    ToolTip      = "do not prompt before launching a diff tool";
+                },
+                @{
+                    ListItemText = '--no-index';
+                    ToolTip      = 'passed to `diff`';
+                },
+                @{
+                    CompletionText = '--no-';
+                    ListItemText   = '--no-...';
+                    ResultType     = 'Text';
+                } | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
-        }
-        It 'No' {
-            $expected = @{
-                CompletionText = '--no-';
-                ListItemText   = '--no-...';
-                ResultType     = 'Text'
-            } | ConvertTo-Completion -ResultType Text
-            "git $Command --no" | Complete-FromLine | Select-Object -Last 1 | Should -BeCompletion $expected
         }
     }
 

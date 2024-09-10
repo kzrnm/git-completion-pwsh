@@ -1,6 +1,6 @@
 using namespace System.Management.Automation;
 
-function Complete-GitSubCommand-archive {
+function Complete-GitSubCommand-format-patch {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -13,22 +13,16 @@ function Complete-GitSubCommand-archive {
         $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
-        $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
-            '--format' { (gitArchiveList) }
-            '--remote' { (gitRemote) }
-        }
-
-        if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
-            return
+        switch -CaseSensitive -Regex ($Context.PreviousWord()) {
+            '^--(base|interdiff|range-diff)$' { gitCompleteRefs $Current; return }
         }
 
         if ($Current -cmatch '(--[^=]+)=(.*)') {
             $key = $Matches[1]
             $value = $Matches[2]
-            $candidates = switch -CaseSensitive ($key) {
-                '--format' { (gitArchiveList) }
-                '--remote' { (gitRemote) }
+            $candidates = switch -CaseSensitive -Regex ($key) {
+                '^--thread$' { 'deep', 'shallow' }
+                '^--(base|interdiff|range-diff)$' { gitCompleteRefs $value -Prefix "$key="; return }
             }
 
             if ($candidates) {
@@ -38,16 +32,12 @@ function Complete-GitSubCommand-archive {
         }
 
         if ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.Command -Current $Current -Include @(
-                '--format=',
-                '--list',
-                '--verbose',
-                '--prefix=',
-                '--worktree-attributes'
-            )
+            gitCompleteResolveBuiltins $Context.Command -Current $Current -Include $gitFormatPatchExtraOptions
             return
         }
     }
 
-    gitCompleteFile $Current
+    gitCompleteRevlist $Current
 }
+
+$gitFormatPatchExtraOptions = '--full-index', '--not', '--all', '--no-prefix', '--src-prefix=', '--dst-prefix=', '--notes'
