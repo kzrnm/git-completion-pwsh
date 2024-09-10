@@ -26,14 +26,16 @@ function gitCompleteResolveBuiltins {
         [string[]]
         $Include = $null,
         [string[]]
-        $Exclude = $null
+        $Exclude = $null,
+        [switch]
+        $Check
     )
 
     if ($Include) {
-        $Include += @(gitResolveBuiltins @Command)
+        $Include += @(gitResolveBuiltins @Command -Check:$Check)
     }
     else {
-        $Include = @(gitResolveBuiltins @Command)
+        $Include = @(gitResolveBuiltins @Command -Check:$Check)
     }
 
     if ($Exclude) {

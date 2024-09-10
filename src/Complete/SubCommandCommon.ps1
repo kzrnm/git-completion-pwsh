@@ -20,11 +20,11 @@ function Complete-GitSubCommandCommon {
                 return
             }
             if ($Current.StartsWith('--')) {
-                $result = gitCompleteResolveBuiltins $Command $Subcommand -Current $Current
+                $result = gitCompleteResolveBuiltins $Command $Subcommand -Current $Current -Check
                 if ($result) {
                     return $result
                 }
-                gitCompleteResolveBuiltins $Command -Current $Current
+                gitCompleteResolveBuiltins $Command -Current $Current -Check
                 return
             }
         }
@@ -34,10 +34,10 @@ function Complete-GitSubCommandCommon {
             $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
             if ($shortOpts) { return $shortOpts }
             elseif (!$Current) {
-                gitCompleteResolveBuiltins $Command -Current $Current | Where-Object { !$_.CompletionText.StartsWith('-') }
+                gitCompleteResolveBuiltins $Command -Current $Current | Where-Object { !$_.CompletionText.StartsWith('-') } -Check
             }
             else {
-                gitCompleteResolveBuiltins $Command -Current $Current
+                gitCompleteResolveBuiltins $Command -Current $Current -Check
             }
         }
         return

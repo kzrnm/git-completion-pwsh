@@ -497,14 +497,16 @@ function gitResolveBuiltins {
         $Command,
         [Parameter(ParameterSetName = 'All')]
         [switch]
-        $All
+        $All,
+        [switch]
+        $Check
     )
 
     if ($PSCmdlet.ParameterSetName -eq 'Default') {
         $All = [bool]$script:GitCompletionSettings.ShowAllOptions
     }
 
-    if (gitSupportParseoptHelper $Command[0]) {
+    if (!$Check -or (gitSupportParseoptHelper $Command[0])) {
         return (gitResolveBuiltinsImpl @Command -All:([bool]$All) |
             ForEach-Object { $_ -split "\s+" } |
             Where-Object { $_ }
