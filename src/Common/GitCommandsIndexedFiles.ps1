@@ -52,7 +52,7 @@ function gitIndexFiles {
 
             $files = Compare-Object $a $b
             return $files | ForEach-Object InputObject | ForEach-Object {
-                if ($_) {
+                if ($_ -and ($_ -ne './')) {
                     "$BaseDir$_"
                 }
             } | Sort-Object
