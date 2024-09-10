@@ -1,3 +1,4 @@
+using namespace System.Collections.Generic;
 using namespace System.Management.Automation;
 
 function Complete-GitSubCommand-commit {
@@ -48,10 +49,10 @@ function Complete-GitSubCommand-commit {
         }
     }
 
-    $skipOptions = [System.Collections.Generic.List[string]]::new()
+    $skipOptions = [HashSet[string]]::new()
     foreach ($opt in (gitResolveBuiltins $Context.Command -All)) {
         if ($opt.EndsWith('=')) {
-            $skipOptions.Add($opt)
+            $skipOptions.Add($opt) | Out-Null
         }
     }
     $UsedPaths = [System.Collections.Generic.List[string]]::new($Context.Words.Length)

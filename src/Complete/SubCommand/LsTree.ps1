@@ -1,7 +1,7 @@
 using namespace System.Collections.Generic;
 using namespace System.Management.Automation;
 
-function Complete-GitSubCommand-clean {
+function Complete-GitSubCommand-ls-tree {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -26,20 +26,14 @@ function Complete-GitSubCommand-clean {
             $skipOptions.Add($opt) | Out-Null
         }
     }
-
-    $completeOpt = [IndexFilesOptions]::Untracked
-    $UsedPaths = [System.Collections.Generic.List[string]]::new($Context.Words.Length)
-    for ($i = $Context.CommandIndex + 1; $i -lt $Context.Words.Length; $i++) {
-        if ($i -eq $Context.CurrentIndex) { continue }
+    for ($i = $Context.CommandIndex + 1; $i -lt $Context.CurrentIndex; $i++) {
         $w = $Context.Words[$i]
-        if ($skipOptions.Contains($w)) { $i++ }
-        elseif ($w -cmatch '^-[^-]*X$') {
-            $completeOpt = [IndexFilesOptions]::Ignored
+        if ($skipOptions.Contains($w)) {
+            $i++
         }
-        elseif (!$w.StartsWith('-') -or ($i -gt $Context.DoubledashIndex)) {
-            $UsedPaths.Add($w)
+        elseif (!$w.StartsWith('-')) {
+            return
         }
     }
-
-    gitCompleteIndexFile -Current $Current -Options $completeOpt -Exclude $UsedPaths -LeadingDash:($Context.HasDoubledash())
+    gitCompleteFile $Current
 }

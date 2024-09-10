@@ -43,10 +43,10 @@ function Complete-GitSubCommand-add {
     }
 
     $completeOpt = [IndexFilesOptions]::Updated
-    $skipOptions = [System.Collections.Generic.List[string]]::new()
+    $skipOptions = [HashSet[string]]::new()
     foreach ($opt in (gitResolveBuiltins $Context.Command -All)) {
         if ($opt.EndsWith('=')) {
-            $skipOptions.Add($opt)
+            $skipOptions.Add($opt) | Out-Null
         }
     }
     $UsedPaths = [System.Collections.Generic.List[string]]::new($Context.Words.Length)
