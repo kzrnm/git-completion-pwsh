@@ -50,14 +50,14 @@ function gitVersion {
 function gitIsConfiguredRemote {
     [OutputType([bool])]
     param([Parameter(Mandatory, Position = 0)][string]$Remote)
-    return (gitRemote | Where-Object { $_ -eq $Remote })
+    return @(gitRemote | Where-Object { $_ -eq $Remote })
 }
 
 function gitRemote {
     [OutputType([string[]])]
     param ()
 
-    return (__git remote)
+    return @(__git remote)
 }
 
 function gitListAliases {
@@ -83,7 +83,7 @@ function gitParseShellArgs {
     )
 
     $cmd = "!printf '%s\n' $($Line.Replace("`n", ' '))"
-    return (git -c alias.cmp-shell-args=$cmd cmp-shell-args)
+    return @(git -c alias.cmp-shell-args=$cmd cmp-shell-args)
 }
 
 function gitGetAlias {
@@ -129,7 +129,7 @@ function gitListMergeStrategies {
 
     function listMergeStrategies {
         param ()
-        (git merge -s help 2>&1 | Where-Object { $_ -like "*Available strategies are: *" }) -match ".*:\s*(.*)\s*\." | Out-Null
+        @(git merge -s help 2>&1 | Where-Object { $_ -like "*Available strategies are: *" }) -match ".*:\s*(.*)\s*\." | Out-Null
         return ($Matches[1] -split " ")
     }
 
@@ -154,7 +154,7 @@ function gitConfigVars {
     if ($script:__git_config_vars) {
         return $script:__git_config_vars
     }
-    return $script:__git_config_vars = (git help --config-for-completion | Sort-Object)
+    return $script:__git_config_vars = @(git help --config-for-completion | Sort-Object)
 }
 
 $script:__git_config_vars_all = $null
@@ -163,7 +163,7 @@ function gitConfigVarsAll {
     if ($script:__git_config_vars_all) {
         return $script:__git_config_vars_all
     }
-    return $script:__git_config_vars_all = (git --no-pager help --config)
+    return $script:__git_config_vars_all = @(git --no-pager help --config)
 }
 
 $script:__git_config_sections = $null
@@ -172,7 +172,7 @@ function gitConfigSections {
     if ($script:__git_config_sections) {
         return $script:__git_config_sections
     }
-    return $script:__git_config_sections = (git help --config-sections-for-completion)
+    return $script:__git_config_sections = @(git help --config-sections-for-completion)
 }
 
 $script:__git_first_level_config_vars_for_section = $null
