@@ -62,7 +62,7 @@ function gitCompleteRemoteOrRefspec {
         $ResultType = [CompletionResultType]::ParameterValue
     )
 
-    $Command = $Context.command
+    $Command = $Context.Command
     $Current = $Context.CurrentWord()
 
     $Prefix = ''
@@ -73,7 +73,7 @@ function gitCompleteRemoteOrRefspec {
     $c = 1
     if ($Command -eq 'remote') { $c++ }
 
-    for ($i = $Context.commandIndex + $c; $i -lt $Context.Words.Length; $i++) {
+    for ($i = $Context.CommandIndex + $c; $i -lt $Context.Words.Length; $i++) {
         if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
         if (($i -lt $Context.CurrentIndex) -and !$w.StartsWith('-')) {

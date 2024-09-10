@@ -17,7 +17,7 @@ function Complete-GitSubCommand-config {
     [string] $Prev = $Context.PreviousWord()
     [string] $Current = $Context.CurrentWord()
 
-    $subcommands = gitResolveBuiltins $Context.command
+    $subcommands = gitResolveBuiltins $Context.Command
     [string] $subcommand = $Context.SubcommandWithoutGlobalOption()
     if ($subcommand -notin $subcommands) {
         if ($Context.HasDoubledash()) { return }
@@ -41,16 +41,16 @@ function Complete-GitSubCommand-config {
         }
     }
     
-    $shortOpts = Get-GitShortOptions $Context.command -Subcommand $subcommand -Current $Current
+    $shortOpts = Get-GitShortOptions $Context.Command -Subcommand $subcommand -Current $Current
     if ($shortOpts) { return $shortOpts }
 
     if ($Current.StartsWith('--')) {
-        gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
+        gitCompleteResolveBuiltins $Context.Command $subcommand -Current $Current
         return
     }
 
     if ($Prev.StartsWith('--')) {
-        if ((gitResolveBuiltins $Context.command $subcommand) -eq "$Prev=") {
+        if ((gitResolveBuiltins $Context.Command $subcommand) -eq "$Prev=") {
             return @()
         }
     }
@@ -80,14 +80,14 @@ function Complete-GitSubCommand-config-Git2_45 {
     $Prev = $Context.PreviousWord()
     $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        $shortOpts = Get-GitShortOptions $Context.command -Subcommand $subcommand -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Subcommand $subcommand -Current $Current
         if ($shortOpts) { return $shortOpts }
         if ($Prev -in ('--get', '--get-all', '--unset', '--unset-all')) {
             completeGitConfigGetSetVariables $Context
             return
         }
         if ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.command -Current $Current
+            gitCompleteResolveBuiltins $Context.Command -Current $Current
             return
         }
     }

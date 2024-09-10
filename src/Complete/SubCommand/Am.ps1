@@ -10,7 +10,7 @@ function Complete-GitSubCommand-am {
 
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
         $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {

@@ -12,7 +12,7 @@ function Complete-GitSubCommand-worktree {
     [string] $Prev = $Context.PreviousWord()
     [string] $Current = $Context.CurrentWord()
 
-    $subcommands = gitResolveBuiltins $Context.command
+    $subcommands = gitResolveBuiltins $Context.Command
 
     if (!$subcommand) {
         if (!$Context.HasDoubledash()) {
@@ -37,11 +37,11 @@ function Complete-GitSubCommand-worktree {
         return
     }
     if (!$Context.HasDoubledash()) {
-        $shortOpts = Get-GitShortOptions $Context.command -Subcommand $subcommand -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Subcommand $subcommand -Current $Current
         if ($shortOpts) { return $shortOpts }
 
         if ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
+            gitCompleteResolveBuiltins $Context.Command $subcommand -Current $Current
             return
         }
     }

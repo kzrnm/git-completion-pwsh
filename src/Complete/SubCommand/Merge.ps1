@@ -11,14 +11,14 @@ function Complete-GitSubCommand-merge {
     [string] $Current = $Context.CurrentWord()
 
     if (!$Context.HasDoubledash()) { 
-        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
         $result = gitCompleteStrategy -Current $Current -Prev $Context.PreviousWord()
         if ($null -ne $result) { return $result }
 
         if ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.command -Current $Current
+            gitCompleteResolveBuiltins $Context.Command -Current $Current
             return
         }
     }

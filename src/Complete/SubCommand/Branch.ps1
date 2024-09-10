@@ -10,7 +10,7 @@ function Complete-GitSubCommand-branch {
 
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
         switch ($Context.PreviousWord()) {
@@ -30,14 +30,14 @@ function Complete-GitSubCommand-branch {
         }
 
         if ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.command -Current $Current
+            gitCompleteResolveBuiltins $Context.Command -Current $Current
             return
         }
     }
 
     $onlyLocalRef = $false
     $hasR = $false
-    for ($i = $Context.commandIndex + 1; $i -lt $Context.DoubledashIndex; $i++) {
+    for ($i = $Context.CommandIndex + 1; $i -lt $Context.DoubledashIndex; $i++) {
         if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
         if ($w -cmatch '^-([^-]*[dDmMcC][^-]*|-delete|-move|-copy)$') {

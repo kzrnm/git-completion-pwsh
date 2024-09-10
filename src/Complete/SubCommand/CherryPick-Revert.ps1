@@ -41,7 +41,7 @@ function completeCherryPickOrRevert {
             return
         }
 
-        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
         $result = gitCompleteStrategy -Current $Current -Prev $Context.PreviousWord()

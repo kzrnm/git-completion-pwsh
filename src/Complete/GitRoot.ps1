@@ -222,9 +222,9 @@ function Complete-GitCommandLine {
         Set-Variable 'Context' $Context -Scope 'Script'
 
         [string] $Current = $Context.CurrentWord()
-        if ($Context.command) {
+        if ($Context.Command) {
             try {
-                $completeSubcommandFunc = "Complete-GitSubCommand-$($Context.command)"
+                $completeSubcommandFunc = "Complete-GitSubCommand-$($Context.Command)"
                 . $completeSubcommandFunc $Context
             }
             catch {

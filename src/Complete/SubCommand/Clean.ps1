@@ -11,17 +11,17 @@ function Complete-GitSubCommand-clean {
 
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
         if ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.command -Current $Current
+            gitCompleteResolveBuiltins $Context.Command -Current $Current
             return
         }
     }
 
     $skipOptions = [System.Collections.Generic.List[string]]::new()
-    foreach ($opt in (gitResolveBuiltins $Context.command -All)) {
+    foreach ($opt in (gitResolveBuiltins $Context.Command -All)) {
         if ($opt.EndsWith('=')) {
             $skipOptions.Add($opt)
         }

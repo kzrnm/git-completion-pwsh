@@ -11,7 +11,7 @@ function Complete-GitSubCommand-add {
 
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
         $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
@@ -37,20 +37,20 @@ function Complete-GitSubCommand-add {
         }
 
         if ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.command -Current $Current
+            gitCompleteResolveBuiltins $Context.Command -Current $Current
             return
         }
     }
 
     $completeOpt = [IndexFilesOptions]::Updated
     $skipOptions = [System.Collections.Generic.List[string]]::new()
-    foreach ($opt in (gitResolveBuiltins $Context.command -All)) {
+    foreach ($opt in (gitResolveBuiltins $Context.Command -All)) {
         if ($opt.EndsWith('=')) {
             $skipOptions.Add($opt)
         }
     }
     $UsedPaths = [System.Collections.Generic.List[string]]::new($Context.Words.Length)
-    for ($i = $Context.commandIndex + 1; $i -lt $Context.Words.Length; $i++) {
+    for ($i = $Context.CommandIndex + 1; $i -lt $Context.Words.Length; $i++) {
         if ($i -eq $Context.CurrentIndex) { continue }
         $w = $Context.Words[$i]
         if ($w -cmatch '^-([^-]*u[^-]*|-update)$') {

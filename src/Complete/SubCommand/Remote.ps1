@@ -10,16 +10,16 @@ function Complete-GitSubCommand-remote {
 
     [string] $Current = $Context.CurrentWord()
     [string] $subcommand = $Context.Subcommand()
-    $subcommands = gitResolveBuiltins $Context.command | Where-Object {
+    $subcommands = gitResolveBuiltins $Context.Command | Where-Object {
         (!$_.StartsWith('--')) -and ($_ -ne 'rm')
     }
 
     if (!$subcommand) {
         if (!$Context.HasDoubledash()) {
-            $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+            $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
             if ($shortOpts) { return $shortOpts }
             elseif ($Current.StartsWith('--')) {
-                gitCompleteResolveBuiltins $Context.command -Current $Current
+                gitCompleteResolveBuiltins $Context.Command -Current $Current
             }
             else {
                 $subcommands | completeList -Current $Current -DescriptionBuilder { 
@@ -43,10 +43,10 @@ function Complete-GitSubCommand-remote {
     if ($subcommand -notin $subcommands) { return }
 
     if (!$Context.HasDoubledash()) {
-        $shortOpts = Get-GitShortOptions $Context.command $subcommand -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command $subcommand -Current $Current
         if ($shortOpts) { return $shortOpts }
         if ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
+            gitCompleteResolveBuiltins $Context.Command $subcommand -Current $Current
             return
         }
     }

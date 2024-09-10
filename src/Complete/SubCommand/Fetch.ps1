@@ -11,7 +11,7 @@ function Complete-GitSubCommand-fetch {
     [string] $Prev = $Context.PreviousWord()
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
-        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
         $gitFetchFilters = "blob:none", "blob:limit=", "sparse:oid="
@@ -36,7 +36,7 @@ function Complete-GitSubCommand-fetch {
                 return
             }
             '--*' {
-                gitCompleteResolveBuiltins $Context.command -Current $Current
+                gitCompleteResolveBuiltins $Context.Command -Current $Current
                 return
             }
         }

@@ -34,7 +34,7 @@ function Complete-GitSubCommand-reflog {
                 $gitLogCommonOptions | completeList -Current $Current -ResultType ParameterName
             }
             else {
-                gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current
+                gitCompleteResolveBuiltins $Context.Command $subcommand -Current $Current
             }
             return
         }

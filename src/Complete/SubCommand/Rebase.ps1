@@ -20,7 +20,7 @@ function Complete-GitSubCommand-rebase {
             return
         }
 
-        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
         $result = gitCompleteStrategy -Current $Current -Prev $Context.PreviousWord()
@@ -57,7 +57,7 @@ function Complete-GitSubCommand-rebase {
         }
 
         if ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.command -Current $Current -Exclude $gitRebaseInteractiveInprogressOptions
+            gitCompleteResolveBuiltins $Context.Command -Current $Current -Exclude $gitRebaseInteractiveInprogressOptions
             return
         }
     }

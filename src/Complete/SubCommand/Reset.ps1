@@ -11,11 +11,11 @@ function Complete-GitSubCommand-reset {
     [string] $Current = $Context.CurrentWord()
     if ($Context.HasDoubledash()) { return }
 
-    $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+    $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
     if ($shortOpts) { return $shortOpts }
 
     if ($Current.StartsWith('--')) {
-        gitCompleteResolveBuiltins $Context.command -Current $Current
+        gitCompleteResolveBuiltins $Context.Command -Current $Current
         return
     }
     gitCompleteRefs $Context.CurrentWord()

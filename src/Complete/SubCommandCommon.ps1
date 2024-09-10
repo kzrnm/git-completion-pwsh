@@ -7,7 +7,7 @@ function Complete-GitSubCommandCommon {
     )
 
     $Current = $Context.CurrentWord()
-    $Command = $Context.command
+    $Command = $Context.Command
 
     [string] $Subcommand = $Context.Subcommand()
 

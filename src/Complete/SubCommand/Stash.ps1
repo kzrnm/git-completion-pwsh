@@ -45,7 +45,7 @@ function Complete-GitSubCommand-stash {
                 'show' { $gitDiffCommonOptions }
                 Default { $null }
             }
-            gitCompleteResolveBuiltins $Context.command $subcommand -Current $Current -Include $Include
+            gitCompleteResolveBuiltins $Context.Command $subcommand -Current $Current -Include $Include
             return
         }
     }

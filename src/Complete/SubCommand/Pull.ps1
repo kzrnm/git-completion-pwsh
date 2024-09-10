@@ -12,7 +12,7 @@ function Complete-GitSubCommand-pull {
     [string] $Current = $Context.CurrentWord()
 
     if (!$Context.HasDoubledash()) {
-        $shortOpts = Get-GitShortOptions $Context.command -Current $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
         $result = gitCompleteStrategy -Current $Current -Prev $Prev
@@ -31,7 +31,7 @@ function Complete-GitSubCommand-pull {
                 return
             }
             '--*' {
-                gitCompleteResolveBuiltins $Context.command -Current $Current
+                gitCompleteResolveBuiltins $Context.Command -Current $Current
                 return
             }
         }
