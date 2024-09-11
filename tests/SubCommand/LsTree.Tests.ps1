@@ -1,4 +1,7 @@
-﻿using namespace System.Collections.Generic;
+﻿# Copyright (C) 2024 kzrnm
+# Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
+# Distributed under the GNU General Public License, version 2.0.
+using namespace System.Collections.Generic;
 using namespace System.IO;
 
 . "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"

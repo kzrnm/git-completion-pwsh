@@ -12,7 +12,7 @@
     RootModule        = 'git-completion.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.1.0'
+    ModuleVersion     = '1.0.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -110,7 +110,7 @@
             ReleaseNotes = 'https://github.com/kzrnm/git-completion-pwsh/blob/main/CHANGELOG.md'
 
             # Prerelease string of this module
-            Prerelease   = 'alpha'
+            # Prerelease   = 'alpha'
 
             # Flag to indicate whether the module requires explicit user acceptance for install/update/save
             # RequireLicenseAcceptance = $false
