@@ -129,8 +129,13 @@ function gitListMergeStrategies {
 
     function listMergeStrategies {
         param ()
-        @(git merge -s help 2>&1 | Where-Object { $_ -like "*Available strategies are: *" }) -match ".*:\s*(.*)\s*\." | Out-Null
-        return ($Matches[1] -split " ")
+        git merge -s help 2>&1 |
+        Where-Object { $_ -like "*Available strategies are: *" } |
+        ForEach-Object {
+            if ($_ -match ".*:\s*(.*)\s*\.") {
+                $Matches[1] -split " "
+            }
+        }
     }
 
     try {

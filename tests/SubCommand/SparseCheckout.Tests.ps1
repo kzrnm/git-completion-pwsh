@@ -11,7 +11,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         mkdir ($rootPath = "$TestDrive/gitRoot")
         Initialize-FilesRepo $rootPath
         Push-Location $rootPath
-        git sparse-checkout add Pwsh 'Aquarion Evol'
+
+        $ErrorActionPreference = 'SilentlyContinue'
+        git sparse-checkout add Pwsh 'Aquarion Evol' 2>$null
     }
 
     AfterAll {
