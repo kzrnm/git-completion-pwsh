@@ -237,7 +237,7 @@ function gitAllCommands {
         $Categories
     )
     $list = ($Categories -join ",")
-    return (__git "--list-cmds=$list")
+    return @(__git "--list-cmds=$list")
 }
 
 # __git_find_repo_path, gitFindRepoPath
@@ -252,7 +252,7 @@ function gitRepoPath {
     $gitCArgs = $Context.gitCArgs
 
     if ($gitCArgs) {
-        return (__git rev-parse --absolute-git-dir 2>$null)
+        return [string](__git rev-parse --absolute-git-dir 2>$null)
     }
     elseif ($gitDir) {
         return "$gitDir"
@@ -264,7 +264,7 @@ function gitRepoPath {
         return ".git"
     }
     else {
-        return (git rev-parse --git-dir 2>$null)
+        return [string](git rev-parse --git-dir 2>$null)
     }
 }
 
@@ -284,9 +284,9 @@ function gitHeads {
         $ignoreCase = '--ignore-case'
     }
 
-    __git for-each-ref --format="%(refname:strip=2)" `
-        $ignoreCase `
-        "refs/heads/$Current*" "refs/heads/$Current*/**"
+    @(__git for-each-ref --format="%(refname:strip=2)" `
+            $ignoreCase `
+            "refs/heads/$Current*" "refs/heads/$Current*/**")
 }
 
 # Lists branches from remote repositories.
@@ -305,9 +305,9 @@ function gitRemoteHeads {
         $ignoreCase = '--ignore-case'
     }
 
-    __git for-each-ref --format="%(refname:strip=2)" `
-        $ignoreCase `
-        "refs/remotes/$Current*" "refs/remotes/$Current*/**"
+    @(__git for-each-ref --format="%(refname:strip=2)" `
+            $ignoreCase `
+            "refs/remotes/$Current*" "refs/remotes/$Current*/**")
 }
 
 # Lists tags from the local repository.
@@ -326,9 +326,9 @@ function gitTags {
         $ignoreCase = '--ignore-case'
     }
 
-    __git for-each-ref --format="$ForeachPrefix%(refname:strip=2)$Suffix" `
-        $ignoreCase `
-        "refs/tags/$Current*" "refs/tags/$Current*/**"
+    @(__git for-each-ref --format="$ForeachPrefix%(refname:strip=2)$Suffix" `
+            $ignoreCase `
+            "refs/tags/$Current*" "refs/tags/$Current*/**")
 }
 
 # List unique branches from refs/remotes used for 'git checkout' and 'git
@@ -349,10 +349,10 @@ function gitDwimRemoteHeads {
         $ignoreCase = '--ignore-case'
     }
 
-    __git for-each-ref --format="${Prefix}%(refname:strip=3)" `
-        --sort="refname:strip=3" `
-        $ignoreCase `
-        "refs/remotes/*/$Current*" "refs/remotes/*/$Current*/**" | 
+    @(__git for-each-ref --format="${Prefix}%(refname:strip=3)" `
+            --sort="refname:strip=3" `
+            $ignoreCase `
+            "refs/remotes/*/$Current*" "refs/remotes/*/$Current*/**") |
     Group-Object |
     Where-Object Count -gt 0 |
     Select-Object -ExpandProperty Name |
@@ -454,7 +454,7 @@ function gitRefs {
     }
     
     if ($Current -match "refs(/.*)?") {
-        __git ls-remote "$Remote" "$Match*" | 
+        __git ls-remote "$Remote" "$Match*" |
         ForEach-Object {
             $_ -match "(\S+)\s+(\S+)" | Out-Null
             $i = $Matches[2]
