@@ -21,6 +21,7 @@ function completeList {
         [Parameter(ParameterSetName = 'Prefix')]
         [switch]
         $RemovePrefix,
+        $Exclude = $null,
         [Parameter(ValueFromPipeline)]
         [string]
         $Candidate
@@ -30,10 +31,21 @@ function completeList {
         if ($RemovePrefix -and $Current.StartsWith($Prefix)) {
             $Current = $Current.Substring($Prefix.Length)
         }
+        if ($Exclude) {
+            $ExcludeSet = [System.Collections.Generic.HashSet[string]]::new()
+            foreach ($e in $Exclude) {
+                $ExcludeSet.Add($e) | Out-Null
+            }
+        }
     }
 
     process {
         if ((!$Current) -or $Candidate.StartsWith($Current)) {
+            $Completion = "$Prefix$Candidate$Suffix"
+            if ($ExcludeSet -and $ExcludeSet.Contains($Completion)) {
+                return
+            }
+
             $desc = $null
             if ($DescriptionBuilder) {
                 $desc = [string]$DescriptionBuilder.InvokeWithContext(
@@ -47,10 +59,8 @@ function completeList {
             }
             $ListItem = $Candidate
 
-            $Completion = "$Prefix$Candidate$Suffix"
-
             [CompletionResult]::new(
-                "$Completion",
+                $Completion,
                 $ListItem,
                 $ResultType,
                 $desc

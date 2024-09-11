@@ -316,8 +316,8 @@ function gitTags {
     [OutputType([string[]])]
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
-        [Parameter(Mandatory)][AllowEmptyString()][string] $Prefix,
-        [Parameter(Mandatory)][AllowEmptyString()][string] $Suffix
+        [string] $Prefix = '',
+        [string] $Suffix = ''
     )
 
     $ForeachPrefix = "$Prefix".Replace('%', '%%')
