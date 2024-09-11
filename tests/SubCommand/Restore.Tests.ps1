@@ -15,6 +15,17 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
         mkdir ($remotePath = "$TestDrive/gitRemote")
         Initialize-FilesRepo $rootPath $remotePath
         Push-Location $rootPath
+
+        $cachedFiles = @(
+            'cached',
+            'Pwsh/foo',
+            'Pwsh/bar',
+            'Pwsh/L1/foo' | ForEach-Object {
+                "$_" | Out-File "$_"
+                "$_"
+            }
+        )
+        git add @cachedFiles
     }
 
     AfterAll {
@@ -196,6 +207,80 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+
+        Describe 'Staged' {
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '--staged ';
+                    Expected = 'cached', 'Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '--staged -- ';
+                    Expected = 'cached', 'Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '--staged --quiet ';
+                    Expected = 'cached', 'Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '--staged Pwsh/';
+                    Expected = 'Pwsh/bar', 'Pwsh/foo', 'Pwsh/L1/foo' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '--staged -- Pwsh/';
+                    Expected = 'Pwsh/bar', 'Pwsh/foo', 'Pwsh/L1/foo' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '--staged --quiet Pwsh/';
+                    Expected = 'Pwsh/bar', 'Pwsh/foo', 'Pwsh/L1/foo' | ConvertTo-Completion -ResultType ProviderItem
+                }
+            ) {
+                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+
+            Describe 'Subdir' {
+                BeforeEach {
+                    Push-Location $Path
+                }
+                AfterEach {
+                    Pop-Location
+                }
+                It '<Line> at <Path>' -ForEach @(
+                    @{
+                        Path     = 'Pwsh/';
+                        Line     = '--staged ';
+                        Expected = 'bar', 'foo', 'L1/foo' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
+                        Path     = 'Pwsh/';
+                        Line     = '--staged -- ';
+                        Expected = 'bar', 'foo', 'L1/foo' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
+                        Path     = 'Pwsh/';
+                        Line     = '--staged --quiet ';
+                        Expected = 'bar', 'foo', 'L1/foo' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
+                        Path     = 'Pwsh/';
+                        Line     = '--staged ../';
+                        Expected = '../cached', '../Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
+                        Path     = 'Pwsh/';
+                        Line     = '--staged -- ../';
+                        Expected = '../cached', '../Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
+                        Path     = 'Pwsh/';
+                        Line     = '--staged --quiet ../';
+                        Expected = '../cached', '../Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
+                    }
+                ) {
+                    "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+                }
+            }
         }
     }
 }

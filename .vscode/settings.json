@@ -16,7 +16,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "function Invoke-Pester-Updated { Invoke-Pester -Output Detailed @(git diff-index HEAD --name-only --relative tests; git ls-files tests -o --exclude-standard) };$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$true;Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$true; Get-Module git-completion | Remove-Module; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "icon": "terminal-powershell"
         },
@@ -25,7 +25,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$ErrorActionPreference = 'Stop'; Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Get-Module git-completion | Remove-Module; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "color": "terminal.ansiCyan",
             "icon": "terminal-powershell"
@@ -37,7 +37,7 @@
                 "pwsh",
                 "-NoExit",
                 "-Command",
-                "$ErrorActionPreference = 'Stop'; Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Get-Module git-completion | Remove-Module; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "color": "terminal.ansiGreen",
             "icon": "terminal-ubuntu"

@@ -53,6 +53,7 @@ function Complete-GitSubCommand-restore {
         }
     }
 
+    $completeOpt = [IndexFilesOptions]::Modified
     if (gitPseudorefExists HEAD) {
         $skipOptions = [HashSet[string]]::new()
         foreach ($opt in (gitResolveBuiltins $Context.Command -All)) {
@@ -64,12 +65,15 @@ function Complete-GitSubCommand-restore {
         for ($i = $Context.CommandIndex + 1; $i -lt $Context.Words.Length; $i++) {
             if ($i -eq $Context.CurrentIndex) { continue }
             $w = $Context.Words[$i]
-            if ($skipOptions.Contains($w)) { $i++ }
+            if ($w -ceq '--staged') {
+                $completeOpt = [IndexFilesOptions]::Staged
+            }
+            elseif ($skipOptions.Contains($w)) { $i++ }
             elseif (!$w.StartsWith('-') -or ($i -gt $Context.DoubledashIndex)) {
                 $UsedPaths.Add($w)
             }
         }
 
-        gitCompleteIndexFile -Current $Current -Options Modified -Exclude $UsedPaths -LeadingDash:($Context.HasDoubledash())
+        gitCompleteIndexFile -Current $Current -Options $completeOpt -Exclude $UsedPaths -LeadingDash:($Context.HasDoubledash())
     }
 }

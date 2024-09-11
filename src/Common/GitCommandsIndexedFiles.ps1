@@ -11,6 +11,7 @@ enum IndexFilesOptions {
     Ignored
     All
     AllWithIgnored
+    Staged
     Committable
 }
 
@@ -57,6 +58,9 @@ function gitIndexFiles {
         Ignored { '--ignored', '--others', '--exclude=*' }
         All { '--cached', '--directory', '--no-empty-directory', '--others' }
         AllWithIgnored { '--cached', '--directory', '--no-empty-directory', '--others', '--ignored', '--exclude=*' }
+        Staged {
+            $results = __git @BaseDirOpts diff --staged -z --name-only --relative '--' $Pattern
+        }
         Committable {
             $results = __git @BaseDirOpts diff-index -z --name-only --relative HEAD '--' $Pattern
         }

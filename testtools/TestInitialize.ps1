@@ -18,6 +18,7 @@ Test-GitVersion
 . "$PSScriptRoot/Revlist.ps1"
 
 BeforeAll {
+    Get-Module git-completion,TestModule | Remove-Module
     Import-Module "$PSScriptRoot/../src/git-completion.psd1" -Force
     Import-Module "$PSScriptRoot/TestModule.psm1" -DisableNameChecking -Force
 }
