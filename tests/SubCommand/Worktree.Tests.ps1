@@ -34,15 +34,15 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 Line     = ""
                 Expected = @{
                     ListItemText = 'add';
-                    ToolTip      = 'Create a worktree at <path> and checkout <commit-ish> into it';
+                    ToolTip      = 'create a worktree at <path> and checkout <commit-ish> into it';
                 },
                 @{
                     ListItemText = 'prune';
-                    ToolTip      = 'Prune worktree information';
+                    ToolTip      = 'prune worktree information';
                 },
                 @{
                     ListItemText = 'list';
-                    ToolTip      = 'List details of each worktree';
+                    ToolTip      = 'list details of each worktree';
                 },
                 @{
                     ListItemText = 'lock';
@@ -50,30 +50,30 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 },
                 @{
                     ListItemText = 'unlock';
-                    ToolTip      = 'Unlock a worktree';
+                    ToolTip      = 'unlock a worktree';
                 },
                 @{
                     ListItemText = 'move';
-                    ToolTip      = 'Move a worktree to a new location';
+                    ToolTip      = 'move a worktree to a new location';
                 },
                 @{
                     ListItemText = 'remove';
-                    ToolTip      = 'Remove a worktree';
+                    ToolTip      = 'remove a worktree';
                 },
                 @{
                     ListItemText = 'repair';
-                    ToolTip      = 'Repair worktree administrative files';
+                    ToolTip      = 'repair worktree administrative files';
                 } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "re"
                 Expected = @{
                     ListItemText = 'remove';
-                    ToolTip      = 'Remove a worktree';
+                    ToolTip      = 'remove a worktree';
                 },
                 @{
                     ListItemText = 'repair';
-                    ToolTip      = 'Repair worktree administrative files';
+                    ToolTip      = 'repair worktree administrative files';
                 } | ConvertTo-Completion -ResultType ParameterName
             }
         ) {

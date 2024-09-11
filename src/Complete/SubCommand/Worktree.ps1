@@ -22,14 +22,14 @@ function Complete-GitSubCommand-worktree {
             else {
                 $subcommands | gitcomp -Current $Current -DescriptionBuilder { 
                     switch ($_) {
-                        "add" { 'Create a worktree at <path> and checkout <commit-ish> into it' }
-                        "prune" { 'Prune worktree information' }
-                        "list" { 'List details of each worktree' }
-                        "lock" { 'lock it to prevent its administrative files from being pruned automatically' }
-                        "unlock" { 'Unlock a worktree' }
-                        "move" { 'Move a worktree to a new location' }
-                        "remove" { 'Remove a worktree' }
-                        "repair" { 'Repair worktree administrative files' }
+                        'add' { 'create a worktree at <path> and checkout <commit-ish> into it' }
+                        'prune' { 'prune worktree information' }
+                        'list' { 'list details of each worktree' }
+                        'lock' { 'lock it to prevent its administrative files from being pruned automatically' }
+                        'unlock' { 'unlock a worktree' }
+                        'move' { 'move a worktree to a new location' }
+                        'remove' { 'remove a worktree' }
+                        'repair' { 'repair worktree administrative files' }
                     }
                 }
             }
