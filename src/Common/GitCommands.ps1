@@ -610,7 +610,7 @@ function gitPseudorefExists {
     # platforms.
     if ($head -eq 'ref: refs/heads/.invalid') {
         __git show-ref --exists "$ref" 1>$null 2>$null
-        return $LASTEXITCODE
+        return $LASTEXITCODE -eq 0
     }
 
     return ((Get-Item "$repoPath/$ref" -ErrorAction Ignore) -is [System.IO.FileInfo])
