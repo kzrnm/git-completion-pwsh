@@ -31,19 +31,21 @@ function completeLocalFile {
         $RemovePrefix
     )
 
-    process {
+    begin {
         if ($RemovePrefix -and $Current.StartsWith($Prefix)) {
             $Current = $Current.Substring($Prefix.Length)
         }
+    }
 
+    process {
         if ((!$Current) -or $File.StartsWith($Current)) {
             if ($BaseDir -and !$BaseDir.EndsWith('/')) {
                 $BaseDir += '/'
             }
             $fullPath = (Resolve-Path "${BaseDir}${File}").Path
 
-            $ListItem = "$File$Suffix"
-            $Completion = "$Prefix$File$Suffix"
+            $ListItem = "$File"
+            $Completion = "$Prefix$File"
 
             [CompletionResult]::new(
                 "$Completion",
