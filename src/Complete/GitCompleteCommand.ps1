@@ -167,13 +167,13 @@ function gitCompleteRefs {
 
     switch ($Mode) {
         'refs' { 
-            gitRefs -Current $Current -Remote $Remote | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+            gitRefs -Current $Current -Remote $Remote | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
         }
         'heads' { 
-            gitHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+            gitHeads -Current $Current                | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
         }
         'remote-heads' { 
-            gitRemoteHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+            gitRemoteHeads -Current $Current          | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
         }
     }
 
