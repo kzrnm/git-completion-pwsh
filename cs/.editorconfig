@@ -1,0 +1,12 @@
+root = true
+
+[{*.csproj,Directory.Build.props,Directory.Build.targets,app.config,app.config.*}]
+charset = utf-8
+indent_style = space
+indent_size = 2
+tab_width = 2
+
+[*.cs]
+csharp_style_namespace_declarations = file_scoped:warning
+
+dotnet_style_prefer_collection_expression = never

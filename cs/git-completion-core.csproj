@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>git-completion-core</AssemblyName>
+		<RootNamespace>Kzrnm.GitCompletion</RootNamespace>
+		<LangVersion>12</LangVersion>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IsExternalInit" Version="1.0.3">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="PowerShellStandard.Library" Version="5.1.0">
+			<PrivateAssets>All</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+</Project>

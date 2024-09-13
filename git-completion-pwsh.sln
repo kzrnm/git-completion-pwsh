@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "git-completion-core", "cs\git-completion-core.csproj", "{DFD50B14-78CA-4A6A-9545-F48733C7D579}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GitComplettionLauncher", "cstools\GitComplettionLauncher\GitComplettionLauncher.vcxproj", "{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579} = {DFD50B14-78CA-4A6A-9545-F48733C7D579}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Debug|x64.Build.0 = Debug|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Debug|x86.Build.0 = Debug|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Release|x64.ActiveCfg = Release|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Release|x64.Build.0 = Release|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Release|x86.ActiveCfg = Release|Any CPU
+		{DFD50B14-78CA-4A6A-9545-F48733C7D579}.Release|x86.Build.0 = Release|Any CPU
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Debug|Any CPU.Build.0 = Debug|x64
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Debug|x64.ActiveCfg = Debug|x64
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Debug|x64.Build.0 = Debug|x64
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Debug|x86.ActiveCfg = Debug|Win32
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Debug|x86.Build.0 = Debug|Win32
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Release|Any CPU.ActiveCfg = Release|x64
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Release|Any CPU.Build.0 = Release|x64
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Release|x64.ActiveCfg = Release|x64
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Release|x64.Build.0 = Release|x64
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Release|x86.ActiveCfg = Release|Win32
+		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1DDCD27-32B3-4F8E-BAAA-D37938A1D71E}
+	EndGlobalSection
+EndGlobal
