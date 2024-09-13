@@ -406,11 +406,10 @@ function gitRefs {
     [OutputType([string[]])]
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string] $Remote,
-        [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
-        [string] $Track = "",
-        [string] $Prefix = ''
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
     )
-    
+
+    $Prefix = ''
     $listRefsFrom = "path"
     $match = $Current
     $umatch = $Current
@@ -455,7 +454,6 @@ function gitRefs {
         if ($Current -match "\^?refs(/.*)?") {
             $format = "refname"
             $refs = @("$match*", "$match*/**")
-            $Track = ""
         }
         else {
             foreach ($i in ("HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD", "REBASE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD", "BISECT_HEAD", "AUTO_MERGE")) {
@@ -475,9 +473,6 @@ function gitRefs {
                 "refs/remotes/$match*/**")
         }
         __git -GitDirOverride $dir for-each-ref "--format=$Prefix%($format)" $ignoreCase @refs
-        if ($Track) {
-            gitDwimRemoteHeads -Current $match -Prefix $Prefix
-        }
         return
     }
     
@@ -511,8 +506,8 @@ function gitRefs {
             $_ -match "(\S+)\s+(\S+)" > $null
             $i = $Matches[2]
             if ($i -notlike "*^{}") {
-                if ($i.StartsWith('refs/*')) {
-                    $i.Substring('refs/*'.Length)
+                if ($i.StartsWith('refs/')) {
+                    $i.Substring("$i".IndexOf('/', 5))
                 }
                 else {
                     "$i"

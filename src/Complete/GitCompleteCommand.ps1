@@ -197,10 +197,10 @@ function gitCompleteRefs {
             }
         }
         'heads' { 
-            gitHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+            gitHeads -Current $Current                | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
         }
         'remote-heads' { 
-            gitRemoteHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+            gitRemoteHeads -Current $Current          | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
         }
     }
 
