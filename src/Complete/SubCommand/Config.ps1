@@ -309,7 +309,7 @@ function completeConfigVariableValue {
                     "${Prefix}negotiate",
                     'negotiate',
                     'ParameterValue',
-                    ' GSS-Negotiate authentication (compare the --negotiate option of curl)'
+                    'GSS-Negotiate authentication (compare the --negotiate option of curl)'
                 ),
                 [CompletionResult]::new(
                     "${Prefix}ntlm",

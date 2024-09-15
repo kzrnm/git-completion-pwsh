@@ -482,32 +482,32 @@
         "include.path" { 'Special variables to include other configuration files' }
         "include.*.path" { 'Special variables to include other configuration files' }
 
-        "index.recordEndOfIndexEntries" { ' Specifies whether the index file should include an "End Of Index Entry" section. ' }
-        "index.recordOffsetTable" { ' Specifies whether the index file should include an "Index Entry Offset Table" section. ' }
-        "index.sparse" { ' When enabled, write the index using sparse-directory entries. ' }
-        "index.threads" { ' Specifies the number of threads to spawn when loading the index. ' }
-        "index.version" { ' Specify the version with which new index files should be initialized. ' }
-        "index.skipHash" { ' When enabled, do not compute the trailing hash for the index file. ' }
+        "index.recordEndOfIndexEntries" { 'Specifies whether the index file should include an "End Of Index Entry" section.' }
+        "index.recordOffsetTable" { 'Specifies whether the index file should include an "Index Entry Offset Table" section.' }
+        "index.sparse" { 'When enabled, write the index using sparse-directory entries.' }
+        "index.threads" { 'Specifies the number of threads to spawn when loading the index.' }
+        "index.version" { 'Specify the version with which new index files should be initialized.' }
+        "index.skipHash" { 'When enabled, do not compute the trailing hash for the index file.' }
 
-        "init.templateDir" { ' Specify the directory from which templates will be copied. ' }
-        "init.defaultBranch" { ' Allows overriding the default branch name. ' }
+        "init.templateDir" { 'Specify the directory from which templates will be copied.' }
+        "init.defaultBranch" { 'Allows overriding the default branch name.' }
 
-        "instaweb.browser" { ' Specify the program that will be used to browse your working repository in gitweb. ' }
-        "instaweb.httpd" { ' The HTTP daemon command-line to start gitweb on your working repository. ' }
+        "instaweb.browser" { 'Specify the program that will be used to browse your working repository in gitweb.' }
+        "instaweb.httpd" { 'The HTTP daemon command-line to start gitweb on your working repository.' }
         "instaweb.local" { "If true the web server started by git-instaweb will be bound to the local IP (127.0.0.1)" }
-        "instaweb.modulePath" { ' The default module path for git-instaweb to use instead of /usr/lib/apache2/modules. ' }
-        "instaweb.port" { ' The port number to bind the gitweb httpd to. ' }
+        "instaweb.modulePath" { 'The default module path for git-instaweb to use instead of /usr/lib/apache2/modules.' }
+        "instaweb.port" { 'The port number to bind the gitweb httpd to.' }
 
-        "interactive.singleKey" { ' In interactive commands, allow the user to provide one-letter input with a single key (i.e., without hitting enter). ' }
-        "interactive.diffFilter" { ' When an interactive command shows a colorized diff, git will pipe the diff through the shell command defined by this configuration variable. ' }
+        "interactive.singleKey" { 'In interactive commands, allow the user to provide one-letter input with a single key (i.e., without hitting enter).' }
+        "interactive.diffFilter" { 'When an interactive command shows a colorized diff, git will pipe the diff through the shell command defined by this configuration variable.' }
 
-        "log.abbrevCommit" { ' If true, makes git-log, git-show, and git-whatchanged assume --abbrev-commit. ' }
-        "log.date" { ' Set the default date-time mode for the log command. ' }
-        "log.decorate" { ' Print out the ref names of any commits that are shown by the log command. ' }
-        "log.initialDecorationSet" { ' If all is specified, then show all refs as decorations. ' }
-        "log.excludeDecoration" { ' Exclude the specified patterns from the log decorations. ' }
-        "log.diffMerges" { ' Set diff format to be used when --diff-merges=on is specified, see --diff-merges in git-log for details. ' }
-        "log.follow" { ' If true, git log will act as if the --follow option was used when a single <path> is given. ' }
+        "log.abbrevCommit" { 'If true, makes git-log, git-show, and git-whatchanged assume --abbrev-commit.' }
+        "log.date" { 'Set the default date-time mode for the log command.' }
+        "log.decorate" { 'Print out the ref names of any commits that are shown by the log command.' }
+        "log.initialDecorationSet" { 'If all is specified, then show all refs as decorations.' }
+        "log.excludeDecoration" { 'Exclude the specified patterns from the log decorations.' }
+        "log.diffMerges" { 'Set diff format to be used when --diff-merges=on is specified, see --diff-merges in git-log for details.' }
+        "log.follow" { 'If true, git log will act as if the --follow option was used when a single <path> is given.' }
         "log.graphColors" { "A list of colors, separated by commas, that can be used to draw history lines in git log --graph" }
         "log.showRoot" { 'If true, the initial commit will be shown as a big creation event' }
         "log.showSignature" { "If true, makes git-log, git-show, and git-whatchanged assume --show-signature" }
@@ -753,7 +753,7 @@
         "status.aheadBehind" { 'Set to true to enable --ahead-behind and false to enable --no-ahead-behind by default in git-status for non-porcelain status formats' }
         "status.displayCommentPrefix" { 'If set to true, git-status will insert a comment prefix before each output line' }
         "status.renameLimit" { 'The number of files to consider when performing rename detection in git-status and git-commit' }
-        "status.renames" { 'Whether and how Git detects renames in git-status and git-commit ' }
+        "status.renames" { 'Whether and how Git detects renames in git-status and git-commit' }
         "status.showStash" { 'If set to true, git-status will display the number of entries currently stashed away' }
         "status.showUntrackedFiles" { 'Whether to show files which are not currently tracked by Git' }
         "status.submoduleSummary" { 'If this is set to a non-zero number or true (identical to -1 or an unlimited number), the submodule summary will be enabled and a summary of commits for modified submodules will be shown' }

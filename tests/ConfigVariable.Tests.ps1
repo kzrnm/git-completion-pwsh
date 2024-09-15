@@ -268,7 +268,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 @{
                     CompletionText = "http.proxyAuthMethod=negotiate";
                     ListItemText   = 'negotiate';
-                    ToolTip        = ' GSS-Negotiate authentication (compare the --negotiate option of curl)';
+                    ToolTip        = 'GSS-Negotiate authentication (compare the --negotiate option of curl)';
                 },
                 @{
                     CompletionText = "http.proxyAuthMethod=ntlm";
