@@ -21,6 +21,6 @@ public class GitCompletionSettings
     public bool IgnoreCase { get; set; }
     public bool CheckoutNoGuess { get; set; }
 
-    public string[] AdditionalCommands { get; set; } = [];
-    public string[] ExcludeCommands { get; set; } = [];
+    public string[]? AdditionalCommands { get; set; } = [];
+    public string[]? ExcludeCommands { get; set; } = [];
 }

@@ -29,14 +29,16 @@ internal static class StringCompleter
         string Prefix = "",
         string Suffix = "",
         HashSet<string>? Exclude = null,
-        bool RemovePrefix = true) where T : struct, IDescriptionBuilder
+        bool RemovePrefix = true,
+        T DescriptionBuilder = default) where T : struct, IDescriptionBuilder
         => new(
             Current,
             ResultType,
             Prefix,
             Suffix,
             Exclude,
-            RemovePrefix);
+            RemovePrefix,
+            DescriptionBuilder);
 }
 
 internal readonly record struct StringCompleter<T>(
@@ -45,7 +47,8 @@ internal readonly record struct StringCompleter<T>(
     string Prefix = "",
     string Suffix = "",
     HashSet<string>? Exclude = null,
-    bool RemovePrefix = true)
+    bool RemovePrefix = true,
+    T DescriptionBuilder = default)
         where T : struct, IDescriptionBuilder
 {
     public string Current { get; } = RemovePrefix && Current.StartsWith(Prefix) ? Current.Substring(Prefix.Length) : Current;
@@ -58,7 +61,7 @@ internal readonly record struct StringCompleter<T>(
             var completion = $"{Prefix}{candidate}{Suffix}";
             if (Exclude?.Contains(completion) == true) continue;
 
-            var description = new T().Description(candidate) ?? candidate;
+            var description = DescriptionBuilder.Description(candidate) ?? candidate;
 
             yield return new CompletionResult(completion, candidate, ResultType, description);
         }
