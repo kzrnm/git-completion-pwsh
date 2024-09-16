@@ -2,6 +2,7 @@
 // Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
 // Distributed under the GNU General Public License, version 2.0.
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Management.Automation;
 using System.Text;
@@ -114,6 +115,10 @@ public partial class CompletionContext
     private void InitWords(int start)
     {
         var cArgsBuilder = new StringBuilder();
+        if (gitCArgs.Length > 0)
+        {
+            cArgsBuilder.Append(gitCArgs);
+        }
         int i = start;
         for (; i < words.Length; i++)
         {
@@ -121,7 +126,7 @@ public partial class CompletionContext
             var s = words[i];
             if (s is "--")
             {
-                DoubledashIndex = i;
+                DoubledashIndex = i++;
                 break;
             }
             else if (CommandIndex < 0)
@@ -152,14 +157,18 @@ public partial class CompletionContext
                         words[i] = "help";
                         CommandIndex = i;
                     }
+                    ++i;
                     break;
                 }
                 else if (s is "--work-tree" or "--namespace") { ++i; }
                 else if (s is "-c" or "-C")
                 {
-                    if (++i < words.Length)
+                    if (i == CurrentIndex) continue;
+                    else if (++i < words.Length && i != CurrentIndex)
                     {
                         var t = words[i];
+                        if (cArgsBuilder.Length > 0)
+                            cArgsBuilder.Append(' ');
                         cArgsBuilder.Append(s);
                         cArgsBuilder.Append(' ');
                         cArgsBuilder.AppendArgument(t);
@@ -172,6 +181,7 @@ public partial class CompletionContext
                     {
                         CommandIndex = i;
                     }
+                    ++i;
                     break;
                 }
             }
@@ -191,13 +201,13 @@ public partial class CompletionContext
             var s = words[i];
             if (s is "--")
             {
-                DoubledashIndex = i;
+                DoubledashIndex = i++;
                 break;
             }
             else if (s.StartsWith("-")) { }
             else
             {
-                SubcommandLikeIndex = i;
+                SubcommandLikeIndex = i++;
                 break;
             }
         }
@@ -236,13 +246,41 @@ public partial class CompletionContext
             stringBuilder.Append(' ');
         }
     }
-    internal void ReplaceCommand(string[] newCommand)
+
+    public void ResolveAlias()
+    {
+        // Avoid infinite loop
+        for (int i = 0; Command != null && i < 20; i++)
+        {
+            string alias;
+            using (var p = Git($"config --get {"alias." + Command}"))
+            {
+                if (p.ExitCode != 0) return;
+                alias = p.StandardOutput.ReadToEnd();
+            }
+            if (alias.Length == 0) return;
+
+            using (var p = GitRaw($"-c {"alias.cmp-shell-args=!printf '%s\\n' " + alias.Replace('\n', ' ')} cmp-shell-args"))
+            {
+                if (p.ExitCode != 0) return;
+
+                var list = new List<string>();
+                while (p.StandardOutput.ReadLine() is string line)
+                {
+                    list.Add(line);
+                }
+                ReplaceCommand(list);
+            }
+        }
+    }
+
+    internal void ReplaceCommand(IList<string> newCommand)
     {
         int ix = CommandIndex;
         Debug.Assert((uint)ix < (uint)words.Length);
 
-        int additionalSize = newCommand.Length;
-        if (newCommand.Length == 1)
+        int additionalSize = newCommand.Count - 1;
+        if (newCommand.Count == 1)
         {
             words[ix] = newCommand[0];
             return;
@@ -250,8 +288,8 @@ public partial class CompletionContext
 
         var newWords = new string[words.Length + additionalSize];
         Array.Copy(words, 0, newWords, 0, ix);
-        Array.Copy(newCommand, 0, newWords, ix, newCommand.Length);
-        Array.Copy(words, ix + 1, newWords, ix + newCommand.Length, words.Length - ix - 1);
+        newCommand.CopyTo(newWords, ix);
+        Array.Copy(words, ix + 1, newWords, ix + newCommand.Count, words.Length - ix - 1);
 
         words = newWords;
         CurrentIndex += additionalSize;

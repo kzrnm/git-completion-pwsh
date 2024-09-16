@@ -14,6 +14,8 @@ public class GitCompletionSettings
         IgnoreCase = Environment.GetEnvironmentVariable("GIT_COMPLETION_IGNORE_CASE") is not null or "0",
         CheckoutNoGuess = Environment.GetEnvironmentVariable("GIT_COMPLETION_CHECKOUT_NO_GUESS") is not null or "0",
     };
+    public string? GitPath { get; set; }
+    internal string GitInvoketionPath => GitPath ?? "git";
     public bool ShowAllOptions { get; set; }
     public bool ShowAllCommand { get; set; }
     public bool IgnoreCase { get; set; }

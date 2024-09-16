@@ -1,6 +1,7 @@
 ﻿// Copyright (C) 2024 kzrnm
 // Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
 // Distributed under the GNU General Public License, version 2.0.
+using Kzrnm.GitCompletion.Completion.Completer;
 using Kzrnm.GitCompletion.Context;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,6 @@ public static class CompletionRefs
         }
 
         return StringCompleter.Create(current, CompletionResultType.ParameterValue, prefix)
-            .Complete(context.Refs(current));
+            .Complete(context.GitRefs(current));
     }
 }

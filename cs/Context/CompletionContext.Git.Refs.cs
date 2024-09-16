@@ -13,9 +13,10 @@ public partial class CompletionContext
     public IEnumerable<string> GitRemote()
     {
         using var p = Git("remote");
-        while (p.StandardOutput.ReadLine() is { Length: > 0 } line)
+        while (p.StandardOutput.ReadLine() is string line)
         {
-            yield return line;
+            if (line.Length > 0)
+                yield return line;
         }
     }
 
@@ -97,7 +98,7 @@ public partial class CompletionContext
     // but empty).
     //
     // Use gitCompleteRefs() instead.
-    public IEnumerable<string> Refs(string current, string remote = "")
+    public IEnumerable<string> GitRefs(string current, string remote = "")
     {
         var prefix = "";
         var listRefsFrom = ListRefsFrom.Path;
@@ -184,16 +185,17 @@ public partial class CompletionContext
             }
             var formatArgs = $"--format={prefix}%({format})";
             using var p = Git(overrideGitDir: dir, $"for-each-ref {formatArgs} {ignoreCase} {@refs}");
-            while (p.StandardOutput.ReadLine() is { Length: > 0 } line)
+            while (p.StandardOutput.ReadLine() is string line)
             {
-                yield return line;
+                if (line.Length > 0)
+                    yield return line;
             }
         }
 
         if (refsPrefixRegex.IsMatch(current))
         {
             using var p = Git($"ls-remote {remote} {$"{match}*"}");
-            while (p.StandardOutput.ReadLine() is { Length: > 0 } line)
+            while (p.StandardOutput.ReadLine() is string line)
             {
                 if (spaceSplitterRegex.Match(line) is { Success: true, Groups: var m })
                 {
@@ -215,9 +217,10 @@ public partial class CompletionContext
                 [$"refs/remotes/{remote}/{match}*",
                 $"refs/remotes/{remote}/{match}*/**"
                 ]}""");
-            while (p.StandardOutput.ReadLine() is { Length: > 0 } line)
+            while (p.StandardOutput.ReadLine() is string line)
             {
-                yield return line;
+                if (line.Length > 0)
+                    yield return line;
             }
         }
         else
@@ -229,7 +232,7 @@ public partial class CompletionContext
             }
 
             using var p = Git($"ls-remote {remote} {querySymref} {$"refs/tags/{match}*"} {$"refs/heads/{match}*"} {$"refs/remotes/{match}*"}");
-            while (p.StandardOutput.ReadLine() is { Length: > 0 } line)
+            while (p.StandardOutput.ReadLine() is string line)
             {
                 if (spaceSplitterRegex.Match(line) is { Success: true, Groups: var m })
                 {
@@ -240,13 +243,55 @@ public partial class CompletionContext
                         {
                             yield return h.Substring(ix);
                         }
-                        else
+                        else if (h.Length > 0)
                         {
                             yield return line;
                         }
                     }
                 }
             }
+        }
+    }
+
+    // Lists branches from the local repository.
+    // 1: A prefix to be added to each listed branch (optional).
+    // 2: List only branches matching this word (optional; list all branches if
+    // unset or empty).
+    // 3: A suffix to be appended to each listed branch (optional).
+    public IEnumerable<string> GitHeads(string current)
+    {
+        using var p = Git($"for-each-ref --format=%(refname:strip=2) {(Settings.IgnoreCase ? "--ignore-case" : null)} {$"refs/heads/{current}*"} {$"refs/heads/{current}*/**"}");
+        while (p.StandardOutput.ReadLine() is string line)
+        {
+            yield return line;
+        }
+    }
+
+    public IEnumerable<string> GitSubmodules()
+    {
+        /*
+
+        $gitTopPath = (__git rev-parse --show-toplevel)
+
+        __git config -f "$gitTopPath/.gitmodules" --name-only --list 2>$null |
+        ForEach-Object {
+            if ($_ -match 'submodule\.(.*)\.path') {
+                $sub = $Matches[1]
+                "$section.$sub."
+            }
+        } | completeList -Current $Current -Prefix $Prefix -DescriptionBuilder $DescriptionBuilder
+         */
+        string topPath;
+        using (var rp = Git("rev-parse --show-toplevel"))
+        {
+            topPath = rp.StandardOutput.ReadLine();
+        }
+
+        using var p = Git($"config -f {$"{topPath}/.gitmodules"} --name-only --list", stderr: true);
+        while (p.StandardError.ReadLine() is string line)
+        {
+            if (line.StartsWith("submodule.") && line.EndsWith(".path") && line != "submodule.path")
+                yield return line.Substring("submodule.".Length, line.Length - "submodule.".Length - ".path".Length);
         }
     }
 }

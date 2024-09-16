@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 
-namespace Kzrnm.GitCompletion.Completion;
+namespace Kzrnm.GitCompletion.Completion.Completer;
 
 internal readonly record struct LocalFileCompleter(
     SessionState SessionState,

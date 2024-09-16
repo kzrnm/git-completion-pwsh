@@ -47,7 +47,7 @@ public abstract class CompleteGitCommandBase : PSCmdlet
                 _ => extent.Text,
             };
 
-            if (currentIndex == 0 && CursorPosition < extent.EndOffset)
+            if (currentIndex == 0 && CursorPosition <= extent.EndOffset)
             {
                 currentIndex = i;
                 if (CursorPosition < extent.StartOffset)

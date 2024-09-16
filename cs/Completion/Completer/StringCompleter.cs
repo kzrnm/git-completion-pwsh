@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (C) 2024 kzrnm
+// Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
+// Distributed under the GNU General Public License, version 2.0.
+using System.Collections.Generic;
 using System.Management.Automation;
 
-namespace Kzrnm.GitCompletion.Completion;
+namespace Kzrnm.GitCompletion.Completion.Completer;
 
 internal static class StringCompleter
 {

@@ -17,7 +17,7 @@ public partial class CompletionContext
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0251")]
     [InterpolatedStringHandler]
-    //[DebuggerStepThrough]
+    [DebuggerStepThrough]
     internal struct CommandLineHandler
     {
         StringBuilder sb;
@@ -90,15 +90,23 @@ public partial class CompletionContext
         }
     }
 
-    internal Process GitRaw(string args, bool stderr)
+    internal Process GitRaw(string args, bool stderr, (string Key, string Value)[]? environmentVariables = null)
     {
         var pi = new ProcessStartInfo
         {
             CreateNoWindow = true,
             WorkingDirectory = cmdlet.SessionState.Path.CurrentLocation.Path,
-            FileName = "git",
+            FileName = Settings.GitInvoketionPath,
             Arguments = args,
         };
+
+        if (environmentVariables != null)
+        {
+            foreach (var (k, v) in environmentVariables)
+            {
+                pi.EnvironmentVariables[k] = v;
+            }
+        }
 
         if (stderr)
         {
@@ -116,11 +124,17 @@ public partial class CompletionContext
 
         return p;
     }
+    internal Process GitRaw(
+        CommandLineHandler args,
+        bool stderr = false)
+    {
+        return GitRaw(args.ToString(), stderr: stderr);
+    }
+
     internal Process Git(string args, bool stderr = false)
     {
         return GitRaw(args, stderr: stderr);
     }
-
 
     internal Process Git(
         [InterpolatedStringHandlerArgument("")]

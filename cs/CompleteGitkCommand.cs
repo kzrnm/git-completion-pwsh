@@ -2,12 +2,12 @@
 // Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
 // Distributed under the GNU General Public License, version 2.0.
 using Kzrnm.GitCompletion.Completion;
+using Kzrnm.GitCompletion.Completion.Completer;
 using Kzrnm.GitCompletion.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using static Kzrnm.GitCompletion.Git.Constants;
 
 namespace Kzrnm.GitCompletion;
 
@@ -31,7 +31,7 @@ public class CompleteGitkCommand : CompleteGitCommandBase
 
     private static IEnumerable<string> GitkOptions(bool merge)
     {
-        var result = LogCommonOptions.Concat(LogGitkOptions);
+        var result = GitConstants.LogCommonOptions.Concat(GitConstants.LogGitkOptions);
         if (merge)
         {
             result = result.Append("--merge");

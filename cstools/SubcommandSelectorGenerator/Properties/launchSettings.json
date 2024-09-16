@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SubcommandSelectorGenerator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\..\\cs\\git-completion-core.csproj"
+    }
+  }
+}

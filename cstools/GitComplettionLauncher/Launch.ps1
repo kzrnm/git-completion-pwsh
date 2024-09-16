@@ -1,3 +1,5 @@
+param([Parameter(Position=0)]$Line)
+
 Import-Module "$PSScriptRoot/../../cs/bin/Debug/netstandard2.0/git-completion-core.dll"
 
 function Complete-FromLine {
@@ -23,6 +25,9 @@ function Complete-FromLine {
     return (Complete -CommandAst $CommandAst -CursorPosition $CursorPosition)
 }
 
-if (Test-Path "$PSScriptRoot/args.txt"){
+if($Line){
+    "$Line" |Complete-FromLine
+}
+elseif (Test-Path "$PSScriptRoot/args.txt"){
 	(Get-Content "$PSScriptRoot/args.txt" -Raw).Trim() | Complete-FromLine
 }

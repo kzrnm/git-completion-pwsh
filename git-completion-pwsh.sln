@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GitComplettionLauncher", "c
 		{DFD50B14-78CA-4A6A-9545-F48733C7D579} = {DFD50B14-78CA-4A6A-9545-F48733C7D579}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubcommandSelectorGenerator", "cstools\SubcommandSelectorGenerator\SubcommandSelectorGenerator.csproj", "{372D5915-F153-47E1-979A-FE07FCD02C3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,18 @@ Global
 		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Release|x64.Build.0 = Release|x64
 		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Release|x86.ActiveCfg = Release|Win32
 		{C435D10A-1B36-49DB-8B9D-FDA133EA49EC}.Release|x86.Build.0 = Release|Win32
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Debug|x64.Build.0 = Debug|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Debug|x86.Build.0 = Debug|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Release|x64.ActiveCfg = Release|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Release|x64.Build.0 = Release|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Release|x86.ActiveCfg = Release|Any CPU
+		{372D5915-F153-47E1-979A-FE07FCD02C3A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
