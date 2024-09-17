@@ -6,7 +6,10 @@ using System.Management.Automation;
 
 namespace Kzrnm.GitCompletion.Completion.Completer;
 
-internal readonly record struct DescribedText(string Text, string Description);
+internal readonly record struct DescribedText(string Text, string Description)
+{
+    public static implicit operator DescribedText(string text) => new(text, text);
+}
 
 internal readonly record struct DescriptionCompleter(
     string Current,

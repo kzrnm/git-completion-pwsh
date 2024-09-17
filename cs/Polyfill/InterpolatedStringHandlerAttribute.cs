@@ -1,7 +1,9 @@
 ﻿// Copyright (C) 2024 kzrnm
 // Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
 // Distributed under the GNU General Public License, version 2.0.
+#pragma warning disable IDE0130
 namespace System.Runtime.CompilerServices;
+#pragma warning restore IDE0130
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false, Inherited = false)]
 internal sealed class InterpolatedStringHandlerAttribute : Attribute { }

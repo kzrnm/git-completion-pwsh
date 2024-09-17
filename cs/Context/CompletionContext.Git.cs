@@ -90,6 +90,25 @@ public partial class CompletionContext
         }
     }
 
+    internal Process GitRawAll(CommandLineHandler args)
+    {
+        var pi = new ProcessStartInfo
+        {
+            CreateNoWindow = true,
+            WorkingDirectory = cmdlet.SessionState.Path.CurrentLocation.Path,
+            FileName = Settings.GitInvoketionPath,
+            Arguments = args.ToString(),
+            RedirectStandardError = true,
+            StandardErrorEncoding = Encoding.UTF8,
+            RedirectStandardOutput = true,
+            StandardOutputEncoding = Encoding.UTF8,
+        };
+
+        var p = Process.Start(pi);
+        p.WaitForExit(gitCommandWaitMilliseconds);
+
+        return p;
+    }
     internal Process GitRaw(string args, bool stderr, (string Key, string Value)[]? environmentVariables = null)
     {
         var pi = new ProcessStartInfo

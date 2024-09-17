@@ -5,6 +5,7 @@ using Kzrnm.GitCompletion.Completion;
 using Kzrnm.GitCompletion.Completion.Completer;
 using Kzrnm.GitCompletion.Context;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Management.Automation;
 

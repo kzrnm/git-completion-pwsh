@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Management.Automation;
 using System.Text;
+using System.Threading;
 
 namespace Kzrnm.GitCompletion.Context;
 
@@ -298,4 +299,7 @@ public partial class CompletionContext
         DoubledashIndex = -1;
         InitWords(ix);
     }
+
+    public string GetUnresolvedProviderPathFromPSPath(string path)
+        => SessionState.Path.GetUnresolvedProviderPathFromPSPath(path);
 }

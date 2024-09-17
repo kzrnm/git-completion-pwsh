@@ -3,7 +3,6 @@
 // Distributed under the GNU General Public License, version 2.0.
 using Kzrnm.GitCompletion.Completion.Completer;
 using Kzrnm.GitCompletion.Context;
-using System;
 using System.Collections.Generic;
 using System.Management.Automation;
 using System.Text.RegularExpressions;

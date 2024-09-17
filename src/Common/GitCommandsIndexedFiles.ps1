@@ -47,7 +47,6 @@ function gitIndexFiles {
     }
 
     $results = $null
-    $Current = $Current.Replace('\', '\\')
     $lsFilesOptions = switch ($Options) {
         None { @() }
         Cached { '--cached' }
