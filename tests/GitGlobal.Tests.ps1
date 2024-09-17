@@ -134,7 +134,7 @@ Describe 'GirGlobal' {
     }
 
     Describe 'AdditionalCommands,ExcludeCommands' {
-        It '<Command>,Add:(<Add>),Exclude:(<Exclude>)' -ForEach @(
+        Describe '<Command>,Add:(<Add>),Exclude:(<Exclude>)' -ForEach @(
             @{
                 Add      = @();
                 Exclude  = @();
@@ -188,15 +188,28 @@ Describe 'GirGlobal' {
                 Expected = "ls-files" | ConvertTo-Completion -ResultType Text -ToolTip "Show information about files in the index and the working tree"
             }
         ) {
-            $GitCompletionSettings.AdditionalCommands = $Add
-            $GitCompletionSettings.ExcludeCommands = $Exclude
+            It '<Command>' {
+                "git $Command" | Complete-FromLine | Should -BeCompletion $Expected
+            }
 
-            "git $Command" | Complete-FromLine | Should -BeCompletion $Expected
-        }
+            It 'First is Add' {
+                "git " | Complete-FromLine | Select-Object -First 1 | Should -BeCompletion (
+                    @{
+                        ListItemText = "add";
+                        ToolTip      = "Add file contents to the index";
+                    } | ConvertTo-Completion -ResultType Text
+                )
+            }
 
-        AfterEach {
-            $GitCompletionSettings.AdditionalCommands = @()
-            $GitCompletionSettings.ExcludeCommands = @()
+            BeforeEach {
+                $GitCompletionSettings.AdditionalCommands = $Add
+                $GitCompletionSettings.ExcludeCommands = $Exclude
+            }
+
+            AfterEach {
+                $GitCompletionSettings.AdditionalCommands = @()
+                $GitCompletionSettings.ExcludeCommands = @()
+            }
         }
     }
 }

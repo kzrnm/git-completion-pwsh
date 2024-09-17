@@ -3,7 +3,17 @@
 # Distributed under the GNU General Public License, version 2.0.
 using namespace System.Collections.Generic;
 
-$script:GitCompletionSettings = [PSCustomObject]@{
+class GitCompletionSettings {
+    [bool] $ShowAllOptions;
+    [bool] $ShowAllCommand;
+    [bool] $IgnoreCase;
+    [bool] $CheckoutNoGuess;
+
+    [string[]] $AdditionalCommands;
+    [string[]] $ExcludeCommands;
+}
+
+$script:GitCompletionSettings = [GitCompletionSettings]@{
     ShowAllOptions     = ($env:GIT_COMPLETION_SHOW_ALL -and ($env:GIT_COMPLETION_SHOW_ALL -ne '0'));
     ShowAllCommand     = ($env:GIT_COMPLETION_SHOW_ALL_COMMANDS -and ($env:GIT_COMPLETION_SHOW_ALL_COMMANDS -ne '0'));
     IgnoreCase         = ($env:GIT_COMPLETION_IGNORE_CASE -and ($env:GIT_COMPLETION_IGNORE_CASE -ne '0'));
@@ -23,12 +33,8 @@ function listCommands {
     }
     gitAllCommands @cmds | ForEach-Object { $commands.Add($_) } | Out-Null
 
-    foreach ($c in $script:GitCompletionSettings.AdditionalCommands) {
-        $commands.Add($c)
-    }
-    foreach ($c in $script:GitCompletionSettings.ExcludeCommands) {
-        $commands.Remove($c)
-    }
+    $commands.UnionWith([string[]]@($script:GitCompletionSettings.AdditionalCommands))
+    $commands.ExceptWith([string[]]@($script:GitCompletionSettings.ExcludeCommands))
 
     return $commands | Sort-Object
 }
