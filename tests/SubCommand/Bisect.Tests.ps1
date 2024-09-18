@@ -8,6 +8,18 @@ using namespace System.IO;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
+        InModuleScope git-completion {
+            Mock gitCommitMessage {
+                param([string]$ref)
+                if ($ref.StartsWith('^')) {
+                    return $null
+                }
+                if ($ref -ceq 'zeta') {
+                    return 'c7ba46c zeta'
+                }
+                return '0b399df World'
+            }
+        }
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 

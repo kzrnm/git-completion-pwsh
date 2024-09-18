@@ -8,6 +8,15 @@ using namespace System.IO;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
     BeforeAll {
+        InModuleScope git-completion {
+            Mock gitCommitMessage {
+                param([string]$ref)
+                if ($ref.StartsWith('^')) {
+                    return $null
+                }
+                return $RemoteCommits[$ref].ToolTip
+            }
+        }
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
@@ -310,13 +319,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         'ordinary/develop',
                         'origin/develop',
                         'initial',
-                        'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                        'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
                     },
                     @{
                         Line     = "$option o";
                         Expected = 
                         'ordinary/develop',
-                        'origin/develop' | ConvertTo-Completion -ResultType ParameterValue
+                        'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
                     },
                     @{
                         Line     = "$option ^";
@@ -350,13 +359,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                             'ordinary/develop',
                             'origin/develop',
                             'initial',
-                            'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
+                            'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
                         },
                         @{
                             Line     = "$option=o";
                             Expected = 
                             'ordinary/develop',
-                            'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
+                            'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
                         },
                         @{
                             Line     = "$option=^";

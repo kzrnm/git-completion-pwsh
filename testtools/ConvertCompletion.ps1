@@ -45,7 +45,7 @@ function ConvertTo-Completion {
             }
         }
         else {
-            $Object = $TextOrObject
+            $Object = $TextOrObject.Clone()
 
             if (!$Object.ResultType) {
                 $Object.ResultType = $ResultType

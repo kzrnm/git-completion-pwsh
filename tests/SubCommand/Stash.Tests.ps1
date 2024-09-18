@@ -8,6 +8,19 @@ using namespace System.IO;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, File {
     BeforeAll {
+        InModuleScope git-completion {
+            Mock gitCommitMessage {
+                param([string]$ref)
+                if ($ref.StartsWith('^')) {
+                    return $null
+                }
+                if ($ref -ceq 'ORIG_HEAD') {
+                    return '20ad91e Start'
+                }
+                return $RemoteCommits[$ref].ToolTip
+            }
+        }
+
         $ErrorActionPreference = 'SilentlyContinue'
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
@@ -480,14 +493,30 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         'origin/develop',
                         'initial',
                         'zeta'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    ) | ForEach-Object { switch ($_) {
+                            'ORIG_HEAD' {
+                                @{
+                                    ListItemText = 'ORIG_HEAD';
+                                    ToolTip      = '20ad91e Start';
+                                }
+                            }
+                            Default { $RemoteCommits[$_] }
+                        } } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = "o";
                     Expected = @(
                         'ordinary/develop',
                         'origin/develop'
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    ) | ForEach-Object { switch ($_) {
+                            'ORIG_HEAD' {
+                                @{
+                                    ListItemText = 'ORIG_HEAD';
+                                    ToolTip      = '20ad91e Start';
+                                }
+                            }
+                            Default { $RemoteCommits[$_] }
+                        } } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = "^";

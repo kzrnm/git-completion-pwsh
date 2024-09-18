@@ -618,3 +618,14 @@ function gitStashList {
         }
     }
 }
+
+function gitCommitMessage() {
+    [CmdletBinding()]
+    [OutputType([string])]
+    param(
+        [Parameter(Position = 0)]
+        [string]
+        $ref
+    )
+    return [string](__git show -s "$ref" --oneline 2>$null)
+}

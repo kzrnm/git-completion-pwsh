@@ -167,7 +167,34 @@ function gitCompleteRefs {
 
     switch ($Mode) {
         'refs' { 
-            gitRefs -Current $Current -Remote $Remote | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+            gitRefs -Current $Current -Remote $Remote | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -DescriptionBuilder {
+                gitCommitMessage $_
+            }
+
+            # $toolTip = [string](__git show -s "$Current" --oneline 2>$null)
+            # if ($toolTip) {
+            #     [CompletionResult]::new(
+            #         $Current,
+            #         $Current,
+            #         $ResultType,
+            #         [string](__git show -s "$Current" --oneline)
+            #     )
+            # }
+
+            # if ($Current.EndsWith('~')) {
+            #     [CompletionResult]::new(
+            #         $Current,
+            #         $Current,
+            #         $ResultType,
+            #         [string](__git show -s "$Current" --oneline)
+            #     )
+            #     [CompletionResult]::new(
+            #         "$Current~",
+            #         "$Current~",
+            #         $ResultType,
+            #         [string](__git show -s "$Current~" --oneline)
+            #     )
+            # }
         }
         'heads' { 
             gitHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType

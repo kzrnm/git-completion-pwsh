@@ -128,7 +128,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         'ordinary/develop',
                         'origin/develop',
                         'initial',
-                        'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                        'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
                     )
                 },
                 @{
@@ -150,7 +150,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                     Line     = ' o';
                     Expected = @(
                         'ordinary/develop',
-                        'origin/develop' | ConvertTo-Completion -ResultType ParameterValue
+                        'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
                     )
                 }
             ) {
@@ -169,7 +169,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 Expected = @(
                     'ordinary/develop',
                     'origin/develop'
-                ) | ConvertTo-Completion -ResultType ParameterValue
+                ) | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = "^";

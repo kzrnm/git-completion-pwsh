@@ -221,13 +221,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'ordinary/develop',
                 'origin/develop',
                 'initial',
-                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
+                'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
             },
             @{
                 Line     = '--force-with-lease=or';
                 Expected = 
                 'ordinary/develop',
-                'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
+                'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
             },
             @{
                 Line     = '--force-with-lease=ma:';
@@ -239,13 +239,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'ordinary/develop',
                 'origin/develop',
                 'initial',
-                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
+                'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
             },
             @{
                 Line     = '--force-with-lease=ma:or';
                 Expected = 
                 'ordinary/develop',
-                'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
+                'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
             },
             @{
                 Line     = '--recurse-submodules ';
@@ -353,13 +353,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'ordinary/develop',
                 'origin/develop',
                 'initial',
-                'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin o';
                 Expected = 
                 'ordinary/develop',
-                'origin/develop' | ConvertTo-Completion -ResultType ParameterValue
+                'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin ^';
@@ -389,18 +389,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'ordinary/develop',
                 'origin/develop',
                 'initial',
-                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin +o';
                 Expected = 
                 'ordinary/develop',
-                'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin left:';
                 Expected = 
-                'HEAD',
+                $RemoteCommits['HEAD'],
                 'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
@@ -429,12 +429,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'refs/remotes/ordinary/develop',
                 'refs/remotes/origin/develop',
                 'refs/tags/initial',
-                'refs/tags/zeta' | ConvertTo-Completion -ResultType ParameterValue
+                'refs/tags/zeta' | ForEach-Object { @{
+                        ListItemText = $_;
+                        ToolTip      = $RemoteCommits[$_ -replace '^refs/[^/]+/', ''].ToolTip;
+                    } } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin refs/h';
                 Expected = 
-                'refs/heads/main' | ConvertTo-Completion -ResultType ParameterValue
+                'refs/heads/main' | ForEach-Object { @{
+                        ListItemText = $_;
+                        ToolTip      = $RemoteCommits[$_ -replace '^refs/[^/]+/', ''].ToolTip;
+                    } } | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
             

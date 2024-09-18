@@ -7,6 +7,16 @@ using namespace System.Collections.Generic;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
+        InModuleScope git-completion {
+            Mock gitCommitMessage {
+                param([string]$ref)
+                if ($ref.StartsWith('^')) {
+                    return $null
+                }
+                return '4de2038 initial'
+            }
+        }
+
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
@@ -28,8 +38,30 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Pop-Location
     }
 
-    $refs = 'HEAD', 'brn', 'main', 'wk', 'wt' | ConvertTo-Completion -ResultType ParameterValue
-    $brn = 'brn' | ConvertTo-Completion -ResultType ParameterValue
+    $refs = @{
+        ListItemText = 'HEAD';
+        ToolTip      = '4de2038 initial';
+    },
+    @{
+        ListItemText = 'brn';
+        ToolTip      = '4de2038 initial';
+    },
+    @{
+        ListItemText = 'main';
+        ToolTip      = '4de2038 initial';
+    },
+    @{
+        ListItemText = 'wk';
+        ToolTip      = '4de2038 initial';
+    },
+    @{
+        ListItemText = 'wt';
+        ToolTip      = '4de2038 initial';
+    } | ConvertTo-Completion -ResultType ParameterValue
+    $brn = @{
+        ListItemText = 'brn';
+        ToolTip      = '4de2038 initial';
+    } | ConvertTo-Completion -ResultType ParameterValue
 
     Describe 'Subcommands' {
         It '<Line>' -ForEach @(

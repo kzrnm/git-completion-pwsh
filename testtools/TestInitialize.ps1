@@ -16,6 +16,7 @@ $ErrorActionPreference = 'Continue'
 Test-GitVersion
 . "$PSScriptRoot/ConvertCompletion.ps1"
 . "$PSScriptRoot/Revlist.ps1"
+Import-Module "$PSScriptRoot/TestModule.psm1" -DisableNameChecking -Force
 
 BeforeAll {
     Get-Module git-completion,TestModule | Remove-Module

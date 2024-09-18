@@ -245,11 +245,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'origin/develop',
                     'initial',
                     'zeta',
-                    'develop' | ConvertTo-Completion -ResultType ParameterValue
+                    'develop' | ForEach-Object {
+                        switch ($_) {
+                            'develop' { $_ }
+                            Default { $RemoteCommits[$_] }
+                        }
+                    } |  ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'm';
-                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 'main' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
                 "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -268,24 +273,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             '-t --guess -b main',
             '-t --guess -B main' | ForEach-Object { @{Option = $_; } }
         ) {
-            It '<Line>' -ForEach @(
-                @{
-                    Line     = '';
-                    Expected =
-                    'HEAD',
-                    'FETCH_HEAD',
-                    'main',
-                    'grm/develop',
-                    'ordinary/develop',
-                    'origin/develop',
-                    'initial',
-                    'zeta' | ConvertTo-Completion -ResultType ParameterValue
-                },
-                @{
-                    Line     = 'm';
-                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue
-                }
-            ) {
+            Describe-Revlist -Ref {
                 "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
             }
         }
@@ -323,7 +311,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'origin/develop',
                 'initial',
                 'zeta',
-                'develop' | ConvertTo-Completion -ResultType ParameterValue
+                'develop' | ForEach-Object {
+                    switch ($_) {
+                        'develop' { $_ }
+                        Default { $RemoteCommits[$_] }
+                    }
+                } | ConvertTo-Completion -ResultType ParameterValue
             )
             Set-Variable noGuessCase (
                 'HEAD',
@@ -333,7 +326,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'ordinary/develop',
                 'origin/develop',
                 'initial',
-                'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                'zeta' | ForEach-Object {
+                    switch ($_) {
+                        'develop' { $_ }
+                        Default { $RemoteCommits[$_] }
+                    }
+                } | ConvertTo-Completion -ResultType ParameterValue
             )
         }
         Describe 'CheckoutNoGuess' {

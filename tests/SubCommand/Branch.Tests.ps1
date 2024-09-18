@@ -178,47 +178,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
     }
 
     Describe 'OptionValue' {
-        It '<Line>' -ForEach @(
-            @{
-                Line     = '--set-upstream-to=';
-                Expected =
-                'HEAD',
-                'FETCH_HEAD',
-                'main',
-                'grm/develop',
-                'ordinary/develop',
-                'origin/develop',
-                'initial',
-                'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
-            },
-            @{
-                Line     = '--set-upstream-to=o';
-                Expected =
-                'ordinary/develop',
-                'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
-            },
-            @{
-                Line     = '--set-upstream-to=^';
-                Expected =
-                '^HEAD',
-                '^FETCH_HEAD',
-                '^main',
-                '^grm/develop',
-                '^ordinary/develop',
-                '^origin/develop',
-                '^initial',
-                '^zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
-            },
-            @{
-                Line     = '--set-upstream-to=^o';
-                Expected =
-                '^ordinary/develop',
-                '^origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--set-upstream-to=$_" }
-            }
-        ) {
-            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        Describe-Revlist -Ref -CompletionPrefix '--set-upstream-to=' {
+            "git $Command --set-upstream-to=$Line" | Complete-FromLine | Should -BeCompletion $expected
         }
-
         Describe-Revlist -Ref {
             "git $Command --set-upstream-to $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
@@ -240,36 +202,22 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 "git $Command " | Complete-FromLine -Right " $Option" | Should -BeCompletion $expected
             }
 
-            It 'Remote:<Remote>' -ForEach @('--remotes', '-r' | ForEach-Object { @{Remote = $_; } }) {
-                $Expected =
-                'HEAD',
-                'FETCH_HEAD',
-                'main',
-                'grm/develop',
-                'ordinary/develop',
-                'origin/develop',
-                'initial',
-                'zeta' | ConvertTo-Completion -ResultType ParameterValue
-                "git $Command $Remote $Option " | Complete-FromLine | Should -BeCompletion $expected
+            Describe 'Remote:<Remote>' -ForEach @('--remotes', '-r' | ForEach-Object { @{Remote = $_; } }) {
+                Describe-Revlist -Ref {
+                    "git $Command $Remote $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
+                }
             }
         }
 
-        It 'RemoteShort' -ForEach @(
+        Describe 'RemoteShort' -ForEach @(
             'd', 'D', 'm', 'M', 'c', 'C' | ForEach-Object { 
                 @{Option = "-r$_"; },
                 @{Option = "-$_r"; }
             }
         ) {
-            $Expected =
-            'HEAD',
-            'FETCH_HEAD',
-            'main',
-            'grm/develop',
-            'ordinary/develop',
-            'origin/develop',
-            'initial',
-            'zeta' | ConvertTo-Completion -ResultType ParameterValue
-            "git $Command $Option " | Complete-FromLine | Should -BeCompletion $expected
+            Describe-Revlist -Ref {
+                "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
         }
     }
 }

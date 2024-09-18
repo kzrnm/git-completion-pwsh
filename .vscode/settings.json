@@ -16,7 +16,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$true; Get-Module git-completion | Remove-Module; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$false; Get-Module git-completion | Remove-Module; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "icon": "terminal-powershell"
         },

@@ -209,116 +209,116 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '-d ';
-                Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial', 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-d z';
-                Expected = 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-d -- ';
-                Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial', 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-d -- z';
-                Expected = 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-d zeta -- ';
-                Expected = 'initial' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-d -- zeta ';
-                Expected = 'initial' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--delete ';
-                Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial', 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--delete z';
-                Expected = 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--delete -- ';
-                Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial', 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--delete -- z';
-                Expected = 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--delete zeta -- ';
-                Expected = 'initial' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--delete -- zeta ';
-                Expected = 'initial' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-v ';
-                Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial', 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-v z';
-                Expected = 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-v -- ';
-                Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial', 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-v -- z';
-                Expected = 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-v zeta -- ';
-                Expected = 'initial' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-v -- zeta ';
-                Expected = 'initial' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--verify ';
-                Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial', 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--verify z';
-                Expected = 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--verify -- ';
-                Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial', 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--verify -- z';
-                Expected = 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--verify zeta -- ';
-                Expected = 'initial' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--verify -- zeta ';
-                Expected = 'initial' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
 
             @{
                 Line     = '-f ';
-                Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial', 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-f -- z';
-                Expected = 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--force ';
-                Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'initial', 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--force -- z';
-                Expected = 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $Expected

@@ -8,6 +8,16 @@ using namespace System.IO;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, File {
     BeforeAll {
+        InModuleScope git-completion {
+            Mock gitCommitMessage {
+                param([string]$ref)
+                if ($ref.StartsWith('^')) {
+                    return $null
+                }
+                return $RemoteCommits[$ref].ToolTip
+            }
+        }
+
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
@@ -192,97 +202,24 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
     }
 
     Describe 'OptionValue' {
-        Describe 'Revlist:<_>' -ForEach @('-C',
+        Describe 'Revlist:<Option>' -ForEach @('-C',
             '-c',
             '--reuse-message',
             '--reedit-message',
             '--fixup',
-            '--squash') {
-            BeforeDiscovery {
-                $option = $_
-                Set-Variable 'Data' @(
-                    @{
-                        Line     = "$option ";
-                        Expected =
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/develop',
-                        'ordinary/develop',
-                        'origin/develop',
-                        'initial',
-                        'zeta' | ConvertTo-Completion -ResultType ParameterValue
-                    },
-                    @{
-                        Line     = "$option o";
-                        Expected = 
-                        'ordinary/develop',
-                        'origin/develop' | ConvertTo-Completion -ResultType ParameterValue
-                    },
-                    @{
-                        Line     = "$option ^";
-                        Expected =
-                        'HEAD',
-                        'FETCH_HEAD',
-                        'main',
-                        'grm/develop',
-                        'ordinary/develop',
-                        'origin/develop',
-                        'initial',
-                        'zeta' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
-                    },
-                    @{
-                        Line     = "$option ^o";
-                        Expected = 
-                        '^ordinary/develop',
-                        '^origin/develop' | ConvertTo-Completion -ResultType ParameterValue
-                    }
-                )
+            '--squash' | ForEach-Object { @{Option = $_; } }) {
+       
+            # It '<Line>' -ForEach $Data {
+            #     "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            # }
 
-                if ($option.StartsWith('--')) {
-                    $Data += @(
-                        @{
-                            Line     = "$option=";
-                            Expected =
-                            'HEAD',
-                            'FETCH_HEAD',
-                            'main',
-                            'grm/develop',
-                            'ordinary/develop',
-                            'origin/develop',
-                            'initial',
-                            'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
-                        },
-                        @{
-                            Line     = "$option=o";
-                            Expected = 
-                            'ordinary/develop',
-                            'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
-                        },
-                        @{
-                            Line     = "$option=^";
-                            Expected =
-                            'HEAD',
-                            'FETCH_HEAD',
-                            'main',
-                            'grm/develop',
-                            'ordinary/develop',
-                            'origin/develop',
-                            'initial',
-                            'zeta' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
-                        },
-                        @{
-                            Line     = "$option=^o";
-                            Expected = 
-                            '^ordinary/develop',
-                            '^origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
-                        }
-                    )
+            if ($Option.StartsWith('--')) {
+                Describe-Revlist -Ref -CompletionPrefix "$Option=" {
+                    "git $Command $Option=$Line" | Complete-FromLine | Should -BeCompletion $expected
                 }
             }
-
-            It '<Line>' -ForEach $Data {
-                "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            Describe-Revlist -Ref {
+                "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
             }
         }
         It '<Line>' -ForEach @(

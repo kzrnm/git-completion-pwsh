@@ -2,47 +2,29 @@
 
 Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
     BeforeAll {
+        InModuleScope git-completion {
+            Mock gitCommitMessage {
+                param([string]$ref)
+                if ($ref.StartsWith('^')) {
+                    return $null
+                }
+                if ($ref -ceq 'dev') {
+                    return 'aaaaccc submodules'
+                }
+                return $RemoteCommits[$ref].ToolTip
+            }
+        }
         Initialize-Home
 
         $ErrorActionPreference = 'SilentlyContinue'
         mkdir ($rootPath = "$TestDrive/gitRoot")
         mkdir ($remotePath = "$TestDrive/gitRemote")
-
-        Push-Location $remotePath
-        git init --initial-branch=develop
-        "Initial" > 'initial.txt'
-        "echo hello" > 'hello.sh'
-        git update-index --add --chmod=+x hello.sh
+        
+        Initialize-Remote $rootPath $remotePath
+        Push-Location $rootPath
         git submodule add https://github.com/github/nagios-plugins-github.git sub 2>$null
         git submodule add https://github.com/github/nagios-plugins-github.git sum 2>$null
-        git add -A 2>$null
-        git commit -m "initial"
-        git tag initial
-        Pop-Location
-    
-        Push-Location $rootPath
-        git init --initial-branch=main
-    
-        git remote add origin "$remotePath"
-        git remote add ordinary "$remotePath"
-        git remote add grm "$remotePath"
-    
-        git config set remotes.default "origin grm"
-        git config set remotes.ors "origin ordinary"
-    
-        git fetch --recurse-submodules origin 2>$null
-        git fetch --recurse-submodules ordinary 2>$null
-        git fetch --recurse-submodules grm 2>$null
-        git reset origin/develop --hard 2>$null
-        git tag zeta
-        mkdir Pwsh
-    
-        'Pwsh/ign*' > 'Pwsh/ignored'
-        'Pwsh/ign*' | Out-File '.gitignore' -Encoding ascii
-        'echo world' > 'Pwsh/world.ps1'
-        git add -A 2>$null
-        git commit -m "World"
-        git branch -c master
+        git commit -m submodules
         git branch -c dev
     }
 
@@ -95,12 +77,24 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
             },
             @{
                 Line     = 'branch.main.merge=';
-                Expected = 'HEAD', 'FETCH_HEAD', 'dev', 'main', 'master', 'grm/develop', 'ordinary/develop', 'origin/develop', 'initial', 'zeta' |
+                Expected = 'HEAD', 'FETCH_HEAD', 'dev', 'main', 'grm/develop', 'ordinary/develop', 'origin/develop', 'initial', 'zeta' |
+                ForEach-Object {
+                    switch ($_) {
+                        'dev' {
+                            @{
+                                ListItemText = 'dev';
+                                ToolTip      = 'aaaaccc submodules';
+                            }
+                        }
+                        Default { $RemoteCommits[$_] }
+                    }
+                } |
                 ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.merge=$_" }
             },
             @{
                 Line     = 'branch.main.merge=or';
                 Expected = 'ordinary/develop', 'origin/develop' |
+                ForEach-Object { $RemoteCommits[$_] } |
                 ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.merge=$_" }
             },
             @{
@@ -711,9 +705,6 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 "branch.dev.",
                 "branch.main.",
                 @{
-                    ListItemText = "branch.master.";
-                },
-                @{
                     CompletionText = "branch.autoSetupMerge=";
                     ListItemText   = "branch.autoSetupMerge";
                     ToolTip        = "Tells git branch, git switch and git checkout to set up new branches so that git-pull will appropriately merge from the starting point branch";
@@ -732,8 +723,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
             @{
                 Line     = "branch.m";
                 Expected =
-                "branch.main.",
-                "branch.master." | ConvertTo-Completion -ResultType ParameterName
+                "branch.main." | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = "branch.a";

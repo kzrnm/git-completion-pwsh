@@ -40,23 +40,21 @@ function Describe-Revlist {
                 It '<Line>' -ForEach @(
                     @{
                         Line     = "";
-                        Expected = @(
-                            'HEAD',
-                            'FETCH_HEAD',
-                            'main',
-                            'grm/develop',
-                            'ordinary/develop',
-                            'origin/develop',
-                            'initial',
-                            'zeta'
-                        ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
+                        Expected =
+                        'HEAD',
+                        'FETCH_HEAD',
+                        'main',
+                        'grm/develop',
+                        'ordinary/develop',
+                        'origin/develop',
+                        'initial',
+                        'zeta' | ForEach-Object { $RemoteCommits[$_] }  | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
                     },
                     @{
                         Line     = "o";
-                        Expected = @(
-                            'ordinary/develop',
-                            'origin/develop'
-                        ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
+                        Expected =
+                        'ordinary/develop',
+                        'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
                     },
                     @{
                         Line     = "^";
@@ -87,43 +85,39 @@ function Describe-Revlist {
                 It '<Line>' -ForEach @(
                     @{
                         Line     = "HEAD...";
-                        Expected = @(
-                            'HEAD',
-                            'FETCH_HEAD',
-                            'main',
-                            'grm/develop',
-                            'ordinary/develop',
-                            'origin/develop',
-                            'initial',
-                            'zeta'
-                        ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD...$_" }
+                        Expected =
+                        'HEAD',
+                        'FETCH_HEAD',
+                        'main',
+                        'grm/develop',
+                        'ordinary/develop',
+                        'origin/develop',
+                        'initial',
+                        'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD...$_" }
                     },
                     @{
                         Line     = "HEAD...o";
-                        Expected = @(
-                            'ordinary/develop',
-                            'origin/develop'
-                        ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD...$_" }
+                        Expected =
+                        'ordinary/develop',
+                        'origin/develop' | ForEach-Object { $RemoteCommits[$_] }  | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD...$_" }
                     },
                     @{
                         Line     = "HEAD..";
-                        Expected = @(
-                            'HEAD',
-                            'FETCH_HEAD',
-                            'main',
-                            'grm/develop',
-                            'ordinary/develop',
-                            'origin/develop',
-                            'initial',
-                            'zeta'
-                        ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD..$_" }
+                        Expected =
+                        'HEAD',
+                        'FETCH_HEAD',
+                        'main',
+                        'grm/develop',
+                        'ordinary/develop',
+                        'origin/develop',
+                        'initial',
+                        'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD..$_" }
                     },
                     @{
                         Line     = "HEAD..o";
-                        Expected = @(
-                            'ordinary/develop',
-                            'origin/develop'
-                        ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD..$_" }
+                        Expected =
+                        'ordinary/develop',
+                        'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD..$_" }
                     }
                 ) -Test $ScriptBlock
             }

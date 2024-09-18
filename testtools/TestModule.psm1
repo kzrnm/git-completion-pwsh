@@ -1,12 +1,10 @@
-﻿#Requires -Module Pester, git-completion
+﻿#Requires -Module Pester
 
 using namespace System.Management.Automation;
 
 $ErrorActionPreference = 'Continue'
 
 . "$PSScriptRoot/ConvertCompletion.ps1"
-
-$script:NoOptionsCompletion = '--no-...' | ConvertTo-Completion -ResultType Text -CompletionText '--no-'
 
 function ConvertTo-KebabCase {
     param (
@@ -64,19 +62,10 @@ function Initialize-Remote {
         $remotePath
     )
 
-    Push-Location $remotePath
-    git init --initial-branch=develop
-    "Initial" > 'initial.txt'
-    "echo hello" > 'hello.sh'
-    git update-index --add --chmod=+x hello.sh
-    git add -A 2>$null
-    git commit -m "initial"
-    (0..10) > Number.txt
-    git add Number.txt
-    git commit -m zeta
-    git tag zeta
-    git reset HEAD~ --hard
-    Pop-Location
+    $ProgressPreferenceBak = $global:ProgressPreference
+    $global:ProgressPreference = "SilentlyContinue"
+    Expand-Archive "$PSScriptRoot/RemoteRepo.zip" -DestinationPath $remotePath
+    $global:ProgressPreference = $ProgressPreferenceBak
 
     Push-Location $rootPath
     git init --initial-branch=main
@@ -93,13 +82,7 @@ function Initialize-Remote {
     git fetch grm 2>$null
     git reset origin/develop --hard 2>$null
     git tag initial
-    mkdir Pwsh
-
     'Pwsh/ign*' > 'Pwsh/ignored'
-    'Pwsh/ign*' | Out-File '.gitignore' -Encoding ascii
-    'echo world' > 'Pwsh/world.ps1'
-    git add -A 2>$null
-    git commit -m "World"
     Pop-Location
 }
 
@@ -255,6 +238,41 @@ function Should-BeCompletion {
     }
 }
 
+$script:RemoteCommits = @{
+    'HEAD'             = @{
+        ListItemText = 'HEAD';
+        ToolTip      = '0b399df World';
+    };
+    'FETCH_HEAD'       = @{
+        ListItemText = 'FETCH_HEAD';
+        ToolTip      = '0b399df World';
+    };
+    'initial'          = @{
+        ListItemText = 'initial';
+        ToolTip      = '0b399df World';
+    };
+    'main'             = @{
+        ListItemText = 'main';
+        ToolTip      = '0b399df World';
+    };
+    'origin/develop'   = @{
+        ListItemText = 'origin/develop';
+        ToolTip      = '0b399df World';
+    };
+    'ordinary/develop' = @{
+        ListItemText = 'ordinary/develop';
+        ToolTip      = '0b399df World';
+    };
+    'grm/develop'      = @{
+        ListItemText = 'grm/develop';
+        ToolTip      = '0b399df World';
+    };
+    'zeta'             = @{
+        ListItemText = 'zeta';
+        ToolTip      = 'c7ba46c zeta';
+    };
+}
+
 Add-ShouldOperator -Name BeCompletion `
     -Test ${function:Should-BeCompletion} `
     -SupportsArrayInput
@@ -263,4 +281,4 @@ Export-ModuleMember `
     -Function Complete-FromLine, Initialize-Home, Restore-Home, `
     ConvertTo-KebabCase, ConvertTo-Completion, `
     Initialize-Remote, Initialize-SimpleRepo, Initialize-FilesRepo `
-    -Variable 'NoOptionsCompletion'
+    -Variable 'RemoteCommits'

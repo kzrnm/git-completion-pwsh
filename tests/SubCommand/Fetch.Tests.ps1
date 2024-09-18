@@ -285,13 +285,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'origin/develop',
                     'initial',
                     'zeta'
-                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
+                ) | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'origin left:m';
                 Expected = @(
                     'main'
-                ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
+                ) | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'or';

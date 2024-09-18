@@ -238,11 +238,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'ordinary/develop',
                     'origin/develop',
                     'initial',
-                    'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                    'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'm';
-                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 'main' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
                 "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
