@@ -13,7 +13,7 @@ class GitCompletionSettings {
     [string[]] $ExcludeCommands;
 }
 
-$script:GitCompletionSettings = [GitCompletionSettings]@{
+[GitCompletionSettings]$script:GitCompletionSettings = @{
     ShowAllOptions     = ($env:GIT_COMPLETION_SHOW_ALL -and ($env:GIT_COMPLETION_SHOW_ALL -ne '0'));
     ShowAllCommand     = ($env:GIT_COMPLETION_SHOW_ALL_COMMANDS -and ($env:GIT_COMPLETION_SHOW_ALL_COMMANDS -ne '0'));
     IgnoreCase         = ($env:GIT_COMPLETION_IGNORE_CASE -and ($env:GIT_COMPLETION_IGNORE_CASE -ne '0'));
