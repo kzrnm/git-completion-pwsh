@@ -1,5 +1,6 @@
 /git-completion/
 debug.log
+coverage.xml
 testResults.xml
 *.dev
 /local
