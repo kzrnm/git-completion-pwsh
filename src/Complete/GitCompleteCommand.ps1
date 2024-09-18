@@ -166,35 +166,23 @@ function gitCompleteRefs {
     )
 
     switch ($Mode) {
-        'refs' { 
+        'refs' {
             gitRefs -Current $Current -Remote $Remote | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -DescriptionBuilder {
                 gitCommitMessage $_
             }
 
-            # $toolTip = [string](__git show -s "$Current" --oneline 2>$null)
-            # if ($toolTip) {
-            #     [CompletionResult]::new(
-            #         $Current,
-            #         $Current,
-            #         $ResultType,
-            #         [string](__git show -s "$Current" --oneline)
-            #     )
-            # }
-
-            # if ($Current.EndsWith('~')) {
-            #     [CompletionResult]::new(
-            #         $Current,
-            #         $Current,
-            #         $ResultType,
-            #         [string](__git show -s "$Current" --oneline)
-            #     )
-            #     [CompletionResult]::new(
-            #         "$Current~",
-            #         "$Current~",
-            #         $ResultType,
-            #         [string](__git show -s "$Current~" --oneline)
-            #     )
-            # }
+            if ($Current) {
+                $pp = $Current
+                gitRecentLog $Current -Skip 1 | ForEach-Object {
+                    $pp = "$pp~"
+                    [CompletionResult]::new(
+                        "$Prefix$pp$Suffix",
+                        $pp,
+                        $ResultType,
+                        $_
+                    )
+                }
+            }
         }
         'heads' { 
             gitHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType

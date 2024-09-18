@@ -13,6 +13,8 @@ function Describe-Revlist {
         [Parameter(ParameterSetName = 'Separate')]
         [switch]$Ref,
         [Parameter(ParameterSetName = 'Separate')]
+        [switch]$RefPrevious,
+        [Parameter(ParameterSetName = 'Separate')]
         [switch]$Refspec,
         [Parameter(ParameterSetName = 'Separate')]
         [switch]$File,
@@ -23,6 +25,7 @@ function Describe-Revlist {
     switch ($PsCmdlet.ParameterSetName) {
         'All' {
             $Ref =
+            $RefPrevious =
             $Refspec =
             $File = $true
         }
@@ -75,6 +78,71 @@ function Describe-Revlist {
                             'ordinary/develop',
                             'origin/develop'
                         ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
+                    }
+                ) -Test $ScriptBlock
+            }
+        }
+
+        if ($RefPrevious) {
+            Describe 'RefPrevious' {
+                It '<Line>' -ForEach @(
+                    @{
+                        Line     = "HEAD";
+                        Expected =
+                        $RemoteCommits['HEAD'],
+                        @{
+                            ListItemText = 'HEAD~';
+                            ToolTip      = 'd19340a initial';
+                        } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
+                    },
+                    @{
+                        Line     = "zeta";
+                        Expected =
+                        $RemoteCommits['zeta'],
+                        @{
+                            ListItemText = 'zeta~';
+                            ToolTip      = 'e946fd9 ' + [char]0x395;
+                        },
+                        @{
+                            ListItemText = 'zeta~~';
+                            ToolTip      = '20cc0b9 ' + [char]0x394;
+                        },
+                        @{
+                            ListItemText = 'zeta~~~';
+                            ToolTip      = '059ae39 ' + [char]0x393;
+                        },
+                        @{
+                            ListItemText = 'zeta~~~~';
+                            ToolTip      = 'd3054a8 ' + [char]0x392;
+                        },
+                        @{
+                            ListItemText = 'zeta~~~~~';
+                            ToolTip      = '881ffe7 ' + [char]0x391;
+                        } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
+                    },
+                    @{
+                        Line     = "zeta~";
+                        Expected =
+                        @{
+                            ListItemText = 'zeta~~';
+                            ToolTip      = '20cc0b9 ' + [char]0x394;
+                        },
+                        @{
+                            ListItemText = 'zeta~~~';
+                            ToolTip      = '059ae39 ' + [char]0x393;
+                        },
+                        @{
+                            ListItemText = 'zeta~~~~';
+                            ToolTip      = 'd3054a8 ' + [char]0x392;
+                        },
+                        @{
+                            ListItemText = 'zeta~~~~~';
+                            ToolTip      = '881ffe7 ' + [char]0x391;
+                        },
+                        @{
+                            ListItemText = 'zeta~~~~~~';
+                            ToolTip      = "d19340a initial";
+                        } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
                     }
                 ) -Test $ScriptBlock
             }

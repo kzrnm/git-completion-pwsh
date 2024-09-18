@@ -629,3 +629,19 @@ function gitCommitMessage() {
     )
     return [string](__git show -s "$ref" --oneline 2>$null)
 }
+
+function gitRecentLog() {
+    [CmdletBinding()]
+    [OutputType([string[]])]
+    param(
+        [Parameter(Position = 0)]
+        $ref = $null,
+        $MaxCount = 5,
+        $Skip = 0
+    )
+    $line = [string](git log $ref --oneline -z "--max-count=$MaxCount" "--skip=$Skip" 2>$null)
+    if ($line) {
+        return $line.Split([char[]]@([char]0), [StringSplitOptions]::RemoveEmptyEntries)
+    }
+    return @()
+}

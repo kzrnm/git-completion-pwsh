@@ -14,10 +14,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 if ($ref.StartsWith('^')) {
                     return $null
                 }
-                if ($ref -ceq 'zeta') {
-                    return 'c7ba46c zeta'
-                }
-                return '0b399df World'
+                return $RemoteCommits[$ref].ToolTip
             }
         }
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)

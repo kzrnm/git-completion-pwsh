@@ -269,7 +269,7 @@ $script:RemoteCommits = @{
     };
     'zeta'             = @{
         ListItemText = 'zeta';
-        ToolTip      = 'c7ba46c zeta';
+        ToolTip      = 'f36f2be Ζ';
     };
 }
 
