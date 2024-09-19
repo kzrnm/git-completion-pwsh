@@ -152,6 +152,7 @@ function gitCompleteRemoteOrRefspec {
 }
 
 function gitCompleteRefs {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'matchRef')]
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -167,20 +168,33 @@ function gitCompleteRefs {
 
     switch ($Mode) {
         'refs' {
-            gitRefs -Current $Current -Remote $Remote | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -DescriptionBuilder {
+            $matchRef = $false
+            gitRefs -Current $Current -Remote $Remote | ForEach-Object {
+                if ($Current -ceq $_) {
+                    $matchRef = $true
+                }
+                $_
+            } | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -DescriptionBuilder {
                 gitCommitMessage $_
             }
 
             if ($Current) {
-                $pp = $Current
-                gitRecentLog $Current -Skip 1 | ForEach-Object {
-                    $pp = "$pp~"
+                if ($matchRef) {
+                    $pp = "$Current~"
+                    $skip = 1
+                }
+                else {
+                    $pp = $Current
+                    $skip = 0
+                }
+                gitRecentLog $Current -Skip $skip -MaxCount:(6 - $skip) | ForEach-Object {
                     [CompletionResult]::new(
                         "$Prefix$pp$Suffix",
                         $pp,
                         $ResultType,
                         $_
                     )
+                    $pp = "$pp~"
                 }
             }
         }

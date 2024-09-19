@@ -124,6 +124,10 @@ function Describe-Revlist {
                         Line     = "zeta~";
                         Expected =
                         @{
+                            ListItemText = 'zeta~';
+                            ToolTip      = 'e946fd9 ' + [char]0x395;
+                        },
+                        @{
                             ListItemText = 'zeta~~';
                             ToolTip      = '20cc0b9 ' + [char]0x394;
                         },
@@ -141,6 +145,34 @@ function Describe-Revlist {
                         },
                         @{
                             ListItemText = 'zeta~~~~~~';
+                            ToolTip      = "d19340a initial";
+                        } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
+                    },
+                    @{
+                        Line     = "e946fd9";
+                        Expected =
+                        @{
+                            ListItemText = 'e946fd9';
+                            ToolTip      = 'e946fd9 ' + [char]0x395;
+                        },
+                        @{
+                            ListItemText = 'e946fd9~';
+                            ToolTip      = '20cc0b9 ' + [char]0x394;
+                        },
+                        @{
+                            ListItemText = 'e946fd9~~';
+                            ToolTip      = '059ae39 ' + [char]0x393;
+                        },
+                        @{
+                            ListItemText = 'e946fd9~~~';
+                            ToolTip      = 'd3054a8 ' + [char]0x392;
+                        },
+                        @{
+                            ListItemText = 'e946fd9~~~~';
+                            ToolTip      = '881ffe7 ' + [char]0x391;
+                        },
+                        @{
+                            ListItemText = 'e946fd9~~~~~';
                             ToolTip      = "d19340a initial";
                         } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
                     }
