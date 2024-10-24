@@ -698,3 +698,195 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         }
     }
 }
+
+
+Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -Tag Remote, File {
+    BeforeAll {
+        Initialize-Home
+
+        mkdir ($rootPath = "$TestDrive/gitRoot")
+        Initialize-FilesRepo $rootPath
+        Push-Location $rootPath
+        'ax' > "ax"
+        git add ax
+        git commit -m ax
+        'ax2' > "ax"
+        'print world' > 'Pwsh/world.ps1'
+    }
+
+    AfterAll {
+        Restore-Home
+        Pop-Location
+    }
+
+    Describe 'File' {
+        Describe 'stash' {
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = ' ';
+                    Expected = (
+                        @{
+                            ListItemText = 'apply';
+                            ToolTip      = 'apply a single stashed state but do not remove the state';
+                        },
+                        @{
+                            ListItemText = 'clear';
+                            ToolTip      = 'remove all the stash entries';
+                        },
+                        @{
+                            ListItemText = 'drop';
+                            ToolTip      = 'remove a single stashed state';
+                        },
+                        @{
+                            ListItemText = 'pop';
+                            ToolTip      = 'remove a single stashed state and apply it';
+                        },
+                        @{
+                            ListItemText = 'branch';
+                            ToolTip      = 'creates and checks out a new branch';
+                        },
+                        @{
+                            ListItemText = 'list';
+                            ToolTip      = 'list the stash entries';
+                        },
+                        @{
+                            ListItemText = 'show';
+                            ToolTip      = 'show the changes recorded';
+                        },
+                        @{
+                            ListItemText = 'store';
+                            ToolTip      = 'store a given stash';
+                        },
+                        @{
+                            ListItemText = 'create';
+                            ToolTip      = 'create a stash entry';
+                        },
+                        @{
+                            ListItemText = 'push';
+                            ToolTip      = 'save your local modifications to a new stash entry and roll them back to HEAD (default)';
+                        } | ConvertTo-Completion -ResultType ParameterName
+                    ) + (
+                        @(
+                            @{
+                                CompletionText = "Aquarion`` Evol/Evol";
+                                ListItemText   = "Aquarion Evol/Evol";
+                            },
+                            'ax', 'Dr.Wily', 'Pwsh/'
+                        ) | ConvertTo-Completion -ResultType ProviderItem
+                    )
+                },
+                @{
+                    Line     = 'a';
+                    Expected = if ($IsLinux -or $IsMacOS) {
+                        @{
+                            ListItemText = "apply";
+                            ResultType   = 'ParameterName';
+                            ToolTip      = "apply a single stashed state but do not remove the state";
+                        },
+                        @{
+                            CompletionText = "Aquarion`` Evol/Evol";
+                            ListItemText   = "Aquarion Evol/Evol"
+                        },
+                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
+                    }
+                    else {
+                        @{
+                            ListItemText = "apply";
+                            ResultType   = 'ParameterName';
+                            ToolTip      = "apply a single stashed state but do not remove the state";
+                        },
+                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
+                    }
+                },
+                @{
+                    Line     = 'Pwsh';
+                    Expected = 'Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = 'Pwsh/';
+                    Expected = 'Pwsh/OptionLike/-foo.ps1', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '-u ';
+                    Expected = (
+                        @(
+                            @{
+                                CompletionText = "Aquarion`` Evol/";
+                                ListItemText   = "Aquarion Evol/"
+                            },
+                            'ax', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
+                                CompletionText = '漢```''帝`　国`''';
+                                ListItemText   = '漢`''帝　国''';
+                            }
+                        ) | ConvertTo-Completion -ResultType ProviderItem
+                    )
+                },
+                @{
+                    Line     = '-u Pwsh/';
+                    Expected = 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                }
+            ) {
+                "git stash $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
+        Describe 'stash push' {
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = ' ';
+                    Expected = (
+                        @(
+                            @{
+                                CompletionText = "Aquarion`` Evol/Evol";
+                                ListItemText   = "Aquarion Evol/Evol"
+                            },
+                            'ax', 'Dr.Wily', 'Pwsh/'
+                        ) | ConvertTo-Completion -ResultType ProviderItem
+                    )
+                },
+                @{
+                    Line     = 'a';
+                    Expected = if ($IsLinux -or $IsMacOS) {
+                        @{
+                            CompletionText = "Aquarion`` Evol/Evol";
+                            ListItemText   = "Aquarion Evol/Evol"
+                        },
+                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
+                    }
+                    else {
+                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
+                    }
+                },
+                @{
+                    Line     = 'Pwsh';
+                    Expected = 'Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = 'Pwsh/';
+                    Expected = 'Pwsh/OptionLike/-foo.ps1', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '-u ';
+                    Expected = (
+                        @(
+                            @{
+                                CompletionText = "Aquarion`` Evol/";
+                                ListItemText   = "Aquarion Evol/"
+                            },
+                            'ax', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
+                                CompletionText = '漢```''帝`　国`''';
+                                ListItemText   = '漢`''帝　国''';
+                            }
+                        ) | ConvertTo-Completion -ResultType ProviderItem
+                    )
+                },
+                @{
+                    Line     = '-u Pwsh/';
+                    Expected = 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                }
+            ) {
+                "git stash push $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+    }
+}
