@@ -82,7 +82,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--';
-                Expected = '--tool=', '--prompt', '--no-prompt', '--gui', '--no-gui' | ConvertTo-Completion -ResultType ParameterName
+                Expected = '--tool=', '--tool-help', '--prompt', '--no-prompt', '--gui', '--no-gui' | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no-';
