@@ -124,8 +124,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         'HEAD',
                         'FETCH_HEAD',
                         'main',
+                        'grm/HEAD',
                         'grm/develop',
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop',
                         'initial',
                         'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
@@ -148,10 +151,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 },
                 @{
                     Line     = ' o';
-                    Expected = @(
-                        'ordinary/develop',
-                        'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
-                    )
+                    Expected = 
+                    'ordinary/HEAD',
+                    'ordinary/develop',
+                    'origin/HEAD',
+                    'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
                 if ($Subcommand -eq 'show') {
@@ -166,30 +170,34 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         It '<Line>' -ForEach @(
             @{
                 Line     = "o";
-                Expected = @(
-                    'ordinary/develop',
-                    'origin/develop'
-                ) | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 
+                'ordinary/HEAD',
+                'ordinary/develop',
+                'origin/HEAD',
+                'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = "^";
-                Expected = @(
-                    'HEAD',
-                    'FETCH_HEAD',
-                    'main',
-                    'grm/develop',
-                    'ordinary/develop',
-                    'origin/develop',
-                    'initial',
-                    'zeta'
-                ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
+                Expected =
+                'HEAD',
+                'FETCH_HEAD',
+                'main',
+                'grm/HEAD',
+                'grm/develop',
+                'ordinary/HEAD',
+                'ordinary/develop',
+                'origin/HEAD',
+                'origin/develop',
+                'initial',
+                'zeta' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = "^o";
-                Expected = @(
-                    'ordinary/develop',
-                    'origin/develop'
-                ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 
+                'ordinary/HEAD',
+                'ordinary/develop',
+                'origin/HEAD',
+                'origin/develop' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

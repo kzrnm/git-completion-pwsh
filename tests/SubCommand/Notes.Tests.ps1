@@ -137,6 +137,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 ToolTip      = "reuse specified note object";
             },
             @{
+                ListItemText = '-e';
+                ToolTip      = "edit note message in editor";
+            },
+            @{
                 ListItemText = '-f';
                 ToolTip      = "replace existing notes";
             },
@@ -201,6 +205,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         ToolTip      = "reuse and edit specified note object";
                     },
                     @{
+                        ListItemText = '--edit';
+                        ToolTip      = "edit note message in editor";
+                    },
+                    @{
                         ListItemText = '--reuse-message=';
                         ToolTip      = "reuse specified note object";
                     },
@@ -217,8 +225,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         ToolTip      = "remove unnecessary whitespace";
                     },
                     @{
-                        ListItemText = '--no-allow-empty';
-                        ToolTip      = "[NO] allow storing empty note";
+                        ListItemText = '--no-edit';
+                        ToolTip      = "[NO] edit note message in editor";
                     },
                     @{
                         CompletionText = '--no-';
@@ -269,8 +277,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 @{
                     Line     = '--no';
                     Expected = @{
-                        ListItemText = '--no-allow-empty';
-                        ToolTip      = "[NO] allow storing empty note";
+                        ListItemText = '--no-edit';
+                        ToolTip      = "[NO] edit note message in editor";
                     },
                     @{
                         CompletionText = '--no-';
@@ -424,6 +432,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 ToolTip      = "reuse specified note object";
             },
             @{
+                ListItemText = '-e';
+                ToolTip      = "edit note message in editor";
+            },
+            @{
                 ListItemText = '-F';
                 ToolTip      = "note contents in a file";
             },
@@ -488,6 +500,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         ToolTip      = "reuse specified note object";
                     },
                     @{
+                        ListItemText = '--edit';
+                        ToolTip      = "edit note message in editor";
+                    },
+                    @{
                         ListItemText = '--allow-empty';
                         ToolTip      = "allow storing empty note";
                     },
@@ -500,8 +516,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         ToolTip      = "remove unnecessary whitespace";
                     },
                     @{
-                        ListItemText = '--no-allow-empty';
-                        ToolTip      = "[NO] allow storing empty note";
+                        ListItemText = '--no-edit';
+                        ToolTip      = "[NO] edit note message in editor";
                     },
                     @{
                         CompletionText = '--no-';
@@ -552,8 +568,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 @{
                     Line     = '--no';
                     Expected = @{
-                        ListItemText = '--no-allow-empty';
-                        ToolTip      = "[NO] allow storing empty note";
+                        ListItemText = '--no-edit';
+                        ToolTip      = "[NO] edit note message in editor";
                     },
                     @{
                         CompletionText = '--no-';
@@ -598,6 +614,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 ListItemText = '-C';
                 ToolTip      = "reuse specified note object";
+            },
+            @{
+                ListItemText = '-e';
+                ToolTip      = "edit note message in editor";
             },
             @{
                 ListItemText = '-F';
@@ -658,6 +678,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         ToolTip      = "reuse specified note object";
                     },
                     @{
+                        ListItemText = '--edit';
+                        ToolTip      = "edit note message in editor";
+                    },
+                    @{
                         ListItemText = '--allow-empty';
                         ToolTip      = "allow storing empty note";
                     },
@@ -670,8 +694,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         ToolTip      = "remove unnecessary whitespace";
                     },
                     @{
-                        ListItemText = '--no-allow-empty';
-                        ToolTip      = "[NO] allow storing empty note";
+                        ListItemText = '--no-edit';
+                        ToolTip      = "[NO] edit note message in editor";
                     },
                     @{
                         CompletionText = '--no-';
@@ -704,6 +728,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 @{
                     Line     = '--no-';
                     Expected = @{
+                        ListItemText = '--no-edit';
+                        ToolTip      = "[NO] edit note message in editor";
+                    },
+                    @{
                         ListItemText = '--no-allow-empty';
                         ToolTip      = "[NO] allow storing empty note";
                     },
@@ -719,8 +747,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 @{
                     Line     = '--no';
                     Expected = @{
-                        ListItemText = '--no-allow-empty';
-                        ToolTip      = "[NO] allow storing empty note";
+                        ListItemText = '--no-edit';
+                        ToolTip      = "[NO] edit note message in editor";
                     },
                     @{
                         CompletionText = '--no-';

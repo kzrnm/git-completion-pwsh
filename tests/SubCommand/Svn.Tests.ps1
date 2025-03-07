@@ -40,7 +40,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 'gc' | ConvertTo-Completion -ResultType ParameterName
             },
             @{
-                Line = "re"
+                Line     = "re"
                 Expected =
                 'rebase', 'reset' | ConvertTo-Completion -ResultType ParameterName
             }
@@ -127,14 +127,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     '--branches=',
                     '--stdlayout',
                     '--minimize-url',
-                    '--no-metadata',
-                    '--use-svm-props',
-                    '--use-svnsync-props',
                     '--rewrite-root=',
-                    '--prefix=',
-                    '--username=',
-                    '--config-dir=',
-                    '--no-auth-cache' | ConvertTo-Completion -ResultType ParameterName
+                    '--prefix=' | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = '--q';

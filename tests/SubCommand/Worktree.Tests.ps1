@@ -122,12 +122,26 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 @{
                     Left     = 'add --re';
                     Right    = ' --';
-                    Expected = '--reason=' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'reason for locking'
+                    Expected = @{
+                        ListItemText = '--reason='; 
+                        ToolTip      = 'reason for locking';
+                    },
+                    @{
+                        ListItemText = '--relative-paths';
+                        ToolTip      = 'use relative paths for worktrees';
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Left     = 'add --re';
                     Right    = ' -- --all';
-                    Expected = '--reason=' | ConvertTo-Completion -ResultType ParameterName -ToolTip 'reason for locking'
+                    Expected = @{
+                        ListItemText = '--reason='; 
+                        ToolTip      = 'reason for locking';
+                    },
+                    @{
+                        ListItemText = '--relative-paths';
+                        ToolTip      = 'use relative paths for worktrees';
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Left     = 'prune --ver';
@@ -239,10 +253,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     It '<Line>' -ForEach @(
         @{
             Line     = "add --re"
-            Expected = @(
-                '--reason=' | ConvertTo-Completion -ResultType ParameterName `
-                    -ToolTip 'reason for locking'
-            )
+            Expected = @{
+                ListItemText = '--reason='; 
+                ToolTip      = 'reason for locking';
+            },
+            @{
+                ListItemText = '--relative-paths';
+                ToolTip      = 'use relative paths for worktrees';
+            } | ConvertTo-Completion -ResultType ParameterName
         },
         @{
             Line     = "list --p"

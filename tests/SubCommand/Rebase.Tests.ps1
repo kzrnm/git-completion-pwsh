@@ -315,8 +315,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         'HEAD',
                         'FETCH_HEAD',
                         'main',
+                        'grm/HEAD',
                         'grm/develop',
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop',
                         'initial',
                         'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
@@ -324,7 +327,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     @{
                         Line     = "$option o";
                         Expected = 
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
                     },
                     @{
@@ -333,8 +338,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         'HEAD',
                         'FETCH_HEAD',
                         'main',
+                        'grm/HEAD',
                         'grm/develop',
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop',
                         'initial',
                         'zeta' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
@@ -342,7 +350,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     @{
                         Line     = "$option ^o";
                         Expected = 
+                        '^ordinary/HEAD',
                         '^ordinary/develop',
+                        '^origin/HEAD',
                         '^origin/develop' | ConvertTo-Completion -ResultType ParameterValue
                     }
                 )
@@ -355,8 +365,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                             'HEAD',
                             'FETCH_HEAD',
                             'main',
+                            'grm/HEAD',
                             'grm/develop',
+                            'ordinary/HEAD',
                             'ordinary/develop',
+                            'origin/HEAD',
                             'origin/develop',
                             'initial',
                             'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
@@ -364,7 +377,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         @{
                             Line     = "$option=o";
                             Expected = 
+                            'ordinary/HEAD',
                             'ordinary/develop',
+                            'origin/HEAD',
                             'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
                         },
                         @{
@@ -373,8 +388,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                             'HEAD',
                             'FETCH_HEAD',
                             'main',
+                            'grm/HEAD',
                             'grm/develop',
+                            'ordinary/HEAD',
                             'ordinary/develop',
+                            'origin/HEAD',
                             'origin/develop',
                             'initial',
                             'zeta' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
@@ -382,7 +400,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         @{
                             Line     = "$option=^o";
                             Expected = 
+                            '^ordinary/HEAD',
                             '^ordinary/develop',
+                            '^origin/HEAD',
                             '^origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "$option=$_" }
                         }
                     )

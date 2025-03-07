@@ -57,7 +57,7 @@ function Complete-GitSubCommand-mergetool {
         }
 
         if ($Current.StartsWith('--')) {
-            '--tool=', '--prompt', '--no-prompt', '--gui', '--no-gui' | completeList -Current $Current
+            '--tool=', '--tool-help', '--prompt', '--no-prompt', '--gui', '--no-gui' | completeList -Current $Current
             return
         }
     }

@@ -77,7 +77,18 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
             },
             @{
                 Line     = 'branch.main.merge=';
-                Expected = 'HEAD', 'FETCH_HEAD', 'dev', 'main', 'grm/develop', 'ordinary/develop', 'origin/develop', 'initial', 'zeta' |
+                Expected = 'HEAD',
+                'FETCH_HEAD', 
+                'dev', 
+                'main',
+                'grm/HEAD', 
+                'grm/develop', 
+                'ordinary/HEAD', 
+                'ordinary/develop', 
+                'origin/HEAD', 
+                'origin/develop', 
+                'initial', 
+                'zeta' |
                 ForEach-Object {
                     switch ($_) {
                         'dev' {
@@ -93,7 +104,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
             },
             @{
                 Line     = 'branch.main.merge=or';
-                Expected = 'ordinary/develop', 'origin/develop' |
+                Expected = 'ordinary/HEAD', 'ordinary/develop', 'origin/HEAD', 'origin/develop' |
                 ForEach-Object { $RemoteCommits[$_] } |
                 ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.merge=$_" }
             },
@@ -537,6 +548,10 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                     CompletionText = "remote.pwsh.fetch=";
                     ListItemText   = "remote.pwsh.fetch";
                     ToolTip        = 'The default set of "refspec" for git-fetch';
+                }, @{
+                    CompletionText = "remote.pwsh.followRemoteHEAD=";
+                    ListItemText   = "remote.pwsh.followRemoteHEAD";
+                    ToolTip        = 'How git-fetch should handle updates to remotes/<name>/HEAD';
                 },
                 @{
                     CompletionText = "remote.pwsh.mirror=";
@@ -587,6 +602,11 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                     CompletionText = "remote.pwsh.receivepack=";
                     ListItemText   = "remote.pwsh.receivepack";
                     ToolTip        = "The default program to execute on the remote side when pushing";
+                },
+                @{
+                    CompletionText = "remote.pwsh.serverOption=";
+                    ListItemText   = "remote.pwsh.serverOption";
+                    ToolTip        = 'The default set of server options used when fetching from this remote';
                 },
                 @{
                     CompletionText = "remote.pwsh.skipDefaultUpdate=";

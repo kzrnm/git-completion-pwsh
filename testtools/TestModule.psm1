@@ -267,6 +267,18 @@ $script:RemoteCommits = @{
         ListItemText = 'grm/develop';
         ToolTip      = '0b399df World';
     };
+    'origin/HEAD'   = @{
+        ListItemText = 'origin/HEAD';
+        ToolTip      = '0b399df World';
+    };
+    'ordinary/HEAD' = @{
+        ListItemText = 'ordinary/HEAD';
+        ToolTip      = '0b399df World';
+    };
+    'grm/HEAD'      = @{
+        ListItemText = 'grm/HEAD';
+        ToolTip      = '0b399df World';
+    };
     'zeta'             = @{
         ListItemText = 'zeta';
         ToolTip      = 'f36f2be Ζ';

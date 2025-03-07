@@ -177,7 +177,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '-b ';
-                Expected = 'main', 'develop' | ConvertTo-Completion -ResultType ParameterValue
+                Expected =
+                'main',
+                'HEAD',
+                'develop' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-b m';
@@ -185,7 +188,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '-B ';
-                Expected = 'main', 'develop' | ConvertTo-Completion -ResultType ParameterValue
+                Expected =
+                'main',
+                'HEAD',
+                'develop' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '-B m';
@@ -193,7 +199,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--orphan ';
-                Expected = 'main', 'develop' | ConvertTo-Completion -ResultType ParameterValue
+                Expected =
+                'main',
+                'HEAD',
+                'develop' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--orphan m';
@@ -201,7 +210,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--orphan=';
-                Expected = 'main', 'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--orphan=$_" }
+                Expected =
+                'main',
+                'HEAD',
+                'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--orphan=$_" }
             },
             @{
                 Line     = '--orphan=m';
@@ -240,13 +252,21 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
+                    'grm/HEAD',
                     'grm/develop',
+                    'ordinary/HEAD',
                     'ordinary/develop',
+                    'origin/HEAD',
                     'origin/develop',
                     'initial',
                     'zeta',
+                    @{
+                        ListItemText = 'HEAD';
+                        ToolTip      = 'HEAD';
+                    },
                     'develop' | ForEach-Object {
                         switch ($_) {
+                            { $_ -isnot [string] } { $_ }
                             'develop' { $_ }
                             Default { $RemoteCommits[$_] }
                         }
@@ -286,13 +306,20 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 @{
                     Line     = '';
                     Expected =
+                    'grm/HEAD',
                     'grm/develop',
+                    'ordinary/HEAD',
                     'ordinary/develop',
+                    'origin/HEAD',
                     'origin/develop' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'o';
-                    Expected = 'ordinary/develop', 'origin/develop'  | ConvertTo-Completion -ResultType ParameterValue
+                    Expected =
+                    'ordinary/HEAD',
+                    'ordinary/develop',
+                    'origin/HEAD',
+                    'origin/develop' | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
                 "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -306,13 +333,21 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
+                'grm/HEAD',
                 'grm/develop',
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop',
                 'initial',
                 'zeta',
+                @{
+                    ListItemText = 'HEAD';
+                    ToolTip      = 'HEAD';
+                },
                 'develop' | ForEach-Object {
                     switch ($_) {
+                        { $_ -isnot [string] } { $_ }
                         'develop' { $_ }
                         Default { $RemoteCommits[$_] }
                     }
@@ -322,8 +357,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
+                'grm/HEAD',
                 'grm/develop',
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop',
                 'initial',
                 'zeta' | ForEach-Object {

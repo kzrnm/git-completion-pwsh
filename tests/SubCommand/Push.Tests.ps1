@@ -217,8 +217,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
+                'grm/HEAD',
                 'grm/develop',
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop',
                 'initial',
                 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
@@ -226,7 +229,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = '--force-with-lease=or';
                 Expected = 
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
             },
             @{
@@ -235,8 +240,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
+                'grm/HEAD',
                 'grm/develop',
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop',
                 'initial',
                 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
@@ -244,7 +252,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = '--force-with-lease=ma:or';
                 Expected = 
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
             },
             @{
@@ -349,8 +359,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
+                'grm/HEAD',
                 'grm/develop',
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop',
                 'initial',
                 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
@@ -358,7 +371,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = 'origin o';
                 Expected = 
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
@@ -367,8 +382,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
+                'grm/HEAD',
                 'grm/develop',
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop',
                 'initial',
                 'zeta' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
@@ -376,7 +394,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = 'origin ^o';
                 Expected = 
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop' | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
@@ -385,8 +405,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'HEAD',
                 'FETCH_HEAD',
                 'main',
+                'grm/HEAD',
                 'grm/develop',
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop',
                 'initial',
                 'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
@@ -394,7 +417,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = 'origin +o';
                 Expected = 
+                'ordinary/HEAD',
                 'ordinary/develop',
+                'origin/HEAD',
                 'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
@@ -425,8 +450,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 Line     = 'origin refs';
                 Expected = 
                 'refs/heads/main',
+                'refs/remotes/grm/HEAD',
                 'refs/remotes/grm/develop',
+                'refs/remotes/ordinary/HEAD',
                 'refs/remotes/ordinary/develop',
+                'refs/remotes/origin/HEAD',
                 'refs/remotes/origin/develop',
                 'refs/tags/initial',
                 'refs/tags/zeta' | ForEach-Object { @{

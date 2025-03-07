@@ -34,8 +34,8 @@ function completeList {
         if ($RemovePrefix -and $Current.StartsWith($Prefix)) {
             $Current = $Current.Substring($Prefix.Length)
         }
+        $ExcludeSet = [System.Collections.Generic.HashSet[string]]::new()
         if ($Exclude) {
-            $ExcludeSet = [System.Collections.Generic.HashSet[string]]::new()
             foreach ($e in $Exclude) {
                 $ExcludeSet.Add($e) | Out-Null
             }
@@ -45,7 +45,7 @@ function completeList {
     process {
         if ((!$Current) -or $Candidate.StartsWith($Current)) {
             $Completion = "$Prefix$Candidate$Suffix"
-            if ($ExcludeSet -and $ExcludeSet.Contains($Completion)) {
+            if (!$ExcludeSet.Add($Candidate)) {
                 return
             }
 

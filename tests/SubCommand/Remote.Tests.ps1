@@ -649,8 +649,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
+                    'grm/HEAD',
                     'grm/develop',
+                    'ordinary/HEAD',
                     'ordinary/develop',
+                    'origin/HEAD',
                     'origin/develop',
                     'initial',
                     'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
@@ -790,8 +793,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'HEAD',
                     'FETCH_HEAD',
                     'main',
+                    'grm/HEAD',
                     'grm/develop',
+                    'ordinary/HEAD',
                     'ordinary/develop',
+                    'origin/HEAD',
                     'origin/develop',
                     'initial',
                     'zeta' | ForEach-Object { $RemoteCommits[$_] } |  ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }

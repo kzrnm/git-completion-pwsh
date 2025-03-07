@@ -352,14 +352,15 @@ function gitDwimRemoteHeads {
         $ignoreCase = '--ignore-case'
     }
 
-    @(__git for-each-ref --format="${Prefix}%(refname:strip=3)" `
-            --sort="refname:strip=3" `
-            $ignoreCase `
-            "refs/remotes/*/$Current*" "refs/remotes/*/$Current*/**") |
-    Group-Object |
-    Where-Object Count -gt 0 |
-    Select-Object -ExpandProperty Name |
-    Where-Object { $_ }
+    $dict = [System.Collections.Specialized.OrderedDictionary]::new()
+
+    foreach ($name in @(__git for-each-ref --format="${Prefix}%(refname:strip=3)" `
+                --sort="refname:strip=3" `
+                $ignoreCase `
+                "refs/remotes/*/$Current*" "refs/remotes/*/$Current*/**")) {
+        $dict[$name] = 0
+    }
+    [string[]]$dict.Keys
 }
 
 

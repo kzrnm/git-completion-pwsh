@@ -488,8 +488,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         'FETCH_HEAD',
                         'ORIG_HEAD',
                         'main',
+                        'grm/HEAD',
                         'grm/develop',
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop',
                         'initial',
                         'zeta'
@@ -506,7 +509,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 @{
                     Line     = "o";
                     Expected = @(
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop'
                     ) | ForEach-Object { switch ($_) {
                             'ORIG_HEAD' {
@@ -525,8 +530,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         'FETCH_HEAD',
                         'ORIG_HEAD',
                         'main',
+                        'grm/HEAD',
                         'grm/develop',
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop',
                         'initial',
                         'zeta'
@@ -535,7 +543,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 @{
                     Line     = "^o";
                     Expected = @(
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop'
                     ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
                 }

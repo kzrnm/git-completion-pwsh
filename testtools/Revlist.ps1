@@ -47,8 +47,11 @@ function Describe-Revlist {
                         'HEAD',
                         'FETCH_HEAD',
                         'main',
+                        'grm/HEAD',
                         'grm/develop',
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop',
                         'initial',
                         'zeta' | ForEach-Object { $RemoteCommits[$_] }  | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
@@ -56,7 +59,9 @@ function Describe-Revlist {
                     @{
                         Line     = "o";
                         Expected =
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
                     },
                     @{
@@ -65,8 +70,11 @@ function Describe-Revlist {
                             'HEAD',
                             'FETCH_HEAD',
                             'main',
+                            'grm/HEAD',
                             'grm/develop',
+                            'ordinary/HEAD',
                             'ordinary/develop',
+                            'origin/HEAD',
                             'origin/develop',
                             'initial',
                             'zeta'
@@ -75,7 +83,9 @@ function Describe-Revlist {
                     @{
                         Line     = "^o";
                         Expected = @(
+                            'ordinary/HEAD',
                             'ordinary/develop',
+                            'origin/HEAD',
                             'origin/develop'
                         ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
                     }
@@ -189,8 +199,11 @@ function Describe-Revlist {
                         'HEAD',
                         'FETCH_HEAD',
                         'main',
+                        'grm/HEAD',
                         'grm/develop',
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop',
                         'initial',
                         'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD...$_" }
@@ -198,7 +211,9 @@ function Describe-Revlist {
                     @{
                         Line     = "HEAD...o";
                         Expected =
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop' | ForEach-Object { $RemoteCommits[$_] }  | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD...$_" }
                     },
                     @{
@@ -207,8 +222,11 @@ function Describe-Revlist {
                         'HEAD',
                         'FETCH_HEAD',
                         'main',
+                        'grm/HEAD',
                         'grm/develop',
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop',
                         'initial',
                         'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD..$_" }
@@ -216,7 +234,9 @@ function Describe-Revlist {
                     @{
                         Line     = "HEAD..o";
                         Expected =
+                        'ordinary/HEAD',
                         'ordinary/develop',
+                        'origin/HEAD',
                         'origin/develop' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD..$_" }
                     }
                 ) -Test $ScriptBlock

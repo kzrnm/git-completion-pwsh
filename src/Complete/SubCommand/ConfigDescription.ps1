@@ -659,8 +659,10 @@
         "remote.*.proxy" { 'For remotes that require curl (http, https and ftp), the URL to the proxy to use for that remote' }
         "remote.*.proxyAuthMethod" { 'For remotes that require curl (http, https and ftp), the method to use for authenticating against the proxy in use (probably set in remote.<name>.proxy)' }
         "remote.*.fetch" { 'The default set of "refspec" for git-fetch' }
+        "remote.*.followRemoteHEAD" { 'How git-fetch should handle updates to remotes/<name>/HEAD' }
         "remote.*.push" { 'The default set of "refspec" for git-push' }
         "remote.*.mirror" { "If true, pushing to this remote will automatically behave as if the --mirror option was given on the command line" }
+        "remote.*.serverOption" { 'The default set of server options used when fetching from this remote' }
         "remote.*.skipDefaultUpdate" { "If true, this remote will be skipped by default when updating using git-fetch or the update subcommand of git-remote" }
         "remote.*.skipFetchAll" { "If true, this remote will be skipped by default when updating using git-fetch or the update subcommand of git-remote" }
         "remote.*.receivepack" { 'The default program to execute on the remote side when pushing' }
