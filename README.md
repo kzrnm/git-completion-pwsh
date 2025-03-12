@@ -10,22 +10,40 @@ Give it a try and experience next-level Git productivity in PowerShell! 🚀
 
 [PowerShell Gallery](https://www.powershellgallery.com/packages/git-completion).
 
+Run the command below. This module works on both Windows PowerShell and the latest cross-platform PowerShell.
+
 ```powershell
 Install-Module git-completion
 ```
 
-## Features
-
-- Extensive Command Coverage – Provides Git completion on par with Bash
-- Comprehensive Option Completion – Supports both long and short options
-- Context-Aware Value Completion – Suggests valid values for Git options
-- File State-Based Path Completion
-    - git add suggests only new or modified files
-    - Context-aware file path suggestions for various commands
-
 ## Usage
 
 ![image](https://github.com/user-attachments/assets/6d702fe0-5084-4dbf-8b62-3e7c99a6b087)
+
+## Features
+
+### Equivalent Completion to Bash
+
+In Bash, completion works for all subcommands, including `ls-files`. Although posh-git covers many common commands, it doesn't handle all commands. Additionally, posh-git embeds option definitions within its script, making it difficult to keep up with Git updates. In contrast, Bash's completion leverages Git's built-in --git-completion-helper option, allowing it to adapt easily to changes. I have replicated this approach in PowerShell to create a more robust and future-proof module.
+
+### Option Completion
+While posh-git supports completion for short options, Bash does not, which can be inconvenient. Since memorizing options is cumbersome, this module provides completion for both short and long options to improve usability.
+Additionally, like Bash, it dynamically adjusts completion suggestions based on option values, making the experience more intuitive.
+
+### File Path Completion
+Both Bash and posh-git provide file path completion based on Git's internal state. To maintain this behavior, git-completion-pwsh also intelligently suggests relevant files. For example, when using git add, only new or modified files appear as completion candidates, making file selection smarter and more efficient.
+
+### Utilizing Tooltips
+By default, tab completion does not display tooltips. However, when using MenuComplete mode, tooltips appear alongside the suggestions. The screenshot above demonstrates this behavior in MenuComplete mode.
+To enable it, run the following command:
+
+```powershell
+Set-PSReadLineKeyHandler -Chord Tab -Function MenuComplete
+```
+
+![log completion](https://github.com/user-attachments/assets/f8327f31-58f8-46cd-af75-97392a0f5cc9)
+
+When selecting a branch, commit messages are displayed, and option descriptions are shown, allowing for more intuitive choices.
 
 
 ## Original
