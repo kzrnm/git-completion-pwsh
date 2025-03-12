@@ -23,9 +23,10 @@ Install-Module git-completion
     - git add suggests only new or modified files
     - Context-aware file path suggestions for various commands
 
-## Usage movie
+## Usage
 
-https://github.com/user-attachments/assets/14d63c28-4658-490a-9668-c645914539cb
+![image](https://github.com/user-attachments/assets/6d702fe0-5084-4dbf-8b62-3e7c99a6b087)
+
 
 ## Original
 
