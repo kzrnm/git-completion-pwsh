@@ -159,12 +159,13 @@ function completeFromFileList {
                         )
                         $Prev = $Candidate
                     }
-                    break
+                    return
                 }
                 elseif ($Candidate[$i] -cin @([Path]::DirectorySeparatorChar, [Path]::AltDirectorySeparatorChar)) {
                     $CommonPrefixLength = $i + 1
                 }
             }
+            $Prev = $Prev.Substring(0, $CommonPrefixLength)
         }
     }
 

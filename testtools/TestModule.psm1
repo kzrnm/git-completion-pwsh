@@ -119,6 +119,9 @@ function Initialize-FilesRepo {
     New-Item "$TestDrive/gitRoot/Deava" -ItemType File
     New-Item "$TestDrive/gitRoot/Aquarion Evol/Gepard" -ItemType File
     New-Item "$TestDrive/gitRoot/Aquarion Evol/Gepada" -ItemType File
+    New-Item "$TestDrive/gitRoot/BigInteger/BigInteger.cs" -ItemType File -Force
+    New-Item "$TestDrive/gitRoot/BigInteger/BigInteger.csproj" -ItemType File
+    New-Item "$TestDrive/gitRoot/BigInteger/BigInteger.csx" -ItemType File
     Pop-Location
 }
 

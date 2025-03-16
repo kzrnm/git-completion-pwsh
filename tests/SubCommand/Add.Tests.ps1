@@ -167,7 +167,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                                 CompletionText = "Aquarion`` Evol/";
                                 ListItemText   = "Aquarion Evol/"
                             },
-                            'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
+                            'BigInteger/', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
                                 CompletionText = '漢```''帝`　国`''';
                                 ListItemText   = '漢`''帝　国''';
                             }
@@ -182,7 +182,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                                 CompletionText = "Aquarion`` Evol/";
                                 ListItemText   = "Aquarion Evol/"
                             },
-                            'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
+                            'BigInteger/', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
                                 CompletionText = '漢```''帝`　国`''';
                                 ListItemText   = '漢`''帝　国''';
                             }
@@ -244,7 +244,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                             @{
                                 CompletionText = "Aquarion`` Evol/";
                                 ListItemText   = "Aquarion Evol/"
-                            }, 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config')
+                            }, 'BigInteger/', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config')
                     ) | ConvertTo-Completion -ResultType ProviderItem
                 },
                 @{
@@ -269,14 +269,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                     Expected = @{
                         CompletionText = 'Aquarion` Evol/Gepard';
                         ListItemText   = 'Aquarion Evol/Gepard';
-                    }, 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
+                    }, 'BigInteger/', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
                         CompletionText = '漢```''帝`　国`''';
                         ListItemText   = '漢`''帝　国''';
                     } | ConvertTo-Completion -ResultType ProviderItem
                 },
                 @{
                     Line     = 'Aquarion` Evol/Evol Aquarion` Evol/Gepada Aquarion` Evol/Gepard ';
-                    Expected = 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
+                    Expected = 'BigInteger/', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
                         CompletionText = '漢```''帝`　国`''';
                         ListItemText   = '漢`''帝　国''';
                     } | ConvertTo-Completion -ResultType ProviderItem
@@ -331,6 +331,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                             CompletionText = "Aquarion`` Evol/";
                             ListItemText   = "Aquarion Evol/"
                         },
+                        'BigInteger/',
                         'Deava',
                         'Dr.Wily',
                         'Pwsh/',
@@ -417,7 +418,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                                     CompletionText = "../../Aquarion`` Evol/";
                                     ListItemText   = "../../Aquarion Evol/"
                                 },
-                                '../../Deava', '../../Dr.Wily', '../../Pwsh/', '../../test.config', @{
+                                '../../BigInteger/', '../../Deava', '../../Dr.Wily', '../../Pwsh/', '../../test.config', @{
                                     CompletionText = '../../漢```''帝`　国`''';
                                     ListItemText   = '../../漢`''帝　国''';
                                 }

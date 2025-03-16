@@ -221,7 +221,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                             CompletionText = "Aquarion`` Evol/";
                             ListItemText   = "Aquarion Evol/"
                         },
-                        'Deava', 'Dr.Wily', 'hello.sh', 'initial.txt', 'Pwsh/',
+                        'BigInteger/', 'Deava', 'Dr.Wily', 'hello.sh', 'initial.txt', 'Pwsh/',
                         @{
                             CompletionText = '漢```''帝`　国`''';
                             ListItemText   = '漢`''帝　国''';
@@ -258,7 +258,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                             CompletionText = "Aquarion`` Evol/";
                             ListItemText   = "Aquarion Evol/"
                         },
-                        'Deava', 'Dr.Wily', 'hello.sh', 'initial.txt', 'Pwsh/',
+                        'BigInteger/', 'Deava', 'Dr.Wily', 'hello.sh', 'initial.txt', 'Pwsh/',
                         @{
                             CompletionText = '漢```''帝`　国`''';
                             ListItemText   = '漢`''帝　国''';
@@ -298,7 +298,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                             CompletionText = "Aquarion`` Evol/";
                             ListItemText   = "Aquarion Evol/"
                         },
-                        'Deava', 'Dr.Wily', 'hello.sh', 'ignored', 'initial.txt', 'Pwsh/',
+                        'BigInteger/', 'Deava', 'Dr.Wily', 'hello.sh', 'ignored', 'initial.txt', 'Pwsh/',
                         @{
                             CompletionText = '漢```''帝`　国`''';
                             ListItemText   = '漢`''帝　国''';
@@ -340,7 +340,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                             CompletionText = "Aquarion`` Evol/";
                             ListItemText   = "Aquarion Evol/"
                         },
-                        'Deava', 'Dr.Wily', 'hello.sh', 'ignored', 'initial.txt', 'Pwsh/',
+                        'BigInteger/', 'Deava', 'Dr.Wily', 'hello.sh', 'ignored', 'initial.txt', 'Pwsh/',
                         @{
                             CompletionText = '漢```''帝`　国`''';
                             ListItemText   = '漢`''帝　国''';

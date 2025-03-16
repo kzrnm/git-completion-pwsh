@@ -132,6 +132,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                     CompletionText = "Aquarion`` Evol/";
                     ListItemText   = "Aquarion Evol/"
                 },
+                'BigInteger/',
                 'Deava',
                 'Pwsh/L1/',
                 'test.config',
@@ -160,6 +161,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                     CompletionText = "Aquarion`` Evol/";
                     ListItemText   = "Aquarion Evol/"
                 },
+                'BigInteger/',
                 'Deava',
                 'Pwsh/L1/',
                 'test.config',

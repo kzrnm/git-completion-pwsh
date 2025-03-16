@@ -174,6 +174,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                     CompletionText = "Aquarion`` Evol/";
                     ListItemText   = "Aquarion Evol/"
                 },
+                'BigInteger/',
                 'Deava',
                 'Dr.Wily', 'Pwsh/', 'test.config', 'untracked-directory/',
                 @{
@@ -237,7 +238,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 @{
                     CompletionText = 'Aquarion` Evol/';
                     ListItemText   = 'Aquarion Evol/';
-                }, 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', 'untracked-directory/',
+                }, 'BigInteger/', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', 'untracked-directory/',
                 @{
                     CompletionText = '漢```''帝`　国`''';
                     ListItemText   = '漢`''帝　国''';
@@ -250,7 +251,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 @{
                     CompletionText = 'Aquarion` Evol/Ancient/Soler';
                     ListItemText   = 'Aquarion Evol/Ancient/Soler';
-                }, 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', 'untracked-directory/',
+                }, 'BigInteger/', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', 'untracked-directory/',
                 @{
                     CompletionText = '漢```''帝`　国`''';
                     ListItemText   = '漢`''帝　国''';
@@ -271,6 +272,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         CompletionText = "Aquarion`` Evol/";
                         ListItemText   = "Aquarion Evol/"
                     },
+                    'BigInteger/',
                     'Deava',
                     'Dr.Wily',
                     'Pwsh/', 'test.config', 'untracked-directory/',

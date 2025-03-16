@@ -824,7 +824,7 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                                 CompletionText = "Aquarion`` Evol/";
                                 ListItemText   = "Aquarion Evol/"
                             },
-                            'ax', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
+                            'ax', 'BigInteger/', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
                                 CompletionText = '漢```''帝`　国`''';
                                 ListItemText   = '漢`''帝　国''';
                             }
@@ -883,7 +883,7 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                                 CompletionText = "Aquarion`` Evol/";
                                 ListItemText   = "Aquarion Evol/"
                             },
-                            'ax', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
+                            'ax', 'BigInteger/', 'Deava', 'Dr.Wily', 'Pwsh/', 'test.config', @{
                                 CompletionText = '漢```''帝`　国`''';
                                 ListItemText   = '漢`''帝　国''';
                             }
