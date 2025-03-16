@@ -190,6 +190,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                     )
                 },
                 @{
+                    Line     = 'BigIntege';
+                    Expected = 'BigInteger/' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = 'BigInteger/';
+                    Expected = 'BigInteger/BigInteger.cs', 'BigInteger/BigInteger.csproj', 'BigInteger/BigInteger.csx' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
                     Line     = 'Pws';
                     Expected = 'Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
                 },

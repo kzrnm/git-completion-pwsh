@@ -143,29 +143,28 @@ function completeFromFileList {
             $CommonPrefixLength = $Prefix.Length
             for ($i = $Prefix.Length; $i -lt $Prev.Length; $i++) {
                 if ($Candidate[$i] -cne $Prev[$i]) {
-                    if ($CommonPrefixLength -gt $Prefix.Length) {
-                        $Prev = $Prev.Substring(0, $CommonPrefixLength)
-                    }
-                    else {
-                        $Completion = $Prev
-                        if (!$LeadingDash -and ($Prev.StartsWith('-'))) {
-                            $Completion = "./$Completion"
-                        }
-                        [CompletionResult]::new(
-                            ($Completion | escapeSpecialChar),
-                            $Prev,
-                            'ProviderItem',
-                            $Prev
-                        )
-                        $Prev = $Candidate
-                    }
-                    return
+                    break
                 }
                 elseif ($Candidate[$i] -cin @([Path]::DirectorySeparatorChar, [Path]::AltDirectorySeparatorChar)) {
                     $CommonPrefixLength = $i + 1
                 }
             }
-            $Prev = $Prev.Substring(0, $CommonPrefixLength)
+            if ($CommonPrefixLength -gt $Prefix.Length) {
+                $Prev = $Prev.Substring(0, $CommonPrefixLength)
+            }
+            else {
+                $Completion = $Prev
+                if (!$LeadingDash -and ($Prev.StartsWith('-'))) {
+                    $Completion = "./$Completion"
+                }
+                [CompletionResult]::new(
+                    ($Completion | escapeSpecialChar),
+                    $Prev,
+                    'ProviderItem',
+                    $Prev
+                )
+                $Prev = $Candidate
+            }
         }
     }
 
