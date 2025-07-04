@@ -22,6 +22,7 @@ function Complete-GitSubCommand-reflog {
                 "expire" { 'prunes older reflog entries' }
                 "delete" { 'deletes single entries' }
                 "exists" { 'checks whether a ref has a reflog' }
+                "drop" { 'removes the reflog for the specified references' }
             }
         }
 

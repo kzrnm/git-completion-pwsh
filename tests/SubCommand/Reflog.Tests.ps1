@@ -119,6 +119,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                             ListItemText = 'exists';
                             ToolTip      = "checks whether a ref has a reflog";
                             IsSubcommand = $true;
+                        },
+                        @{
+                            ListItemText = 'drop';
+                            ToolTip      = "removes the reflog for the specified references";
+                            IsSubcommand = $true;
                         } | ConvertTo-Completion -ResultType ParameterName
                     ) + @(
                         'HEAD',
