@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.2] - 2025-07-05
+### Changed
+- fix bugs with slashes in remote names. [git/git@778d2f1](https://github.com/git/git/commit/778d2f1760bf5411ab15657bdaf0ecf19352c502)
+
 ## [1.1.1] - 2024-03-16
 ### Changed
 - Fixed the behavior of v1.1.0.
