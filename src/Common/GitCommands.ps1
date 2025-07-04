@@ -347,22 +347,46 @@ function gitDwimRemoteHeads {
         [string]$Prefix = ''
     )
 
-    $ignoreCase = $null
-    if ($script:GitCompletionSettings.IgnoreCase) {
-        $ignoreCase = '--ignore-case'
+    function casemap {
+        [OutputType([string])]
+        param (
+            [Parameter(Mandatory, Position = 0)][AllowEmptyString()][string] $s
+        )
+        if ($script:GitCompletionSettings.IgnoreCase) {
+            return $s.ToLower()
+        }
+        else {
+            return $s
+        }
     }
 
     $dict = [System.Collections.Specialized.OrderedDictionary]::new()
-
-    foreach ($name in @(__git for-each-ref --format="${Prefix}%(refname:strip=3)" `
-                --sort="refname:strip=3" `
-                $ignoreCase `
-                "refs/remotes/*/$Current*" "refs/remotes/*/$Current*/**")) {
-        $dict[$name] = 0
+    $Current = (casemap $Current)
+    $remotes = @(
+        gitRemote |
+        Sort-Object -Descending -Unique |
+        ForEach-Object { casemap $_ } |
+        ForEach-Object { "refs/remotes/$_" })
+    foreach ($ref in @(__git for-each-ref --format='%(refname)' refs/remotes/)) {
+        foreach ($r in $remotes) {
+            if ((casemap $ref).StartsWith("$r/$Current")) {
+                $dict[$ref.Substring(1 + $r.Length)] = 0
+            }
+        }
     }
     [string[]]$dict.Keys
 }
 
+# __git_count_path_components ()
+# Prints the number of slash-separated components in a path.
+# 1: Path to count components of.
+function countPathComponents {
+    [OutputType([int])]
+    param(
+        [Parameter(Mandatory, Position = 0)][AllowEmptyString()][string] $Path
+    )
+    return ($Path.Trim('/') -replace "[^/]", "").Length + 1
+}
 
 # __git_refs
 # Lists refs from the local (by default) or from a remote repository.
@@ -471,7 +495,9 @@ function gitRefs {
         if ("HEAD".StartsWith($match)) {
             "HEAD"
         }
-        __git for-each-ref --format="%(refname:strip=3)" `
+        $strip = countPathComponents "refs/remotes/$remote"
+
+        __git for-each-ref --format="%(refname:strip=$strip)" `
             $ignoreCase `
             "refs/remotes/$remote/$match*" "refs/remotes/$remote/$match*/**"
     }
