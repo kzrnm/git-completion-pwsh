@@ -45,7 +45,6 @@ Set-PSReadLineKeyHandler -Chord Tab -Function MenuComplete
 
 When selecting a branch, commit messages are displayed, and option descriptions are shown, allowing for more intuitive choices.
 
-
 ## Original
 
-This module is a PowerShell port of [git-completion.bash Commit: 159f2d50e75c17382c9f4eb7cbda671a6fa612d1](https://github.com/git/git/blob/a36e024e989f4d35f35987a60e3af8022cac3420/contrib/completion/git-completion.bash).
+This module is a PowerShell port of [git-completion.bash Commit: 8b6f19ccfc3aefbd0f22f6b7d56ad6a3fc5e4f37](https://github.com/git/git/blob/8b6f19ccfc3aefbd0f22f6b7d56ad6a3fc5e4f37/contrib/completion/git-completion.bash).

@@ -137,19 +137,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Config, R
                 },
                 @{
                     ListItemText = '--tags';
-                    ToolTip      = "opposite of --no-tags"
+                    ToolTip      = "clone tags, and make later fetches not to follow them"
                 } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no-t';
                 Expected = 
                 @{
-                    ListItemText = '--no-tags';
-                    ToolTip      = "don't clone any tags, and make later fetches not to follow them"
-                },
-                @{
                     ListItemText = '--no-template';
                     ToolTip      = "[NO] directory from which templates will be used"
+                },
+                @{
+                    ListItemText = '--no-tags';
+                    ToolTip      = "[NO] clone tags, and make later fetches not to follow them"
                 } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
@@ -161,10 +161,6 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Config, R
                 @{
                     ListItemText = '--no-hardlinks';
                     ToolTip      = "don't use local hardlinks, always copy"
-                },
-                @{
-                    ListItemText = '--no-tags';
-                    ToolTip      = "don't clone any tags, and make later fetches not to follow them"
                 },
                 @{
                     CompletionText = '--no-';

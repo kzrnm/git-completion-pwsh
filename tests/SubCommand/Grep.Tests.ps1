@@ -249,10 +249,6 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = '--no-a';
                 Expected = @{
-                    ListItemText = '--no-after-context';
-                    ToolTip      = "[NO] show <n> context lines after matches";
-                },
-                @{
                     ListItemText = '--no-all-match';
                     ToolTip      = "[NO] show only matches from files that match all patterns";
                 } | ConvertTo-Completion -ResultType ParameterName
