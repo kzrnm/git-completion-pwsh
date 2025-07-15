@@ -32,6 +32,7 @@ function Initialize-Home {
     "[user]`nemail = Kitazato@example.com`nname = 1000yen" | Out-File "$env:HOME/.gitconfig" -Encoding ascii
 }
 function Restore-Home {
+    Get-ChildItem "$TestDrive/*" | Remove-Item -Recurse -Force
     $env:HOME = $script:envHOMEBak
 }
 
