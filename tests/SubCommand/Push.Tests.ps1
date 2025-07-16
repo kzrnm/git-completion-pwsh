@@ -497,4 +497,28 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             "git $Command $Line" | Complete-FromLine -Right $Right | Should -BeCompletion $expected
         }
     }
+
+    Describe 'WithSlashRemote' {
+        BeforeAll {
+            git remote add slash/origin "$TestDrive/gitRemote"
+            git fetch slash/origin --quiet
+        }
+
+        AfterAll {
+            git remote remove slash/origin
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'slash/origin :d';
+                Expected = 
+                @{
+                    CompletionText = ':develop';
+                    ListItemText   = 'develop';
+                } | ConvertTo-Completion -ResultType ParameterValue
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine -Right $Right | Should -BeCompletion $expected
+        }
+    }
 }
