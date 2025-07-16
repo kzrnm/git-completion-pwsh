@@ -106,6 +106,7 @@ jobs:
         run: |
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           Install-Module PowerShellGet -MinimumVersion " 3.0.23-beta23" -AllowPrerelease -Repository PSGallery -AllowClobber -Force
+          Get-PSResourceRepository PSGallery # https://github.com/PowerShell/PSResourceGet/issues/1806
 
       - name: Publish
         shell: pwsh
