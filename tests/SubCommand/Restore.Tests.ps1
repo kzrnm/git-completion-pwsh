@@ -105,6 +105,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
             ToolTip      = "restore the index";
         },
         @{
+            ListItemText = '-U';
+            ToolTip      = "generate diffs with <n> lines context";
+        },
+        @{
             ListItemText = '-W';
             ToolTip      = "restore the working tree (default)";
         },

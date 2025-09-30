@@ -108,6 +108,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             ToolTip      = "set branch tracking configuration";
         },
         @{
+            ListItemText = '-U';
+            ToolTip      = "generate diffs with <n> lines context";
+        },
+        @{
             ListItemText = '-h';
             ToolTip      = "show help";
         } | ConvertTo-Completion -ResultType ParameterName

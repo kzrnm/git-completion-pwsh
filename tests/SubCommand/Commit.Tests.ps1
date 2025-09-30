@@ -128,6 +128,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
             ToolTip      = "show untracked files, optional modes: all, normal, no. (Default: all)";
         },
         @{
+            ListItemText = '-U';
+            ToolTip      = "generate diffs with <n> lines context";
+        },
+        @{
             ListItemText = '-v';
             ToolTip      = "show diff in commit message template";
         },

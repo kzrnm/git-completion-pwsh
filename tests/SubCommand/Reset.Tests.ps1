@@ -76,6 +76,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 ListItemText = '-q';
                 ToolTip      = "be quiet, only report errors";
             }
+            @{
+                ListItemText = '-U';
+                ToolTip      = "generate diffs with <n> lines context";
+            }
             if ($IsWindows -or ($PSVersionTable.PSEdition -eq 'Desktop')) {
                 @{
                     ListItemText = '-z';
