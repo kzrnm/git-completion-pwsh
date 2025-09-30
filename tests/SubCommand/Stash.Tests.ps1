@@ -120,6 +120,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 ToolTip      = "include untracked files in stash";
             },
             @{
+                ListItemText = '-U';
+                ToolTip      = "generate diffs with <n> lines context";
+            },
+            @{
                 ListItemText = '-h';
                 ToolTip      = "show help";
             } | ConvertTo-Completion -ResultType ParameterName
@@ -207,6 +211,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         @{
             ListItemText = 'push';
             ToolTip      = 'save your local modifications to a new stash entry and roll them back to HEAD (default)';
+        },
+        @{
+            ListItemText = 'export';
+            ToolTip      = 'export the specified stashes';
+        },
+        @{
+            ListItemText = 'import';
+            ToolTip      = 'import the specified stashes from the specified commit, which must have been created by export';
         } | ConvertTo-Completion -ResultType ParameterName
         "git $Command " | Complete-FromLine | Should -BeCompletion $Expected
     }
@@ -216,7 +228,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         'drop',
         'pop',
         'apply',
-        'branch m' | ForEach-Object { @{Subcommand = $_ } }
+        'branch m',
+        'export' | ForEach-Object { @{Subcommand = $_ } }
     ) {
         It '<Line>' -ForEach @(
             @{
@@ -707,6 +720,171 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
             }
         }
     }
+    Describe 'export' {
+        BeforeAll {
+            Set-Variable Subcommand 'export'
+        }
+        It 'ShortOptions' {
+            $Expected = @{
+                ListItemText = '-h';
+                ToolTip      = "show help";
+            } | ConvertTo-Completion -ResultType ParameterName
+            "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
+        }
+
+        Describe 'Options' {
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '--p';
+                    Expected = @{
+                        ListItemText = '--print';
+                        ToolTip      = "print the object ID instead of writing it to a ref";
+                    } | ConvertTo-Completion -ResultType ParameterName
+                },
+                @{
+                    Line     = '--';
+                    Expected = @{
+                        ListItemText = '--print';
+                        ToolTip      = "print the object ID instead of writing it to a ref";
+                    },
+                    @{
+                        ListItemText = '--to-ref=';
+                        ToolTip      = "save the data to the given ref";
+                    },
+                    @{
+                        ListItemText = '--no-to-ref';
+                        ToolTip      = "[NO] save the data to the given ref";
+                    } | ConvertTo-Completion -ResultType ParameterName
+                },
+                @{
+                    Line     = '--to-ref=';
+                    Expected = @(
+                        'HEAD',
+                        'FETCH_HEAD',
+                        'ORIG_HEAD',
+                        'main',
+                        'grm/HEAD',
+                        'grm/develop',
+                        'ordinary/HEAD',
+                        'ordinary/develop',
+                        'origin/HEAD',
+                        'origin/develop',
+                        'initial',
+                        'zeta'
+                    ) | ForEach-Object { switch ($_) {
+                            'ORIG_HEAD' {
+                                @{
+                                    ListItemText = 'ORIG_HEAD';
+                                    ToolTip      = '20ad91e Start';
+                                }
+                            }
+                            Default { $RemoteCommits[$_] }
+                        }
+                    } | ConvertTo-Completion -CompletionText { "--to-ref=$_" } -ResultType ParameterValue
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+    }
+    Describe 'import' {
+        BeforeAll {
+            Set-Variable Subcommand 'import'
+        }
+        It 'ShortOptions' {
+            $Expected = @{
+                ListItemText = '-h';
+                ToolTip      = "show help";
+            } | ConvertTo-Completion -ResultType ParameterName
+            "git $Command $Subcommand -" | Complete-FromLine | Should -BeCompletion $expected
+        }
+
+        Describe 'Options' {
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = '--';
+                    Expected = @()
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
+        Describe 'Branch' {
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = "";
+                    Expected = @(
+                        'HEAD',
+                        'FETCH_HEAD',
+                        'ORIG_HEAD',
+                        'main',
+                        'grm/HEAD',
+                        'grm/develop',
+                        'ordinary/HEAD',
+                        'ordinary/develop',
+                        'origin/HEAD',
+                        'origin/develop',
+                        'initial',
+                        'zeta'
+                    ) | ForEach-Object { switch ($_) {
+                            'ORIG_HEAD' {
+                                @{
+                                    ListItemText = 'ORIG_HEAD';
+                                    ToolTip      = '20ad91e Start';
+                                }
+                            }
+                            Default { $RemoteCommits[$_] }
+                        } } | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Line     = "o";
+                    Expected = @(
+                        'ordinary/HEAD',
+                        'ordinary/develop',
+                        'origin/HEAD',
+                        'origin/develop'
+                    ) | ForEach-Object { switch ($_) {
+                            'ORIG_HEAD' {
+                                @{
+                                    ListItemText = 'ORIG_HEAD';
+                                    ToolTip      = '20ad91e Start';
+                                }
+                            }
+                            Default { $RemoteCommits[$_] }
+                        } } | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Line     = "^";
+                    Expected = @(
+                        'HEAD',
+                        'FETCH_HEAD',
+                        'ORIG_HEAD',
+                        'main',
+                        'grm/HEAD',
+                        'grm/develop',
+                        'ordinary/HEAD',
+                        'ordinary/develop',
+                        'origin/HEAD',
+                        'origin/develop',
+                        'initial',
+                        'zeta'
+                    ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Line     = "^o";
+                    Expected = @(
+                        'ordinary/HEAD',
+                        'ordinary/develop',
+                        'origin/HEAD',
+                        'origin/develop'
+                    ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
+                }
+            ) {
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+    }
 }
 
 
@@ -774,6 +952,14 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                         @{
                             ListItemText = 'push';
                             ToolTip      = 'save your local modifications to a new stash entry and roll them back to HEAD (default)';
+                        },
+                        @{
+                            ListItemText = 'export';
+                            ToolTip      = 'export the specified stashes';
+                        },
+                        @{
+                            ListItemText = 'import';
+                            ToolTip      = 'import the specified stashes from the specified commit, which must have been created by export';
                         } | ConvertTo-Completion -ResultType ParameterName
                     ) + (
                         @(
