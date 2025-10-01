@@ -56,27 +56,7 @@ jobs:
           fi
           echo "new-tag=$TAG" | tee -a "$GITHUB_OUTPUT"
   test:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        shell: [pwsh]
-        include:
-          - os: windows-latest
-            shell: powershell
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run Pester
-        if: matrix.shell == 'pwsh'
-        continue-on-error: ${{ inputs.force-publish }}
-        shell: pwsh
-        run: Invoke-Pester -CI
-      - name: Run Pester(Windows PowerShell)
-        if: matrix.shell == 'powershell'
-        continue-on-error: ${{ inputs.force-publish }}
-        shell: powershell
-        run: Invoke-Pester -CI
+    uses: ./.github/workflows/test.yml
 
   new-version-only:
     runs-on: ubuntu-latest

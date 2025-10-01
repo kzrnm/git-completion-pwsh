@@ -8,6 +8,7 @@ on:
       - 'testtools/**'
       - '.github/workflows/**'
   workflow_dispatch:
+  workflow_call:
 env:
   Module: git-completion
 jobs:
