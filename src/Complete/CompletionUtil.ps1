@@ -201,11 +201,9 @@ function buildWords {
     for ($i = 0; $i -lt $CommandAst.CommandElements.Count; $i++) {
         $cmd = $CommandAst.CommandElements[$i]
         $extent = $cmd.Extent
-        if ($null -eq $cmd.Value) {
+        $text = $cmd.Value
+        if ($text -isnot [string]) {
             $text = $extent.Text
-        }
-        else {
-            $text = $cmd.Value
         }
 
         if (!$CurrentIndex -and ($CursorPosition -le $extent.EndOffset)) {
