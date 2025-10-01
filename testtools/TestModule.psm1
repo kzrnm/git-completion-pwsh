@@ -212,6 +212,24 @@ function buildFailedMessage {
     }
 }
 
+function Remove-Tooltip {
+    param(
+        [Parameter(ValueFromPipeline = $true)]
+        $cr,
+        [Parameter(Mandatory, Position = 0, ValueFromRemainingArguments)][string[]] $Target
+    )
+    begin {
+        $hs = [System.Collections.Generic.HashSet[string]]::new($target)
+    }
+    process {
+        if ($hs.Contains($cr.ListItemText)) {
+            $cr = $cr.Clone()
+            $cr.ToolTip = $cr.ListItemText
+        }
+        return $cr
+    }
+}
+
 function Should-BeCompletion {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope = 'Function')]
     param(
@@ -271,15 +289,15 @@ $script:RemoteCommits = @{
         ListItemText = 'grm/develop';
         ToolTip      = '0b399df World';
     };
-    'origin/HEAD'   = @{
+    'origin/HEAD'      = @{
         ListItemText = 'origin/HEAD';
         ToolTip      = '0b399df World';
     };
-    'ordinary/HEAD' = @{
+    'ordinary/HEAD'    = @{
         ListItemText = 'ordinary/HEAD';
         ToolTip      = '0b399df World';
     };
-    'grm/HEAD'      = @{
+    'grm/HEAD'         = @{
         ListItemText = 'grm/HEAD';
         ToolTip      = '0b399df World';
     };
@@ -296,5 +314,6 @@ Add-ShouldOperator -Name BeCompletion `
 Export-ModuleMember `
     -Function Complete-FromLine, Initialize-Home, Restore-Home, `
     ConvertTo-KebabCase, ConvertTo-Completion, `
-    Initialize-Remote, Initialize-SimpleRepo, Initialize-FilesRepo `
+    Initialize-Remote, Initialize-SimpleRepo, Initialize-FilesRepo, `
+    Remove-Tooltip `
     -Variable 'RemoteCommits'

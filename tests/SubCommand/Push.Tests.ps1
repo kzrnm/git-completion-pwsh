@@ -224,7 +224,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'origin/HEAD',
                 'origin/develop',
                 'initial',
-                'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
+                'zeta' | ForEach-Object { $RemoteCommits[$_] } | Remove-Tooltip zeta | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=$_" }
             },
             @{
                 Line     = '--force-with-lease=or';
@@ -247,7 +247,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'origin/HEAD',
                 'origin/develop',
                 'initial',
-                'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
+                'zeta' | ForEach-Object { $RemoteCommits[$_] } | Remove-Tooltip zeta | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--force-with-lease=ma:$_" }
             },
             @{
                 Line     = '--force-with-lease=ma:or';
@@ -366,7 +366,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'origin/HEAD',
                 'origin/develop',
                 'initial',
-                'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue
+                'zeta' | ForEach-Object { $RemoteCommits[$_] } | Remove-Tooltip zeta | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin o';
@@ -412,7 +412,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'origin/HEAD',
                 'origin/develop',
                 'initial',
-                'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                'zeta' | ForEach-Object { $RemoteCommits[$_] } | Remove-Tooltip zeta | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin +o';
