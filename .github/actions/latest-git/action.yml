@@ -1,0 +1,30 @@
+name: Update latest git command
+description: Update git command to the latest version
+branding:
+  icon: git-branch
+  color: black
+author: kzrnm
+runs:
+  using: composite
+  steps:
+    - name: MacOS - Install latest git
+      if: runner.os == 'macOS'
+      run: brew update && brew upgrade git
+      shell: bash
+
+    - name: Windows - Install latest git
+      if: runner.os == 'Windows'
+      run: choco upgrade git -y
+      shell: powershell
+
+    - name: Linux - Install latest git
+      if: runner.os == 'Linux'
+      run: |
+        sudo add-apt-repository ppa:git-core/ppa -y
+        sudo apt-get update
+        sudo apt-get install git -y
+      shell: bash
+
+    - name: Check git version
+      run: git --version | tee $GITHUB_STEP_SUMMARY
+      shell: bash

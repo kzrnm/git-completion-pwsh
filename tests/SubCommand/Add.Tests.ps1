@@ -84,6 +84,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File {
                 ToolTip      = "update tracked files";
             },
             @{
+                ListItemText = '-U';
+                ToolTip      = "generate diffs with <n> lines context";
+            },
+            @{
                 ListItemText = '-v';
                 ToolTip      = "be verbose";
             },

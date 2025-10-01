@@ -31,6 +31,8 @@ function Complete-GitSubCommand-stash {
                         'store' { 'store a given stash' }
                         'create' { 'create a stash entry' }
                         'push' { 'save your local modifications to a new stash entry and roll them back to HEAD (default)' }
+                        'export' { 'export the specified stashes' }
+                        'import' { 'import the specified stashes from the specified commit, which must have been created by export' }
                     }
                 }
             }
@@ -45,6 +47,17 @@ function Complete-GitSubCommand-stash {
         if ($shortOpts) { return $shortOpts }
 
         if ($Current.StartsWith('--')) {
+            if ($subcommand -eq 'export') {
+                if ($Current -cmatch '(--[^=]+)=(.*)') {
+                    $key = $Matches[1]
+                    $value = $Matches[2]
+                    if ($key -eq '--to-ref') {
+                        gitCompleteRefs $value -Prefix "$key="
+                        return
+                    }
+                }
+            }
+
             $Include = switch ($subcommand) {
                 'list' { $gitLogCommonOptions + $gitDiffCommonOptions }
                 'show' { $gitDiffCommonOptions }
@@ -55,15 +68,7 @@ function Complete-GitSubCommand-stash {
         }
     }
 
-    if ($subcommand -in 'branch', 'show', 'apply', 'drop', 'pop') {
-        if (($subcommand -eq 'branch') -and ($ArgIndex -eq $Context.CurrentIndex)) {
-            gitCompleteRefs $Current
-        }
-        else {
-            gitCompletStashList | filterCompletionResult $Current
-        }
-    }
-    elseif ($subcommand -eq 'push') {
+    if ($subcommand -eq 'push') {
         $completeOpt = [IndexFilesOptions]::Modified
         $UsedPaths = [List[string]]::new($Context.Words.Length)
         for ($i = $Context.CommandIndex + 1; $i -lt $Context.Words.Length; $i++) {
@@ -78,5 +83,20 @@ function Complete-GitSubCommand-stash {
         }
 
         gitCompleteIndexFile -Current $Current -Options $completeOpt -Exclude $UsedPaths -LeadingDash:($Context.HasDoubledash())
+        return
+    }
+    if ($subcommand -eq 'import') {
+        gitCompleteRefs $Current
+        return
+    }
+    if ($subcommand -in 'branch', 'show', 'apply', 'drop', 'pop', 'export') {
+        if ($subcommand -eq 'branch') {
+            if ($ArgIndex -eq $Context.CurrentIndex) {
+                gitCompleteRefs $Current
+                return
+            }
+        }
+        gitCompletStashList | filterCompletionResult $Current
+        return
     }
 }
