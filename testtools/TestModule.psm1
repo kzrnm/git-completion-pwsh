@@ -45,7 +45,7 @@ function Initialize-SimpleRepo {
     Push-Location $rootPath
     git init --initial-branch=main
     git commit -m "initial" --allow-empty
-    mkdir Pwsh | Out-Null
+    mkdir Pwsh > $null
     'Pwsh/ign*' > 'Pwsh/ignored'
     'Pwsh/ign*' | Out-File '.gitignore' -Encoding ascii
     'echo world' > 'Pwsh/world.ps1'
@@ -307,6 +307,7 @@ $script:RemoteCommits = @{
     };
 }
 
+$GitCompletionSettings.CommitMessageFetchThreshold = 10
 Add-ShouldOperator -Name BeCompletion `
     -Test ${function:Should-BeCompletion} `
     -SupportsArrayInput

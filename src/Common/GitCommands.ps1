@@ -44,7 +44,7 @@ function gitVersion {
     }
 
     (git --version) -match 'version\s*(\d+\.\d+\.\d+)'
-    [version]::TryParse($Matches[1], [ref]$script:__gitVersion) | Out-Null
+    [version]::TryParse($Matches[1], [ref]$script:__gitVersion) > $null
     return $script:__gitVersion
 }
 
@@ -484,7 +484,7 @@ function gitRefs {
     if ($Current -match "refs(/.*)?") {
         __git ls-remote "$Remote" "$Match*" |
         ForEach-Object {
-            $_ -match "(\S+)\s+(\S+)" | Out-Null
+            $_ -match "(\S+)\s+(\S+)" > $null
             $i = $Matches[2]
             if ($i -notlike "*^{}") {
                 "$i"
@@ -508,7 +508,7 @@ function gitRefs {
         }
         __git ls-remote "$Remote" $querySymref "refs/tags/$match*" "refs/heads/$match*" "refs/remotes/$match*" |
         ForEach-Object {
-            $_ -match "(\S+)\s+(\S+)" | Out-Null
+            $_ -match "(\S+)\s+(\S+)" > $null
             $i = $Matches[2]
             if ($i -notlike "*^{}") {
                 if ($i.StartsWith('refs/*')) {

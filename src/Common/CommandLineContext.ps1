@@ -142,18 +142,18 @@ class CommandLineContext {
             0,
             $wds,
             0,
-            $this.CommandIndex) | Out-Null
+            $this.CommandIndex) > $null
         [array]::Copy($NewCommand,
             0,
             $wds,
             $this.CommandIndex,
-            $NewCommand.Length) | Out-Null
+            $NewCommand.Length) > $null
         [array]::Copy(
             $this.Words,
             $this.CommandIndex + 1,
             $wds,
             $this.CommandIndex + $NewCommand.Length,
-            $this.Words.Length - $this.CommandIndex - 1) | Out-Null
+            $this.Words.Length - $this.CommandIndex - 1) > $null
 
         $this.CurrentIndex += $additionalSize
         $this.SubcommandLikeIndex = -1

@@ -55,7 +55,7 @@ function Complete-GitSubCommand-commit {
     $skipOptions = [HashSet[string]]::new()
     foreach ($opt in (gitResolveBuiltins $Context.Command -All)) {
         if ($opt.EndsWith('=')) {
-            $skipOptions.Add($opt) | Out-Null
+            $skipOptions.Add($opt) > $null
         }
     }
     $UsedPaths = [List[string]]::new($Context.Words.Length)
@@ -68,7 +68,7 @@ function Complete-GitSubCommand-commit {
         }
     }
 
-    __git rev-parse --verify --quiet HEAD | Out-Null
+    __git rev-parse --verify --quiet HEAD > $null
     $completeOpt = if ($LASTEXITCODE -eq 0) {
         [IndexFilesOptions]::Committable
     }

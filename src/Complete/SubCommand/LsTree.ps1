@@ -26,7 +26,7 @@ function Complete-GitSubCommand-ls-tree {
     $skipOptions = [HashSet[string]]::new()
     foreach ($opt in (gitResolveBuiltins $Context.Command -All)) {
         if ($opt.EndsWith('=')) {
-            $skipOptions.Add($opt) | Out-Null
+            $skipOptions.Add($opt) > $null
         }
     }
     for ($i = $Context.CommandIndex + 1; $i -lt $Context.CurrentIndex; $i++) {

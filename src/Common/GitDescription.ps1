@@ -383,7 +383,7 @@ class GitHelpOptions {
 
     [string] Description([string]$key) {
         $value = $null
-        $this.Long.TryGetValue($key, [ref]$value) | Out-Null
+        $this.Long.TryGetValue($key, [ref]$value) > $null
 
         return $value
     }

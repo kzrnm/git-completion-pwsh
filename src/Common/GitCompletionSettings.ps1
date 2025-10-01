@@ -24,7 +24,7 @@ class GitCompletionSettings {
     AdditionalCommands          = [string[]]@()
     ExcludeCommands             = [string[]]@()
 
-    CommitMessageFetchThreshold = 10;
+    CommitMessageFetchThreshold = 100;
 }
 
 function listCommands {
@@ -35,7 +35,7 @@ function listCommands {
     if (!$script:GitCompletionSettings.ShowAllCommand) {
         $cmds = $cmds | Select-Object -Skip 1
     }
-    gitAllCommands @cmds | ForEach-Object { $commands.Add($_) } | Out-Null
+    gitAllCommands @cmds | ForEach-Object { $commands.Add($_) } > $null
 
     $commands.UnionWith([string[]]@($script:GitCompletionSettings.AdditionalCommands))
     $commands.ExceptWith([string[]]@($script:GitCompletionSettings.ExcludeCommands))
