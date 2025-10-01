@@ -44,7 +44,7 @@ function gitCompleteResolveBuiltins {
     if ($Exclude) {
         $ex = [System.Collections.Generic.HashSet[string]]::new($Exclude.Length)
         foreach ($e in $Exclude) {
-            $ex.Add($e) | Out-Null
+            $ex.Add($e) > $null
         }
 
         $Include | Where-Object {

@@ -8,7 +8,7 @@ using namespace System.IO;
 
 function noSendEmail {
     $ErrorActionPreference = 'SilentlyContinue'
-    git send-email --dump-aliases 2>$null | Out-Null
+    git send-email --dump-aliases 2>$null > $null
     return $LASTEXITCODE -ne 0
 }
 

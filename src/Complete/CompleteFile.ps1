@@ -106,7 +106,7 @@ function filterFiles {
     begin {
         $ex = [HashSet[string]]::new($Exclude.Length)
         foreach ($e in $Exclude) {
-            $ex.Add($ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($e)) | Out-Null
+            $ex.Add($ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($e)) > $null
         }
     }
 

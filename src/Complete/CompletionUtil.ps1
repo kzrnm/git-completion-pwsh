@@ -40,7 +40,7 @@ function completeList {
         $ExcludeSet = [System.Collections.Generic.HashSet[string]]::new()
         if ($Exclude) {
             foreach ($e in $Exclude) {
-                $ExcludeSet.Add($e) | Out-Null
+                $ExcludeSet.Add($e) > $null
             }
         }
     }

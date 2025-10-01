@@ -207,7 +207,7 @@ function completeConfigVariableValue {
             }
             try {
                 $remote = ($VarName -replace "^remote\." -replace "\.fetch$")
-                (__git ls-remote $remote 'refs/heads/*') -match "(\S+)\s+(\S+)" | Out-Null
+                (__git ls-remote $remote 'refs/heads/*') -match "(\S+)\s+(\S+)" > $null
                 # $hash = $Matches[1]
                 $ref = $Matches[2]
                 $result = "${ref}:refs/remotes/$remote/$($ref -replace '^refs/heads/')"

@@ -49,7 +49,7 @@ function Complete-GitSubCommand-status {
     $skipOptions = [HashSet[string]]::new()
     foreach ($opt in (gitResolveBuiltins $Context.Command -All)) {
         if ($opt.EndsWith('=')) {
-            $skipOptions.Add($opt) | Out-Null
+            $skipOptions.Add($opt) > $null
         }
     }
     $untrackedState = $null
