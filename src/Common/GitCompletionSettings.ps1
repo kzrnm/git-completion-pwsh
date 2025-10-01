@@ -24,7 +24,7 @@ class GitCompletionSettings {
     AdditionalCommands          = [string[]]@()
     ExcludeCommands             = [string[]]@()
 
-    CommitMessageFetchThreshold = 10;
+    CommitMessageFetchThreshold = 100;
 }
 
 function listCommands {

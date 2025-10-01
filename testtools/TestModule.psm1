@@ -307,6 +307,7 @@ $script:RemoteCommits = @{
     };
 }
 
+$GitCompletionSettings.CommitMessageFetchThreshold = 10
 Add-ShouldOperator -Name BeCompletion `
     -Test ${function:Should-BeCompletion} `
     -SupportsArrayInput
