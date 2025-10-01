@@ -7,16 +7,6 @@ using namespace System.Collections.Generic;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
-        InModuleScope git-completion {
-            Mock gitCommitMessage {
-                param([string]$ref)
-                if ($ref.StartsWith('^')) {
-                    return $null
-                }
-                return '4de2038 initial'
-            }
-        }
-
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
@@ -31,6 +21,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         $workTreePath2 = "$TestDrive/wkt2".Replace('\', '/')
         git worktree add -B wk $workTreePath1 2>$null
         git worktree add -B wt $workTreePath2 2>$null
+
+        $headCommit = git show -s brn --oneline --no-decorate
+        function replace-Tooltip {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '')]
+            param ([Parameter(ValueFromPipeline)] $Object)
+
+            process {
+                if ($Object.ListItemText -in 'HEAD', 'main', 'brn', 'wk', 'wt') {
+                    $Object.ToolTip = $headCommit
+                }
+                $Object
+            }
+        }
     }
 
     AfterAll {
@@ -200,7 +203,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 Expected = $refs
             }
         ) {
-            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion ($Expected | replace-Tooltip)
         }
     }
 
@@ -358,6 +361,6 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             Expected = @()
         }
     ) {
-        "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        "git $Command $Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
     }
 }

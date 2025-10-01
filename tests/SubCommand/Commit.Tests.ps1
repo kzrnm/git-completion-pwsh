@@ -8,16 +8,6 @@ using namespace System.IO;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, File {
     BeforeAll {
-        InModuleScope git-completion {
-            Mock gitCommitMessage {
-                param([string]$ref)
-                if ($ref.StartsWith('^')) {
-                    return $null
-                }
-                return $RemoteCommits[$ref].ToolTip
-            }
-        }
-
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
@@ -27,6 +17,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         Push-Location $rootPath
         git config set trailer.sigob.key "signed-off-by: "
         git config set trailer.helpb.key "Helped-by: "
+
+        $headCommit = git show -s HEAD --oneline --no-decorate
+        function replace-Tooltip {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '')]
+            param ([Parameter(ValueFromPipeline)] $Object)
+
+            process {
+                if ($Object.ListItemText -in 'HEAD', 'main') {
+                    $Object.ToolTip = $headCommit
+                }
+                $Object
+            }
+        }
     }
 
     AfterAll {
@@ -219,11 +222,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
 
             if ($Option.StartsWith('--')) {
                 Describe-Revlist -Ref -CompletionPrefix "$Option=" {
-                    "git $Command $Option=$Line" | Complete-FromLine | Should -BeCompletion $expected
+                    "git $Command $Option=$Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
                 }
             }
             Describe-Revlist -Ref {
-                "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
         }
         It '<Line>' -ForEach @(

@@ -8,16 +8,6 @@ using namespace System.IO;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
     BeforeAll {
-        InModuleScope git-completion {
-            Mock gitCommitMessage {
-                param([string]$ref)
-                if ($ref.StartsWith('^')) {
-                    return $null
-                }
-                return $RemoteCommits[$ref].ToolTip
-            }
-        }
-
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
@@ -32,6 +22,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         (99..20) > Number.txt
         git add Number.txt
         git commit -m desc
+
+        $headCommit = git show -s HEAD --oneline --no-decorate
+        function replace-Tooltip {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '')]
+            param ([Parameter(ValueFromPipeline)] $Object)
+
+            process {
+                if ($Object.ListItemText -in 'HEAD', 'main') {
+                    $Object.ToolTip = $headCommit
+                }
+                $Object
+            }
+        }
     }
 
     AfterAll {
@@ -71,7 +74,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         }
 
         Describe-Revlist -Ref {
-            "git $Command -- $Line" | Complete-FromLine | Should -BeCompletion $expected
+            "git $Command -- $Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
         }
     }
 
@@ -247,7 +250,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         }
     }
 
-    Describe-Revlist -Ref
+    Describe-Revlist -Ref {
+        "git $Command $Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
+    }
 
     Describe 'InProgress' {
         BeforeAll {

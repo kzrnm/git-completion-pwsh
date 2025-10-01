@@ -2,18 +2,6 @@
 
 Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
     BeforeAll {
-        InModuleScope git-completion {
-            Mock gitCommitMessage {
-                param([string]$ref)
-                if ($ref.StartsWith('^')) {
-                    return $null
-                }
-                if ($ref -ceq 'dev') {
-                    return 'aaaaccc submodules'
-                }
-                return $RemoteCommits[$ref].ToolTip
-            }
-        }
         Initialize-Home
 
         $ErrorActionPreference = 'SilentlyContinue'
@@ -26,6 +14,19 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
         git submodule add https://github.com/github/nagios-plugins-github.git sum 2>$null
         git commit -m submodules
         git branch -c dev
+
+        $submoduleCommit = git show -s dev --oneline --no-decorate
+        function replace-Tooltip {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '')]
+            param ([Parameter(ValueFromPipeline)] $Object)
+
+            process {
+                if ($Object.ListItemText -in 'dev', 'HEAD', 'main') {
+                    $Object.ToolTip = $submoduleCommit
+                }
+                $Object
+            }
+        }
     }
 
     AfterAll {
@@ -93,7 +94,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                         'dev' {
                             @{
                                 ListItemText = 'dev';
-                                ToolTip      = 'aaaaccc submodules';
+                                ToolTip      = 'cf862b2 submodules';
                             }
                         }
                         Default { $RemoteCommits[$_] | Remove-Tooltip zeta initial }
@@ -349,19 +350,19 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
             }
         ) {
             It 'Root' {
-                "git -c $line" | Complete-FromLine | Should -BeCompletion $expected
+                "git -c $line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
             It 'CloneLong' {
-                "git clone --config $line" | Complete-FromLine | Should -BeCompletion $expected
+                "git clone --config $line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
             It 'CloneLongEqual' {
-                "git clone --config=$line" | Complete-FromLine | Should -BeCompletion @($expected | ForEach-Object { 
+                "git clone --config=$line" | Complete-FromLine | Should -BeCompletion @($expected | replace-Tooltip | ForEach-Object { 
                         $_ | ConvertTo-Completion -ResultType $_.ResultType -CompletionText ("--config=" + $_.CompletionText)
                     })
             }
 
             It 'CloneShort' {
-                "git clone -c $line" | Complete-FromLine | Should -BeCompletion $expected
+                "git clone -c $line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
         }
     }
