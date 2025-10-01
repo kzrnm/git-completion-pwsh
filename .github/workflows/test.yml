@@ -23,6 +23,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+      - name: Update git command
+        uses: ./.github/actions/latest-git
       - name: Run Pester
         if: matrix.shell == 'pwsh'
         shell: pwsh

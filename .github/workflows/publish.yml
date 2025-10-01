@@ -16,6 +16,8 @@ jobs:
       new-tag: ${{ steps.is-new-version.outputs.new-tag }}
     steps:
       - uses: actions/checkout@v4
+      - name: Update git command
+        uses: ./.github/actions/latest-git
       - name: Get Module Version
         id: get-version
         shell: pwsh
