@@ -14,8 +14,9 @@ runs:
 
     - name: Windows - Install latest git
       if: runner.os == 'Windows'
-      run: choco upgrade git -y
-      shell: cmd
+      run: "echo 'TODO: After git 2.52.0 is released, uncomment the install command below.'"
+      # run: choco upgrade git -y
+      shell: bash
 
     - name: Linux - Install latest git
       if: runner.os == 'Linux'
