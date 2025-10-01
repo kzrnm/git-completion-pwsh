@@ -37,9 +37,7 @@ function Complete-GitSubCommand-tag {
     }
 
     if ($deleteOrVerify) {
-        gitTags $Current | completeList -Current $Current -ResultType ParameterValue -Exclude $Used -DescriptionBuilder {
-            gitCommitMessage $_
-        }
+        gitTags $Current | completeList -Current $Current -ResultType ParameterValue -Exclude $Used -WithCommitMessage
         return
     }
 
@@ -59,9 +57,7 @@ function Complete-GitSubCommand-tag {
 
     if ($Used.Count -eq 0) {
         if ($force) {
-            gitTags $Current | completeList -Current $Current -ResultType ParameterValue -DescriptionBuilder {
-                gitCommitMessage $_
-            }
+            gitTags $Current | completeList -Current $Current -ResultType ParameterValue -WithCommitMessage
         }
         return
     }
