@@ -174,9 +174,7 @@ function gitCompleteRefs {
                     $matchRef = $true
                 }
                 $_
-            } | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -DescriptionBuilder {
-                gitCommitMessage $_
-            }
+            } | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -WithCommitMessage
 
             if ($Current) {
                 if ($matchRef) {

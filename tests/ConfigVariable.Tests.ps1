@@ -88,8 +88,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 'origin/HEAD', 
                 'origin/develop', 
                 'initial', 
-                'zeta' |
-                ForEach-Object {
+                'zeta' | ForEach-Object {
                     switch ($_) {
                         'dev' {
                             @{
@@ -97,10 +96,9 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                                 ToolTip      = 'aaaaccc submodules';
                             }
                         }
-                        Default { $RemoteCommits[$_] }
+                        Default { $RemoteCommits[$_] | Remove-Tooltip zeta initial }
                     }
-                } |
-                ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.merge=$_" }
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.merge=$_" }
             },
             @{
                 Line     = 'branch.main.merge=or';

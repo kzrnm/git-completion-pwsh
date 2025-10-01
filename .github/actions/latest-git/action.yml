@@ -15,7 +15,7 @@ runs:
     - name: Windows - Install latest git
       if: runner.os == 'Windows'
       run: choco upgrade git -y
-      shell: powershell
+      shell: cmd
 
     - name: Linux - Install latest git
       if: runner.os == 'Linux'

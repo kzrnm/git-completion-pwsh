@@ -19,6 +19,8 @@ function completeList {
         $Suffix = '',
         [scriptblock]
         $DescriptionBuilder = $null,
+        [switch]
+        $WithCommitMessage,
         [CompletionResultType]
         $ResultType = [CompletionResultType]::ParameterName,
         [Parameter(ParameterSetName = 'Prefix')]
@@ -31,6 +33,7 @@ function completeList {
     )
 
     begin {
+        $count = 0
         if ($RemovePrefix -and $Current.StartsWith($Prefix)) {
             $Current = $Current.Substring($Prefix.Length)
         }
@@ -50,7 +53,10 @@ function completeList {
             }
 
             $desc = $null
-            if ($DescriptionBuilder) {
+            if ($WithCommitMessage -and ($count -lt $GitCompletionSettings.CommitMessageFetchThreshold)) {
+                $desc = gitCommitMessage $Candidate
+            }
+            elseif ($DescriptionBuilder) {
                 $desc = [string]$DescriptionBuilder.InvokeWithContext(
                     $null,
                     [psvariable]::new('_', $Candidate),
@@ -62,6 +68,7 @@ function completeList {
             }
             $ListItem = $Candidate
 
+            $count++
             [CompletionResult]::new(
                 $Completion,
                 $ListItem,

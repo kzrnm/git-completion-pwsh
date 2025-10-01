@@ -326,7 +326,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'origin/HEAD',
                 'origin/develop',
                 'initial',
-                'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
+                'zeta' | ForEach-Object { $RemoteCommits[$_] } | Remove-Tooltip zeta | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'origin left:m';

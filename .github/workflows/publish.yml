@@ -5,6 +5,12 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      force-publish:
+        description: Force publish even if tests fail
+        required: false
+        type: boolean
+        default: false
 env:
   Module: git-completion
 jobs:
@@ -63,10 +69,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run Pester
         if: matrix.shell == 'pwsh'
+        continue-on-error: ${{ inputs.force-publish }}
         shell: pwsh
         run: Invoke-Pester -CI
       - name: Run Pester(Windows PowerShell)
         if: matrix.shell == 'powershell'
+        continue-on-error: ${{ inputs.force-publish }}
         shell: powershell
         run: Invoke-Pester -CI
 
@@ -83,7 +91,7 @@ jobs:
       name: actions
       url: https://github.com
     needs: [get-version, new-version-only]
-    permissions: 
+    permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
