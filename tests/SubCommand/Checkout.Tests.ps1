@@ -272,7 +272,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                         switch ($_) {
                             { $_ -isnot [string] } { $_ }
                             'develop' { $_ }
-                            Default { $RemoteCommits[$_] | Remove-Tooltip zeta }
+                            Default { $RemoteCommits[$_] }
                         }
                     } | ConvertTo-Completion -ResultType ParameterValue
                 },
@@ -353,7 +353,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     switch ($_) {
                         { $_ -isnot [string] } { $_ }
                         'develop' { $_ }
-                        Default { $RemoteCommits[$_] | Remove-Tooltip zeta }
+                        Default { $RemoteCommits[$_] }
                     }
                 } | ConvertTo-Completion -ResultType ParameterValue
             )
@@ -371,7 +371,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'zeta' | ForEach-Object {
                     switch ($_) {
                         'develop' { $_ }
-                        Default { $RemoteCommits[$_] | Remove-Tooltip zeta }
+                        Default { $RemoteCommits[$_] }
                     }
                 } | ConvertTo-Completion -ResultType ParameterValue
             )

@@ -516,7 +516,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                                     ToolTip      = '20ad91e Start';
                                 }
                             }
-                            Default { $RemoteCommits[$_] | Remove-Tooltip zeta initial }
+                            Default { $RemoteCommits[$_] }
                         } } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
@@ -778,7 +778,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                                     ToolTip      = '20ad91e Start';
                                 }
                             }
-                            Default { $RemoteCommits[$_] | Remove-Tooltip zeta initial }
+                            Default { $RemoteCommits[$_] }
                         }
                     } | ConvertTo-Completion -CompletionText { "--to-ref=$_" } -ResultType ParameterValue
                 }
@@ -834,7 +834,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                                     ToolTip      = '20ad91e Start';
                                 }
                             }
-                            Default { $RemoteCommits[$_] | Remove-Tooltip zeta initial }
+                            Default { $RemoteCommits[$_] }
                         } 
                     } | ConvertTo-Completion -ResultType ParameterValue
                 },

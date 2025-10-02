@@ -97,7 +97,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                                 ToolTip      = 'cf862b2 submodules';
                             }
                         }
-                        Default { $RemoteCommits[$_] | Remove-Tooltip zeta initial }
+                        Default { $RemoteCommits[$_] }
                     }
                 } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.merge=$_" }
             },

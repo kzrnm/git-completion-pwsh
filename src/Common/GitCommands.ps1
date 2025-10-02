@@ -647,14 +647,23 @@ function gitStashList {
 }
 
 function gitCommitMessage() {
+    [Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssignments', '')]
     [CmdletBinding()]
-    [OutputType([string])]
+    [OutputType([string[]])]
     param(
         [Parameter(Position = 0)]
-        [string]
-        $ref
+        [string[]]
+        $refs
     )
-    return [string](__git show -s "$ref" --oneline 2>$null)
+    $keyLength = 0
+    $msgTable = @{}
+    foreach ($line in (__git show -s @refs --oneline --no-decorate 2>$null)) {
+        if ($line -cmatch '^(?<msg>(?<key>[0-9a-fA-F]+) .*)$') {
+            $msgTable[$Matches['key']] = $Matches['msg']
+            $keyLength = $Matches['key'].Length
+        }
+    }
+    return __git rev-parse @refs 2>$null | ForEach-Object { $msgTable[$_.Substring(0, $keyLength)] }
 }
 
 function gitRecentLog() {

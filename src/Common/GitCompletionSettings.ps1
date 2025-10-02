@@ -11,8 +11,6 @@ class GitCompletionSettings {
 
     [string[]] $AdditionalCommands;
     [string[]] $ExcludeCommands;
-
-    [int] $CommitMessageFetchThreshold;
 }
 
 [GitCompletionSettings]$script:GitCompletionSettings = @{
@@ -23,8 +21,6 @@ class GitCompletionSettings {
 
     AdditionalCommands          = [string[]]@()
     ExcludeCommands             = [string[]]@()
-
-    CommitMessageFetchThreshold = 100;
 }
 
 function listCommands {

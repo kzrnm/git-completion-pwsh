@@ -33,7 +33,9 @@ function completeList {
     )
 
     begin {
-        $count = 0
+        if ($WithCommitMessage) {
+            $list = [System.Collections.ArrayList]::new()
+        }
         if ($RemovePrefix -and $Current.StartsWith($Prefix)) {
             $Current = $Current.Substring($Prefix.Length)
         }
@@ -53,8 +55,8 @@ function completeList {
             }
 
             $desc = $null
-            if ($WithCommitMessage -and ($count -lt $GitCompletionSettings.CommitMessageFetchThreshold)) {
-                $desc = gitCommitMessage $Candidate
+            if ($WithCommitMessage) {
+                # Do nothing
             }
             elseif ($DescriptionBuilder) {
                 $desc = [string]$DescriptionBuilder.InvokeWithContext(
@@ -66,15 +68,60 @@ function completeList {
             if (!$desc) {
                 $desc = "$Candidate"
             }
-            $ListItem = $Candidate
 
-            $count++
-            [CompletionResult]::new(
-                $Completion,
-                $ListItem,
-                $ResultType,
-                $desc
-            )
+            if ($WithCommitMessage) {
+                $list.Add(@{Completion = $Completion; Candidate = $Candidate; }) > $null
+            }
+            else {
+                [CompletionResult]::new(
+                    $Completion,
+                    $Candidate,
+                    $ResultType,
+                    $desc
+                )
+            }
+        }
+    }
+    end {
+        if ($WithCommitMessage) {
+            try {
+                $messages = gitCommitMessage ($list | ForEach-Object Candidate)
+                if ($null -eq $messages) {
+                    $messages = @()
+                }
+                elseif ($messages -is [string]) {
+                    $messages = @($messages)
+                }
+
+                for ($i = 0; $i -lt $messages.Length; $i++) {
+                    $Candidate = $list[$i].Candidate
+                    $msg = $messages[$i]
+                    if ($msg) {
+                        $desc = $msg
+                    }
+                    else {
+                        $desc = $Candidate
+                    }
+                    [CompletionResult]::new(
+                        $list[$i].Completion,
+                        $Candidate,
+                        $ResultType,
+                        $desc
+                    )
+                }
+            }
+            catch {
+                $messages = @()
+            }
+            $list | Select-Object -Skip $messages.Length | ForEach-Object {
+                $Candidate = $_.Candidate
+                [CompletionResult]::new(
+                    $_.Completion,
+                    $Candidate,
+                    $ResultType,
+                    $Candidate
+                )
+            }
         }
     }
 }

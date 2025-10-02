@@ -293,9 +293,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         Describe '<Line>' -ForEach @(
             @{
                 Line     = 'origin ';
-                Expected = 
-                $RemoteCommits['HEAD'],
-                'develop' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'HEAD', 'develop' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = 'origin d';
@@ -304,9 +302,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = 'origin +';
-                Expected = 
-                $RemoteCommits['HEAD'],
-                'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
+                Expected = 'HEAD', 'develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "+$_" }
             },
             @{
                 Line     = 'origin +d';
@@ -326,7 +322,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'origin/HEAD',
                 'origin/develop',
                 'initial',
-                'zeta' | ForEach-Object { $RemoteCommits[$_] } | Remove-Tooltip zeta | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
+                'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "left:$_" }
             },
             @{
                 Line     = 'origin left:m';
