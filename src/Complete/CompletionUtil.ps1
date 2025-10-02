@@ -3,6 +3,10 @@
 # Distributed under the GNU General Public License, version 2.0.
 using namespace System.Management.Automation;
 
+function getCommitMessages {
+    param()
+}
+
 function completeList {
     [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = 'Default')]
     [OutputType([CompletionResult[]])]
@@ -19,8 +23,8 @@ function completeList {
         $Suffix = '',
         [scriptblock]
         $DescriptionBuilder = $null,
-        [switch]
-        $WithCommitMessage,
+        [string[]]
+        $Messages,
         [CompletionResultType]
         $ResultType = [CompletionResultType]::ParameterName,
         [Parameter(ParameterSetName = 'Prefix')]
@@ -33,9 +37,7 @@ function completeList {
     )
 
     begin {
-        if ($WithCommitMessage) {
-            $list = [System.Collections.ArrayList]::new()
-        }
+        $count = 0
         if ($RemovePrefix -and $Current.StartsWith($Prefix)) {
             $Current = $Current.Substring($Prefix.Length)
         }
@@ -55,8 +57,11 @@ function completeList {
             }
 
             $desc = $null
-            if ($WithCommitMessage) {
-                # Do nothing
+            if ($null -ne $Messages) {
+                if ($count -lt $Messages.Length) {
+                    $desc = $Messages[$count]
+                }
+                $count++
             }
             elseif ($DescriptionBuilder) {
                 $desc = [string]$DescriptionBuilder.InvokeWithContext(
@@ -69,59 +74,12 @@ function completeList {
                 $desc = "$Candidate"
             }
 
-            if ($WithCommitMessage) {
-                $list.Add(@{Completion = $Completion; Candidate = $Candidate; }) > $null
-            }
-            else {
-                [CompletionResult]::new(
-                    $Completion,
-                    $Candidate,
-                    $ResultType,
-                    $desc
-                )
-            }
-        }
-    }
-    end {
-        if ($WithCommitMessage) {
-            try {
-                $messages = gitCommitMessage ($list | ForEach-Object Candidate)
-                if ($null -eq $messages) {
-                    $messages = @()
-                }
-                elseif ($messages -is [string]) {
-                    $messages = @($messages)
-                }
-
-                for ($i = 0; $i -lt $messages.Length; $i++) {
-                    $Candidate = $list[$i].Candidate
-                    $msg = $messages[$i]
-                    if ($msg) {
-                        $desc = $msg
-                    }
-                    else {
-                        $desc = $Candidate
-                    }
-                    [CompletionResult]::new(
-                        $list[$i].Completion,
-                        $Candidate,
-                        $ResultType,
-                        $desc
-                    )
-                }
-            }
-            catch {
-                $messages = @()
-            }
-            $list | Select-Object -Skip $messages.Length | ForEach-Object {
-                $Candidate = $_.Candidate
-                [CompletionResult]::new(
-                    $_.Completion,
-                    $Candidate,
-                    $ResultType,
-                    $Candidate
-                )
-            }
+            [CompletionResult]::new(
+                $Completion,
+                $Candidate,
+                $ResultType,
+                $desc
+            )
         }
     }
 }
