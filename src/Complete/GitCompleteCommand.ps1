@@ -174,7 +174,7 @@ function gitCompleteRefs {
                     $matchRef = $true
                 }
                 $_
-            } | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -WithCommitMessage
+            } | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -WithCommitMessage:($Remote -ceq '')
 
             if ($Current) {
                 if ($matchRef) {

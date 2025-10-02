@@ -212,24 +212,6 @@ function buildFailedMessage {
     }
 }
 
-function Remove-Tooltip {
-    param(
-        [Parameter(ValueFromPipeline = $true)]
-        $cr,
-        [Parameter(Mandatory, Position = 0, ValueFromRemainingArguments)][string[]] $Target
-    )
-    begin {
-        $hs = [System.Collections.Generic.HashSet[string]]::new($target)
-    }
-    process {
-        if ($hs.Contains($cr.ListItemText)) {
-            $cr = $cr.Clone()
-            $cr.ToolTip = $cr.ListItemText
-        }
-        return $cr
-    }
-}
-
 function Should-BeCompletion {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope = 'Function')]
     param(
@@ -307,7 +289,6 @@ $script:RemoteCommits = @{
     };
 }
 
-$GitCompletionSettings.CommitMessageFetchThreshold = 10
 Add-ShouldOperator -Name BeCompletion `
     -Test ${function:Should-BeCompletion} `
     -SupportsArrayInput
@@ -315,6 +296,5 @@ Add-ShouldOperator -Name BeCompletion `
 Export-ModuleMember `
     -Function Complete-FromLine, Initialize-Home, Restore-Home, `
     ConvertTo-KebabCase, ConvertTo-Completion, `
-    Initialize-Remote, Initialize-SimpleRepo, Initialize-FilesRepo, `
-    Remove-Tooltip `
+    Initialize-Remote, Initialize-SimpleRepo, Initialize-FilesRepo `
     -Variable 'RemoteCommits'

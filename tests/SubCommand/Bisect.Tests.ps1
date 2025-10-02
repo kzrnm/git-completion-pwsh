@@ -8,15 +8,6 @@ using namespace System.IO;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     BeforeAll {
-        InModuleScope git-completion {
-            Mock gitCommitMessage {
-                param([string]$ref)
-                if ($ref.StartsWith('^')) {
-                    return $null
-                }
-                return $RemoteCommits[$ref].ToolTip
-            }
-        }
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
@@ -26,6 +17,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         Push-Location $rootPath
         git config set pretty.changelog "format:* %H %s"
         1..10 | ForEach-Object { git commit -m "cm$_" --allow-empty }
+
+        $headCommit = git show -s HEAD --oneline --no-decorate
+        function replace-Tooltip {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '')]
+            param ([Parameter(ValueFromPipeline)] $Object)
+
+            process {
+                if ($Object.ListItemText -in 'HEAD', 'main') {
+                    $Object.ToolTip = $headCommit
+                }
+                $Object
+            }
+        }
     }
 
     AfterAll {
@@ -79,7 +83,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
 
         Describe '<Subcommand>' -ForEach @('start' | ForEach-Object { @{Subcommand = $_ } }) {
             Describe-Revlist -Ref {
-                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
         }
     }
@@ -152,12 +156,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 ListItemText = 'run';
                 ToolTip      = "bisect by issuing the command";
             } | ConvertTo-Completion -ResultType ParameterName
-            "git $Command " | Complete-FromLine | Should -BeCompletion $Expected
+            "git $Command " | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
         }
 
         Describe '<Subcommand>' -ForEach @('start', $Bad, $Good, 'reset', 'skip' | ForEach-Object { @{Subcommand = $_ } }) {
             Describe-Revlist -Ref {
-                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
         }
 

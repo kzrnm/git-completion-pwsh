@@ -8,16 +8,6 @@ using namespace System.IO;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Remote {
     BeforeAll {
-        InModuleScope git-completion {
-            Mock gitCommitMessage {
-                param([string]$ref)
-                if ($ref.StartsWith('^')) {
-                    return $null
-                }
-                return $RemoteCommits[$ref].ToolTip
-            }
-        }
-
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
 
@@ -36,6 +26,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
             }
         )
         git add @cachedFiles
+
+        $headCommit = git show -s HEAD --oneline --no-decorate
+        function replace-Tooltip {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '')]
+            param ([Parameter(ValueFromPipeline)] $Object)
+
+            process {
+                if ($Object.ListItemText -in 'HEAD', 'main') {
+                    $Object.ToolTip = $headCommit
+                }
+                $Object
+            }
+        }
     }
 
     AfterAll {
@@ -159,12 +162,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
     Describe 'OptionValue' {
         Describe '<Option>' -ForEach @('-s ', '--source ' | ForEach-Object { @{Option = $_ } }) {
             Describe-Revlist -Ref {
-                "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Option $Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
         }
         Describe '--source' {
             Describe-Revlist -Ref -CompletionPrefix "--source=" {
-                "git $Command --source=$Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command --source=$Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
         }
         It '<Line>' -ForEach @(

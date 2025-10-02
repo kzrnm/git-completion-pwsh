@@ -54,7 +54,7 @@ function Describe-Revlist {
                         'origin/HEAD',
                         'origin/develop',
                         'initial',
-                        'zeta' | ForEach-Object { $RemoteCommits[$_] } | Remove-Tooltip zeta | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
+                        'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}$_" }
                     },
                     @{
                         Line     = "o";
@@ -206,7 +206,7 @@ function Describe-Revlist {
                         'origin/HEAD',
                         'origin/develop',
                         'initial',
-                        'zeta' | ForEach-Object { $RemoteCommits[$_] } | Remove-Tooltip zeta | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD...$_" }
+                        'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD...$_" }
                     },
                     @{
                         Line     = "HEAD...o";
@@ -229,7 +229,7 @@ function Describe-Revlist {
                         'origin/HEAD',
                         'origin/develop',
                         'initial',
-                        'zeta' | ForEach-Object { $RemoteCommits[$_] } | Remove-Tooltip zeta | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD..$_" }
+                        'zeta' | ForEach-Object { $RemoteCommits[$_] } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "${CompletionPrefix}HEAD..$_" }
                     },
                     @{
                         Line     = "HEAD..o";

@@ -8,19 +8,6 @@ using namespace System.IO;
 
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, File {
     BeforeAll {
-        InModuleScope git-completion {
-            Mock gitCommitMessage {
-                param([string]$ref)
-                if ($ref.StartsWith('^')) {
-                    return $null
-                }
-                if ($ref -ceq 'ORIG_HEAD') {
-                    return '20ad91e Start'
-                }
-                return $RemoteCommits[$ref].ToolTip
-            }
-        }
-
         $ErrorActionPreference = 'SilentlyContinue'
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
         Initialize-Home
@@ -33,6 +20,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
         git stash push --message 'others'
         git switch --detach HEAD 2>$null
         git stash push --include-untracked --message 'untracked'
+
+        $headCommit = git show -s HEAD --oneline --no-decorate
+        function replace-Tooltip {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '')]
+            param ([Parameter(ValueFromPipeline)] $Object)
+
+            process {
+                if ($Object.ListItemText -in 'ORIG_HEAD', 'HEAD', 'main') {
+                    $Object.ToolTip = $headCommit
+                }
+                $Object
+            }
+        }
     }
 
     AfterAll {
@@ -516,7 +516,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                                     ToolTip      = '20ad91e Start';
                                 }
                             }
-                            Default { $RemoteCommits[$_] | Remove-Tooltip zeta initial }
+                            Default { $RemoteCommits[$_] }
                         } } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
@@ -563,7 +563,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                     ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
-                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
         }
     }
@@ -778,12 +778,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                                     ToolTip      = '20ad91e Start';
                                 }
                             }
-                            Default { $RemoteCommits[$_] | Remove-Tooltip zeta initial }
+                            Default { $RemoteCommits[$_] }
                         }
                     } | ConvertTo-Completion -CompletionText { "--to-ref=$_" } -ResultType ParameterValue
                 }
             ) {
-                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
         }
     }
@@ -834,8 +834,9 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                                     ToolTip      = '20ad91e Start';
                                 }
                             }
-                            Default { $RemoteCommits[$_] | Remove-Tooltip zeta initial }
-                        } } | ConvertTo-Completion -ResultType ParameterValue
+                            Default { $RemoteCommits[$_] }
+                        } 
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = "o";
@@ -881,7 +882,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                     ) | ForEach-Object { "^$_" } | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
-                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
+                "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion ($expected | replace-Tooltip)
             }
         }
     }
