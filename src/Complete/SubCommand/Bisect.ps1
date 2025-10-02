@@ -63,7 +63,7 @@ function Complete-GitSubCommand-bisect {
             if (!$Context.HasDoubledash()) {
                 if ($Current.StartsWith('--')) {
                     '--first-parent', '--no-checkout', '--term-new', '--term-bad', '--term-old', '--term-good' |
-                    completeList -Current $Current
+                    Complete-List -Current $Current
                     return
                 }
             }
@@ -73,7 +73,7 @@ function Complete-GitSubCommand-bisect {
     elseif ($subcommand -ceq 'terms') {
         if ($Current.StartsWith('--')) {
             '--term-good', '--term-old', '--term-bad', '--term-new' |
-            completeList -Current $Current
+            Complete-List -Current $Current
             return
         }
     }

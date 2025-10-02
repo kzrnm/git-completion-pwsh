@@ -24,7 +24,7 @@ function Complete-GitSubCommand-init {
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                $candidates | Complete-List -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }

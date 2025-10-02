@@ -28,7 +28,7 @@ function Complete-GitSubCommand-help {
     }
 
     @(gitAllCommands main nohelpers alias list-guide) + @('gitk') |
-    completeList -Current $Context.CurrentWord() -ResultType ParameterValue -DescriptionBuilder {
+    Complete-List -Current $Context.CurrentWord() -ResultType ParameterValue -DescriptionBuilder {
         $a = $aliases[$_]
         if ($a) {
             $a

@@ -18,7 +18,7 @@ function Complete-GitSubCommand-svn {
         'find-rev', 'set-tree', 'commit-diff', 'info',
         'create-ignore', 'propget', 'proplist', 'show-ignore',
         'show-externals', 'branch', 'tag', 'blame',
-        'migrate', 'mkdirs', 'reset', 'gc' | completeList -Current $Current -ResultType ParameterName
+        'migrate', 'mkdirs', 'reset', 'gc' | Complete-List -Current $Current -ResultType ParameterName
         return
     }
 
@@ -54,6 +54,6 @@ function Complete-GitSubCommand-svn {
             { $_ -cin 'create-ignore', 'propget', 'proplist', 'show-ignore', 'show-externals', 'mkdirs' } { '--revision=' }
         }
 
-        $Candidates | completeList -Current $Current -ResultType ParameterName
+        $Candidates | Complete-List -Current $Current -ResultType ParameterName
     }
 }

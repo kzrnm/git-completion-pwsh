@@ -20,22 +20,22 @@ function Complete-GitSubCommand-push {
 
         switch ($Prev) {
             '--repo' {
-                gitRemote | completeList -Current $Current -ResultType ParameterValue 
+                gitRemote | Complete-List -Current $Current -ResultType ParameterValue 
                 return
             }
             '--recurse-submodules' {
-                $script:gitPushRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
+                $script:gitPushRecurseSubmodules | Complete-List -Current $Current -ResultType ParameterValue 
                 return
             }
         }
 
         switch -Wildcard ($Current) {
             '--repo=*' { 
-                gitRemote | completeList -Current $Current -ResultType ParameterValue -Prefix '--repo=' -RemovePrefix
+                gitRemote | Complete-List -Current $Current -ResultType ParameterValue -Prefix '--repo=' -RemovePrefix
                 return
             }
             '--recurse-submodules=*' { 
-                $script:gitPushRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
+                $script:gitPushRecurseSubmodules | Complete-List -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
                 return
             }
             '--force-with-lease=*' {

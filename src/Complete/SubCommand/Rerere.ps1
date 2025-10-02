@@ -22,7 +22,7 @@ function Complete-GitSubCommand-rerere {
         }
 
         if (!$Context.Subcommand()) {
-            'clear', 'forget', 'diff', 'remaining', 'status', 'gc' | completeList -Current $Current
+            'clear', 'forget', 'diff', 'remaining', 'status', 'gc' | Complete-List -Current $Current
         }
     }
 }

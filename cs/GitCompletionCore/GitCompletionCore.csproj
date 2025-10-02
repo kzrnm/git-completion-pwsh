@@ -6,7 +6,6 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Kzrnm.GitCompletion</RootNamespace>
-		<PublishDir>../csbin</PublishDir>
 	</PropertyGroup>
 
 	<ItemGroup>

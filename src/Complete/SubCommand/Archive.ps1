@@ -22,7 +22,7 @@ function Complete-GitSubCommand-archive {
         }
 
         if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+            $prevCandidates | Complete-List -Current $Current -ResultType ParameterValue
             return
         }
 
@@ -35,7 +35,7 @@ function Complete-GitSubCommand-archive {
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                $candidates | Complete-List -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }

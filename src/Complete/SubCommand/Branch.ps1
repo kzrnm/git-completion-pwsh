@@ -52,7 +52,7 @@ function Complete-GitSubCommand-branch {
     }
 
     if ($onlyLocalRef -and !$hasR) {
-        gitHeads $Current | completeList -Current $Current -ResultType ParameterValue
+        gitHeads $Current | Complete-List -Current $Current -ResultType ParameterValue
     }
     else {
         gitCompleteRefs $Current

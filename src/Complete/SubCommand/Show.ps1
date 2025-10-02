@@ -44,7 +44,7 @@ function Complete-Opts-show {
     }
 
     if ($prevCandidates) {
-        $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+        $prevCandidates | Complete-List -Current $Current -ResultType ParameterValue
         return
     }
 
@@ -66,12 +66,12 @@ function Complete-Opts-show {
         }
 
         if ($candidates) {
-            $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+            $candidates | Complete-List -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }
 
-    gitShowOpts | completeList -Current $Current
+    gitShowOpts | Complete-List -Current $Current
     return
 }
 

@@ -103,7 +103,7 @@ function gitCompleteRemoteOrRefspec {
     }
 
     if (!$remote) {
-        gitRemote | completeList -Current $Current -ResultType $ResultType
+        gitRemote | Complete-List -Current $Current -ResultType $ResultType
         return
     }
 
@@ -181,7 +181,7 @@ function gitCompleteRefs {
                 $messages = (gitCommitMessage $refs)
             }
 
-            $refs | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -Messages $messages
+            $refs | Complete-List -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -Messages $messages
 
             if ($Current) {
                 if ($matchRef) {
@@ -204,15 +204,15 @@ function gitCompleteRefs {
             }
         }
         'heads' { 
-            gitHeads -Current $Current                | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+            gitHeads -Current $Current                | Complete-List -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
         }
         'remote-heads' { 
-            gitRemoteHeads -Current $Current          | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+            gitRemoteHeads -Current $Current          | Complete-List -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
         }
     }
 
     if ($dwim) {
-        gitDwimRemoteHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+        gitDwimRemoteHeads -Current $Current | Complete-List -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
     }
 }
 
@@ -230,7 +230,7 @@ function gitCompleteFetchRefspecs {
 
     gitRefs -Remote $Remote -Current $Current |
     ForEach-Object { "${_}:${_}" } |
-    completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+    Complete-List -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
 }
 
 # __git_complete_strategy
@@ -261,21 +261,21 @@ function gitCompleteStrategy {
     )
 
     if ($Prev -cmatch '^-([^-]*s|-strategy)$') {
-        gitListMergeStrategies | completeList -Current $Current -ResultType ParameterValue 
+        gitListMergeStrategies | Complete-List -Current $Current -ResultType ParameterValue 
         return
     }
     elseif ($Prev -cmatch '^-([^-]*X|-strategy-option)$') {
-        $gitMergeStrategyOptions | completeList -Current $Current -ResultType ParameterValue 
+        $gitMergeStrategyOptions | Complete-List -Current $Current -ResultType ParameterValue 
         return
     }
 
     switch -Wildcard ($Current) {
         '--strategy=*' { 
-            gitListMergeStrategies | completeList -Current $Current -ResultType ParameterValue -Prefix '--strategy=' -RemovePrefix
+            gitListMergeStrategies | Complete-List -Current $Current -ResultType ParameterValue -Prefix '--strategy=' -RemovePrefix
             return
         }
         '--strategy-option=*' {
-            $gitMergeStrategyOptions | completeList -Current $Current -ResultType ParameterValue -Prefix '--strategy-option=' -RemovePrefix
+            $gitMergeStrategyOptions | Complete-List -Current $Current -ResultType ParameterValue -Prefix '--strategy-option=' -RemovePrefix
             return
         }
     }

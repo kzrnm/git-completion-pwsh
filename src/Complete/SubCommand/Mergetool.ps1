@@ -40,7 +40,7 @@ function Complete-GitSubCommand-mergetool {
         }
 
         if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+            $prevCandidates | Complete-List -Current $Current -ResultType ParameterValue
             return
         }
         if ($Current -cmatch '(--[^=]+)=(.*)') {
@@ -51,13 +51,13 @@ function Complete-GitSubCommand-mergetool {
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                $candidates | Complete-List -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }
 
         if ($Current.StartsWith('--')) {
-            '--tool=', '--tool-help', '--prompt', '--no-prompt', '--gui', '--no-gui' | completeList -Current $Current
+            '--tool=', '--tool-help', '--prompt', '--no-prompt', '--gui', '--no-gui' | Complete-List -Current $Current
             return
         }
     }

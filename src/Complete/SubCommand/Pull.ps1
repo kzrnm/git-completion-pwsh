@@ -23,14 +23,14 @@ function Complete-GitSubCommand-pull {
 
         switch ($Prev) {
             '--recurse-submodules' {
-                $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
+                $script:gitFetchRecurseSubmodules | Complete-List -Current $Current -ResultType ParameterValue 
                 return
             }
         }
 
         switch -Wildcard ($Current) {
             '--recurse-submodules=*' { 
-                $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
+                $script:gitFetchRecurseSubmodules | Complete-List -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
                 return
             }
             '--*' {

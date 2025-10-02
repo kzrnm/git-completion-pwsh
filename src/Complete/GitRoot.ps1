@@ -261,7 +261,7 @@ function Complete-GitCommandLine {
             $aliases[$a.Name] = "[alias] $($a.Value)"
         }
 
-        listCommands | completeList -Current $Current -DescriptionBuilder {
+        listCommands | Complete-List -Current $Current -DescriptionBuilder {
             $a = $aliases[$_]
             if ($a) {
                 $a

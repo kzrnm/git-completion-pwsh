@@ -17,7 +17,7 @@ function Complete-GitSubCommand-status {
         if ($Current -cmatch '^(-[^-]*u)(.*)') {
             $prefix = $Matches[1]
             $value = $Matches[2]
-            $script:gitUntrackedFileModes | completeList -Current $value -Prefix "$prefix" -ResultType ParameterValue
+            $script:gitUntrackedFileModes | Complete-List -Current $value -Prefix "$prefix" -ResultType ParameterValue
             return
         }
 
@@ -35,7 +35,7 @@ function Complete-GitSubCommand-status {
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                $candidates | Complete-List -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }

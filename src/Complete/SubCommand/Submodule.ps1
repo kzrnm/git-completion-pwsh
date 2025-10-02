@@ -15,7 +15,7 @@ function Complete-GitSubCommand-submodule {
     $Subcommand = $Context.SubcommandWithoutGlobalOption()
     if (!$Subcommand) {
         'add', 'status', 'init', 'deinit', 'update', 'set-branch', 'set-url', 'summary', 'foreach', 'sync', 'absorbgitdirs' |
-        completeList -Current $Current -ResultType ParameterName -DescriptionBuilder {
+        Complete-List -Current $Current -ResultType ParameterName -DescriptionBuilder {
             switch ($_) {
                 'add' { 'add the given repository as a submodule' }
                 'status' { 'show the status of the submodules' }
@@ -44,6 +44,6 @@ function Complete-GitSubCommand-submodule {
             { $_ -cin 'foreach', 'sync' } { '--recursive' }
         }
 
-        $Candidates | completeList -Current $Current -ResultType ParameterName
+        $Candidates | Complete-List -Current $Current -ResultType ParameterName
     }
 }

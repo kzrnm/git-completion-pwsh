@@ -36,7 +36,7 @@ function Complete-Gitk {
     $Current = $Context.CurrentWord()
 
     if ($Current.StartsWith('--')) {
-        gitkOpts -Merge:(gitPseudorefExists MERGE_HEAD) | completeList -Current $Current -ResultType ParameterName
+        gitkOpts -Merge:(gitPseudorefExists MERGE_HEAD) | Complete-List -Current $Current -ResultType ParameterName
         return
     }
 

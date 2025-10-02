@@ -29,7 +29,7 @@ function Complete-GitSubCommand-format-patch {
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                $candidates | Complete-List -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }

@@ -24,7 +24,7 @@ function Complete-GitSubCommand-send-email {
         }
 
         if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+            $prevCandidates | Complete-List -Current $Current -ResultType ParameterValue
             return
         }
 
@@ -40,16 +40,16 @@ function Complete-GitSubCommand-send-email {
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                $candidates | Complete-List -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }
 
         if ($Current.StartsWith('--')) {
-            $gitFormatPatchExtraOptions | completeList -Current $Current -DescriptionBuilder { 
+            $gitFormatPatchExtraOptions | Complete-List -Current $Current -DescriptionBuilder { 
                 Get-GitOptionsDescription $_ 'send-email'
             }
-            @(gitResolveBuiltins $Context.Command) | completeList -Current $Current -DescriptionBuilder {
+            @(gitResolveBuiltins $Context.Command) | Complete-List -Current $Current -DescriptionBuilder {
                 Get-GitOptionsDescription $_ 'send-email'
             }
             return

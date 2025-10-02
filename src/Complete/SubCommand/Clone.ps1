@@ -23,7 +23,7 @@ function Complete-GitSubCommand-clone {
         }
 
         if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+            $prevCandidates | Complete-List -Current $Current -ResultType ParameterValue
             return
         }
 

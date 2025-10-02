@@ -21,7 +21,7 @@ function Complete-GitSubCommand-difftool {
         }
 
         if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+            $prevCandidates | Complete-List -Current $Current -ResultType ParameterValue
             return
         }
 
@@ -33,13 +33,13 @@ function Complete-GitSubCommand-difftool {
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                $candidates | Complete-List -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }
 
         if ($Current.StartsWith('--')) {
-            $gitDiffDifftoolOptions | completeList -Current $Current
+            $gitDiffDifftoolOptions | Complete-List -Current $Current
             gitCompleteResolveBuiltins $Context.Command -Current $Current
             return
         }

@@ -23,5 +23,5 @@ function Complete-GitSubCommand-ls-remote {
         }
     }
 
-    gitRemote | completeList -Current $Current -ResultType ParameterValue
+    gitRemote | Complete-List -Current $Current -ResultType ParameterValue
 }

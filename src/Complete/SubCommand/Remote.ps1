@@ -25,7 +25,7 @@ function Complete-GitSubCommand-remote {
                 gitCompleteResolveBuiltins $Context.Command -Current $Current
             }
             else {
-                $subcommands | completeList -Current $Current -DescriptionBuilder { 
+                $subcommands | Complete-List -Current $Current -DescriptionBuilder { 
                     switch ($_) {
                         'add' { 'Add a remote' }
                         'get-url' { 'Retrieves the URLs for a remote' }
@@ -60,11 +60,11 @@ function Complete-GitSubCommand-remote {
             gitCompleteRemoteOrRefspec $Context
         }
         'update' {
-            gitRemote | completeList -Current $Current -ResultType ParameterValue
-            gitGetConfigVariables 'remotes' | completeList -Current $Current -ResultType ParameterValue
+            gitRemote | Complete-List -Current $Current -ResultType ParameterValue
+            gitGetConfigVariables 'remotes' | Complete-List -Current $Current -ResultType ParameterValue
         }
         default {
-            gitRemote | completeList -Current $Current -ResultType ParameterValue
+            gitRemote | Complete-List -Current $Current -ResultType ParameterValue
         }
     }
 }

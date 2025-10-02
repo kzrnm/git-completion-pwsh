@@ -26,7 +26,7 @@ function Complete-GitSubCommand-restore {
         }
 
         if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+            $prevCandidates | Complete-List -Current $Current -ResultType ParameterValue
             return
         }
 
@@ -42,7 +42,7 @@ function Complete-GitSubCommand-restore {
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $Current -Prefix "$key=" -ResultType ParameterValue -RemovePrefix
+                $candidates | Complete-List -Current $Current -Prefix "$key=" -ResultType ParameterValue -RemovePrefix
                 return
             }
         }
