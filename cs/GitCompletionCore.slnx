@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="GitCompletionCore/GitCompletionCore.csproj" />
+  <Project Path="GitCompletionLauncher/GitCompletionLauncher.vcxproj" Id="bd10f5be-9512-4252-af01-0d83ab67bb49">
+    <BuildDependency Project="GitCompletionCore/GitCompletionCore.csproj" />
+  </Project>
+</Solution>
