@@ -14,4 +14,9 @@
 			<PrivateAssets>All</PrivateAssets>
 		</PackageReference>
 	</ItemGroup>
+
+	<Target Name="ReleaseDll" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+		<Copy SourceFiles="$(OutputPath)/GitCompletionCore.dll" DestinationFolder="$(MSBuildThisFileDirectory)../../src/" />
+	</Target>
+
 </Project>

@@ -33,7 +33,7 @@
     Description       = 'Tab Completion for Git command'
 
     # Minimum version of the PowerShell engine required by this module
-    PowerShellVersion = '5.0'
+    PowerShellVersion = '5.1'
 
     # Name of the PowerShell host required by this module
     # PowerShellHostName = ''
@@ -66,13 +66,13 @@
     # FormatsToProcess = @()
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-    # NestedModules = @()
+    NestedModules = @('GitCompletionCore.dll')
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @('Complete-Git', 'Complete-Gitk')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport   = @()
+    CmdletsToExport   = @("Complete-GitCore")
 
     # Variables to export from this module
     VariablesToExport = @('GitCompletionSettings')

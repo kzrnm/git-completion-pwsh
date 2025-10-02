@@ -1,4 +1,15 @@
 {
+    "files.exclude": {
+        "cs/.vs": true,
+        "cs/x64": true,
+        "cs/GitCompletionLauncher/x64": true,
+        "cs/*/obj": true,
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true
+    },
     "powershell.powerShellDefaultVersion": "Windows PowerShell (x64)",
     "terminal.integrated.env.linux": {
         "GIT_COMPLETION_SHOW_ALL_COMMANDS": "1"

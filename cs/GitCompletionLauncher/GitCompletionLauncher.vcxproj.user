@@ -5,27 +5,27 @@
     <LocalDebuggerCommandArguments>-ExecutionPolicy Bypass -NoLogo -NoProfile -NoExit -File $(ProjectDir)\launch.ps1</LocalDebuggerCommandArguments>
     <LocalDebuggerDebuggerType>NativeWithManagedCore</LocalDebuggerDebuggerType>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>$(ProjectDir)../../</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(TMP)/GitCompletionLauncher/</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommand>pwsh.exe</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>-ExecutionPolicy Bypass -NoLogo -NoProfile -NoExit -File $(ProjectDir)\launch.ps1</LocalDebuggerCommandArguments>
     <LocalDebuggerDebuggerType>NativeWithManagedCore</LocalDebuggerDebuggerType>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>$(ProjectDir)../../</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(TMP)/GitCompletionLauncher/</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerCommand>pwsh.exe</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>-ExecutionPolicy Bypass -NoLogo -NoProfile -NoExit -File $(ProjectDir)\launch.ps1</LocalDebuggerCommandArguments>
     <LocalDebuggerDebuggerType>NativeWithManagedCore</LocalDebuggerDebuggerType>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>$(ProjectDir)../../</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(TMP)/GitCompletionLauncher/</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerCommand>pwsh.exe</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>-ExecutionPolicy Bypass -NoLogo -NoProfile -NoExit -File $(ProjectDir)\launch.ps1</LocalDebuggerCommandArguments>
     <LocalDebuggerDebuggerType>NativeWithManagedCore</LocalDebuggerDebuggerType>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>$(ProjectDir)../../</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(TMP)/GitCompletionLauncher/</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
 </Project>
