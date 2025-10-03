@@ -1,6 +1,10 @@
 $ErrorActionPreference = 'Continue'
 
-Get-ChildItem -Recurse "$PSScriptRoot" | Where-Object { $_.Extension -eq '.ps1' } | ForEach-Object { . $_.FullName }
+foreach ($f in (Get-ChildItem -Recurse "$PSScriptRoot")) {
+    if ($f.Extension -eq '.ps1') {
+        . $f.FullName
+    }
+}
 
 Export-ModuleMember -Variable 'GitCompletionSettings'
 

@@ -84,8 +84,8 @@ function gitTrailerTokens {
     param ()
 
     $regex = '^trailer\.(.*)\.key$'
-    __git config --name-only --get-regexp $regex | ForEach-Object {
-        if ($_ -cmatch $regex) {
+    foreach ($line in @(__git config --name-only --get-regexp $regex)) {
+        if ($line -cmatch $regex) {
             $Matches[1]
         }
     }

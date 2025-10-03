@@ -277,11 +277,21 @@ function Complete-GitCommandLine {
         }
 
         if ($Current -eq '-') {
-            $gitGlobalOptions | ForEach-Object { $_.ToShortCompletion() } | Where-Object { $_ }
+            foreach ($opt in $gitGlobalOptions) {
+                $t = $opt.ToShortCompletion()
+                if ($t) {
+                    $t
+                }
+            }
             return
         }
         elseif ($Current -like '--*') {
-            $gitGlobalOptions | ForEach-Object { $_.ToLongCompletion($Current) } | Where-Object { $_ }
+            foreach ($opt in $gitGlobalOptions) {
+                $t = $opt.ToLongCompletion($Current)
+                if ($t) {
+                    $t
+                }
+            }
             return
         }
 
@@ -299,9 +309,6 @@ function Complete-GitCommandLine {
                 Get-GitCommandDescription $_ 
             }
         } -ResultType Text  
-    }
-    catch{
-        Write-Error $_
     }
     finally {
         Remove-Variable 'Context' -Scope 'Script'

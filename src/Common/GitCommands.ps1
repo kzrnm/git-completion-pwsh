@@ -40,7 +40,7 @@ function gitVersion {
     param ()
 
     if ($script:__gitVersion) {
-        return $script:__gitVersion 
+        return $script:__gitVersion
     }
 
     (git --version) -match 'version\s*(\d+\.\d+\.\d+)'
@@ -67,12 +67,9 @@ function gitListAliases {
     [OutputType([PSCustomObject[]])]
     param()
 
-    __git config --get-regexp "^alias\." | ForEach-Object {
-        if ($_ -match "^alias\.([^ ]+) (.*)") {
-            [PSCustomObject]@{
-                Name  = $Matches[1];
-                Value = $Matches[2];
-            }
+    foreach ($line in @(__git config --get-regexp "^alias\.")) {
+        if ($line -match "^alias\.(?<Name>[^ ]+) (?<Value>.*)") {
+            [PSCustomObject]$Matches
         }
     }
 }
@@ -127,15 +124,13 @@ function gitListMergeStrategies {
     param()
 
     if ($script:__git_merge_strategies -is [string[]]) {
-        return $script:__git_merge_strategies 
+        return $script:__git_merge_strategies
     }
 
     function listMergeStrategies {
         param ()
-        git merge -s help 2>&1 |
-        Where-Object { $_ -like "*Available strategies are: *" } |
-        ForEach-Object {
-            if ($_ -match ".*:\s*(.*)\s*\.") {
+        foreach ($line in @(git merge -s help 2>&1)) {
+            if ($line -match 'Available strategies are: (.+)\s*\.$') {
                 $Matches[1] -split " "
             }
         }
@@ -201,7 +196,7 @@ function gitFirstLevelConfigVarsForSection {
         gitConfigVars | ForEach-Object {
             $s = $_.Split(".")
             if (($section -eq $s[0]) -and $s[1]) {
-                return $s[1] 
+                return $s[1]
             }
         }
     )
@@ -362,11 +357,9 @@ function gitDwimRemoteHeads {
 
     $dict = [System.Collections.Specialized.OrderedDictionary]::new()
     $Current = (casemap $Current)
-    $remotes = @(
-        gitRemote |
-        Sort-Object -Descending -Unique |
-        ForEach-Object { casemap $_ } |
-        ForEach-Object { "refs/remotes/$_" })
+    $remotes = foreach ($r in @(gitRemote | Sort-Object -Descending -Unique)) {
+        "refs/remotes/$(casemap $r)"
+    }
     foreach ($ref in @(__git for-each-ref --format='%(refname)' refs/remotes/)) {
         foreach ($r in $remotes) {
             if ((casemap $ref).StartsWith("$r/$Current")) {
@@ -469,20 +462,20 @@ function gitRefs {
                 "refs/tags/$match*/**",
                 "refs/heads/$match*",
                 "refs/heads/$match*/**",
-                "refs/remotes/$match*", 
+                "refs/remotes/$match*",
                 "refs/remotes/$match*/**")
         }
         __git -GitDirOverride $dir for-each-ref "--format=$Prefix%($format)" $ignoreCase @refs
         return
     }
-    
+
     if ($Current -match "refs(/.*)?") {
-        __git ls-remote "$Remote" "$Match*" |
-        ForEach-Object {
-            $_ -match "(\S+)\s+(\S+)" > $null
-            $i = $Matches[2]
-            if ($i -notlike "*^{}") {
-                "$i"
+        foreach ($r in @(__git ls-remote "$Remote" "$Match*")) {
+            if ($r -match "(\S+)\s+(\S+)") {
+                $i = $Matches[2]
+                if ($i -notlike "*^{}") {
+                    "$i"
+                }
             }
         }
     }
@@ -501,23 +494,24 @@ function gitRefs {
         if ("HEAD".StartsWith($match)) {
             $querySymref = 'HEAD'
         }
-        __git ls-remote "$Remote" $querySymref "refs/tags/$match*" "refs/heads/$match*" "refs/remotes/$match*" |
-        ForEach-Object {
-            $_ -match "(\S+)\s+(\S+)" > $null
-            $i = $Matches[2]
-            if ($i -notlike "*^{}") {
-                if ($i.StartsWith('refs/')) {
-                    $i.Substring("$i".IndexOf('/', 5))
-                }
-                else {
-                    "$i"
+
+        foreach ($r in @(__git ls-remote "$Remote" $querySymref "refs/tags/$match*" "refs/heads/$match*" "refs/remotes/$match*")) {
+            if ($r -match "(\S+)\s+(\S+)") {
+                $i = $Matches[2]
+                if ($i -notlike "*^{}") {
+                    if ($i.StartsWith('refs/')) {
+                        $i.Substring("$i".IndexOf('/', 5))
+                    }
+                    else {
+                        "$i"
+                    }
                 }
             }
         }
     }
 }
 
-# __git_resolve_builtins 
+# __git_resolve_builtins
 function gitResolveBuiltins {
     [OutputType([string[]])]
     [CmdletBinding(DefaultParameterSetName = 'Default')]
@@ -550,7 +544,7 @@ function gitResolveBuiltinsImpl {
         [Parameter(Mandatory, ValueFromRemainingArguments)][string[]] $Command,
         [switch] $All
     )
-    
+
     if ($All) {
         $completionHelper = '--git-completion-helper-all'
     }
@@ -625,20 +619,6 @@ function gitArchiveList {
     param ()
 
     __git archive --list
-}
-
-function gitStashList {
-    [CmdletBinding()]
-    [OutputType([PSCustomObject[]])]
-    param ()
-    foreach ($line in ((git stash list -z) -split '\0')) {
-        if ($line -match '^([^:]+): ?(.*?)$') {
-            [PSCustomObject]@{
-                Name    = $Matches[1]
-                Message = $Matches[2]
-            }
-        }
-    }
 }
 
 function gitCommitMessage() {

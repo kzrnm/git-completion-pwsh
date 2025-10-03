@@ -7,14 +7,10 @@ using namespace System.IO;
 
 function escapeSpecialChar {
     param (
-        [Parameter(Position = 0, ValueFromPipeline)]
-        [string]
+        [Parameter(Position = 0)]
         $Text
     )
-
-    process {
-        $Text -creplace '(["''`\s])', '`$1'
-    }
+    $Text -creplace '(["''`\s])', '`$1'
 }
 
 function completeLocalFile {
@@ -70,24 +66,24 @@ function completeCurrentDirectory {
     )
 
     $lx = $Current.LastIndexOfAny(@([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar))
-    $left = $Current.Substring(0, $lx + 1) | escapeSpecialChar
+    $left = escapeSpecialChar ($Current.Substring(0, $lx + 1))
 
-    Get-ChildItem "$Current*" | ForEach-Object {
-        $name = $_.Name | escapeSpecialChar
-        if ($_ -is [System.IO.DirectoryInfo]) {
+    foreach ($p in @(Get-ChildItem "$Current*")) {
+        $name = escapeSpecialChar ($p.Name)
+        if ($p -is [System.IO.DirectoryInfo]) {
             [CompletionResult]::new(
                 "${Prefix}${left}${name}/",
-                $_.Name + '/',
+                $p.Name + '/',
                 'ProviderItem',
-                $_.FullName
+                $p.FullName
             )
         }
         else {
             [CompletionResult]::new(
                 "${Prefix}${left}${name}",
-                $_.Name,
+                $p.Name,
                 'ProviderItem',
-                $_.FullName
+                $p.FullName
             )
         }
     }
@@ -160,7 +156,7 @@ function completeFromFileList {
                     $Completion = "./$Completion"
                 }
                 [CompletionResult]::new(
-                    ($Completion | escapeSpecialChar),
+                    (escapeSpecialChar $Completion),
                     $Prev,
                     'ProviderItem',
                     $Prev
@@ -177,7 +173,7 @@ function completeFromFileList {
                 $Completion = "./$Completion"
             }
             [CompletionResult]::new(
-                ($Completion | escapeSpecialChar),
+                (escapeSpecialChar $Completion),
                 $Prev,
                 'ProviderItem',
                 $Prev

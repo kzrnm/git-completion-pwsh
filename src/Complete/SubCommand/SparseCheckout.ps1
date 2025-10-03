@@ -76,15 +76,15 @@ function sparseCheckoutDirectories {
         $dir = './'
     }
 
-    @(__git ls-tree -z '-d' --name-only HEAD "$dir") -split '\0' | Where-Object {
-        $_ -and "$_".StartsWith($Current)
-    } | ForEach-Object {
-        [CompletionResult]::new(
-            ("$_/" | escapeSpecialChar),
-            "$_/",
-            'ProviderItem',
-            "$_/"
-        )
+    foreach ($line in (@(__git ls-tree -z '-d' --name-only HEAD "$dir") -split '\0')) {
+        if ($line -and "$line".StartsWith($Current)) {
+            [CompletionResult]::new(
+                (escapeSpecialChar "$line/"),
+                "$line/",
+                'ProviderItem',
+                "$line/"
+            )
+        }
     }
 }
 
@@ -131,13 +131,15 @@ function sparseCheckoutSlashLeadingPaths {
     #      literal path character.
     # Since there are two types of quoting here, this might get really
     # complex.  For now, just punt on all of this...
-    @(__git -C "$toplevel" ls-files -z --cached -- "${Prefix}${Current}*") -split '\0' | Where-Object { $_ } | ForEach-Object {
-        [CompletionResult]::new(
-            ("/$_" | escapeSpecialChar),
-            "/$_",
-            'ProviderItem',
-            "/$_"
-        )
+    foreach ($line in (@(__git -C "$toplevel" ls-files -z --cached -- "${Prefix}${Current}*") -split '\0')) {
+        if ($line) {
+            [CompletionResult]::new(
+                (escapeSpecialChar "/$line"),
+                "/$line",
+                'ProviderItem',
+                "/$line"
+            )
+        }
     }
 }
 

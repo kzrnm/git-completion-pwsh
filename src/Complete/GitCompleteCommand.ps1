@@ -4,13 +4,18 @@
 using namespace System.Management.Automation;
 
 function gitCompletStashList {
-    gitStashList | ForEach-Object {
-        [CompletionResult]::new(
-            "'$($_.Name)'",
-            $_.Name,
-            'ParameterValue',
-            $_.Message
-        )
+    foreach ($line in ((git stash list -z) -split '\0')) {
+        if ($line -match '^([^:]+): ?(.*?)$') {
+            $Name = $Matches[1]
+            $Message = $Matches[2]
+
+            [CompletionResult]::new(
+                "'$Name'",
+                $Name,
+                'ParameterValue',
+                $Message
+            )
+        }
     }
 }
 
@@ -169,11 +174,11 @@ function gitCompleteRefs {
     switch ($Mode) {
         'refs' {
             $matchRef = $false
-            $refs = gitRefs -Current $Current -Remote $Remote | ForEach-Object {
-                if ($Current -ceq $_) {
+            $refs = foreach ($r in @(gitRefs -Current $Current -Remote $Remote)) {
+                if ($Current -ceq $r) {
                     $matchRef = $true
                 }
-                $_
+                $r
             }
 
             $messages = $null
@@ -192,12 +197,13 @@ function gitCompleteRefs {
                     $pp = $Current
                     $skip = 0
                 }
-                gitRecentLog $Current -Skip $skip -MaxCount:(6 - $skip) | ForEach-Object {
+
+                foreach ($r in @(gitRecentLog $Current -Skip $skip -MaxCount:(6 - $skip))) {
                     [CompletionResult]::new(
                         "$Prefix$pp$Suffix",
                         $pp,
                         $ResultType,
-                        $_
+                        $r
                     )
                     $pp = "$pp~"
                 }

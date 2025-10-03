@@ -166,8 +166,8 @@ function Convert-ToGitHelpOptions {
         if ($long) { $longDescriptions[$long] = $Description }
         if ($short) {
             if ($short -ceq '-NUM') {
-                0..9 | ForEach-Object {
-                    $shortDescriptions["$_"] = $Description.Replace('NUM', "$_")
+                for ($i = 0; $i -lt 10; $i++) {
+                    $shortDescriptions["$i"] = $Description.Replace('NUM', "$i")
                 }
             }
             else {
