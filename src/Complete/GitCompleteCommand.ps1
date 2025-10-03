@@ -169,12 +169,19 @@ function gitCompleteRefs {
     switch ($Mode) {
         'refs' {
             $matchRef = $false
-            gitRefs -Current $Current -Remote $Remote | ForEach-Object {
+            $refs = gitRefs -Current $Current -Remote $Remote | ForEach-Object {
                 if ($Current -ceq $_) {
                     $matchRef = $true
                 }
                 $_
-            } | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -WithCommitMessage:($Remote -ceq '')
+            }
+
+            $messages = $null
+            if ($Remote -ceq '') {
+                $messages = (gitCommitMessage $refs)
+            }
+
+            $refs | completeList -Current $Current -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -Messages $messages
 
             if ($Current) {
                 if ($matchRef) {

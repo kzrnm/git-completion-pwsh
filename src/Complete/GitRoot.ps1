@@ -190,8 +190,30 @@ $gitGlobalOptions = @(
     )
 )
 
+$script:SubcommandCompleters = $null
+function getSubcommandCompleter {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([string])]
+    param (
+        [Parameter(Position = 0, Mandatory)]
+        [AllowEmptyString()]
+        [string]
+        $Command
+    )
+
+    if (-not $script:SubcommandCompleters) {
+        $script:SubcommandCompleters = @{}
+        foreach ($cmd in (Get-Command -Name 'Complete-GitSubCommand-*' -ErrorAction SilentlyContinue)) {
+            $name = $cmd.Name.Substring('Complete-GitSubCommand-'.Length)
+            $script:SubcommandCompleters[$name] = $cmd.Name
+        }
+    }
+
+    return $script:SubcommandCompleters[$Command]
+}
+
 function resolveAliasContext {
-    [CmdletBinding()]
+    [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CommandLineContext])]
     param (
         [CommandLineContext][Parameter(Position = 0, Mandatory)]$Context
@@ -217,17 +239,24 @@ function Complete-GitCommandLine {
         [CommandLineContext][Parameter(Position = 0, Mandatory)]$Context
     )
 
-    $Context = resolveAliasContext $Context
     try {
+        $SubcommandCompleter = getSubcommandCompleter ($Context.Command)
+        if ($SubcommandCompleter) {
+            Set-Variable 'Context' $Context -Scope 'Script'
+            . $SubcommandCompleter $Context
+            return
+        }
+
+        $Context = resolveAliasContext $Context
         Set-Variable 'Context' $Context -Scope 'Script'
 
         [string] $Current = $Context.CurrentWord()
         if ($Context.Command) {
-            try {
-                $completeSubcommandFunc = "Complete-GitSubCommand-$($Context.Command)"
-                . $completeSubcommandFunc $Context
+            $SubcommandCompleter = getSubcommandCompleter ($Context.Command)
+            if ($SubcommandCompleter) {
+                . $SubcommandCompleter $Context
             }
-            catch {
+            else {
                 Complete-GitSubCommandCommon $Context
             }
             return
@@ -270,6 +299,9 @@ function Complete-GitCommandLine {
                 Get-GitCommandDescription $_ 
             }
         } -ResultType Text  
+    }
+    catch{
+        Write-Error $_
     }
     finally {
         Remove-Variable 'Context' -Scope 'Script'

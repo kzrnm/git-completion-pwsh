@@ -658,7 +658,10 @@ function gitCommitMessage() {
             $keyLength = $Matches['key'].Length
         }
     }
-    return __git rev-parse @refs 2>$null | ForEach-Object { $msgTable[$_.Substring(0, $keyLength)] }
+
+    foreach ($line in (__git rev-parse @refs 2>$null)) {
+        $msgTable[$line.Substring(0, $keyLength)]
+    }
 }
 
 function gitRecentLog() {
