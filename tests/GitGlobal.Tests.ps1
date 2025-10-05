@@ -11,8 +11,6 @@ Describe 'GirGlobal' {
 
         Push-Location $rootPath
         git init --initial-branch=main
-        git config alias.sw "switch"
-        git config alias.swf "sw -f"
     }
 
     AfterAll {
@@ -66,21 +64,6 @@ Describe 'GirGlobal' {
             } | ConvertTo-Completion -ResultType ParameterName
         },
         @{
-            Line     = "sw";
-            Expected = @{
-                ListItemText = "sw";
-                ToolTip      = "[alias] switch";
-            },
-            @{
-                ListItemText = "swf";
-                ToolTip      = "[alias] sw -f";
-            },
-            @{
-                ListItemText = "switch";
-                ToolTip      = "Switch branches";
-            } | ConvertTo-Completion -ResultType Text
-        },
-        @{
             Line     = "--notmatch";
             Expected = @()
         }
@@ -89,10 +72,46 @@ Describe 'GirGlobal' {
     }
 
     Describe 'Complete subcommands' {
+        Describe 'alias' {
+            BeforeAll {
+                git config set alias.sw "switch"
+                git config set alias.swf "sw -f"
+                git config set alias.swc "sw`n--create"
+            }
+            AfterAll {
+                git config unset alias.sw
+                git config unset alias.swf
+                git config unset alias.swc
+            }
+            It '<Line>' -ForEach @(
+                @{
+                    Line     = "sw";
+                    Expected = @{
+                        ListItemText = "sw";
+                        ToolTip      = "[alias] switch";
+                    },
+                    @{
+                        ListItemText = "swc";
+                        ToolTip      = "[alias] sw --create";
+                    },
+                    @{
+                        ListItemText = "swf";
+                        ToolTip      = "[alias] sw -f";
+                    },
+                    @{
+                        ListItemText = "switch";
+                        ToolTip      = "Switch branches";
+                    } | ConvertTo-Completion -ResultType Text
+                }
+            ) {
+                "git $Line" | Complete-FromLine | Should -BeCompletion $Expected
+            }
+        }
+
         Describe 'ShowAllCommand' {
             Describe '<Line>' -ForEach @(
                 @{
-                    Line     = 'git w';
+                    Line     = 'w';
                     Expected = @{
                         $true  = @(
                             @{
@@ -121,94 +140,93 @@ Describe 'GirGlobal' {
                     }
                 }
             ) {
-                It '<_>'  -ForEach @($true, $false) {
+                It '<_>' -ForEach @($true, $false) {
                     $GitCompletionSettings.ShowAllCommand = $_
-                    "$Line" | Complete-FromLine | Should -BeCompletion $Expected[$_]
+                    "git -c alias.sw='switch' -c alias.swf='sw -f' $Line" | Complete-FromLine | Should -BeCompletion $Expected[$_]
                 }
             }
+            AfterEach {
+                $GitCompletionSettings.ShowAllCommand = $false
+            }
         }
 
-        AfterEach {
-            $GitCompletionSettings.ShowAllCommand = $false
-        }
-    }
-
-    Describe 'AdditionalCommands,ExcludeCommands' {
-        Describe '<Command>,Add:(<Add>),Exclude:(<Exclude>)' -ForEach @(
-            @{
-                Add      = @();
-                Exclude  = @();
-                Command  = 'wh';
-                Expected = "whatchanged" | ConvertTo-Completion -ResultType Text -ToolTip "Show logs with differences each commit introduces"
-            },
-            @{
-                Add      = 'why';
-                Exclude  = @();
-                Command  = 'wh';
-                Expected = @{
-                    ListItemText = "whatchanged";
-                    ToolTip      = "Show logs with differences each commit introduces";
+        Describe 'AdditionalCommands,ExcludeCommands' {
+            Describe '<Command>,Add:(<Add>),Exclude:(<Exclude>)' -ForEach @(
+                @{
+                    Add      = @();
+                    Exclude  = @();
+                    Command  = 'wh';
+                    Expected = "whatchanged" | ConvertTo-Completion -ResultType Text -ToolTip "Show logs with differences each commit introduces"
                 },
                 @{
-                    ListItemText = "why";
-                    ToolTip      = "why";
-                } | ConvertTo-Completion -ResultType Text
-            },
-            @{
-                Add      = @('why', 'who');
-                Exclude  = @();
-                Command  = 'wh';
-                Expected = @(@{
+                    Add      = 'why';
+                    Exclude  = @();
+                    Command  = 'wh';
+                    Expected = @{
                         ListItemText = "whatchanged";
                         ToolTip      = "Show logs with differences each commit introduces";
-                    }, "who", "why" | ConvertTo-Completion -ResultType Text)
-            },
-            @{
-                Add      = @();
-                Exclude  = 'whatchanged';
-                Command  = 'wh';
-                Expected = @()
-            },
-            @{
-                Add      = 'why';
-                Exclude  = @('whatchanged', 'worktree');
-                Command  = 'w';
-                Expected = "why" | ConvertTo-Completion -ResultType Text
-            },
-            @{
-                Add      = @('why', 'who');
-                Exclude  = @('whatchanged', 'who');
-                Command  = 'wh';
-                Expected = "why" | ConvertTo-Completion -ResultType Text
-            },
-            @{
-                Add      = @('ls-files');
-                Exclude  = @();
-                Command  = 'ls';
-                Expected = "ls-files" | ConvertTo-Completion -ResultType Text -ToolTip "Show information about files in the index and the working tree"
-            }
-        ) {
-            It '<Command>' {
-                "git $Command" | Complete-FromLine | Should -BeCompletion $Expected
-            }
-
-            It 'First is Add' {
-                "git " | Complete-FromLine | Select-Object -First 1 | Should -BeCompletion (
+                    },
                     @{
-                        ListItemText = "add";
-                        ToolTip      = "Add file contents to the index";
+                        ListItemText = "why";
+                        ToolTip      = "why";
                     } | ConvertTo-Completion -ResultType Text
-                )
-            }
+                },
+                @{
+                    Add      = @('why', 'who');
+                    Exclude  = @();
+                    Command  = 'wh';
+                    Expected = @(@{
+                            ListItemText = "whatchanged";
+                            ToolTip      = "Show logs with differences each commit introduces";
+                        }, "who", "why" | ConvertTo-Completion -ResultType Text)
+                },
+                @{
+                    Add      = @();
+                    Exclude  = 'whatchanged';
+                    Command  = 'wh';
+                    Expected = @()
+                },
+                @{
+                    Add      = 'why';
+                    Exclude  = @('whatchanged', 'worktree');
+                    Command  = 'w';
+                    Expected = "why" | ConvertTo-Completion -ResultType Text
+                },
+                @{
+                    Add      = @('why', 'who');
+                    Exclude  = @('whatchanged', 'who');
+                    Command  = 'wh';
+                    Expected = "why" | ConvertTo-Completion -ResultType Text
+                },
+                @{
+                    Add      = @('ls-files');
+                    Exclude  = @();
+                    Command  = 'ls';
+                    Expected = "ls-files" | ConvertTo-Completion -ResultType Text -ToolTip "Show information about files in the index and the working tree"
+                }
+            ) {
+                It '<Command>' {
+                    "git $Command" | Complete-FromLine | Should -BeCompletion $Expected
+                }
 
-            BeforeEach {
-                $GitCompletionSettings.AdditionalCommands = $Add
-                $GitCompletionSettings.ExcludeCommands = $Exclude
-            }
+                It 'First is Add' {
+                    "git " | Complete-FromLine | Select-Object -First 1 | Should -BeCompletion (
+                        @{
+                            ListItemText = "add";
+                            ToolTip      = "Add file contents to the index";
+                        } | ConvertTo-Completion -ResultType Text
+                    )
+                }
 
-            AfterEach {
-                $GitCompletionSettings.AdditionalCommands = @()
-                $GitCompletionSettings.ExcludeCommands = @()
+                BeforeEach {
+                    $GitCompletionSettings.AdditionalCommands = $Add
+                    $GitCompletionSettings.ExcludeCommands = $Exclude
+                }
+
+                AfterEach {
+                    $GitCompletionSettings.AdditionalCommands = @()
+                    $GitCompletionSettings.ExcludeCommands = @()
+                }
             }
         }
     }
