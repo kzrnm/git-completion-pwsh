@@ -343,6 +343,10 @@ function completeConfigVariableValue {
             "7bit", "8bit", "quoted-printable", "base64" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
+        "merge.conflictStyle" {
+            $script:gitConflictSolver | completeObjList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            return
+        }
     }
 }
 

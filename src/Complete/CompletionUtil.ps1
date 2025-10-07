@@ -84,6 +84,50 @@ function completeList {
     }
 }
 
+function completeObjList {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([CompletionResult[]])]
+    param(
+        [AllowEmptyString()]
+        [string]
+        $Current = '',
+        [AllowEmptyString()]
+        [string]
+        $Prefix = '',
+        [CompletionResultType]
+        $ResultType = [CompletionResultType]::ParameterName,
+        [Parameter(ValueFromPipeline)]
+        [PSCustomObject]
+        $Object
+    )
+
+    begin {
+        $ExcludeSet = [System.Collections.Generic.HashSet[string]]::new()
+    }
+
+    process {
+        $Candidate = $Object.ListItemText
+        if ((!$Current) -or $Candidate.StartsWith($Current)) {
+            $Completion = "$Prefix$Candidate"
+            if (!$ExcludeSet.Add($Candidate)) {
+                return
+            }
+
+            $desc = $Object.Tooltip
+            if (!$desc) {
+                $desc = "$Candidate"
+            }
+
+            [CompletionResult]::new(
+                $Completion,
+                $Candidate,
+                $ResultType,
+                $desc
+            )
+        }
+    }
+}
+
 function filterCompletionResult {
     param (
         [Parameter(ValueFromPipeline)]

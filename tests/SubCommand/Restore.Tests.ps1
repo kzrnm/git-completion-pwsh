@@ -173,23 +173,43 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag File, Rem
         It '<Line>' -ForEach @(
             @{
                 Line     = '--conflict ';
-                Expected = 
-                'diff3', 'merge', 'zdiff3' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'diff3';
+                    Tooltip      = "Adds the common ancestor's content, providing a three-way comparison";
+                }, @{
+                    ListItemText = 'merge';
+                    Tooltip      = '(default) Showing only current changes and the incoming changes';
+                }, @{
+                    ListItemText = 'zdiff3';
+                    Tooltip      = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--conflict z';
-                Expected = 
-                'zdiff3' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'zdiff3';
+                    Tooltip      = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--conflict=';
-                Expected =
-                'diff3', 'merge', 'zdiff3' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--conflict=$_" }
+                Expected = @{
+                    ListItemText = 'diff3';
+                    Tooltip      = "Adds the common ancestor's content, providing a three-way comparison";
+                }, @{
+                    ListItemText = 'merge';
+                    Tooltip      = '(default) Showing only current changes and the incoming changes';
+                }, @{
+                    ListItemText = 'zdiff3';
+                    Tooltip      = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--conflict=$_" }
             },
             @{
                 Line     = '--conflict=z';
-                Expected =
-                'zdiff3' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--conflict=$_" }
+                Expected = @{
+                    ListItemText = 'zdiff3';
+                    Tooltip      = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--conflict=$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
