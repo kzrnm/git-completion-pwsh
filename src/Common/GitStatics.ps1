@@ -107,3 +107,9 @@ $script:gitUntrackedFileModes = 'all', 'no', 'normal'
 
 $script:gitRebaseInprogressOptions = '--continue', '--skip', '--abort', '--quit', '--show-current-patch'
 $script:gitRebaseInteractiveInprogressOptions = $script:gitRebaseInprogressOptions + '--edit-todo'
+
+
+$script:gitShowOpts = @(
+    '--pretty=', '--format=', '--abbrev-commit', '--no-abbrev-commit', '--oneline', '--show-signature',
+    '--expand-tabs', '--expand-tabs=', '--no-expand-tabs'
+) + $gitLogShowOptions + $gitDiffCommonOptions

@@ -71,23 +71,6 @@ function Complete-Opts-show {
         }
     }
 
-    gitShowOpts | completeList -Current $Current
+    $script:gitShowOpts | completeList -Current $Current
     return
-}
-
-function gitShowOpts {
-    [OutputType([string[]])]
-    param ()
-    
-    "--pretty="
-    "--format="
-    "--abbrev-commit"
-    "--no-abbrev-commit"
-    "--oneline"
-    "--show-signature"
-    "--expand-tabs"
-    "--expand-tabs="
-    "--no-expand-tabs"
-    $gitLogShowOptions
-    $gitDiffCommonOptions
 }
