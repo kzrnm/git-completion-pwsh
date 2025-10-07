@@ -48,3 +48,8 @@ When selecting a branch, commit messages are displayed, and option descriptions 
 ## Original
 
 This module is a PowerShell port of [git-completion.bash Commit: 8b6f19ccfc3aefbd0f22f6b7d56ad6a3fc5e4f37](https://github.com/git/git/blob/8b6f19ccfc3aefbd0f22f6b7d56ad6a3fc5e4f37/contrib/completion/git-completion.bash).
+
+### Changes from **git-completion.bash**
+- Add completion information in tooltips
+- Include commit hash completion for some completions
+- Limit completion in `git stash` to files that have been modified
