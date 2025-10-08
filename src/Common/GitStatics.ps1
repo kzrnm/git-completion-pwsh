@@ -14,6 +14,12 @@ $script:gitFetchRecurseSubmodules = [ordered]@{
     'no'        = 'no submodules are fetched';
 }
 
+$script:gitConflictSolver = [ordered]@{
+    'diff3'  = "Adds the common ancestor's content, providing a three-way comparison";
+    'merge'  = '(default) Showing only current changes and the incoming changes';
+    'zdiff3' = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
+}
+
 $script:gitDiffAlgorithms = [ordered]@{
     'myers'     = '(default) The basic greedy diff algorithm';
     'minimal'   = 'Spend extra time to make sure the smallest possible diff is produced';
@@ -120,12 +126,6 @@ $script:gitAmInprogressOptions = '--skip', '--continue', '--resolved', '--abort'
 $script:gitQuotedCr = 'nowarn', 'warn', 'strip'
 
 $script:gitCherryPickInprogressOptions = '--continue', '--quit', '--abort', '--skip'
-
-$script:gitConflictSolver = [ordered]@{
-    'diff3'  = "Adds the common ancestor's content, providing a three-way comparison";
-    'merge'  = '(default) Showing only current changes and the incoming changes';
-    'zdiff3' = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
-}
 
 $script:gitUntrackedFileModes = 'all', 'no', 'normal'
 
