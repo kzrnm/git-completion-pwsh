@@ -38,13 +38,13 @@ function Complete-Opts-show {
     # -G, -S <- what is these? what is __git_complete_symbol?
     $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--diff-algorithm' { $script:gitDiffAlgorithms }
-        '--diff-merges' { $script:gitDiffMergesOpts }
-        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
-        '--color-moved-ws' { $script:gitColorMovedWsOpts }
+        '--diff-merges' { $script:gitDiffMergesOpts | completeList -Current $Current -ResultType ParameterValue; return }
+        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $Current -ResultType ParameterValue; return }
+        '--color-moved-ws' { $script:gitColorMovedWsOpts | completeList -Current $Current -ResultType ParameterValue; return }
     }
 
     if ($prevCandidates) {
-        $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+        $prevCandidates | completeObjList -Current $Current -ResultType ParameterValue
         return
     }
 
@@ -55,18 +55,18 @@ function Complete-Opts-show {
         $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
             { $_ -in @('--pretty', '--format') } {
-                $script:gitLogPrettyFormats + @(gitPrettyAliases)
+                $script:gitLogPrettyFormats + @(gitPrettyAliases) | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return
             }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
-            '--diff-merges' { $script:gitDiffMergesOpts }
-            '--submodule' { $script:gitDiffSubmoduleFormats }
-            '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
-            '--color-moved' { $script:gitColorMovedOpts }
-            '--color-moved-ws' { $script:gitColorMovedWsOpts }
+            '--diff-merges' { $script:gitDiffMergesOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--submodule' { $script:gitDiffSubmoduleFormats | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--color-moved' { $script:gitColorMovedOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--color-moved-ws' { $script:gitColorMovedWsOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
         }
 
         if ($candidates) {
-            $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+            $candidates | completeObjList -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }

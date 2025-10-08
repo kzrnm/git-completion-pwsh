@@ -1,7 +1,25 @@
 # Copyright (C) 2024 kzrnm
 # Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
 # Distributed under the GNU General Public License, version 2.0.
-$script:gitDiffAlgorithms = 'myers', 'minimal', 'patience', 'histogram'
+$script:gitDiffAlgorithms = @(
+    [PSCustomObject]@{
+        ListItemText = 'myers';
+        Tooltip      = '(default) The basic greedy diff algorithm';
+    },
+    [PSCustomObject]@{
+        ListItemText = 'minimal';
+        Tooltip      = 'Spend extra time to make sure the smallest possible diff is produced';
+    },
+    [PSCustomObject]@{
+        ListItemText = 'patience';
+        Tooltip      = 'Use "patience diff" algorithm when generating patches';
+    },
+    [PSCustomObject]@{
+        ListItemText = 'histogram';
+        Tooltip      = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
+    }
+)
+
 $script:gitDiffSubmoduleFormats = 'diff', 'log', 'short'
 
 $script:gitPushRecurseSubmodules = 'check', 'on-demand', 'only'

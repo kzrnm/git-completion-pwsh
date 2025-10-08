@@ -43,14 +43,14 @@ function gitCompleteLogOpts {
     # -L seems difficult to implement, so skip it.
     # -G, -S <- what is these? what is __git_complete_symbol?
     $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
-        '--date' { $script:gitLogDateFormats }
+        '--date' { $script:gitLogDateFormats | completeList -Current $Current -ResultType ParameterValue; return }
         '--diff-algorithm' { $script:gitDiffAlgorithms }
-        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
-        '--diff-merges' { $script:gitDiffMergesOpts }
+        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $Current -ResultType ParameterValue; return }
+        '--diff-merges' { $script:gitDiffMergesOpts | completeList -Current $Current -ResultType ParameterValue; return }
     }
 
     if ($prevCandidates) {
-        $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+        $prevCandidates | completeObjList -Current $Current -ResultType ParameterValue
         return
     }
 
@@ -61,19 +61,19 @@ function gitCompleteLogOpts {
         $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
             { $_ -in @('--pretty', '--format') } {
-                $script:gitLogPrettyFormats + @(gitPrettyAliases)
+                $script:gitLogPrettyFormats + @(gitPrettyAliases) | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return
             }
-            '--date' { $script:gitLogDateFormats }
-            '--decorate' { 'full', 'short', 'no' }
+            '--date' { $script:gitLogDateFormats | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--decorate' { 'full', 'short', 'no' | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
-            '--submodule' { $script:gitDiffSubmoduleFormats }
-            '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
-            '--no-walk' { 'sorted', 'unsorted' }
-            '--diff-merges' { $script:gitDiffMergesOpts }
+            '--submodule' { $script:gitDiffSubmoduleFormats | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--no-walk' { 'sorted', 'unsorted' | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--diff-merges' { $script:gitDiffMergesOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
         }
 
         if ($candidates) {
-            $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+            $candidates | completeObjList -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }

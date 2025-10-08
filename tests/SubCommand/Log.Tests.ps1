@@ -142,19 +142,69 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 },
                 @{
                     Line     = '--diff-algorithm m';
-                    Expected = 'myers', 'minimal' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = @{
+                        ListItemText = 'myers';
+                        ToolTip      = '(default) The basic greedy diff algorithm';
+                    },
+                    @{
+                        ListItemText = 'minimal';
+                        ToolTip      = 'Spend extra time to make sure the smallest possible diff is produced';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--diff-algorithm ';
-                    Expected = 'myers', 'minimal', 'patience', 'histogram' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = @{
+                        ListItemText   = 'myers';
+                        ToolTip        = '(default) The basic greedy diff algorithm';
+                    },
+                    @{
+                        ListItemText   = 'minimal';
+                        ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                    },
+                    @{
+                        ListItemText   = 'patience';
+                        ToolTip        = 'Use "patience diff" algorithm when generating patches';
+                    },
+                    @{
+                        ListItemText   = 'histogram';
+                        ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--diff-algorithm=m';
-                    Expected = 'myers', 'minimal' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
+                    Expected = @{
+                        CompletionText = "--diff-algorithm=myers";
+                        ListItemText   = 'myers';
+                        ToolTip        = '(default) The basic greedy diff algorithm';
+                    },
+                    @{
+                        CompletionText = "--diff-algorithm=minimal";
+                        ListItemText   = 'minimal';
+                        ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
                 },
                 @{
                     Line     = '--diff-algorithm=';
-                    Expected = 'myers', 'minimal', 'patience', 'histogram' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
+                    Expected = @{
+                        CompletionText = "--diff-algorithm=myers";
+                        ListItemText   = 'myers';
+                        ToolTip        = '(default) The basic greedy diff algorithm';
+                    },
+                    @{
+                        CompletionText = "--diff-algorithm=minimal";
+                        ListItemText   = 'minimal';
+                        ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                    },
+                    @{
+                        CompletionText = "--diff-algorithm=patience";
+                        ListItemText   = 'patience';
+                        ToolTip        = 'Use "patience diff" algorithm when generating patches';
+                    },
+                    @{
+                        CompletionText = "--diff-algorithm=histogram";
+                        ListItemText   = 'histogram';
+                        ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
                 },
                 @{
                     Line     = '--decorate=f';

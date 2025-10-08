@@ -39,12 +39,12 @@ function Complete-Opts-diff {
     # -G, -S <- what is these? what is __git_complete_symbol?
     $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--diff-algorithm' { $script:gitDiffAlgorithms }
-        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
-        '--color-moved-ws' { $script:gitColorMovedWsOpts }
+        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $Current -ResultType ParameterValue; return }
+        '--color-moved-ws' { $script:gitColorMovedWsOpts | completeList -Current $Current -ResultType ParameterValue; return }
     }
 
     if ($prevCandidates) {
-        $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+        $prevCandidates | completeObjList -Current $Current -ResultType ParameterValue
         return
     }
 
@@ -53,14 +53,14 @@ function Complete-Opts-diff {
         $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
             '--diff-algorithm' { $script:gitDiffAlgorithms }
-            '--submodule' { $script:gitDiffSubmoduleFormats }
-            '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
-            '--color-moved' { $script:gitColorMovedOpts }
-            '--color-moved-ws' { $script:gitColorMovedWsOpts }
+            '--submodule' { $script:gitDiffSubmoduleFormats | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--color-moved' { $script:gitColorMovedOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--color-moved-ws' { $script:gitColorMovedWsOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
         }
 
         if ($candidates) {
-            $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+            $candidates | completeObjList -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }

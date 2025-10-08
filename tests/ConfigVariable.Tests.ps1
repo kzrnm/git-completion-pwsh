@@ -234,14 +234,9 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 @{
                     Line     = 'diff.algorithm=';
                     Expected = @{
-                        CompletionText = "diff.algorithm=default";
-                        ListItemText   = 'default';
-                        ToolTip        = 'The basic greedy diff algorithm';
-                    },
-                    @{
                         CompletionText = "diff.algorithm=myers";
                         ListItemText   = 'myers';
-                        ToolTip        = 'The basic greedy diff algorithm. Currently, this is the default';
+                        ToolTip        = '(default) The basic greedy diff algorithm';
                     },
                     @{
                         CompletionText = "diff.algorithm=minimal";
@@ -264,7 +259,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                     Expected = @{
                         CompletionText = "diff.algorithm=myers";
                         ListItemText   = 'myers';
-                        ToolTip        = 'The basic greedy diff algorithm. Currently, this is the default';
+                        ToolTip        = '(default) The basic greedy diff algorithm';
                     },
                     @{
                         CompletionText = "diff.algorithm=minimal";

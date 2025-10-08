@@ -252,38 +252,8 @@ function completeConfigVariableValue {
             return
         }
         "diff.algorithm" {
-            return (
-                [CompletionResult]::new(
-                    "${Prefix}default",
-                    'default',
-                    'ParameterValue',
-                    'The basic greedy diff algorithm'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}myers",
-                    'myers',
-                    'ParameterValue',
-                    'The basic greedy diff algorithm. Currently, this is the default'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}minimal",
-                    'minimal',
-                    'ParameterValue',
-                    'Spend extra time to make sure the smallest possible diff is produced'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}patience",
-                    'patience',
-                    'ParameterValue',
-                    'Use "patience diff" algorithm when generating patches'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}histogram",
-                    'histogram',
-                    'ParameterValue',
-                    'This algorithm extends the patience algorithm to "support low-occurrence common elements"'
-                ) | filterCompletionResult $Current
-            )
+            $script:gitDiffAlgorithms | completeObjList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            return
         }
         "http.proxyAuthMethod" {
             return (
