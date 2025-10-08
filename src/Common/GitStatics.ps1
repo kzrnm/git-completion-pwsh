@@ -121,20 +121,11 @@ $script:gitQuotedCr = 'nowarn', 'warn', 'strip'
 
 $script:gitCherryPickInprogressOptions = '--continue', '--quit', '--abort', '--skip'
 
-$script:gitConflictSolver = @(
-    [PSCustomObject]@{
-        ListItemText = 'diff3';
-        Tooltip      = "Adds the common ancestor's content, providing a three-way comparison";
-    }
-    [PSCustomObject]@{
-        ListItemText = 'merge';
-        Tooltip      = '(default) Showing only current changes and the incoming changes';
-    }
-    [PSCustomObject]@{
-        ListItemText = 'zdiff3';
-        Tooltip      = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
-    }
-)
+$script:gitConflictSolver = [ordered]@{
+    'diff3'  = "Adds the common ancestor's content, providing a three-way comparison";
+    'merge'  = '(default) Showing only current changes and the incoming changes';
+    'zdiff3' = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
+}
 
 $script:gitUntrackedFileModes = 'all', 'no', 'normal'
 

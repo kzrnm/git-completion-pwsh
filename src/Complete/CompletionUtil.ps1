@@ -113,13 +113,16 @@ function completeTipTable {
 
     process {
         $Candidate = $Object.Key
+        $desc = $Object.Value
+
+        # TODO: temporary for compatibility
+        if ($Object -is [string]) {
+            $Candidate = $Object
+            $desc = $null
+        }
+
         if ((!$Current) -or $Candidate.StartsWith($Current)) {
             $Completion = "$Prefix$Candidate"
-
-            $desc = $Object.Value
-            if (!$desc) {
-                $desc = "$Candidate"
-            }
 
             [CompletionResult]::new(
                 $Completion,
