@@ -253,36 +253,47 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--recurse-submodules ';
-                Expected =
-                'yes',
-                'on-demand',
-                'no' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
+                },
+                @{
+                    ListItemText = 'on-demand';
+                    Tooltip      = '(default) only changed submodules are fetched';
+                },
+                @{
+                    ListItemText = 'no';
+                    Tooltip      = 'no submodules are fetched';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--recurse-submodules y';
-                Expected = 'yes' | ConvertTo-Completion -ResultType ParameterValue -ToolTip "yes"
+                Expected = @{
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--recurse-submodules=';
                 Expected = @{
-                    CompletionText = '--recurse-submodules=yes';
-                    ListItemText   = 'yes';
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
                 },
                 @{
-                    CompletionText = '--recurse-submodules=on-demand';
-                    ListItemText   = 'on-demand';
+                    ListItemText = 'on-demand';
+                    Tooltip      = '(default) only changed submodules are fetched';
                 },
                 @{
-                    CompletionText = '--recurse-submodules=no';
-                    ListItemText   = 'no';
-                } | ConvertTo-Completion -ResultType ParameterValue
+                    ListItemText = 'no';
+                    Tooltip      = 'no submodules are fetched';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--recurse-submodules=$_" }
             },
             @{
                 Line     = '--recurse-submodules=y';
                 Expected = @{
-                    CompletionText = '--recurse-submodules=yes';
-                    ListItemText   = 'yes';
-                } | ConvertTo-Completion -ResultType ParameterValue
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--recurse-submodules=$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

@@ -8,6 +8,12 @@ $script:gitPushRecurseSubmodules = [ordered]@{
     'no'        = '(default) no submodules are pushed';
 }
 
+$script:gitFetchRecurseSubmodules = [ordered]@{
+    'yes'       = 'all submodules are fetched';
+    'on-demand' = '(default) only changed submodules are fetched';
+    'no'        = 'no submodules are fetched';
+}
+
 $script:gitDiffAlgorithms = [ordered]@{
     'myers'     = '(default) The basic greedy diff algorithm';
     'minimal'   = 'Spend extra time to make sure the smallest possible diff is produced';
@@ -20,8 +26,6 @@ $script:gitDiffSubmoduleFormats = [ordered]@{
     'log'   = 'Lists the commits in the range like "git submodule summary" does';
     'short' = '(default) Shows the names of the commits at the beginning and end of the range';
 }
-
-$script:gitFetchRecurseSubmodules = 'yes', 'on-demand', 'no'
 
 $script:gitColorMovedOpts = 'no', 'default', 'plain', 'blocks', 'zebra', 'dimmed-zebra'
 

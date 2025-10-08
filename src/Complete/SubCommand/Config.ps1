@@ -321,6 +321,10 @@ function completeConfigVariableValue {
             $script:gitPushRecurseSubmodules.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
+        "fetch.recurseSubmodules" {
+            $script:gitFetchRecurseSubmodules.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            return
+        }
     }
 }
 
