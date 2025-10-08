@@ -20,7 +20,20 @@ $script:gitDiffAlgorithms = @(
     }
 )
 
-$script:gitDiffSubmoduleFormats = 'diff', 'log', 'short'
+$script:gitDiffSubmoduleFormats = @(
+    [PSCustomObject]@{
+        ListItemText = 'diff';
+        Tooltip      = 'Shows an inline diff of the changed contents of the submodule';
+    },
+    [PSCustomObject]@{
+        ListItemText = 'log';
+        Tooltip      = 'Lists the commits in the range like "git submodule summary" does';
+    },
+    [PSCustomObject]@{
+        ListItemText = 'short';
+        Tooltip      = '(default) Shows the names of the commits at the beginning and end of the range';
+    }
+)
 
 $script:gitPushRecurseSubmodules = 'check', 'on-demand', 'only'
 $script:gitFetchRecurseSubmodules = 'yes', 'on-demand', 'no'

@@ -59,7 +59,7 @@ function Complete-Opts-show {
             }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
             '--diff-merges' { $script:gitDiffMergesOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
-            '--submodule' { $script:gitDiffSubmoduleFormats | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--submodule' { $script:gitDiffSubmoduleFormats }
             '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
             '--color-moved' { $script:gitColorMovedOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
             '--color-moved-ws' { $script:gitColorMovedWsOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }

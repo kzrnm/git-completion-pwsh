@@ -248,7 +248,7 @@ function completeConfigVariableValue {
             return
         }
         "diff.submodule" {
-            $script:gitDiffSubmoduleFormats | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitDiffSubmoduleFormats | completeObjList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "diff.algorithm" {

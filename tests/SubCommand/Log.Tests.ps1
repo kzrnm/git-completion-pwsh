@@ -134,11 +134,25 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 },
                 @{
                     Line     = '--submodule=d';
-                    Expected = 'diff' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
+                    Expected = @{
+                        ListItemText = 'diff';
+                        Tooltip      = 'Shows an inline diff of the changed contents of the submodule';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
                 },
                 @{
                     Line     = '--submodule=';
-                    Expected = 'diff', 'log', 'short' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
+                    Expected = @{
+                        ListItemText = 'diff';
+                        Tooltip      = 'Shows an inline diff of the changed contents of the submodule';
+                    },
+                    @{
+                        ListItemText = 'log';
+                        Tooltip      = 'Lists the commits in the range like "git submodule summary" does';
+                    },
+                    @{
+                        ListItemText = 'short';
+                        Tooltip      = '(default) Shows the names of the commits at the beginning and end of the range';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
                 },
                 @{
                     Line     = '--diff-algorithm m';
@@ -154,20 +168,20 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 @{
                     Line     = '--diff-algorithm ';
                     Expected = @{
-                        ListItemText   = 'myers';
-                        ToolTip        = '(default) The basic greedy diff algorithm';
+                        ListItemText = 'myers';
+                        ToolTip      = '(default) The basic greedy diff algorithm';
                     },
                     @{
-                        ListItemText   = 'minimal';
-                        ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                        ListItemText = 'minimal';
+                        ToolTip      = 'Spend extra time to make sure the smallest possible diff is produced';
                     },
                     @{
-                        ListItemText   = 'patience';
-                        ToolTip        = 'Use "patience diff" algorithm when generating patches';
+                        ListItemText = 'patience';
+                        ToolTip      = 'Use "patience diff" algorithm when generating patches';
                     },
                     @{
-                        ListItemText   = 'histogram';
-                        ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
+                        ListItemText = 'histogram';
+                        ToolTip      = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
                     } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{

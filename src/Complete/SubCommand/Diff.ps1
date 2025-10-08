@@ -53,7 +53,7 @@ function Complete-Opts-diff {
         $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
             '--diff-algorithm' { $script:gitDiffAlgorithms }
-            '--submodule' { $script:gitDiffSubmoduleFormats | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--submodule' { $script:gitDiffSubmoduleFormats }
             '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
             '--color-moved' { $script:gitColorMovedOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
             '--color-moved-ws' { $script:gitColorMovedWsOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }

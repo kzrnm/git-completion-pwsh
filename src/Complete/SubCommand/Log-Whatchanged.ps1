@@ -66,7 +66,7 @@ function gitCompleteLogOpts {
             '--date' { $script:gitLogDateFormats | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
             '--decorate' { 'full', 'short', 'no' | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
-            '--submodule' { $script:gitDiffSubmoduleFormats | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--submodule' { $script:gitDiffSubmoduleFormats }
             '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
             '--no-walk' { 'sorted', 'unsorted' | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
             '--diff-merges' { $script:gitDiffMergesOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }

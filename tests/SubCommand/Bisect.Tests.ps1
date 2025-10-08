@@ -328,11 +328,25 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     },
                     @{
                         Line     = '--submodule=d';
-                        Expected = 'diff' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
+                        Expected = @{
+                            ListItemText = 'diff';
+                            Tooltip      = 'Shows an inline diff of the changed contents of the submodule';
+                        } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
                     },
                     @{
                         Line     = '--submodule=';
-                        Expected = 'diff', 'log', 'short' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
+                        Expected = @{
+                            ListItemText = 'diff';
+                            Tooltip      = 'Shows an inline diff of the changed contents of the submodule';
+                        },
+                        @{
+                            ListItemText = 'log';
+                            Tooltip      = 'Lists the commits in the range like "git submodule summary" does';
+                        },
+                        @{
+                            ListItemText = 'short';
+                            Tooltip      = '(default) Shows the names of the commits at the beginning and end of the range';
+                        } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
                     },
                     @{
                         Line     = '--diff-algorithm m';
