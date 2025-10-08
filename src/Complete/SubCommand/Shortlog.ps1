@@ -17,8 +17,9 @@ function Complete-GitSubCommand-shortlog {
         if ($shortOpts) { return $shortOpts }
 
         if ($Current.StartsWith('--')) {
-            ($gitLogCommonOptions + $gitLogShortlogOptions + @('--numbered', '--summary', '--email', '--no-committer', '--no-numbered', '--no-summary', '--no-email')) |
-            completeList -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.Command }
+            $gitLogCommonOptions | completeTipList -Current $Current
+            $gitLogShortlogOptions | completeTipList -Current $Current
+            '--committer', '--numbered', '--summary', '--email', '--no-committer', '--no-numbered', '--no-summary', '--no-email' | completeList -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.Command }
             return
         }
 

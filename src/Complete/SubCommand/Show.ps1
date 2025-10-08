@@ -38,13 +38,13 @@ function Complete-Opts-show {
     # -G, -S <- what is these? what is __git_complete_symbol?
     $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--diff-algorithm' { $script:gitDiffAlgorithms }
-        '--diff-merges' { $script:gitDiffMergesOpts | completeList -Current $Current -ResultType ParameterValue; return }
-        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $Current -ResultType ParameterValue; return }
-        '--color-moved-ws' { $script:gitColorMovedWsOpts | completeList -Current $Current -ResultType ParameterValue; return }
+        '--diff-merges' { $script:gitDiffMergesOpts }
+        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
+        '--color-moved-ws' { $script:gitColorMovedWsOpts }
     }
 
     if ($prevCandidates) {
-        $prevCandidates.GetEnumerator() | completeTipTable -Current $Current -ResultType ParameterValue
+        $prevCandidates | completeTipList -Current $Current -ResultType ParameterValue
         return
     }
 
@@ -54,23 +54,21 @@ function Complete-Opts-show {
         $key = $Matches[1]
         $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
-            { $_ -in @('--pretty', '--format') } {
-                $script:gitLogPrettyFormats + @(gitPrettyAliases) | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return
-            }
+            { $_ -in @('--pretty', '--format') } { $script:gitLogPrettyFormats + @(gitPrettyAliases) }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
-            '--diff-merges' { $script:gitDiffMergesOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--diff-merges' { $script:gitDiffMergesOpts }
             '--submodule' { $script:gitDiffSubmoduleFormats }
-            '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
-            '--color-moved' { $script:gitColorMovedOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
-            '--color-moved-ws' { $script:gitColorMovedWsOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
+            '--color-moved' { $script:gitColorMovedOpts }
+            '--color-moved-ws' { $script:gitColorMovedWsOpts }
         }
 
         if ($candidates) {
-            $candidates.GetEnumerator() | completeTipTable -Current $value -Prefix "$key=" -ResultType ParameterValue
+            $candidates | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }
 
-    $script:gitShowOpts | completeList -Current $Current
+    $script:gitShowOpts | completeTipList -Current $Current
     return
 }

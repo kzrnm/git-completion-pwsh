@@ -61,7 +61,7 @@ function Complete-GitSubCommand-remote {
         }
         'update' {
             gitRemote | completeList -Current $Current -ResultType ParameterValue
-            gitGetConfigVariables 'remotes' | completeList -Current $Current -ResultType ParameterValue
+            gitGetConfigVariables 'remotes' | completeTipList -Current $Current -ResultType ParameterValue
         }
         default {
             gitRemote | completeList -Current $Current -ResultType ParameterValue

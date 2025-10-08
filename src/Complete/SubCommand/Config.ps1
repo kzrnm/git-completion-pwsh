@@ -248,11 +248,11 @@ function completeConfigVariableValue {
             return
         }
         "diff.submodule" {
-            $script:gitDiffSubmoduleFormats.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitDiffSubmoduleFormats | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "diff.algorithm" {
-            $script:gitDiffAlgorithms.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitDiffAlgorithms | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "http.proxyAuthMethod" {
@@ -294,7 +294,7 @@ function completeConfigVariableValue {
             return
         }
         "log.date" {
-            $script:gitLogDateFormats | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitLogDateFormats | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "sendemail.aliasfiletype" {
@@ -302,27 +302,32 @@ function completeConfigVariableValue {
             return
         }
         "sendemail.confirm" {
-            $script:gitSendEmailConfirmOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitSendEmailConfirmOptions | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "sendemail.suppresscc" {
-            $script:gitSendEmailSuppressccOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitSendEmailSuppressccOptions | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "sendemail.transferencoding" {
             "7bit", "8bit", "quoted-printable", "base64" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
+        # git-completion.bash does not complete below cases.
         "merge.conflictStyle" {
-            $script:gitConflictSolver.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitConflictSolver | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "push.recurseSubmodules" {
-            $script:gitPushRecurseSubmodules.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitPushRecurseSubmodules | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "fetch.recurseSubmodules" {
-            $script:gitFetchRecurseSubmodules.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitFetchRecurseSubmodules | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            return
+        }
+        "diff.colorMovedWS" {
+            $script:gitColorMovedWsOpts | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
     }

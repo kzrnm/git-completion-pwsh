@@ -36,20 +36,13 @@ function Complete-Gitk {
     $Current = $Context.CurrentWord()
 
     if ($Current.StartsWith('--')) {
-        gitkOpts -Merge:(gitPseudorefExists MERGE_HEAD) | completeList -Current $Current -ResultType ParameterName
+        $gitLogCommonOptions | completeTipList -Current $Current -ResultType ParameterName
+        $gitLogGitkOptions | completeTipList -Current $Current -ResultType ParameterName
+        if (gitPseudorefExists MERGE_HEAD) {
+            '--merge' | completeList -Current $Current -ResultType ParameterName
+        }
         return
     }
 
     gitCompleteRevlist $Current
-}
-
-function gitkOpts {
-    [OutputType([string[]])]
-    param (
-        [switch]$Merge
-    )
-    
-    $gitLogCommonOptions
-    $gitLogGitkOptions
-    if ($Merge) { '--merge' }
 }

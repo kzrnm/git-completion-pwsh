@@ -58,12 +58,15 @@ function Complete-GitSubCommand-stash {
                 }
             }
 
-            $Include = switch ($subcommand) {
+            $candidates = switch ($subcommand) {
                 'list' { $gitLogCommonOptions + $gitDiffCommonOptions }
                 'show' { $gitDiffCommonOptions }
                 Default { $null }
             }
-            gitCompleteResolveBuiltins $Context.Command $subcommand -Current $Current -Include $Include
+            if ($candidates) {
+                $candidates | completeTipList -Current $Current -ResultType ParameterName
+            }
+            gitCompleteResolveBuiltins $Context.Command $subcommand -Current $Current -Exclude ($candidates | ForEach-Object ListItemText)
             return
         }
     }

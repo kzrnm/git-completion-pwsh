@@ -247,7 +247,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--format=';
-                Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd', 'changelog' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--format=$_" }
+                Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd',
+                @{
+                    ListItemText = 'changelog';
+                    Tooltip      = 'format:* %H %s';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--format=$_" }
             },
             @{
                 Line     = '--pretty=f';
@@ -255,7 +259,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--pretty=';
-                Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd', 'changelog' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--pretty=$_" }
+                Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd',
+                @{
+                    ListItemText = 'changelog';
+                    Tooltip      = 'format:* %H %s';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--pretty=$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

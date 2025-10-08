@@ -35,23 +35,18 @@ function Complete-GitSubCommand-mergetool {
             )
         }
 
-        $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
-            '--tool' { ($gitMergetoolsCommon + @('tortoisemerge')) }
-        }
-
-        if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+        if ($Context.PreviousWord() -ceq '--tool') {
+            $gitMergetoolsCommon | completeTipList -Current $Current -ResultType ParameterValue
+            'tortoisemerge' | completeList -Current $Current -ResultType ParameterValue
             return
         }
         if ($Current -cmatch '(--[^=]+)=(.*)') {
             $key = $Matches[1]
             $value = $Matches[2]
-            $candidates = switch -CaseSensitive ($key) {
-                '--tool' { ($gitMergetoolsCommon + @('tortoisemerge')) }
-            }
 
-            if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+            if ($key -ceq '--tool') {
+                $gitMergetoolsCommon | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                'tortoisemerge' | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }

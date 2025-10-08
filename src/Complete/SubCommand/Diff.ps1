@@ -39,12 +39,12 @@ function Complete-Opts-diff {
     # -G, -S <- what is these? what is __git_complete_symbol?
     $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
         '--diff-algorithm' { $script:gitDiffAlgorithms }
-        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $Current -ResultType ParameterValue; return }
-        '--color-moved-ws' { $script:gitColorMovedWsOpts | completeList -Current $Current -ResultType ParameterValue; return }
+        '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
+        '--color-moved-ws' { $script:gitColorMovedWsOpts }
     }
 
     if ($prevCandidates) {
-        $prevCandidates.GetEnumerator() | completeTipTable -Current $Current -ResultType ParameterValue
+        $prevCandidates | completeTipList -Current $Current -ResultType ParameterValue
         return
     }
 
@@ -54,19 +54,19 @@ function Complete-Opts-diff {
         $candidates = switch -CaseSensitive ($key) {
             '--diff-algorithm' { $script:gitDiffAlgorithms }
             '--submodule' { $script:gitDiffSubmoduleFormats }
-            '--ws-error-highlight' { $script:gitWsErrorHighlightOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
-            '--color-moved' { $script:gitColorMovedOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
-            '--color-moved-ws' { $script:gitColorMovedWsOpts | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
+            '--color-moved' { $script:gitColorMovedOpts }
+            '--color-moved-ws' { $script:gitColorMovedWsOpts }
         }
 
         if ($candidates) {
-            $candidates.GetEnumerator() | completeTipTable -Current $value -Prefix "$key=" -ResultType ParameterValue
+            $candidates | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }
 
     if ($Current.StartsWith('--')) {
-        $script:gitDiffDifftoolOptions | completeList -Current $Current
+        $script:gitDiffDifftoolOptions | completeTipList -Current $Current
         return
     }
 }

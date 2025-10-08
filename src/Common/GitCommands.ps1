@@ -574,12 +574,18 @@ function gitSupportParseoptHelper {
 # with the prefix removed.
 function gitGetConfigVariables () {
     [CmdletBinding()]
-    [OutputType([string[]])]
+    [OutputType([PSCustomObject[]])]
     param(
         [Parameter(Mandatory, Position = 0)][string]$Section
     )
-    __git config --name-only --get-regexp "^$Section\..*" | ForEach-Object {
-        $_.Substring($Section.Length + 1)
+
+    foreach ($kv in @((__git config -z --get-regexp "^$Section\..*" | Out-String) -split "`0")) {
+        if ($kv -match "^$Section\.(?<Name>\S+)\s+(?<Value>[\s\S]*)") {
+            [PSCustomObject]@{
+                ListItemText  = $Matches['Name'];
+                Tooltip = $Matches['Value'] -creplace "(`r`n|`n)", ' ';
+            }
+        }
     }
 }
 

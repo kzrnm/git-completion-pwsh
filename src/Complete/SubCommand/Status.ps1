@@ -17,7 +17,7 @@ function Complete-GitSubCommand-status {
         if ($Current -cmatch '^(-[^-]*u)(.*)') {
             $prefix = $Matches[1]
             $value = $Matches[2]
-            $script:gitUntrackedFileModes | completeList -Current $value -Prefix "$prefix" -ResultType ParameterValue
+            $script:gitUntrackedFileModes | completeTipList -Current $value -Prefix "$prefix" -ResultType ParameterValue
             return
         }
 
@@ -30,7 +30,7 @@ function Complete-GitSubCommand-status {
             $candidates = switch -CaseSensitive ($key) {
                 '--ignore-submodules' { 'none', 'untracked', 'dirty', 'all' }
                 '--ignored' { 'traditional', 'matching', 'no' }
-                '--untracked-files' { $script:gitUntrackedFileModes }
+                '--untracked-files' { $script:gitUntrackedFileModes | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
                 '--column' { 'always', 'never', 'auto', 'column', 'row', 'plain', 'dense', 'nodense' }
             }
 

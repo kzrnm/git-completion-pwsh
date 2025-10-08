@@ -96,7 +96,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = '--c';
                 Expected = @{
-                    ListItemText = '--committer=';
+                    ListItemText = '--committer';
                     ToolTip      = "group by committer rather than author";
                 } | ConvertTo-Completion -ResultType ParameterName
             },

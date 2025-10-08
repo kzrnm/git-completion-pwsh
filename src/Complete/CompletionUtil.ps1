@@ -84,7 +84,7 @@ function completeList {
     }
 }
 
-function completeTipTable {
+function completeTipList {
     [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = 'Default')]
     [OutputType([CompletionResult[]])]
     param(
@@ -112,13 +112,12 @@ function completeTipTable {
     }
 
     process {
-        $Candidate = $Object.Key
-        $desc = $Object.Value
+        $Candidate = $Object.ListItemText
+        $desc = $Object.Tooltip
 
         # TODO: temporary for compatibility
-        if ($Object -is [string]) {
-            $Candidate = $Object
-            $desc = $null
+        if (!$desc) {
+            $desc = "$Candidate"
         }
 
         if ((!$Current) -or $Candidate.StartsWith($Current)) {

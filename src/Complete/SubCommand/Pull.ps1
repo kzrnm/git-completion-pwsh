@@ -23,14 +23,14 @@ function Complete-GitSubCommand-pull {
 
         switch ($Prev) {
             '--recurse-submodules' {
-                $script:gitFetchRecurseSubmodules.GetEnumerator() | completeTipTable -Current $Current -ResultType ParameterValue 
+                $script:gitFetchRecurseSubmodules | completeTipList -Current $Current -ResultType ParameterValue 
                 return
             }
         }
 
         switch -Wildcard ($Current) {
             '--recurse-submodules=*' { 
-                $script:gitFetchRecurseSubmodules.GetEnumerator() | completeTipTable -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
+                $script:gitFetchRecurseSubmodules | completeTipList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
                 return
             }
             '--*' {

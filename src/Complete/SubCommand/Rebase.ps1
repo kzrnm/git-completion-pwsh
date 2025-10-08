@@ -38,7 +38,7 @@ function Complete-GitSubCommand-rebase {
         }
 
         if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+            $prevCandidates | completeTipList -Current $Current -ResultType ParameterValue
             return
         }
 
@@ -54,7 +54,7 @@ function Complete-GitSubCommand-rebase {
             }
 
             if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                $candidates | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }

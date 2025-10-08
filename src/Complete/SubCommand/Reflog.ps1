@@ -35,7 +35,7 @@ function Complete-GitSubCommand-reflog {
 
         if ($Current.StartsWith('--')) {
             if ($subcommand -eq 'show') {
-                $gitLogCommonOptions | completeList -Current $Current -ResultType ParameterName
+                $gitLogCommonOptions | completeTipList -Current $Current -ResultType ParameterName
             }
             else {
                 gitCompleteResolveBuiltins $Context.Command $subcommand -Current $Current

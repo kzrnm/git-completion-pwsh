@@ -53,5 +53,5 @@ This module is a PowerShell port of [git-completion.bash Commit: 8b6f19ccfc3aefb
 - Add completion information in tooltips
 - Include commit hash completion for some completions
 - Limit completion in `git stash` to files that have been modified
-- Add completions
-  - `config set merge.conflictStyle`
+- Use `git shortlog --committer` instead of `git shortlog --committer=`
+- Add completions to [config](src/Complete/SubCommand/Config.ps1#L316)
