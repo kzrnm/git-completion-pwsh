@@ -44,7 +44,7 @@ function Complete-Opts-diff {
     }
 
     if ($prevCandidates) {
-        $prevCandidates | completeObjList -Current $Current -ResultType ParameterValue
+        $prevCandidates.GetEnumerator() | completeTipTable -Current $Current -ResultType ParameterValue
         return
     }
 
@@ -60,7 +60,7 @@ function Complete-Opts-diff {
         }
 
         if ($candidates) {
-            $candidates | completeObjList -Current $value -Prefix "$key=" -ResultType ParameterValue
+            $candidates.GetEnumerator() | completeTipTable -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }

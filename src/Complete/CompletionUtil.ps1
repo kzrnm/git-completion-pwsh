@@ -84,7 +84,7 @@ function completeList {
     }
 }
 
-function completeObjList {
+function completeTipTable {
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([CompletionResult[]])]
     param(
@@ -97,23 +97,15 @@ function completeObjList {
         [CompletionResultType]
         $ResultType = [CompletionResultType]::ParameterName,
         [Parameter(ValueFromPipeline)]
-        [PSCustomObject]
         $Object
     )
 
-    begin {
-        $ExcludeSet = [System.Collections.Generic.HashSet[string]]::new()
-    }
-
     process {
-        $Candidate = $Object.ListItemText
+        $Candidate = $Object.Key
         if ((!$Current) -or $Candidate.StartsWith($Current)) {
             $Completion = "$Prefix$Candidate"
-            if (!$ExcludeSet.Add($Candidate)) {
-                return
-            }
 
-            $desc = $Object.Tooltip
+            $desc = $Object.Value
             if (!$desc) {
                 $desc = "$Candidate"
             }

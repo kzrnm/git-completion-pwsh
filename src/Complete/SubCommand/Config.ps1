@@ -248,11 +248,11 @@ function completeConfigVariableValue {
             return
         }
         "diff.submodule" {
-            $script:gitDiffSubmoduleFormats | completeObjList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitDiffSubmoduleFormats.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "diff.algorithm" {
-            $script:gitDiffAlgorithms | completeObjList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitDiffAlgorithms.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "http.proxyAuthMethod" {
@@ -314,7 +314,7 @@ function completeConfigVariableValue {
             return
         }
         "merge.conflictStyle" {
-            $script:gitConflictSolver | completeObjList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitConflictSolver.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
     }

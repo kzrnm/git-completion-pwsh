@@ -50,7 +50,7 @@ function gitCompleteLogOpts {
     }
 
     if ($prevCandidates) {
-        $prevCandidates | completeObjList -Current $Current -ResultType ParameterValue
+        $prevCandidates.GetEnumerator() | completeTipTable -Current $Current -ResultType ParameterValue
         return
     }
 
@@ -73,7 +73,7 @@ function gitCompleteLogOpts {
         }
 
         if ($candidates) {
-            $candidates | completeObjList -Current $value -Prefix "$key=" -ResultType ParameterValue
+            $candidates.GetEnumerator() | completeTipTable -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }

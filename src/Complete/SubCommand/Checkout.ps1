@@ -22,7 +22,7 @@ function Complete-GitSubCommand-checkout {
                 return
             }
             '--conflict' {
-                $gitConflictSolver | completeObjList -Current $Current -ResultType ParameterValue
+                $gitConflictSolver.GetEnumerator() | completeTipTable -Current $Current -ResultType ParameterValue
                 return
             }
         }
@@ -36,7 +36,7 @@ function Complete-GitSubCommand-checkout {
                     return
                 }
                 '--conflict' {
-                    $gitConflictSolver | completeObjList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                    $gitConflictSolver.GetEnumerator() | completeTipTable -Current $value -Prefix "$key=" -ResultType ParameterValue
                     return
                 }
             }

@@ -1,41 +1,21 @@
 # Copyright (C) 2024 kzrnm
 # Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
 # Distributed under the GNU General Public License, version 2.0.
-$script:gitDiffAlgorithms = @(
-    [PSCustomObject]@{
-        ListItemText = 'myers';
-        Tooltip      = '(default) The basic greedy diff algorithm';
-    },
-    [PSCustomObject]@{
-        ListItemText = 'minimal';
-        Tooltip      = 'Spend extra time to make sure the smallest possible diff is produced';
-    },
-    [PSCustomObject]@{
-        ListItemText = 'patience';
-        Tooltip      = 'Use "patience diff" algorithm when generating patches';
-    },
-    [PSCustomObject]@{
-        ListItemText = 'histogram';
-        Tooltip      = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
-    }
-)
-
-$script:gitDiffSubmoduleFormats = @(
-    [PSCustomObject]@{
-        ListItemText = 'diff';
-        Tooltip      = 'Shows an inline diff of the changed contents of the submodule';
-    },
-    [PSCustomObject]@{
-        ListItemText = 'log';
-        Tooltip      = 'Lists the commits in the range like "git submodule summary" does';
-    },
-    [PSCustomObject]@{
-        ListItemText = 'short';
-        Tooltip      = '(default) Shows the names of the commits at the beginning and end of the range';
-    }
-)
-
 $script:gitPushRecurseSubmodules = 'check', 'on-demand', 'only'
+
+$script:gitDiffAlgorithms = [ordered]@{
+    'myers'     = '(default) The basic greedy diff algorithm';
+    'minimal'   = 'Spend extra time to make sure the smallest possible diff is produced';
+    'patience'  = 'Use "patience diff" algorithm when generating patches';
+    'histogram' = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
+}
+
+$script:gitDiffSubmoduleFormats = [ordered]@{
+    'diff'  = 'Shows an inline diff of the changed contents of the submodule';
+    'log'   = 'Lists the commits in the range like "git submodule summary" does';
+    'short' = '(default) Shows the names of the commits at the beginning and end of the range';
+}
+
 $script:gitFetchRecurseSubmodules = 'yes', 'on-demand', 'no'
 
 $script:gitColorMovedOpts = 'no', 'default', 'plain', 'blocks', 'zebra', 'dimmed-zebra'
