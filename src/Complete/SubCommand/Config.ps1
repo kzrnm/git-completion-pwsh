@@ -317,6 +317,10 @@ function completeConfigVariableValue {
             $script:gitConflictSolver.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
+        "push.recurseSubmodules" {
+            $script:gitPushRecurseSubmodules.GetEnumerator() | completeTipTable -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            return
+        }
     }
 }
 

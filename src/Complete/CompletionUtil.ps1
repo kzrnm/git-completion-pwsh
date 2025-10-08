@@ -85,20 +85,31 @@ function completeList {
 }
 
 function completeTipTable {
-    [CmdletBinding(PositionalBinding = $false)]
+    [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = 'Default')]
     [OutputType([CompletionResult[]])]
     param(
         [AllowEmptyString()]
         [string]
         $Current = '',
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(Mandatory, ParameterSetName = 'Prefix')]
         [AllowEmptyString()]
         [string]
         $Prefix = '',
         [CompletionResultType]
         $ResultType = [CompletionResultType]::ParameterName,
+        [Parameter(ParameterSetName = 'Prefix')]
+        [switch]
+        $RemovePrefix,
         [Parameter(ValueFromPipeline)]
         $Object
     )
+
+    begin {
+        if ($RemovePrefix -and $Current.StartsWith($Prefix)) {
+            $Current = $Current.Substring($Prefix.Length)
+        }
+    }
 
     process {
         $Candidate = $Object.Key

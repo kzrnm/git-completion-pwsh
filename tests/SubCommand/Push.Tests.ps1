@@ -259,37 +259,55 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--recurse-submodules ';
-                Expected = 
-                'check',
-                'on-demand',
-                'only' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'check';
+                    Tooltip      = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule';
+                },
+                @{
+                    ListItemText = 'on-demand';
+                    Tooltip      = 'all submodules that changed in the revisions to be pushed will be pushed';
+                },
+                @{
+                    ListItemText = 'only';
+                    Tooltip      = 'all submodules will be pushed while the superproject is left unpushed';
+                },
+                @{
+                    ListItemText = 'no';
+                    Tooltip      = '(default) no submodules are pushed';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--recurse-submodules c';
-                Expected = 'check' | ConvertTo-Completion -ResultType ParameterValue -ToolTip "check"
+                Expected = @{
+                    ListItemText = 'check';
+                    Tooltip      = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule';
+                } | ConvertTo-Completion -ResultType ParameterValue -ToolTip "check"
             },
             @{
                 Line     = '--recurse-submodules=';
-                Expected = 
-                @{
-                    CompletionText = '--recurse-submodules=check';
-                    ListItemText   = 'check';
+                Expected = @{
+                    ListItemText = 'check';
+                    Tooltip      = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule';
                 },
                 @{
-                    CompletionText = '--recurse-submodules=on-demand';
-                    ListItemText   = 'on-demand';
+                    ListItemText = 'on-demand';
+                    Tooltip      = 'all submodules that changed in the revisions to be pushed will be pushed';
                 },
                 @{
-                    CompletionText = '--recurse-submodules=only';
-                    ListItemText   = 'only';
-                } | ConvertTo-Completion -ResultType ParameterValue
+                    ListItemText = 'only';
+                    Tooltip      = 'all submodules will be pushed while the superproject is left unpushed';
+                },
+                @{
+                    ListItemText = 'no';
+                    Tooltip      = '(default) no submodules are pushed';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--recurse-submodules=$_" }
             },
             @{
                 Line     = '--recurse-submodules=c';
                 Expected = @{
-                    CompletionText = '--recurse-submodules=check';
-                    ListItemText   = 'check';
-                } | ConvertTo-Completion -ResultType ParameterValue
+                    ListItemText = 'check';
+                    Tooltip      = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--recurse-submodules=$_" }
             },
             @{
                 Line     = '--repo=';

@@ -1,7 +1,12 @@
 # Copyright (C) 2024 kzrnm
 # Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
 # Distributed under the GNU General Public License, version 2.0.
-$script:gitPushRecurseSubmodules = 'check', 'on-demand', 'only'
+$script:gitPushRecurseSubmodules = [ordered]@{
+    'check'     = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule';
+    'on-demand' = 'all submodules that changed in the revisions to be pushed will be pushed';
+    'only'      = 'all submodules will be pushed while the superproject is left unpushed';
+    'no'        = '(default) no submodules are pushed';
+}
 
 $script:gitDiffAlgorithms = [ordered]@{
     'myers'     = '(default) The basic greedy diff algorithm';
