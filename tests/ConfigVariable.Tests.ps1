@@ -386,6 +386,154 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                     ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.transferencoding=$_" }
                 },
                 @{
+                    Line     = 'merge.conflictStyle=';
+                    Expected = @{
+                        ListItemText = 'diff3';
+                        Tooltip      = "Adds the common ancestor's content, providing a three-way comparison";
+                    }, @{
+                        ListItemText = 'merge';
+                        Tooltip      = '(default) Showing only current changes and the incoming changes';
+                    }, @{
+                        ListItemText = 'zdiff3';
+                        Tooltip      = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "merge.conflictStyle=$_" }
+                },
+                @{
+                    Line     = 'merge.conflictStyle=z';
+                    Expected = @{
+                        ListItemText = 'zdiff3';
+                        Tooltip      = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "merge.conflictStyle=$_" }
+                },
+                @{
+                    Line     = 'push.recurseSubmodules=';
+                    Expected = @{
+                        ListItemText = 'check';
+                        Tooltip      = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule';
+                    },
+                    @{
+                        ListItemText = 'no';
+                        Tooltip      = '(default) no submodules are pushed';
+                    },
+                    @{
+                        ListItemText = 'on-demand';
+                        Tooltip      = 'all submodules that changed in the revisions to be pushed will be pushed';
+                    },
+                    @{
+                        ListItemText = 'only';
+                        Tooltip      = 'all submodules will be pushed while the superproject is left unpushed';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "push.recurseSubmodules=$_" }
+                },
+                @{
+                    Line     = 'push.recurseSubmodules=o';
+                    Expected = @{
+                        ListItemText = 'on-demand';
+                        Tooltip      = 'all submodules that changed in the revisions to be pushed will be pushed';
+                    },
+                    @{
+                        ListItemText = 'only';
+                        Tooltip      = 'all submodules will be pushed while the superproject is left unpushed';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "push.recurseSubmodules=$_" }
+                },
+                @{
+                    Line     = 'fetch.recurseSubmodules=';
+                    Expected = @{
+                        ListItemText = 'no';
+                        Tooltip      = 'no submodules are fetched';
+                    },
+                    @{
+                        ListItemText = 'on-demand';
+                        Tooltip      = '(default) only changed submodules are fetched';
+                    },
+                    @{
+                        ListItemText = 'yes';
+                        Tooltip      = 'all submodules are fetched';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "fetch.recurseSubmodules=$_" }
+                },
+                @{
+                    Line     = 'fetch.recurseSubmodules=y';
+                    Expected = @{
+                        ListItemText = 'yes';
+                        Tooltip      = 'all submodules are fetched';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "fetch.recurseSubmodules=$_" }
+                },
+                @{
+                    Line     = 'diff.colorMoved=';
+                    Expected = @{
+                        ListItemText = 'blocks';
+                        Tooltip      = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily'; 
+                    },
+                    @{
+                        ListItemText = 'default';
+                        Tooltip      = 'Is a synonym for zebra'; 
+                    },
+                    @{
+                        ListItemText = 'dimmed-zebra';
+                        Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed'; 
+                    },
+                    @{
+                        ListItemText = 'no';
+                        Tooltip      = 'Moved lines are not highlighted'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved'; 
+                    },
+                    @{
+                        ListItemText = 'zebra';
+                        Tooltip      = 'Blocks of moved text are detected as in blocks mode'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMoved=$_" }
+                },
+                @{
+                    Line     = 'diff.colorMoved=d';
+                    Expected = @{
+                        ListItemText = 'default';
+                        Tooltip      = 'Is a synonym for zebra'; 
+                    },
+                    @{
+                        ListItemText = 'dimmed-zebra';
+                        Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMoved=$_" }
+                },
+                @{
+                    Line     = 'diff.colorMovedWS=';
+                    Expected = @{
+                        ListItemText = 'allow-indentation-change';
+                        Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line'; 
+                    },
+                    @{
+                        ListItemText = 'ignore-all-space';
+                        Tooltip      = 'Ignore whitespace when comparing lines'; 
+                    },
+                    @{
+                        ListItemText = 'ignore-space-at-eol';
+                        Tooltip      = 'Ignore changes in whitespace at EOL'; 
+                    },
+                    @{
+                        ListItemText = 'ignore-space-change';
+                        Tooltip      = 'Ignore changes in amount of whitespace'; 
+                    },
+                    @{
+                        ListItemText = 'no';
+                        Tooltip      = 'Do not ignore whitespace when performing move detection'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMovedWS=$_" }
+                },
+                @{
+                    Line     = 'diff.colorMovedWS=i';
+                    Expected = @{
+                        ListItemText = 'ignore-all-space';
+                        Tooltip      = 'Ignore whitespace when comparing lines'; 
+                    },
+                    @{
+                        ListItemText = 'ignore-space-at-eol';
+                        Tooltip      = 'Ignore changes in whitespace at EOL'; 
+                    },
+                    @{
+                        ListItemText = 'ignore-space-change';
+                        Tooltip      = 'Ignore changes in amount of whitespace'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMovedWS=$_" }
+                },
+                @{
                     Line     = 'branch.main.notmatch=';
                     Expected = @();
                 }
