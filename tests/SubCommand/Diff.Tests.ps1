@@ -133,27 +133,117 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--color-moved-ws i';
-                Expected = 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'ignore-all-space';
+                    Tooltip      = 'Ignore whitespace when comparing lines'; 
+                },
+                @{
+                    ListItemText = 'ignore-space-at-eol';
+                    Tooltip      = 'Ignore changes in whitespace at EOL'; 
+                },
+                @{
+                    ListItemText = 'ignore-space-change';
+                    Tooltip      = 'Ignore changes in amount of whitespace'; 
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--color-moved-ws ';
-                Expected = 'allow-indentation-change', 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change', 'no' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'allow-indentation-change';
+                    Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line'; 
+                },
+                @{
+                    ListItemText = 'ignore-all-space';
+                    Tooltip      = 'Ignore whitespace when comparing lines'; 
+                },
+                @{
+                    ListItemText = 'ignore-space-at-eol';
+                    Tooltip      = 'Ignore changes in whitespace at EOL'; 
+                },
+                @{
+                    ListItemText = 'ignore-space-change';
+                    Tooltip      = 'Ignore changes in amount of whitespace'; 
+                },
+                @{
+                    ListItemText = 'no';
+                    Tooltip      = 'Do not ignore whitespace when performing move detection'; 
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--color-moved-ws=i';
-                Expected = 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
+                Expected = @{
+                    ListItemText = 'ignore-all-space';
+                    Tooltip      = 'Ignore whitespace when comparing lines'; 
+                },
+                @{
+                    ListItemText = 'ignore-space-at-eol';
+                    Tooltip      = 'Ignore changes in whitespace at EOL'; 
+                },
+                @{
+                    ListItemText = 'ignore-space-change';
+                    Tooltip      = 'Ignore changes in amount of whitespace'; 
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
             },
             @{
                 Line     = '--color-moved-ws=';
-                Expected = 'allow-indentation-change', 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change', 'no' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
+                Expected = @{
+                    ListItemText = 'allow-indentation-change';
+                    Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line'; 
+                },
+                @{
+                    ListItemText = 'ignore-all-space';
+                    Tooltip      = 'Ignore whitespace when comparing lines'; 
+                },
+                @{
+                    ListItemText = 'ignore-space-at-eol';
+                    Tooltip      = 'Ignore changes in whitespace at EOL'; 
+                },
+                @{
+                    ListItemText = 'ignore-space-change';
+                    Tooltip      = 'Ignore changes in amount of whitespace'; 
+                },
+                @{
+                    ListItemText = 'no';
+                    Tooltip      = 'Do not ignore whitespace when performing move detection'; 
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
             },
             @{
                 Line     = '--color-moved=d';
-                Expected = 'default', 'dimmed-zebra'  | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
+                Expected = @{
+                    ListItemText = 'default';
+                    Tooltip      = 'Is a synonym for zebra'; 
+                },
+                @{
+                    ListItemText = 'dimmed-zebra';
+                    Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed'; 
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
             },
             @{
                 Line     = '--color-moved=';
-                Expected = 'blocks', 'default', 'dimmed-zebra', 'no', 'plain', 'zebra' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
+                Expected = @{
+                    ListItemText = 'blocks';
+                    Tooltip      = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily'; 
+                },
+                @{
+                    ListItemText = 'default';
+                    Tooltip      = 'Is a synonym for zebra'; 
+                },
+                @{
+                    ListItemText = 'dimmed-zebra';
+                    Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed'; 
+                },
+                @{
+                    ListItemText = 'no';
+                    Tooltip      = 'Moved lines are not highlighted'; 
+                },
+                @{
+                    ListItemText = 'plain';
+                    Tooltip      = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved'; 
+                },
+                @{
+                    ListItemText = 'zebra';
+                    Tooltip      = 'Blocks of moved text are detected as in blocks mode'; 
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
             },
             @{
                 Line     = '--ws-error-highlight d';

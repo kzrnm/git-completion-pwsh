@@ -295,6 +295,10 @@ function completeConfigVariableValue {
             $script:gitFetchRecurseSubmodules | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
+        "diff.colorMoved" {
+            $script:gitColorMovedOpts | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            return
+        }
         "diff.colorMovedWS" {
             $script:gitColorMovedWsOpts | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return

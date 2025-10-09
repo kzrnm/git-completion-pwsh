@@ -61,12 +61,12 @@ $script:gitDiffSubmoduleFormats = [pscustomobject[]]@(
 ) | Sort-Object ListItemText
 
 $script:gitColorMovedOpts = [pscustomobject[]]@(
-    @{ListItemText = 'no'; }
-    @{ListItemText = 'default'; }
-    @{ListItemText = 'plain'; }
-    @{ListItemText = 'blocks'; }
-    @{ListItemText = 'zebra'; }
-    @{ListItemText = 'dimmed-zebra'; }
+    @{ListItemText = 'no'; Tooltip = 'Moved lines are not highlighted'; }
+    @{ListItemText = 'default'; Tooltip = 'Is a synonym for zebra'; }
+    @{ListItemText = 'plain'; Tooltip = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved'; }
+    @{ListItemText = 'blocks'; Tooltip = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily'; }
+    @{ListItemText = 'zebra'; Tooltip = 'Blocks of moved text are detected as in blocks mode'; }
+    @{ListItemText = 'dimmed-zebra'; Tooltip = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed'; }
 ) | Sort-Object ListItemText
 
 $script:gitColorMovedWsOpts = [pscustomobject[]]@(
@@ -75,13 +75,6 @@ $script:gitColorMovedWsOpts = [pscustomobject[]]@(
     @{ListItemText = 'ignore-space-change'; Tooltip = 'Ignore changes in amount of whitespace'; }
     @{ListItemText = 'ignore-all-space'; Tooltip = 'Ignore whitespace when comparing lines'; }
     @{ListItemText = 'allow-indentation-change'; Tooltip = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line'; }
-) | Sort-Object ListItemText
-$script:gitColorMovedWsOpts = [pscustomobject[]]@(
-    @{ListItemText = 'no'; }
-    @{ListItemText = 'ignore-space-at-eol'; }
-    @{ListItemText = 'ignore-space-change'; }
-    @{ListItemText = 'ignore-all-space'; }
-    @{ListItemText = 'allow-indentation-change'; }
 ) | Sort-Object ListItemText
 
 $script:gitWsErrorHighlightOpts = [pscustomobject[]]@(
