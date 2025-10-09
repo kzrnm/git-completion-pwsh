@@ -306,7 +306,7 @@ function gitCompleteIndexFile {
 # __git_complete_revlist
 # __git_complete_file
 # __git_complete_revlist_file
-function gitCompleteRevlistFile {
+function gitCompleteRevlist {
     [OutputType([CompletionResult[]])]
     param (
         [Parameter(Mandatory, Position = 0)]
@@ -355,6 +355,3 @@ function gitCompleteRevlistFile {
         }
     }
 }
-
-Set-Alias gitCompleteFile gitCompleteRevlistFile
-Set-Alias gitCompleteRevlist gitCompleteRevlistFile

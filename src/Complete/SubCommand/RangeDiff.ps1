@@ -23,6 +23,6 @@ function Complete-GitSubCommand-range-diff {
             return
         }
     }
-    gitCompleteRevlistFile $Current
+    gitCompleteRevlist $Current
 }
 

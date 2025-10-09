@@ -39,5 +39,5 @@ function Complete-GitSubCommand-difftool {
         }
     }
 
-    gitCompleteRevlistFile $Current
+    gitCompleteRevlist $Current
 }

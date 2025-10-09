@@ -20,7 +20,7 @@ function Complete-GitSubCommand-show {
     $result = Complete-Opts-show $Context
     if ($result) { return $result }
 
-    gitCompleteRevlistFile $Current
+    gitCompleteRevlist $Current
 }
 
 function Complete-Opts-show {

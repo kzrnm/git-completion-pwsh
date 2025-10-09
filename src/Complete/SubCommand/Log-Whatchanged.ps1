@@ -20,7 +20,7 @@ function Complete-GitSubCommand-log {
 
     $result = gitCompleteLogOpts $Context
     if ($result) { return $result }
-    gitCompleteRevlistFile $Current
+    gitCompleteRevlist $Current
 }
 
 Set-Alias Complete-GitSubCommand-whatchanged Complete-GitSubCommand-log
