@@ -30,7 +30,7 @@ function Complete-GitSubCommand-status {
             $candidates = switch -CaseSensitive ($key) {
                 '--ignore-submodules' { 'none', 'untracked', 'dirty', 'all' }
                 '--ignored' { 'traditional', 'matching', 'no' }
-                '--untracked-files' { $script:gitUntrackedFileModes | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+                '--untracked-files' { $script:gitUntrackedFileModes }
                 '--column' { 'always', 'never', 'auto', 'column', 'row', 'plain', 'dense', 'nodense' }
             }
 

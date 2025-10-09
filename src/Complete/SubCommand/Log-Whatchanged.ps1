@@ -62,11 +62,11 @@ function gitCompleteLogOpts {
         $candidates = switch -CaseSensitive ($key) {
             { $_ -in @('--pretty', '--format') } { @(gitCompletePretty | Sort-Object) }
             '--date' { $script:gitLogDateFormats }
-            '--decorate' { 'full', 'short', 'no' | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--decorate' { 'full', 'short', 'no' }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
             '--submodule' { $script:gitDiffSubmoduleFormats }
             '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
-            '--no-walk' { 'sorted', 'unsorted' | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+            '--no-walk' { 'sorted', 'unsorted' }
             '--diff-merges' { $script:gitDiffMergesOpts }
         }
 

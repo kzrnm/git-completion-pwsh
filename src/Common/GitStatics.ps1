@@ -107,19 +107,6 @@ $script:gitDiffMergesOpts = [pscustomobject[]]@(
     @{ListItemText = 'r'; }
 ) | Sort-Object ListItemText
 
-$script:gitLogPrettyFormats = [pscustomobject[]]@(
-    @{ListItemText = 'oneline'; }
-    @{ListItemText = 'short'; }
-    @{ListItemText = 'medium'; }
-    @{ListItemText = 'full'; }
-    @{ListItemText = 'fuller'; }
-    @{ListItemText = 'reference'; }
-    @{ListItemText = 'email'; }
-    @{ListItemText = 'raw'; }
-    @{ListItemText = 'format:'; }
-    @{ListItemText = 'tformat:'; }
-    @{ListItemText = 'mboxrd'; }
-) | Sort-Object ListItemText
 $script:gitLogDateFormats = [pscustomobject[]]@(
     @{ListItemText = 'relative'; }
     @{ListItemText = 'iso8601'; }
@@ -134,6 +121,21 @@ $script:gitLogDateFormats = [pscustomobject[]]@(
     @{ListItemText = 'auto:'; }
     @{ListItemText = 'format:'; }
 ) | Sort-Object ListItemText
+
+$script:gitLogPrettyFormats = [pscustomobject[]]@(
+    @{ListItemText = 'oneline'; }
+    @{ListItemText = 'short'; }
+    @{ListItemText = 'medium'; }
+    @{ListItemText = 'full'; }
+    @{ListItemText = 'fuller'; }
+    @{ListItemText = 'reference'; }
+    @{ListItemText = 'email'; }
+    @{ListItemText = 'raw'; }
+    @{ListItemText = 'format:'; }
+    @{ListItemText = 'tformat:'; }
+    @{ListItemText = 'mboxrd'; }
+) | Sort-Object ListItemText
+
 $script:gitSendEmailConfirmOptions = [pscustomobject[]]@(
     @{ListItemText = 'always'; }
     @{ListItemText = 'never'; }
@@ -141,6 +143,7 @@ $script:gitSendEmailConfirmOptions = [pscustomobject[]]@(
     @{ListItemText = 'cc'; }
     @{ListItemText = 'compose'; }
 ) | Sort-Object ListItemText
+
 $script:gitSendEmailSuppressccOptions = [pscustomobject[]]@(
     @{ListItemText = 'author'; }
     @{ListItemText = 'self'; }
@@ -172,6 +175,13 @@ $script:gitMergetoolsCommon = [pscustomobject[]]@(
     @{ListItemText = 'smerge'; }
 ) | Sort-Object ListItemText
 
+$script:gitUntrackedFileModes = [pscustomobject[]]@(
+    @{ListItemText = 'all'; }
+    @{ListItemText = 'no'; }
+    @{ListItemText = 'normal'; }
+) | Sort-Object ListItemText
+
+# Options for git am
 $script:gitWhitespacelist = [pscustomobject[]]@(
     @{ListItemText = 'nowarn'; }
     @{ListItemText = 'warn'; }
@@ -179,6 +189,7 @@ $script:gitWhitespacelist = [pscustomobject[]]@(
     @{ListItemText = 'error-all'; }
     @{ListItemText = 'fix'; }
 ) | Sort-Object ListItemText
+
 $script:gitPatchformat = [pscustomobject[]]@(
     @{ListItemText = 'mbox'; }
     @{ListItemText = 'stgit'; }
@@ -186,20 +197,16 @@ $script:gitPatchformat = [pscustomobject[]]@(
     @{ListItemText = 'hg'; }
     @{ListItemText = 'mboxrd'; }
 ) | Sort-Object ListItemText
+
 $script:gitShowcurrentpatch = [pscustomobject[]]@(
     @{ListItemText = 'diff'; }
     @{ListItemText = 'raw'; }
 ) | Sort-Object ListItemText
+
 $script:gitQuotedCr = [pscustomobject[]]@(
     @{ListItemText = 'nowarn'; }
     @{ListItemText = 'warn'; }
     @{ListItemText = 'strip'; }
-) | Sort-Object ListItemText
-
-$script:gitUntrackedFileModes = [pscustomobject[]]@(
-    @{ListItemText = 'all'; }
-    @{ListItemText = 'no'; }
-    @{ListItemText = 'normal'; }
 ) | Sort-Object ListItemText
 
 # Options that go well for log and gitk (not shortlog)
