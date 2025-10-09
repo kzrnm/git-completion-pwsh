@@ -191,16 +191,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = '--recurse-submodules ';
                 Expected = @{
-                    ListItemText = 'yes';
-                    Tooltip      = 'all submodules are fetched';
+                    ListItemText = 'no';
+                    Tooltip      = 'no submodules are fetched';
                 },
                 @{
                     ListItemText = 'on-demand';
                     Tooltip      = '(default) only changed submodules are fetched';
                 },
                 @{
-                    ListItemText = 'no';
-                    Tooltip      = 'no submodules are fetched';
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
                 } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
@@ -213,16 +213,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = '--recurse-submodules=';
                 Expected = @{
-                    ListItemText = 'yes';
-                    Tooltip      = 'all submodules are fetched';
+                    ListItemText = 'no';
+                    Tooltip      = 'no submodules are fetched';
                 },
                 @{
                     ListItemText = 'on-demand';
                     Tooltip      = '(default) only changed submodules are fetched';
                 },
                 @{
-                    ListItemText = 'no';
-                    Tooltip      = 'no submodules are fetched';
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
                 } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--recurse-submodules=$_" }
             },
             @{

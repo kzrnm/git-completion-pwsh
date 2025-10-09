@@ -151,23 +151,23 @@ souseibu@deava.go.jp: akira@deava.go.jp maia@deava.co.jp subete@nesta.jp
             },
             @{
                 Line     = '--suppress-cc=';
-                Expected = 'author', 'self', 'cc', 'bodycc', 'sob', 'cccmd', 'body', 'all' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--suppress-cc=$_" }
+                Expected = 'all', 'author', 'body', 'bodycc', 'cc', 'cccmd', 'self', 'sob' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--suppress-cc=$_" }
             },
             @{
                 Line     = '--suppress-cc=a';
-                Expected = 'author', 'all' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--suppress-cc=$_" }
+                Expected = 'all', 'author' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--suppress-cc=$_" }
             },
             @{
                 Line     = '--suppress-cc ';
-                Expected = 'author', 'self', 'cc', 'bodycc', 'sob', 'cccmd', 'body', 'all' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'all', 'author', 'body', 'bodycc', 'cc', 'cccmd', 'self', 'sob' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--suppress-cc a';
-                Expected = 'author', 'all' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'all', 'author' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--confirm=';
-                Expected = 'always', 'never', 'auto', 'cc', 'compose' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--confirm=$_" }
+                Expected = 'always', 'auto', 'cc', 'compose', 'never' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--confirm=$_" }
             },
             @{
                 Line     = '--confirm=a';
@@ -175,7 +175,7 @@ souseibu@deava.go.jp: akira@deava.go.jp maia@deava.co.jp subete@nesta.jp
             },
             @{
                 Line     = '--confirm ';
-                Expected = 'always', 'never', 'auto', 'cc', 'compose' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'always', 'auto', 'cc', 'compose', 'never' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--confirm a';

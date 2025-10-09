@@ -102,10 +102,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--no';
-                Expected = '--not',
-                '--no-merges',
-                '--no-min-parents',
-                '--no-max-parents',
+                Expected = '--no-max-parents', '--no-merges', '--no-min-parents', '--not',
                 @{
                     ListItemText = '--no-committer';
                     ToolTip      = "[NO] group by committer rather than author";

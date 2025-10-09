@@ -87,7 +87,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--no-p';
-                Expected = '--no-prefix', '--no-patch' | ConvertTo-Completion -ResultType ParameterName
+                Expected = '--no-patch', '--no-prefix' | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -99,19 +99,19 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
 
             @{
                 Line     = '--color-moved-ws i';
-                Expected = 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--color-moved-ws ';
-                Expected = 'no', 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space', 'allow-indentation-change' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'allow-indentation-change', 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change', 'no' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--color-moved-ws=i';
-                Expected = 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
+                Expected = 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
             },
             @{
                 Line     = '--color-moved-ws=';
-                Expected = 'no', 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space', 'allow-indentation-change' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
+                Expected = 'allow-indentation-change', 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change', 'no' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
             },
             @{
                 Line     = '--color-moved=d';
@@ -119,7 +119,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--color-moved=';
-                Expected = 'no', 'default', 'plain', 'blocks', 'zebra', 'dimmed-zebra' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
+                Expected = 'blocks', 'default', 'dimmed-zebra', 'no', 'plain', 'zebra' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
             },
             @{
                 Line     = '--ws-error-highlight d';
@@ -127,7 +127,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--ws-error-highlight ';
-                Expected = 'context', 'old', 'new', 'all', 'default' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'all', 'context', 'default', 'new', 'old' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--ws-error-highlight=d';
@@ -135,7 +135,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--ws-error-highlight=';
-                Expected = 'context', 'old', 'new', 'all', 'default' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
+                Expected = 'all', 'context', 'default', 'new', 'old' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
             },
             @{
                 Line     = '--diff-merges o';
@@ -143,7 +143,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--diff-merges ';
-                Expected = 'off', 'none', 'on', 'first-parent', '1', 'separate', 'm', 'combined', 'c', 'dense-combined', 'cc', 'remerge', 'r' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = '1', 'c', 'cc', 'combined', 'dense-combined', 'first-parent', 'm', 'none', 'off', 'on', 'r', 'remerge', 'separate' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--diff-merges=o';
@@ -151,7 +151,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--diff-merges=';
-                Expected = 'off', 'none', 'on', 'first-parent', '1', 'separate', 'm', 'combined', 'c', 'dense-combined', 'cc', 'remerge', 'r' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-merges=$_" }
+                Expected = '1', 'c', 'cc', 'combined', 'dense-combined', 'first-parent', 'm', 'none', 'off', 'on', 'r', 'remerge', 'separate' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-merges=$_" }
             },
             @{
                 Line     = '--submodule=d';
@@ -178,52 +178,52 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = '--diff-algorithm m';
                 Expected = @{
-                    ListItemText = 'myers';
-                    ToolTip      = '(default) The basic greedy diff algorithm';
-                },
-                @{
                     ListItemText = 'minimal';
                     ToolTip      = 'Spend extra time to make sure the smallest possible diff is produced';
+                },
+                @{
+                    ListItemText = 'myers';
+                    ToolTip      = '(default) The basic greedy diff algorithm';
                 } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--diff-algorithm ';
                 Expected = @{
-                    ListItemText = 'myers';
-                    ToolTip      = '(default) The basic greedy diff algorithm';
+                    ListItemText = 'histogram';
+                    ToolTip      = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
                 },
                 @{
                     ListItemText = 'minimal';
                     ToolTip      = 'Spend extra time to make sure the smallest possible diff is produced';
                 },
                 @{
-                    ListItemText = 'patience';
-                    ToolTip      = 'Use "patience diff" algorithm when generating patches';
+                    ListItemText = 'myers';
+                    ToolTip      = '(default) The basic greedy diff algorithm';
                 },
                 @{
-                    ListItemText = 'histogram';
-                    ToolTip      = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
+                    ListItemText = 'patience';
+                    ToolTip      = 'Use "patience diff" algorithm when generating patches';
                 } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--diff-algorithm=m';
                 Expected = @{
-                    CompletionText = "--diff-algorithm=myers";
-                    ListItemText   = 'myers';
-                    ToolTip        = '(default) The basic greedy diff algorithm';
-                },
-                @{
                     CompletionText = "--diff-algorithm=minimal";
                     ListItemText   = 'minimal';
                     ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                },
+                @{
+                    CompletionText = "--diff-algorithm=myers";
+                    ListItemText   = 'myers';
+                    ToolTip        = '(default) The basic greedy diff algorithm';
                 } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
             },
             @{
                 Line     = '--diff-algorithm=';
                 Expected = @{
-                    CompletionText = "--diff-algorithm=myers";
-                    ListItemText   = 'myers';
-                    ToolTip        = '(default) The basic greedy diff algorithm';
+                    CompletionText = "--diff-algorithm=histogram";
+                    ListItemText   = 'histogram';
+                    ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
                 },
                 @{
                     CompletionText = "--diff-algorithm=minimal";
@@ -231,39 +231,41 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
                 },
                 @{
+                    CompletionText = "--diff-algorithm=myers";
+                    ListItemText   = 'myers';
+                    ToolTip        = '(default) The basic greedy diff algorithm';
+                },
+                @{
                     CompletionText = "--diff-algorithm=patience";
                     ListItemText   = 'patience';
                     ToolTip        = 'Use "patience diff" algorithm when generating patches';
-                },
-                @{
-                    CompletionText = "--diff-algorithm=histogram";
-                    ListItemText   = 'histogram';
-                    ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
                 } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
             },
             @{
                 Line     = '--format=m';
-                Expected = 'medium', 'mboxrd' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--format=$_" }
+                Expected = 'mboxrd', 'medium' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--format=$_" }
             },
             @{
                 Line     = '--format=';
-                Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd',
-                @{
+                Expected = @{
                     ListItemText = 'changelog';
                     Tooltip      = 'format:* %H %s';
-                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--format=$_" }
+                },
+                'email', 'format:', 'full', 'fuller', 'mboxrd', 'medium',
+                'oneline', 'raw', 'reference', 'short', 'tformat:' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--format=$_" }
             },
             @{
                 Line     = '--pretty=f';
-                Expected = 'full', 'fuller', 'format:' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--pretty=$_" }
+                Expected = 'format:', 'full', 'fuller' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--pretty=$_" }
             },
             @{
                 Line     = '--pretty=';
-                Expected = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd',
-                @{
+                Expected = @{
                     ListItemText = 'changelog';
                     Tooltip      = 'format:* %H %s';
-                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--pretty=$_" }
+                },
+                'email', 'format:', 'full', 'fuller', 'mboxrd', 'medium',
+                'oneline', 'raw', 'reference', 'short', 'tformat:' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--pretty=$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

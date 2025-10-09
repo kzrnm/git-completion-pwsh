@@ -59,7 +59,7 @@ function Complete-GitSubCommand-stash {
             }
 
             $candidates = switch ($subcommand) {
-                'list' { $gitLogCommonOptions + $gitDiffCommonOptions }
+                'list' { $gitStashListOptions }
                 'show' { $gitDiffCommonOptions }
                 Default { $null }
             }

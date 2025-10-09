@@ -264,16 +264,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Tooltip      = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule';
                 },
                 @{
+                    ListItemText = 'no';
+                    Tooltip      = '(default) no submodules are pushed';
+                },
+                @{
                     ListItemText = 'on-demand';
                     Tooltip      = 'all submodules that changed in the revisions to be pushed will be pushed';
                 },
                 @{
                     ListItemText = 'only';
                     Tooltip      = 'all submodules will be pushed while the superproject is left unpushed';
-                },
-                @{
-                    ListItemText = 'no';
-                    Tooltip      = '(default) no submodules are pushed';
                 } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
@@ -290,16 +290,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Tooltip      = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule';
                 },
                 @{
+                    ListItemText = 'no';
+                    Tooltip      = '(default) no submodules are pushed';
+                },
+                @{
                     ListItemText = 'on-demand';
                     Tooltip      = 'all submodules that changed in the revisions to be pushed will be pushed';
                 },
                 @{
                     ListItemText = 'only';
                     Tooltip      = 'all submodules will be pushed while the superproject is left unpushed';
-                },
-                @{
-                    ListItemText = 'no';
-                    Tooltip      = '(default) no submodules are pushed';
                 } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--recurse-submodules=$_" }
             },
             @{

@@ -3,6 +3,16 @@
 # Distributed under the GNU General Public License, version 2.0.
 using namespace System.Management.Automation;
 
+
+function gitCompletePretty() {
+    [CmdletBinding()]
+    [OutputType([string[]])]
+    param()
+    $script:gitLogPrettyFormats
+    # __git_pretty_aliases
+    gitGetConfigVariables pretty
+}
+
 $__BuiltinDescriptionBuilder = ([scriptblock] { Get-GitOptionsDescription $_ @Command })
 function gitCompleteResolveBuiltins {
     [OutputType([CompletionResult[]])]
@@ -229,25 +239,6 @@ function gitCompleteStrategy {
     param (
         [Parameter(Mandatory)][AllowEmptyString()][string] $Current,
         [Parameter(Mandatory)][AllowEmptyString()][string] $Prev
-    )
-
-    $gitMergeStrategyOptions = @(
-        'ours',
-        'theirs',
-        'subtree',
-        'subtree=',
-        'patience',
-        'histogram',
-        'diff-algorithm=',
-        'ignore-space-change',
-        'ignore-all-space',
-        'ignore-space-at-eol',
-        'renormalize',
-        'no-renormalize',
-        'no-renames',
-        'find-renames',
-        'find-renames=',
-        'rename-threshold='
     )
 
     if ($Prev -cmatch '^-([^-]*s|-strategy)$') {

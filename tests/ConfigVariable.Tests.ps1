@@ -234,37 +234,37 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 @{
                     Line     = 'diff.algorithm=';
                     Expected = @{
-                        CompletionText = "diff.algorithm=myers";
-                        ListItemText   = 'myers';
-                        ToolTip        = '(default) The basic greedy diff algorithm';
+                        CompletionText = "diff.algorithm=histogram";
+                        ListItemText   = 'histogram';
+                        ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
                     },
                     @{
                         CompletionText = "diff.algorithm=minimal";
                         ListItemText   = 'minimal';
                         ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                    },
+                    @{
+                        CompletionText = "diff.algorithm=myers";
+                        ListItemText   = 'myers';
+                        ToolTip        = '(default) The basic greedy diff algorithm';
                     },
                     @{
                         CompletionText = "diff.algorithm=patience";
                         ListItemText   = 'patience';
                         ToolTip        = 'Use "patience diff" algorithm when generating patches';
-                    },
-                    @{
-                        CompletionText = "diff.algorithm=histogram";
-                        ListItemText   = 'histogram';
-                        ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
                     } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'diff.algorithm=m';
                     Expected = @{
-                        CompletionText = "diff.algorithm=myers";
-                        ListItemText   = 'myers';
-                        ToolTip        = '(default) The basic greedy diff algorithm';
-                    },
-                    @{
                         CompletionText = "diff.algorithm=minimal";
                         ListItemText   = 'minimal';
                         ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                    },
+                    @{
+                        CompletionText = "diff.algorithm=myers";
+                        ListItemText   = 'myers';
+                        ToolTip        = '(default) The basic greedy diff algorithm';
                     } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
@@ -337,7 +337,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 },
                 @{
                     Line     = 'log.date=';
-                    Expected = 'relative', 'iso8601', 'iso8601-strict', 'rfc2822', 'short', 'local', 'default', 'human', 'raw', 'unix', 'auto:', 'format:' |
+                    Expected = 'auto:', 'default', 'format:', 'human', 'iso8601', 'iso8601-strict', 'local', 'raw', 'relative', 'rfc2822', 'short', 'unix' |
                     ConvertTo-Completion -ResultType ParameterValue -CompletionText { "log.date=$_" }
                 },
                 @{
@@ -357,7 +357,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 },
                 @{
                     Line     = 'sendemail.confirm=';
-                    Expected = 'always', 'never', 'auto', 'cc', 'compose' |
+                    Expected = 'always', 'auto', 'cc', 'compose', 'never' |
                     ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.confirm=$_" }
                 },
                 @{
@@ -367,12 +367,12 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 },
                 @{
                     Line     = 'sendemail.suppresscc=';
-                    Expected = 'author', 'self', 'cc', 'bodycc', 'sob', 'cccmd', 'body', 'all' |
+                    Expected = 'all', 'author', 'body', 'bodycc', 'cc', 'cccmd', 'self', 'sob' |
                     ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.suppresscc=$_" }
                 },
                 @{
                     Line     = 'sendemail.suppresscc=a';
-                    Expected = 'author', 'all' |
+                    Expected = 'all', 'author' |
                     ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.suppresscc=$_" }
                 },
                 @{

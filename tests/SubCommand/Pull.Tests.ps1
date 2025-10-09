@@ -215,35 +215,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 },
                 @{
                     Line     = '--strategy-option ';
-                    Expected = 
-                    'ours',
-                    'theirs',
-                    'subtree',
-                    'subtree=',
-                    'patience',
-                    'histogram',
-                    'diff-algorithm=',
-                    'ignore-space-change',
-                    'ignore-all-space',
-                    'ignore-space-at-eol',
-                    'renormalize',
-                    'no-renormalize',
-                    'no-renames',
-                    'find-renames',
-                    'find-renames=',
-                    'rename-threshold=' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 'diff-algorithm=', 'find-renames', 'find-renames=',
+                    'histogram', 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change',
+                    'no-renames', 'no-renormalize', 'ours', 'patience',
+                    'rename-threshold=', 'renormalize', 'subtree', 'subtree=', 'theirs' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy-option r';
-                    Expected = 
-                    'renormalize',
-                    'rename-threshold=' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 'rename-threshold=', 'renormalize' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy-option=r';
-                    Expected = 
-                    'renormalize',
-                    'rename-threshold=' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
+                    Expected = 'rename-threshold=', 'renormalize' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -254,16 +237,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = '--recurse-submodules ';
                 Expected = @{
-                    ListItemText = 'yes';
-                    Tooltip      = 'all submodules are fetched';
+                    ListItemText = 'no';
+                    Tooltip      = 'no submodules are fetched';
                 },
                 @{
                     ListItemText = 'on-demand';
                     Tooltip      = '(default) only changed submodules are fetched';
                 },
                 @{
-                    ListItemText = 'no';
-                    Tooltip      = 'no submodules are fetched';
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
                 } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
@@ -276,16 +259,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = '--recurse-submodules=';
                 Expected = @{
-                    ListItemText = 'yes';
-                    Tooltip      = 'all submodules are fetched';
+                    ListItemText = 'no';
+                    Tooltip      = 'no submodules are fetched';
                 },
                 @{
                     ListItemText = 'on-demand';
                     Tooltip      = '(default) only changed submodules are fetched';
                 },
                 @{
-                    ListItemText = 'no';
-                    Tooltip      = 'no submodules are fetched';
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
                 } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--recurse-submodules=$_" }
             },
             @{

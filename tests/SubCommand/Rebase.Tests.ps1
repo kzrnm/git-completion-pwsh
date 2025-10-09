@@ -271,38 +271,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 },
                 @{
                     Line     = '--strategy-option ';
-                    Expected = @(
-                        'ours',
-                        'theirs',
-                        'subtree',
-                        'subtree=',
-                        'patience',
-                        'histogram',
-                        'diff-algorithm=',
-                        'ignore-space-change',
-                        'ignore-all-space',
-                        'ignore-space-at-eol',
-                        'renormalize',
-                        'no-renormalize',
-                        'no-renames',
-                        'find-renames',
-                        'find-renames=',
-                        'rename-threshold='
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 'diff-algorithm=', 'find-renames', 'find-renames=',
+                    'histogram', 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change',
+                    'no-renames', 'no-renormalize', 'ours', 'patience',
+                    'rename-threshold=', 'renormalize', 'subtree', 'subtree=', 'theirs' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy-option r';
-                    Expected = @(
-                        'renormalize',
-                        'rename-threshold='
-                    ) | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 'rename-threshold=', 'renormalize' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy-option=r';
-                    Expected = @(
-                        'renormalize',
-                        'rename-threshold='
-                    ) | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
+                    Expected = 'rename-threshold=', 'renormalize' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -420,8 +400,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--whitespace ';
-                Expected = 
-                'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'error', 'error-all', 'fix', 'nowarn', 'warn' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--whitespace e';
@@ -430,8 +409,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--whitespace=';
-                Expected =
-                'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--whitespace=$_" }
+                Expected = 'error', 'error-all', 'fix', 'nowarn', 'warn' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--whitespace=$_" }
             },
             @{
                 Line     = '--whitespace=e';
@@ -461,16 +439,12 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 @{
                     Line     = '';
                     Expected = @{
-                        ListItemText = '--continue';
-                        ToolTip      = "continue";
-                    },
-                    @{
-                        ListItemText = '--skip';
-                        ToolTip      = "skip current patch and continue";
-                    },
-                    @{
                         ListItemText = '--abort';
                         ToolTip      = "abort and check out the original branch";
+                    },
+                    @{
+                        ListItemText = '--continue';
+                        ToolTip      = "continue";
                     },
                     @{
                         ListItemText = '--quit';
@@ -479,21 +453,21 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     @{
                         ListItemText = '--show-current-patch';
                         ToolTip      = "show the patch file being applied or merged";
+                    },
+                    @{
+                        ListItemText = '--skip';
+                        ToolTip      = "skip current patch and continue";
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = '-';
                     Expected = @{
-                        ListItemText = '--continue';
-                        ToolTip      = "continue";
-                    },
-                    @{
-                        ListItemText = '--skip';
-                        ToolTip      = "skip current patch and continue";
-                    },
-                    @{
                         ListItemText = '--abort';
                         ToolTip      = "abort and check out the original branch";
+                    },
+                    @{
+                        ListItemText = '--continue';
+                        ToolTip      = "continue";
                     },
                     @{
                         ListItemText = '--quit';
@@ -502,21 +476,21 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     @{
                         ListItemText = '--show-current-patch';
                         ToolTip      = "show the patch file being applied or merged";
+                    },
+                    @{
+                        ListItemText = '--skip';
+                        ToolTip      = "skip current patch and continue";
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = '--';
                     Expected = @{
-                        ListItemText = '--continue';
-                        ToolTip      = "continue";
-                    },
-                    @{
-                        ListItemText = '--skip';
-                        ToolTip      = "skip current patch and continue";
-                    },
-                    @{
                         ListItemText = '--abort';
                         ToolTip      = "abort and check out the original branch";
+                    },
+                    @{
+                        ListItemText = '--continue';
+                        ToolTip      = "continue";
                     },
                     @{
                         ListItemText = '--quit';
@@ -525,6 +499,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     @{
                         ListItemText = '--show-current-patch';
                         ToolTip      = "show the patch file being applied or merged";
+                    },
+                    @{
+                        ListItemText = '--skip';
+                        ToolTip      = "skip current patch and continue";
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
@@ -562,16 +540,16 @@ mv ".rebase" "$1"
                 @{
                     Line     = '';
                     Expected = @{
+                        ListItemText = '--abort';
+                        ToolTip      = "abort and check out the original branch";
+                    },
+                    @{
                         ListItemText = '--continue';
                         ToolTip      = "continue";
                     },
                     @{
-                        ListItemText = '--skip';
-                        ToolTip      = "skip current patch and continue";
-                    },
-                    @{
-                        ListItemText = '--abort';
-                        ToolTip      = "abort and check out the original branch";
+                        ListItemText = '--edit-todo';
+                        ToolTip      = "edit the todo list during an interactive rebase";
                     },
                     @{
                         ListItemText = '--quit';
@@ -582,23 +560,23 @@ mv ".rebase" "$1"
                         ToolTip      = "show the patch file being applied or merged";
                     },
                     @{
-                        ListItemText = '--edit-todo';
-                        ToolTip      = "edit the todo list during an interactive rebase";
+                        ListItemText = '--skip';
+                        ToolTip      = "skip current patch and continue";
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = '-';
                     Expected = @{
+                        ListItemText = '--abort';
+                        ToolTip      = "abort and check out the original branch";
+                    },
+                    @{
                         ListItemText = '--continue';
                         ToolTip      = "continue";
                     },
                     @{
-                        ListItemText = '--skip';
-                        ToolTip      = "skip current patch and continue";
-                    },
-                    @{
-                        ListItemText = '--abort';
-                        ToolTip      = "abort and check out the original branch";
+                        ListItemText = '--edit-todo';
+                        ToolTip      = "edit the todo list during an interactive rebase";
                     },
                     @{
                         ListItemText = '--quit';
@@ -609,23 +587,23 @@ mv ".rebase" "$1"
                         ToolTip      = "show the patch file being applied or merged";
                     },
                     @{
-                        ListItemText = '--edit-todo';
-                        ToolTip      = "edit the todo list during an interactive rebase";
+                        ListItemText = '--skip';
+                        ToolTip      = "skip current patch and continue";
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = '--';
                     Expected = @{
+                        ListItemText = '--abort';
+                        ToolTip      = "abort and check out the original branch";
+                    },
+                    @{
                         ListItemText = '--continue';
                         ToolTip      = "continue";
                     },
                     @{
-                        ListItemText = '--skip';
-                        ToolTip      = "skip current patch and continue";
-                    },
-                    @{
-                        ListItemText = '--abort';
-                        ToolTip      = "abort and check out the original branch";
+                        ListItemText = '--edit-todo';
+                        ToolTip      = "edit the todo list during an interactive rebase";
                     },
                     @{
                         ListItemText = '--quit';
@@ -636,8 +614,8 @@ mv ".rebase" "$1"
                         ToolTip      = "show the patch file being applied or merged";
                     },
                     @{
-                        ListItemText = '--edit-todo';
-                        ToolTip      = "edit the todo list during an interactive rebase";
+                        ListItemText = '--skip';
+                        ToolTip      = "skip current patch and continue";
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
