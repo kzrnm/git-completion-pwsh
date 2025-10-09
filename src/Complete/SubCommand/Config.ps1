@@ -303,6 +303,10 @@ function completeConfigVariableValue {
             $script:gitColorMovedWsOpts | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
+        "diff.wsErrorHighlight" {
+            $script:gitWsErrorHighlightOpts | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            return
+        }
     }
 }
 

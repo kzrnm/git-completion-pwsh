@@ -62,7 +62,7 @@ $script:gitDiffSubmoduleFormats = [pscustomobject[]]@(
 
 $script:gitColorMovedOpts = [pscustomobject[]]@(
     @{ListItemText = 'no'; Tooltip = 'Moved lines are not highlighted'; }
-    @{ListItemText = 'default'; Tooltip = 'Is a synonym for zebra'; }
+    @{ListItemText = 'default'; Tooltip = 'A synonym for zebra'; }
     @{ListItemText = 'plain'; Tooltip = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved'; }
     @{ListItemText = 'blocks'; Tooltip = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily'; }
     @{ListItemText = 'zebra'; Tooltip = 'Blocks of moved text are detected as in blocks mode'; }
@@ -78,11 +78,11 @@ $script:gitColorMovedWsOpts = [pscustomobject[]]@(
 ) | Sort-Object ListItemText
 
 $script:gitWsErrorHighlightOpts = [pscustomobject[]]@(
-    @{ListItemText = 'context'; }
-    @{ListItemText = 'old'; }
-    @{ListItemText = 'new'; }
-    @{ListItemText = 'all'; }
-    @{ListItemText = 'default'; }
+    @{ListItemText = 'context'; Tooltip = 'Highlight whitespace errors in the context'; }
+    @{ListItemText = 'old'; Tooltip = 'Highlight whitespace errors in the old lines of the diff'; }
+    @{ListItemText = 'new'; Tooltip = 'Highlight whitespace errors in the new lines of the diff'; }
+    @{ListItemText = 'all'; Tooltip = 'A synonym for old,new,context'; }
+    @{ListItemText = 'default'; Tooltip = 'A synonym for new'; }
 ) | Sort-Object ListItemText
 
 # Options that go well for log and gitk (not shortlog)
