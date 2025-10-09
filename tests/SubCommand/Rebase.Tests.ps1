@@ -271,18 +271,92 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 },
                 @{
                     Line     = '--strategy-option ';
-                    Expected = 'diff-algorithm=', 'find-renames', 'find-renames=',
-                    'histogram', 'ignore-all-space', 'ignore-space-at-eol', 'ignore-space-change',
-                    'no-renames', 'no-renormalize', 'ours', 'patience',
-                    'rename-threshold=', 'renormalize', 'subtree', 'subtree=', 'theirs' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = @{
+                        ListItemText = 'diff-algorithm=';
+                        Tooltip      = 'Use a different diff algorithm while merging';
+                    },
+                    @{
+                        ListItemText = 'find-renames';
+                        Tooltip      = 'Turn on rename detection';
+                    },
+                    @{
+                        ListItemText = 'find-renames=';
+                        Tooltip      = 'Turn on rename detection, optionally setting the similarity threshold';
+                    },
+                    @{
+                        ListItemText = 'histogram';
+                        Tooltip      = 'Deprecated synonym for diff-algorithm=histogram';
+                    },
+                    @{
+                        ListItemText = 'ignore-all-space';
+                        Tooltip      = 'Ignore whitespace when comparing lines';
+                    },
+                    @{
+                        ListItemText = 'ignore-space-at-eol';
+                        Tooltip      = 'Ignore changes in whitespace at EOL';
+                    },
+                    @{
+                        ListItemText = 'ignore-space-change';
+                        Tooltip      = 'Ignore changes in amount of whitespace';
+                    },
+                    @{
+                        ListItemText = 'no-renames';
+                        Tooltip      = 'Turn off rename detection';
+                    },
+                    @{
+                        ListItemText = 'no-renormalize';
+                        Tooltip      = '[NO] runs a virtual check-out and check-in of all three stages';
+                    },
+                    @{
+                        ListItemText = 'ours';
+                        Tooltip      = 'favoring our version';
+                    },
+                    @{
+                        ListItemText = 'patience';
+                        Tooltip      = 'Deprecated synonym for diff-algorithm=patience';
+                    },
+                    @{
+                        ListItemText = 'rename-threshold=';
+                        Tooltip      = 'Deprecated synonym for find-renames=';
+                    },
+                    @{
+                        ListItemText = 'renormalize';
+                        Tooltip      = 'runs a virtual check-out and check-in of all three stages';
+                    },
+                    @{
+                        ListItemText = 'subtree';
+                        Tooltip      = 'A more advanced form of subtree strategy';
+                    },
+                    @{
+                        ListItemText = 'subtree=';
+                        Tooltip      = 'A more advanced form of subtree strategy';
+                    },
+                    @{
+                        ListItemText = 'theirs';
+                        Tooltip      = 'opposite of ours';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy-option r';
-                    Expected = 'rename-threshold=', 'renormalize' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = @{
+                        ListItemText = 'rename-threshold=';
+                        Tooltip      = 'Deprecated synonym for find-renames=';
+                    },
+                    @{
+                        ListItemText = 'renormalize';
+                        Tooltip      = 'runs a virtual check-out and check-in of all three stages';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy-option=r';
-                    Expected = 'rename-threshold=', 'renormalize' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
+                    Expected = @{
+                        ListItemText = 'rename-threshold=';
+                        Tooltip      = 'Deprecated synonym for find-renames=';
+                    },
+                    @{
+                        ListItemText = 'renormalize';
+                        Tooltip      = 'runs a virtual check-out and check-in of all three stages';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
