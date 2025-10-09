@@ -24,7 +24,7 @@ function Complete-GitSubCommand-push {
                 return
             }
             '--recurse-submodules' {
-                $script:gitPushRecurseSubmodules | completeTipList -Current $Current -ResultType ParameterValue 
+                $script:gitPushRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
                 return
             }
         }
@@ -35,7 +35,7 @@ function Complete-GitSubCommand-push {
                 return
             }
             '--recurse-submodules=*' { 
-                $script:gitPushRecurseSubmodules | completeTipList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
+                $script:gitPushRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
                 return
             }
             '--force-with-lease=*' {

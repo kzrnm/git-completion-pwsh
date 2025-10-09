@@ -64,7 +64,7 @@ function Complete-GitSubCommand-stash {
                 Default { $null }
             }
             if ($candidates) {
-                $candidates | completeTipList -Current $Current -ResultType ParameterName
+                $candidates | completeList -Current $Current -ResultType ParameterName
             }
             gitCompleteResolveBuiltins $Context.Command $subcommand -Current $Current -Exclude ($candidates | ForEach-Object ListItemText)
             return
@@ -99,7 +99,7 @@ function Complete-GitSubCommand-stash {
                 return
             }
         }
-        gitCompletStashList | filterCompletionResult $Current
+        gitStashList | completeList -Current $Current -ResultType ParameterValue -Prefix "'" -Suffix "'"
         return
     }
 }

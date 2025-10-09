@@ -7,6 +7,27 @@ $script:gitAmInprogressOptions = '--skip', '--continue', '--resolved', '--abort'
 $script:gitRebaseInprogressOptions = '--continue', '--skip', '--abort', '--quit', '--show-current-patch'
 $script:gitRebaseInteractiveInprogressOptions = $script:gitRebaseInprogressOptions + '--edit-todo'
 
+$script:gitHttpProxyAuthMethod = @{
+    ListItemText = 'anyauth';
+    Tooltip      = 'Automatically pick a suitable authentication method';
+},
+@{
+    ListItemText = 'basic';
+    Tooltip      = 'HTTP Basic authentication';
+},
+@{
+    ListItemText = 'digest';
+    Tooltip      = 'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text';
+},
+@{
+    ListItemText = 'negotiate';
+    Tooltip      = 'GSS-Negotiate authentication (compare the --negotiate option of curl)';
+},
+@{
+    ListItemText = 'ntlm';
+    Tooltip      = 'NTLM authentication (compare the --ntlm option of curl)';
+} | Sort-Object ListItemText
+
 $script:gitPushRecurseSubmodules = [pscustomobject[]]@(
     @{ListItemText = 'check'; Tooltip = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule'; }
     @{ListItemText = 'on-demand'; Tooltip = 'all submodules that changed in the revisions to be pushed will be pushed'; }

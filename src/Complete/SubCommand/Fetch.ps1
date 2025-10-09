@@ -20,7 +20,7 @@ function Complete-GitSubCommand-fetch {
         $gitFetchFilters = "blob:none", "blob:limit=", "sparse:oid="
         switch ($Prev) {
             '--recurse-submodules' {
-                $script:gitFetchRecurseSubmodules | completeTipList -Current $Current -ResultType ParameterValue 
+                $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue 
                 return
             }
             '--filter' {
@@ -31,7 +31,7 @@ function Complete-GitSubCommand-fetch {
 
         switch -Wildcard ($Current) {
             '--recurse-submodules=*' { 
-                $script:gitFetchRecurseSubmodules | completeTipList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
+                $script:gitFetchRecurseSubmodules | completeList -Current $Current -ResultType ParameterValue -Prefix '--recurse-submodules=' -RemovePrefix
                 return
             }
             '--filter=*' {

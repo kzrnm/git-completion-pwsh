@@ -19,8 +19,8 @@ function Complete-GitSubCommand-send-email {
         $prevCandidates = switch -CaseSensitive -Regex ($Context.PreviousWord()) {
             '^--(to|cc|bcc|from)$' { @(__git send-email --dump-aliases) }
             '^--smtp-encryption$' { 'ssl', 'tls' }
-            '^--suppress-cc$' { $gitSendEmailSuppressccOptions | completeTipList -Current $Current -ResultType ParameterValue; return }
-            '^--confirm$' { $gitSendEmailConfirmOptions | completeTipList -Current $Current -ResultType ParameterValue; return }
+            '^--suppress-cc$' { $gitSendEmailSuppressccOptions | completeList -Current $Current -ResultType ParameterValue; return }
+            '^--confirm$' { $gitSendEmailConfirmOptions | completeList -Current $Current -ResultType ParameterValue; return }
         }
 
         if ($prevCandidates) {
@@ -35,8 +35,8 @@ function Complete-GitSubCommand-send-email {
                 '^--thread$' { 'deep', 'shallow' }
                 '^--(to|cc|bcc|from)$' { @(__git send-email --dump-aliases) }
                 '^--smtp-encryption$' { 'ssl', 'tls' }
-                '^--suppress-cc$' { $gitSendEmailSuppressccOptions | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
-                '^--confirm$' { $gitSendEmailConfirmOptions | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+                '^--suppress-cc$' { $gitSendEmailSuppressccOptions | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+                '^--confirm$' { $gitSendEmailConfirmOptions | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
             }
 
             if ($candidates) {

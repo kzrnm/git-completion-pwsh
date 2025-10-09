@@ -50,7 +50,7 @@ function gitCompleteLogOpts {
     }
 
     if ($prevCandidates) {
-        $prevCandidates | completeTipList -Current $Current -ResultType ParameterValue
+        $prevCandidates | completeList -Current $Current -ResultType ParameterValue
         return
     }
 
@@ -71,15 +71,15 @@ function gitCompleteLogOpts {
         }
 
         if ($candidates) {
-            $candidates | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue
+            $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }
     
-    $gitLogCommonOptions | completeTipList -Current $Current -ResultType ParameterName
-    $gitLogShortlogOptions | completeTipList -Current $Current -ResultType ParameterName
-    $gitLogGitkOptions | completeTipList -Current $Current -ResultType ParameterName
-    $gitLogShowOptions | completeTipList -Current $Current -ResultType ParameterName
+    $gitLogCommonOptions | completeList -Current $Current -ResultType ParameterName
+    $gitLogShortlogOptions | completeList -Current $Current -ResultType ParameterName
+    $gitLogGitkOptions | completeList -Current $Current -ResultType ParameterName
+    $gitLogShowOptions | completeList -Current $Current -ResultType ParameterName
 
     '--committer=',
     '--root',
@@ -119,7 +119,7 @@ function gitCompleteLogOpts {
     if (gitPseudorefExists MERGE_HEAD) {
         '--merge' | completeList -Current $Current -ResultType ParameterName
     }
-    $gitDiffCommonOptions | completeTipList -Current $Current -ResultType ParameterName
+    $gitDiffCommonOptions | completeList -Current $Current -ResultType ParameterName
 
     return
 }

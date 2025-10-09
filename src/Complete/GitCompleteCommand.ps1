@@ -3,22 +3,6 @@
 # Distributed under the GNU General Public License, version 2.0.
 using namespace System.Management.Automation;
 
-function gitCompletStashList {
-    foreach ($line in ((git stash list -z) -split '\0')) {
-        if ($line -match '^([^:]+): ?(.*?)$') {
-            $Name = $Matches[1]
-            $Message = $Matches[2]
-
-            [CompletionResult]::new(
-                "'$Name'",
-                $Name,
-                'ParameterValue',
-                $Message
-            )
-        }
-    }
-}
-
 $__BuiltinDescriptionBuilder = ([scriptblock] { Get-GitOptionsDescription $_ @Command })
 function gitCompleteResolveBuiltins {
     [OutputType([CompletionResult[]])]

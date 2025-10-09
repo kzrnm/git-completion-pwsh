@@ -23,7 +23,7 @@ function Complete-GitSubCommand-restore {
                 return
             }
             '--conflict' {
-                $gitConflictSolver | completeTipList -Current $Current -ResultType ParameterValue
+                $gitConflictSolver | completeList -Current $Current -ResultType ParameterValue
                 return
             }
         }
@@ -37,7 +37,7 @@ function Complete-GitSubCommand-restore {
                     return
                 }
                 '--conflict' {
-                    $gitConflictSolver | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                    $gitConflictSolver | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
                     return
                 }
             }

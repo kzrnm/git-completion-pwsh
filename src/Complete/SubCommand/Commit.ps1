@@ -21,7 +21,7 @@ function Complete-GitSubCommand-commit {
             '^-[^-]*[cC]$' { gitCompleteRefs $Current; return }
             '^--cleanup$' { 'default', 'scissors', 'strip', 'verbatim', 'whitespace' }
             '^--(reuse-message|reedit-message|fixup|squash)$' { gitCompleteRefs $Current; return }
-            '^--untracked-files$' { $script:gitUntrackedFileModes | completeTipList -Current $Current -ResultType ParameterValue; return }
+            '^--untracked-files$' { $script:gitUntrackedFileModes | completeList -Current $Current -ResultType ParameterValue; return }
             '^--trailer$' { gitTrailerTokens }
         }
 
@@ -36,7 +36,7 @@ function Complete-GitSubCommand-commit {
             $candidates = switch -CaseSensitive -Regex ($key) {
                 '^--cleanup$' { 'default', 'scissors', 'strip', 'verbatim', 'whitespace' }
                 '^--(reuse-message|reedit-message|fixup|squash)$' { gitCompleteRefs $value -Prefix "$key="; return }
-                '^--untracked-files$' { $script:gitUntrackedFileModes | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
+                '^--untracked-files$' { $script:gitUntrackedFileModes | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue; return }
                 '^--trailer$' { gitTrailerTokens }
             }
 

@@ -101,6 +101,20 @@ function gitGetAlias {
     }
 }
 
+function gitStashList {
+    [OutputType([PSCustomObject[]])]
+    param()
+
+    foreach ($line in ((git stash list -z) -split '\0')) {
+        if ($line -match '^([^:]+): ?(.*?)$') {
+            @{
+                ListItemText = $Matches[1];
+                Tooltip      = $Matches[2];
+            }
+        }
+    }
+}
+
 function gitLsTreeFile {
     [OutputType([string[]])]
     param ([Parameter(Mandatory, Position = 0)][string]$treeIsh)
@@ -582,8 +596,8 @@ function gitGetConfigVariables () {
     foreach ($kv in @((__git config -z --get-regexp "^$Section\..*" | Out-String) -split "`0")) {
         if ($kv -match "^$Section\.(?<Name>\S+)\s+(?<Value>[\s\S]*)") {
             [PSCustomObject]@{
-                ListItemText  = $Matches['Name'];
-                Tooltip = $Matches['Value'] -creplace "(`r`n|`n)", ' ';
+                ListItemText = $Matches['Name'];
+                Tooltip      = $Matches['Value'] -creplace "(`r`n|`n)", ' ';
             }
         }
     }

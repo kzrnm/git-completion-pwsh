@@ -44,7 +44,7 @@ function Complete-Opts-diff {
     }
 
     if ($prevCandidates) {
-        $prevCandidates | completeTipList -Current $Current -ResultType ParameterValue
+        $prevCandidates | completeList -Current $Current -ResultType ParameterValue
         return
     }
 
@@ -60,13 +60,13 @@ function Complete-Opts-diff {
         }
 
         if ($candidates) {
-            $candidates | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue
+            $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
             return
         }
     }
 
     if ($Current.StartsWith('--')) {
-        $script:gitDiffDifftoolOptions | completeTipList -Current $Current
+        $script:gitDiffDifftoolOptions | completeList -Current $Current
         return
     }
 }

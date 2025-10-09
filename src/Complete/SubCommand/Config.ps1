@@ -248,53 +248,22 @@ function completeConfigVariableValue {
             return
         }
         "diff.submodule" {
-            $script:gitDiffSubmoduleFormats | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitDiffSubmoduleFormats | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "diff.algorithm" {
-            $script:gitDiffAlgorithms | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitDiffAlgorithms | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
-        "http.proxyAuthMethod" {
-            return (
-                [CompletionResult]::new(
-                    "${Prefix}anyauth",
-                    'anyauth',
-                    'ParameterValue',
-                    'Automatically pick a suitable authentication method'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}basic",
-                    'basic',
-                    'ParameterValue',
-                    'HTTP Basic authentication'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}digest",
-                    'digest',
-                    'ParameterValue',
-                    'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}negotiate",
-                    'negotiate',
-                    'ParameterValue',
-                    'GSS-Negotiate authentication (compare the --negotiate option of curl)'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}ntlm",
-                    'ntlm',
-                    'ParameterValue',
-                    'NTLM authentication (compare the --ntlm option of curl)'
-                ) | filterCompletionResult $Current
-            )
+        'http.proxyAuthMethod' {
+            $gitHttpProxyAuthMethod | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
         }
         "help.format" {
             "man", "info", "web", "html" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "log.date" {
-            $script:gitLogDateFormats | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitLogDateFormats | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "sendemail.aliasfiletype" {
@@ -302,11 +271,11 @@ function completeConfigVariableValue {
             return
         }
         "sendemail.confirm" {
-            $script:gitSendEmailConfirmOptions | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitSendEmailConfirmOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "sendemail.suppresscc" {
-            $script:gitSendEmailSuppressccOptions | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitSendEmailSuppressccOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "sendemail.transferencoding" {
@@ -315,19 +284,19 @@ function completeConfigVariableValue {
         }
         # git-completion.bash does not complete below cases.
         "merge.conflictStyle" {
-            $script:gitConflictSolver | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitConflictSolver | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "push.recurseSubmodules" {
-            $script:gitPushRecurseSubmodules | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitPushRecurseSubmodules | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "fetch.recurseSubmodules" {
-            $script:gitFetchRecurseSubmodules | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitFetchRecurseSubmodules | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
         "diff.colorMovedWS" {
-            $script:gitColorMovedWsOpts | completeTipList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $script:gitColorMovedWsOpts | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
     }

@@ -17,7 +17,7 @@ function Complete-GitSubCommand-difftool {
         if ($shortOpts) { return $shortOpts }
 
         if ($Context.PreviousWord() -ceq '--tool') {
-            $gitMergetoolsCommon | completeTipList -Current $Current -ResultType ParameterValue
+            $gitMergetoolsCommon | completeList -Current $Current -ResultType ParameterValue
             'kompare' | completeList -Current $Current -ResultType ParameterValue
             return
         }
@@ -26,14 +26,14 @@ function Complete-GitSubCommand-difftool {
             $key = $Matches[1]
             $value = $Matches[2]
             if ($key -ceq '--tool') {
-                $gitMergetoolsCommon | completeTipList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                $gitMergetoolsCommon | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
                 'kompare' | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }
 
         if ($Current.StartsWith('--')) {
-            $gitDiffDifftoolOptions | completeTipList -Current $Current
+            $gitDiffDifftoolOptions | completeList -Current $Current
             gitCompleteResolveBuiltins $Context.Command -Current $Current
             return
         }

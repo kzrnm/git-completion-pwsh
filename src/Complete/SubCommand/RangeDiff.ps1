@@ -19,7 +19,7 @@ function Complete-GitSubCommand-range-diff {
 
         if ($Current.StartsWith('--')) {
             '--creation-factor=', '--no-dual-color' | completeList -Current $Current
-            $script:gitDiffCommonOptions | completeTipList -Current $Current
+            $script:gitDiffCommonOptions | completeList -Current $Current
             return
         }
     }
