@@ -76,50 +76,10 @@ function gitCompleteLogOpts {
         }
     }
     
-    $gitLogCommonOptions | completeList -Current $Current -ResultType ParameterName
-    $gitLogShortlogOptions | completeList -Current $Current -ResultType ParameterName
-    $gitLogGitkOptions | completeList -Current $Current -ResultType ParameterName
-    $gitLogShowOptions | completeList -Current $Current -ResultType ParameterName
-
-    '--committer=',
-    '--root',
-    '--topo-order',
-    '--date-order',
-    '--reverse',
-    '--follow',
-    '--full-diff',
-    '--abbrev-commit',
-    '--no-abbrev-commit',
-    '--abbrev=',
-    '--relative-date',
-    '--date=',
-    '--pretty=',
-    '--format=',
-    '--oneline',
-    '--show-signature',
-    '--cherry-mark',
-    '--cherry-pick',
-    '--graph',
-    '--decorate',
-    '--decorate=',
-    '--no-decorate',
-    '--walk-reflogs',
-    '--no-walk',
-    '--no-walk=',
-    '--do-walk',
-    '--parents',
-    '--children',
-    '--expand-tabs',
-    '--expand-tabs=',
-    '--no-expand-tabs',
-    '--clear-decorations',
-    '--decorate-refs=',
-    '--decorate-refs-exclude=' | completeList -Current $Current -ResultType ParameterName
-
+    $Exclude = $null
     if (gitPseudorefExists MERGE_HEAD) {
-        '--merge' | completeList -Current $Current -ResultType ParameterName
+        $Exclude = @('--merge')
     }
-    $gitDiffCommonOptions | completeList -Current $Current -ResultType ParameterName
-
+    $gitLogOptions | completeList -Current $Current -ResultType ParameterName -Exclude $Exclude
     return
 }

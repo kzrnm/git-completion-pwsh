@@ -137,8 +137,8 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 
                 Line     = '--no';
-                Expected = '--not',
-                '--no-prefix',
+                Expected = '--no-prefix',
+                '--not',
                 '--notes',
                 @{
                     ListItemText = '--no-numbered';

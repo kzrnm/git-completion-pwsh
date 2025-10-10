@@ -102,11 +102,15 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--no';
-                Expected = '--no-max-parents', '--no-merges', '--no-min-parents', '--not',
-                @{
+                Expected = @{
                     ListItemText = '--no-committer';
                     ToolTip      = "[NO] group by committer rather than author";
                 },
+                @{
+                    ListItemText = '--no-email';
+                    ToolTip      = "[NO] show the email address of each author";
+                },
+                '--no-max-parents', '--no-merges', '--no-min-parents',
                 @{
                     ListItemText = '--no-numbered';
                     ToolTip      = "[NO] sort output according to the number of commits per author";
@@ -115,10 +119,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     ListItemText = '--no-summary';
                     ToolTip      = "[NO] suppress commit descriptions, only provides commit count";
                 },
-                @{
-                    ListItemText = '--no-email';
-                    ToolTip      = "[NO] show the email address of each author";
-                } | ConvertTo-Completion -ResultType ParameterName
+                '--not' | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

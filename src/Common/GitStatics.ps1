@@ -7,6 +7,7 @@ $script:gitAmInprogressOptions = '--skip', '--continue', '--resolved', '--abort'
 $script:gitRebaseInprogressOptions = '--continue', '--skip', '--abort', '--quit', '--show-current-patch' | Sort-Object
 $script:gitRebaseInteractiveInprogressOptions = $script:gitRebaseInprogressOptions + '--edit-todo' | Sort-Object
 
+$script:gitFormatPatchExtraOptions = '--full-index', '--not', '--all', '--no-prefix', '--src-prefix=', '--dst-prefix=', '--notes' | Sort-Object
 $script:gitPullRebaseConfig = [pscustomobject[]]@(
     @{ListItemText = 'false'; Tooltip = 'Merge branch when "git pull"'; },
     @{ListItemText = 'true'; Tooltip = 'Rebase branch when "git pull"'; },
@@ -192,6 +193,9 @@ $script:gitMergetoolsCommon = [pscustomobject[]]@(
     @{ListItemText = 'codecompare'; }
     @{ListItemText = 'smerge'; }
 ) | Sort-Object ListItemText
+
+$script:gitMergetoolsDiffTool = $gitMergetoolsCommon + @{ListItemText = 'kompare'; } | Sort-Object ListItemText
+$script:gitMergetoolsMergeTool = $gitMergetoolsCommon + @{ListItemText = 'tortoisemerge'; } | Sort-Object ListItemText
 
 $script:gitUntrackedFileModes = [pscustomobject[]]@(
     @{ListItemText = 'all'; }
@@ -392,6 +396,17 @@ $script:gitLogShortlogOptions = [pscustomobject[]]@(
     @{ListItemText = '--invert-grep'; }
 ) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
+$script:gitShortlogOptions = $gitLogCommonOptions + $gitLogShortlogOptions + [pscustomobject[]]@(
+    @{ListItemText = '--committer'; }
+    @{ListItemText = '--numbered'; }
+    @{ListItemText = '--summary'; }
+    @{ListItemText = '--email'; }
+    @{ListItemText = '--no-committer'; }
+    @{ListItemText = '--no-numbered'; }
+    @{ListItemText = '--no-summary'; }
+    @{ListItemText = '--no-email'; }
+) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
+
 # Options accepted by log and show
 $script:gitLogShowOptions = [pscustomobject[]]@(
     @{ListItemText = '--diff-merges'; }
@@ -415,3 +430,41 @@ $script:gitShowOpts = [pscustomobject[]]@(
     @{ListItemText = '--expand-tabs='; }
     @{ListItemText = '--no-expand-tabs'; }
 ) + $gitLogShowOptions + $gitDiffCommonOptions | Sort-Object { $_.ListItemText -creplace '=', ' ' }
+
+$script:gitLogOptions = $gitLogCommonOptions + $gitLogShortlogOptions + $gitLogGitkOptions + $gitLogShowOptions + $gitDiffCommonOptions + [pscustomobject[]]@(
+    @{ListItemText = '--committer='; }
+    @{ListItemText = '--root'; }
+    @{ListItemText = '--topo-order'; }
+    @{ListItemText = '--date-order'; }
+    @{ListItemText = '--reverse'; }
+    @{ListItemText = '--follow'; }
+    @{ListItemText = '--full-diff'; }
+    @{ListItemText = '--abbrev-commit'; }
+    @{ListItemText = '--no-abbrev-commit'; }
+    @{ListItemText = '--abbrev='; }
+    @{ListItemText = '--relative-date'; }
+    @{ListItemText = '--date='; }
+    @{ListItemText = '--pretty='; }
+    @{ListItemText = '--format='; }
+    @{ListItemText = '--oneline'; }
+    @{ListItemText = '--show-signature'; }
+    @{ListItemText = '--cherry-mark'; }
+    @{ListItemText = '--cherry-pick'; }
+    @{ListItemText = '--graph'; }
+    @{ListItemText = '--decorate'; }
+    @{ListItemText = '--decorate='; }
+    @{ListItemText = '--no-decorate'; }
+    @{ListItemText = '--walk-reflogs'; }
+    @{ListItemText = '--no-walk'; }
+    @{ListItemText = '--no-walk='; }
+    @{ListItemText = '--do-walk'; }
+    @{ListItemText = '--parents'; }
+    @{ListItemText = '--children'; }
+    @{ListItemText = '--expand-tabs'; }
+    @{ListItemText = '--expand-tabs='; }
+    @{ListItemText = '--no-expand-tabs'; }
+    @{ListItemText = '--clear-decorations'; }
+    @{ListItemText = '--decorate-refs='; }
+    @{ListItemText = '--decorate-refs-exclude='; }
+    @{ListItemText = '--merge'; }
+) | Sort-Object { $_.ListItemText -creplace '=', ' ' }

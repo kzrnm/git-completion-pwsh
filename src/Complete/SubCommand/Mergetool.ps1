@@ -36,8 +36,7 @@ function Complete-GitSubCommand-mergetool {
         }
 
         if ($Context.PreviousWord() -ceq '--tool') {
-            $gitMergetoolsCommon | completeList -Current $Current -ResultType ParameterValue
-            'tortoisemerge' | completeList -Current $Current -ResultType ParameterValue
+            $gitMergetoolsMergeTool | completeList -Current $Current -ResultType ParameterValue
             return
         }
         if ($Current -cmatch '(--[^=]+)=(.*)') {
@@ -45,8 +44,7 @@ function Complete-GitSubCommand-mergetool {
             $value = $Matches[2]
 
             if ($key -ceq '--tool') {
-                $gitMergetoolsCommon | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
-                'tortoisemerge' | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                $gitMergetoolsMergeTool | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
                 return
             }
         }
