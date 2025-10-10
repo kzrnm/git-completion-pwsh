@@ -15,7 +15,7 @@ $script:gitHttpProxyAuthMethod = [pscustomobject[]]@(
     @{ListItemText = 'ntlm'; Tooltip = 'NTLM authentication (compare the --ntlm option of curl)'; }
 ) | Sort-Object ListItemText
 
-$script:gitColumnUiOptions = [pscustomobject[]]@(
+$script:gitColumnUiPatterns = [pscustomobject[]]@(
     @{ListItemText = 'always'; Tooltip = 'always show in columns'; },
     @{ListItemText = 'never'; Tooltip = 'never show in columns'; },
     @{ListItemText = 'auto'; Tooltip = 'show in columns if the output is to the terminal'; },
@@ -26,7 +26,7 @@ $script:gitColumnUiOptions = [pscustomobject[]]@(
     @{ListItemText = 'nodense'; Tooltip = 'make equal size columns'; }
 ) # | Sort-Object ListItemText # Comment out to fit the classification
 
-$script:gitMergeStrategyOptions = [pscustomobject[]]@(
+$script:gitMergeStrategies = [pscustomobject[]]@(
     @{ListItemText = 'ours'; Tooltip = 'favoring our version'; },
     @{ListItemText = 'theirs'; Tooltip = 'opposite of ours'; },
     @{ListItemText = 'subtree'; Tooltip = 'A more advanced form of subtree strategy'; },

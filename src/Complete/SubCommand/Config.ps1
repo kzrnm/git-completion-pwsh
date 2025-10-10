@@ -310,7 +310,7 @@ function completeConfigVariableValue {
         }
         'column.*' {
             if ($v.Substring(7) -cin @('ui', 'branch', 'clean', 'status', 'tag')) {
-                $script:gitColumnUiOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+                $script:gitColumnUiPatterns | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
                 return
             }
         }

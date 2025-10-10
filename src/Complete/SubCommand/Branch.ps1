@@ -31,7 +31,7 @@ function Complete-GitSubCommand-branch {
                     return $rt
                 }
                 '--column' {
-                    $gitColumnUiOptions | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                    $gitColumnUiPatterns | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
                     return
                 }
             }

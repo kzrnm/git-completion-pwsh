@@ -56,7 +56,7 @@ function Complete-GitSubCommand-tag {
             $value = $Matches[2]
             switch ($key) {
                 '--column' {
-                    $gitColumnUiOptions | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                    $gitColumnUiPatterns | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
                     return
                 }
             }

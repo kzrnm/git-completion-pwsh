@@ -246,7 +246,7 @@ function gitCompleteStrategy {
         return
     }
     elseif ($Prev -cmatch '^-([^-]*X|-strategy-option)$') {
-        $gitMergeStrategyOptions | completeList -Current $Current -ResultType ParameterValue 
+        $gitMergeStrategies | completeList -Current $Current -ResultType ParameterValue 
         return
     }
 
@@ -256,7 +256,7 @@ function gitCompleteStrategy {
             return
         }
         '--strategy-option=*' {
-            $gitMergeStrategyOptions | completeList -Current $Current -ResultType ParameterValue -Prefix '--strategy-option=' -RemovePrefix
+            $gitMergeStrategies | completeList -Current $Current -ResultType ParameterValue -Prefix '--strategy-option=' -RemovePrefix
             return
         }
     }
