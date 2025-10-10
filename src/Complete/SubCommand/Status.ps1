@@ -31,7 +31,7 @@ function Complete-GitSubCommand-status {
                 '--ignore-submodules' { 'none', 'untracked', 'dirty', 'all' }
                 '--ignored' { 'traditional', 'matching', 'no' }
                 '--untracked-files' { $script:gitUntrackedFileModes }
-                '--column' { 'always', 'never', 'auto', 'column', 'row', 'plain', 'dense', 'nodense' }
+                '--column' { $script:gitColumnUiOptions }
             }
 
             if ($candidates) {

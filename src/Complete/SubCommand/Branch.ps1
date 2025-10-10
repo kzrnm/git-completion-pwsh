@@ -24,10 +24,15 @@ function Complete-GitSubCommand-branch {
 
         if ($Current -cmatch '(--[^=]+)=(.*)') {
             $key = $Matches[1]
+            $value = $Matches[2]
             switch ($key) {
                 '--set-upstream-to' {
-                    $rt = @(gitCompleteRefs $Matches[2] -Prefix "$key=")
+                    $rt = @(gitCompleteRefs $value -Prefix "$key=")
                     return $rt
+                }
+                '--column' {
+                    $gitColumnUiOptions | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                    return
                 }
             }
         }

@@ -51,6 +51,17 @@ function Complete-GitSubCommand-tag {
         $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
+        if ($Current -cmatch '(--[^=]+)=(.*)') {
+            $key = $Matches[1]
+            $value = $Matches[2]
+            switch ($key) {
+                '--column' {
+                    $gitColumnUiOptions | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                    return
+                }
+            }
+        }
+
         if ($Current.StartsWith('--')) {
             gitCompleteResolveBuiltins $Context.Command -Current $Current
             return

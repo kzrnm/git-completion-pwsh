@@ -461,85 +461,337 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                     Line     = 'diff.colorMoved=';
                     Expected = @{
                         ListItemText = 'blocks';
-                        Tooltip      = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily';                    },
+                        Tooltip      = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily';                    
+                    },
                     @{
                         ListItemText = 'default';
-                        Tooltip      = 'A synonym for zebra';                    },
+                        Tooltip      = 'A synonym for zebra';                    
+                    },
                     @{
                         ListItemText = 'dimmed-zebra';
-                        Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                    },
+                        Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                    
+                    },
                     @{
                         ListItemText = 'no';
-                        Tooltip      = 'Moved lines are not highlighted';                    },
+                        Tooltip      = 'Moved lines are not highlighted';                    
+                    },
                     @{
                         ListItemText = 'plain';
-                        Tooltip      = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved';                    },
+                        Tooltip      = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved';                    
+                    },
                     @{
                         ListItemText = 'zebra';
-                        Tooltip      = 'Blocks of moved text are detected as in blocks mode';                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMoved=$_" }
+                        Tooltip      = 'Blocks of moved text are detected as in blocks mode';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMoved=$_" }
                 },
                 @{
                     Line     = 'diff.colorMoved=d';
                     Expected = @{
                         ListItemText = 'default';
-                        Tooltip      = 'A synonym for zebra';                    },
+                        Tooltip      = 'A synonym for zebra';                    
+                    },
                     @{
                         ListItemText = 'dimmed-zebra';
-                        Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMoved=$_" }
+                        Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMoved=$_" }
                 },
                 @{
                     Line     = 'diff.colorMovedWS=';
                     Expected = @{
                         ListItemText = 'allow-indentation-change';
-                        Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line';                    },
+                        Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line';                    
+                    },
                     @{
                         ListItemText = 'ignore-all-space';
-                        Tooltip      = 'Ignore whitespace when comparing lines';                    },
+                        Tooltip      = 'Ignore whitespace when comparing lines';                    
+                    },
                     @{
                         ListItemText = 'ignore-space-at-eol';
-                        Tooltip      = 'Ignore changes in whitespace at EOL';                    },
+                        Tooltip      = 'Ignore changes in whitespace at EOL';                    
+                    },
                     @{
                         ListItemText = 'ignore-space-change';
-                        Tooltip      = 'Ignore changes in amount of whitespace';                    },
+                        Tooltip      = 'Ignore changes in amount of whitespace';                    
+                    },
                     @{
                         ListItemText = 'no';
-                        Tooltip      = 'Do not ignore whitespace when performing move detection';                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMovedWS=$_" }
+                        Tooltip      = 'Do not ignore whitespace when performing move detection';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMovedWS=$_" }
                 },
                 @{
                     Line     = 'diff.colorMovedWS=i';
                     Expected = @{
                         ListItemText = 'ignore-all-space';
-                        Tooltip      = 'Ignore whitespace when comparing lines';                    },
+                        Tooltip      = 'Ignore whitespace when comparing lines';                    
+                    },
                     @{
                         ListItemText = 'ignore-space-at-eol';
-                        Tooltip      = 'Ignore changes in whitespace at EOL';                    },
+                        Tooltip      = 'Ignore changes in whitespace at EOL';                    
+                    },
                     @{
                         ListItemText = 'ignore-space-change';
-                        Tooltip      = 'Ignore changes in amount of whitespace';                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMovedWS=$_" }
+                        Tooltip      = 'Ignore changes in amount of whitespace';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMovedWS=$_" }
                 },
                 @{
                     Line     = 'diff.wsErrorHighlight=';
                     Expected = @{
                         ListItemText = 'all';
-                        Tooltip      = 'A synonym for old,new,context';                    },
+                        Tooltip      = 'A synonym for old,new,context';                    
+                    },
                     @{
                         ListItemText = 'context';
-                        Tooltip      = 'Highlight whitespace errors in the context';                    },
+                        Tooltip      = 'Highlight whitespace errors in the context';                    
+                    },
                     @{
                         ListItemText = 'default';
-                        Tooltip      = 'A synonym for new';                    },
+                        Tooltip      = 'A synonym for new';                    
+                    },
                     @{
                         ListItemText = 'new';
-                        Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                    },
+                        Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                    
+                    },
                     @{
                         ListItemText = 'old';
-                        Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.wsErrorHighlight=$_" }
+                        Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.wsErrorHighlight=$_" }
                 },
                 @{
                     Line     = 'diff.wsErrorHighlight=d';
                     Expected = @{
                         ListItemText = 'default';
-                        Tooltip      = 'A synonym for new';                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.wsErrorHighlight=$_" }
+                        Tooltip      = 'A synonym for new';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.wsErrorHighlight=$_" }
+                },
+                @{
+                    Line     = 'column.ui=';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'never';
+                        Tooltip      = 'never show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    },
+                    @{
+                        ListItemText = 'column';
+                        Tooltip      = 'fill columns before rows'; 
+                    },
+                    @{
+                        ListItemText = 'row';
+                        Tooltip      = 'fill rows before columns'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'show in one column'; 
+                    },
+                    @{
+                        ListItemText = 'dense';
+                        Tooltip      = 'make unequal size columns to utilize more space'; 
+                    },
+                    @{
+                        ListItemText = 'nodense';
+                        Tooltip      = 'make equal size columns'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.ui=$_" }
+                },
+                @{
+                    Line     = 'column.ui=a';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.ui=$_" }
+                },
+                @{
+                    Line     = 'column.branch=';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'never';
+                        Tooltip      = 'never show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    },
+                    @{
+                        ListItemText = 'column';
+                        Tooltip      = 'fill columns before rows'; 
+                    },
+                    @{
+                        ListItemText = 'row';
+                        Tooltip      = 'fill rows before columns'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'show in one column'; 
+                    },
+                    @{
+                        ListItemText = 'dense';
+                        Tooltip      = 'make unequal size columns to utilize more space'; 
+                    },
+                    @{
+                        ListItemText = 'nodense';
+                        Tooltip      = 'make equal size columns'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.branch=$_" }
+                },
+                @{
+                    Line     = 'column.branch=a';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.branch=$_" }
+                },
+                @{
+                    Line     = 'column.clean=';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'never';
+                        Tooltip      = 'never show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    },
+                    @{
+                        ListItemText = 'column';
+                        Tooltip      = 'fill columns before rows'; 
+                    },
+                    @{
+                        ListItemText = 'row';
+                        Tooltip      = 'fill rows before columns'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'show in one column'; 
+                    },
+                    @{
+                        ListItemText = 'dense';
+                        Tooltip      = 'make unequal size columns to utilize more space'; 
+                    },
+                    @{
+                        ListItemText = 'nodense';
+                        Tooltip      = 'make equal size columns'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.clean=$_" }
+                },
+                @{
+                    Line     = 'column.clean=a';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.clean=$_" }
+                },
+                @{
+                    Line     = 'column.status=';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'never';
+                        Tooltip      = 'never show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    },
+                    @{
+                        ListItemText = 'column';
+                        Tooltip      = 'fill columns before rows'; 
+                    },
+                    @{
+                        ListItemText = 'row';
+                        Tooltip      = 'fill rows before columns'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'show in one column'; 
+                    },
+                    @{
+                        ListItemText = 'dense';
+                        Tooltip      = 'make unequal size columns to utilize more space'; 
+                    },
+                    @{
+                        ListItemText = 'nodense';
+                        Tooltip      = 'make equal size columns'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.status=$_" }
+                },
+                @{
+                    Line     = 'column.status=a';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.status=$_" }
+                },
+                @{
+                    Line     = 'column.tag=';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'never';
+                        Tooltip      = 'never show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    },
+                    @{
+                        ListItemText = 'column';
+                        Tooltip      = 'fill columns before rows'; 
+                    },
+                    @{
+                        ListItemText = 'row';
+                        Tooltip      = 'fill rows before columns'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'show in one column'; 
+                    },
+                    @{
+                        ListItemText = 'dense';
+                        Tooltip      = 'make unequal size columns to utilize more space'; 
+                    },
+                    @{
+                        ListItemText = 'nodense';
+                        Tooltip      = 'make equal size columns'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.tag=$_" }
+                },
+                @{
+                    Line     = 'column.tag=a';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.tag=$_" }
                 },
                 @{
                     Line     = 'branch.main.notmatch=';

@@ -180,13 +180,49 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
             },
             @{
                 Line     = '--column=';
-                Expected =
-                'always', 'never', 'auto', 'column', 'row', 'plain', 'dense', 'nodense' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--column=$_" }
+                Expected = @{
+                    ListItemText = 'always';
+                    Tooltip      = 'always show in columns'; 
+                },
+                @{
+                    ListItemText = 'never';
+                    Tooltip      = 'never show in columns'; 
+                },
+                @{
+                    ListItemText = 'auto';
+                    Tooltip      = 'show in columns if the output is to the terminal'; 
+                },
+                @{
+                    ListItemText = 'column';
+                    Tooltip      = 'fill columns before rows'; 
+                },
+                @{
+                    ListItemText = 'row';
+                    Tooltip      = 'fill rows before columns'; 
+                },
+                @{
+                    ListItemText = 'plain';
+                    Tooltip      = 'show in one column'; 
+                },
+                @{
+                    ListItemText = 'dense';
+                    Tooltip      = 'make unequal size columns to utilize more space'; 
+                },
+                @{
+                    ListItemText = 'nodense';
+                    Tooltip      = 'make equal size columns'; 
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--column=$_" }
             },
             @{
                 Line     = '--column=a';
-                Expected =
-                'always', 'auto' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--column=$_" }
+                Expected = @{
+                    ListItemText = 'always';
+                    Tooltip      = 'always show in columns'; 
+                },
+                @{
+                    ListItemText = 'auto';
+                    Tooltip      = 'show in columns if the output is to the terminal'; 
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--column=$_" }
             },
             @{
                 Line     = '--ignored=';

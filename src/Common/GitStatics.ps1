@@ -15,6 +15,17 @@ $script:gitHttpProxyAuthMethod = [pscustomobject[]]@(
     @{ListItemText = 'ntlm'; Tooltip = 'NTLM authentication (compare the --ntlm option of curl)'; }
 ) | Sort-Object ListItemText
 
+$script:gitColumnUiOptions = [pscustomobject[]]@(
+    @{ListItemText = 'always'; Tooltip = 'always show in columns'; },
+    @{ListItemText = 'never'; Tooltip = 'never show in columns'; },
+    @{ListItemText = 'auto'; Tooltip = 'show in columns if the output is to the terminal'; },
+    @{ListItemText = 'column'; Tooltip = 'fill columns before rows'; },
+    @{ListItemText = 'row'; Tooltip = 'fill rows before columns'; },
+    @{ListItemText = 'plain'; Tooltip = 'show in one column'; },
+    @{ListItemText = 'dense'; Tooltip = 'make unequal size columns to utilize more space'; },
+    @{ListItemText = 'nodense'; Tooltip = 'make equal size columns'; }
+) # | Sort-Object ListItemText # Comment out to fit the classification
+
 $script:gitMergeStrategyOptions = [pscustomobject[]]@(
     @{ListItemText = 'ours'; Tooltip = 'favoring our version'; },
     @{ListItemText = 'theirs'; Tooltip = 'opposite of ours'; },

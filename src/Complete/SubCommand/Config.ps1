@@ -308,6 +308,12 @@ function completeConfigVariableValue {
             $script:gitWsErrorHighlightOpts | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
             return
         }
+        'column.*' {
+            if ($v.Substring(7) -cin @('ui', 'branch', 'clean', 'status', 'tag')) {
+                $script:gitColumnUiOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+                return
+            }
+        }
     }
 }
 
