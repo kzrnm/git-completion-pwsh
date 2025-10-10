@@ -171,30 +171,30 @@ function completeConfigVariableValue {
     }
 
     $v = $VarName.ToLowerInvariant()
-    switch -Wildcard ($v) {
+    $candidates = switch -Wildcard ($v) {
         'branch.*.remote' {
-            remote
-            return
+            gitRemote
+            continue
         }
         'branch.*.pushremote' {
-            remote
-            return
+            gitRemote
+            continue
         }
         'branch.*.pushdefault' {
-            remote
-            return
+            gitRemote
+            continue
         }
         'branch.*.merge' {
             gitCompleteRefs -Current $Current -Prefix $Prefix
             return
         }
         'branch.*.rebase' {
-            'false', 'true', 'merges', 'interactive' | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            'false', 'true', 'merges', 'interactive'
+            continue
         }
         'remote.pushdefault' {
-            remote
-            return
+            gitRemote
+            continue
         }
         'remote.*.fetch' {
             if ($Current -eq '') {
@@ -225,96 +225,100 @@ function completeConfigVariableValue {
             return
         }
         'remote.*.push' {
-            __git for-each-ref --format='%(refname):%(refname)' refs/heads | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            __git for-each-ref --format='%(refname):%(refname)' refs/heads
+            continue
         }
         'pull.twohead' {
-            gitListMergeStrategies | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            gitListMergeStrategies
+            continue
         }
         'pull.octopus' {
-            gitListMergeStrategies | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            gitListMergeStrategies
+            continue
         }
         'color.pager' {
-            'false', 'true' | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            'false', 'true'
+            continue
         }
         'color.*.*' {
-            'normal', 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'bold', 'dim', 'ul', 'blink', 'reverse' | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            'normal', 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'bold', 'dim', 'ul', 'blink', 'reverse'
+            continue
         }
         'color.*' {
-            'false', 'true', 'always', 'never', 'auto' | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            'false', 'true', 'always', 'never', 'auto'
+            continue
         }
         'diff.submodule' {
-            $script:gitDiffSubmoduleFormats | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitDiffSubmoduleFormats
+            continue
         }
         'diff.algorithm' {
-            $script:gitDiffAlgorithms | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitDiffAlgorithms
+            continue
         }
         'http.proxyAuthMethod' {
-            $gitHttpProxyAuthMethod | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            $gitHttpProxyAuthMethod
+            continue
         }
         'help.format' {
-            'man', 'info', 'web', 'html' | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            'man', 'info', 'web', 'html'
+            continue
         }
         'log.date' {
-            $script:gitLogDateFormats | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitLogDateFormats
+            continue
         }
         'sendemail.aliasfiletype' {
-            'mutt', 'mailrc', 'pine', 'elm', 'gnus' | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            'mutt', 'mailrc', 'pine', 'elm', 'gnus'
+            continue
         }
         'sendemail.confirm' {
-            $script:gitSendEmailConfirmOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitSendEmailConfirmOptions
+            continue
         }
         'sendemail.suppresscc' {
-            $script:gitSendEmailSuppressccOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitSendEmailSuppressccOptions
+            continue
         }
         'sendemail.transferencoding' {
-            '7bit', '8bit', 'quoted-printable', 'base64' | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            '7bit', '8bit', 'quoted-printable', 'base64'
+            continue
         }
         # git-completion.bash does not complete below cases.
         'merge.conflictStyle' {
-            $script:gitConflictSolver | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitConflictSolver
+            continue
         }
         'push.recurseSubmodules' {
-            $script:gitPushRecurseSubmodules | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitPushRecurseSubmodules
+            continue
         }
         'fetch.recurseSubmodules' {
-            $script:gitFetchRecurseSubmodules | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitFetchRecurseSubmodules
+            continue
         }
         'diff.colorMoved' {
-            $script:gitColorMovedOpts | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitColorMovedOpts
+            continue
         }
         'diff.colorMovedWS' {
-            $script:gitColorMovedWsOpts | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitColorMovedWsOpts
+            continue
         }
         'diff.wsErrorHighlight' {
-            $script:gitWsErrorHighlightOpts | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+            $script:gitWsErrorHighlightOpts
+            continue
         }
         'column.*' {
-            if ($v.Substring(7) -cin @('ui', 'branch', 'clean', 'status', 'tag')) {
-                $script:gitColumnUiPatterns | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
+            if ($v.Substring(7) -cnotin @('ui', 'branch', 'clean', 'status', 'tag')) {
                 return
             }
+            $script:gitColumnUiPatterns
+            continue
         }
     }
+
+    $candidates | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
 }
 
 # __git_complete_config_variable_name
