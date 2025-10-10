@@ -67,9 +67,12 @@ function gitListAliases {
     [OutputType([PSCustomObject[]])]
     param()
 
-    foreach ($line in @(__git config --get-regexp "^alias\.")) {
-        if ($line -match "^alias\.(?<Name>[^ ]+) (?<Value>.*)") {
-            [PSCustomObject]$Matches
+    foreach ($kv in @((__git config -z --get-regexp "^alias\." | Out-String) -split "`0")) {
+        if ($kv -match "^alias\.(?<Name>\S+)\s+(?<Value>[\s\S]*)") {
+            [PSCustomObject]@{
+                Name  = $Matches['Name'];
+                Value = $Matches['Value'] -creplace "(`r`n|`n)", ' ';
+            }
         }
     }
 }

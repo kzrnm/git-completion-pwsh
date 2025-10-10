@@ -9,6 +9,30 @@
     "terminal.integrated.env.osx": {
         "GIT_COMPLETION_SHOW_ALL_COMMANDS": "1"
     },
+    "terminal.integrated.profiles.osx": {
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell",
+            "color": "terminal.ansiMagenta",
+            "args": [
+                "-NoExit",
+                "-Command",
+                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$false; Get-Module git-completion | Remove-Module; Import-Module ./src/git-completion.psd1 -Force"
+            ]
+        }
+    },
+    "terminal.integrated.profiles.linux": {
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell",
+            "color": "terminal.ansiMagenta",
+            "args": [
+                "-NoExit",
+                "-Command",
+                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$false; Get-Module git-completion | Remove-Module; Import-Module ./src/git-completion.psd1 -Force"
+            ]
+        }
+    },
     "terminal.integrated.profiles.windows": {
         "PowerShell": {
             "source": "PowerShell",

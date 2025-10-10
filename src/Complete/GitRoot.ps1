@@ -296,7 +296,7 @@ function Complete-GitCommandLine {
         }
 
         $aliases = @{}
-        foreach ($a in (gitListAliases)) {
+        foreach ($a in @(gitListAliases)) {
             $aliases[$a.Name] = "[alias] $($a.Value)"
         }
 
