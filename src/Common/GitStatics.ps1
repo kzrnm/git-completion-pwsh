@@ -7,6 +7,13 @@ $script:gitAmInprogressOptions = '--skip', '--continue', '--resolved', '--abort'
 $script:gitRebaseInprogressOptions = '--continue', '--skip', '--abort', '--quit', '--show-current-patch' | Sort-Object
 $script:gitRebaseInteractiveInprogressOptions = $script:gitRebaseInprogressOptions + '--edit-todo' | Sort-Object
 
+$script:gitPullRebaseConfig = [pscustomobject[]]@(
+    @{ListItemText = 'false'; Tooltip = 'Merge branch when "git pull"'; },
+    @{ListItemText = 'true'; Tooltip = 'Rebase branch when "git pull"'; },
+    @{ListItemText = 'merges'; Tooltip = 'Rebase branch with --rebase-merges when "git pull"'; },
+    @{ListItemText = 'interactive'; Tooltip = 'Rebase in interactive mode'; }
+) | Sort-Object ListItemText
+
 $script:gitHttpProxyAuthMethod = [pscustomobject[]]@(
     @{ListItemText = 'anyauth'; Tooltip = 'Automatically pick a suitable authentication method'; },
     @{ListItemText = 'basic'; Tooltip = 'HTTP Basic authentication'; },

@@ -143,13 +143,29 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 },
                 @{
                     Line     = 'branch.main.rebase=';
-                    Expected = 'false', 'true', 'merges', 'interactive' |
-                    ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.rebase=$_" }
+                    Expected = @{
+                        ListItemText = 'false';
+                        Tooltip      = 'Merge branch when "git pull"'; 
+                    },
+                    @{
+                        ListItemText = 'interactive';
+                        Tooltip      = 'Rebase in interactive mode'; 
+                    },
+                    @{
+                        ListItemText = 'merges';
+                        Tooltip      = 'Rebase branch with --rebase-merges when "git pull"'; 
+                    },
+                    @{
+                        ListItemText = 'true';
+                        Tooltip      = 'Rebase branch when "git pull"'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.rebase=$_" }
                 },
                 @{
                     Line     = 'branch.main.rebase=t';
-                    Expected = 'true' |
-                    ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.rebase=$_" }
+                    Expected = @{
+                        ListItemText = 'true';
+                        Tooltip      = 'Rebase branch when "git pull"'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.rebase=$_" }
                 },
                 @{
                     Line     = 'remote.origin.fetch=';
@@ -792,6 +808,32 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                         ListItemText = 'auto';
                         Tooltip      = 'show in columns if the output is to the terminal'; 
                     } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.tag=$_" }
+                },
+                @{
+                    Line     = 'pull.rebase=';
+                    Expected = @{
+                        ListItemText = 'false';
+                        Tooltip      = 'Merge branch when "git pull"'; 
+                    },
+                    @{
+                        ListItemText = 'interactive';
+                        Tooltip      = 'Rebase in interactive mode'; 
+                    },
+                    @{
+                        ListItemText = 'merges';
+                        Tooltip      = 'Rebase branch with --rebase-merges when "git pull"'; 
+                    },
+                    @{
+                        ListItemText = 'true';
+                        Tooltip      = 'Rebase branch when "git pull"'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "pull.rebase=$_" }
+                },
+                @{
+                    Line     = 'pull.rebase=t';
+                    Expected = @{
+                        ListItemText = 'true';
+                        Tooltip      = 'Rebase branch when "git pull"'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "pull.rebase=$_" }
                 },
                 @{
                     Line     = 'branch.main.notmatch=';

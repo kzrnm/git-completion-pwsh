@@ -184,16 +184,16 @@ function completeConfigVariableValue {
             gitRemote
             continue
         }
+        'remote.pushdefault' {
+            gitRemote
+            continue
+        }
         'branch.*.merge' {
             gitCompleteRefs -Current $Current -Prefix $Prefix
             return
         }
         'branch.*.rebase' {
-            'false', 'true', 'merges', 'interactive'
-            continue
-        }
-        'remote.pushdefault' {
-            gitRemote
+            $gitPullRebaseConfig
             continue
         }
         'remote.*.fetch' {
@@ -314,6 +314,10 @@ function completeConfigVariableValue {
                 return
             }
             $script:gitColumnUiPatterns
+            continue
+        }
+        'pull.rebase' {
+            $gitPullRebaseConfig
             continue
         }
     }
