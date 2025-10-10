@@ -35,12 +35,18 @@ function Complete-GitSubCommand-format-patch {
         }
 
         if ($Current.StartsWith('--')) {
-            gitCompleteResolveBuiltins $Context.Command -Current $Current -Include $gitFormatPatchExtraOptions
+            gitCompleteResolveBuiltins $Context.Command -Current $Current -Include @(
+                '--full-index',
+                '--not',
+                '--all',
+                '--no-prefix',
+                '--src-prefix=',
+                '--dst-prefix=',
+                '--notes'
+            )
             return
         }
     }
 
     gitCompleteRevlist $Current
 }
-
-$gitFormatPatchExtraOptions = '--full-index', '--not', '--all', '--no-prefix', '--src-prefix=', '--dst-prefix=', '--notes'

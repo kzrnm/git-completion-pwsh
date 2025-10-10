@@ -79,7 +79,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             It '<Line>' -ForEach @(
                 @{
                     Line     = '--bi';
-                    Expected = '--bisect', '--binary' | ConvertTo-Completion -ResultType ParameterName
+                    Expected = '--binary', '--bisect' | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = '--no-p';
@@ -96,49 +96,61 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Line     = '--ws-error-highlight d';
                     Expected = @{
                         ListItemText = 'default';
-                        Tooltip      = 'A synonym for new';                    } | ConvertTo-Completion -ResultType ParameterValue
+                        Tooltip      = 'A synonym for new';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--ws-error-highlight ';
                     Expected = @{
                         ListItemText = 'all';
-                        Tooltip      = 'A synonym for old,new,context';                    },
+                        Tooltip      = 'A synonym for old,new,context';                    
+                    },
                     @{
                         ListItemText = 'context';
-                        Tooltip      = 'Highlight whitespace errors in the context';                    },
+                        Tooltip      = 'Highlight whitespace errors in the context';                    
+                    },
                     @{
                         ListItemText = 'default';
-                        Tooltip      = 'A synonym for new';                    },
+                        Tooltip      = 'A synonym for new';                    
+                    },
                     @{
                         ListItemText = 'new';
-                        Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                    },
+                        Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                    
+                    },
                     @{
                         ListItemText = 'old';
-                        Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                    } | ConvertTo-Completion -ResultType ParameterValue
+                        Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--ws-error-highlight=d';
                     Expected = @{
                         ListItemText = 'default';
-                        Tooltip      = 'A synonym for new';                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
+                        Tooltip      = 'A synonym for new';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
                 },
                 @{
                     Line     = '--ws-error-highlight=';
                     Expected = @{
                         ListItemText = 'all';
-                        Tooltip      = 'A synonym for old,new,context';                    },
+                        Tooltip      = 'A synonym for old,new,context';                    
+                    },
                     @{
                         ListItemText = 'context';
-                        Tooltip      = 'Highlight whitespace errors in the context';                    },
+                        Tooltip      = 'Highlight whitespace errors in the context';                    
+                    },
                     @{
                         ListItemText = 'default';
-                        Tooltip      = 'A synonym for new';                    },
+                        Tooltip      = 'A synonym for new';                    
+                    },
                     @{
                         ListItemText = 'new';
-                        Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                    },
+                        Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                    
+                    },
                     @{
                         ListItemText = 'old';
-                        Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
+                        Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
                 },
                 @{
                     Line     = '--no-walk=u';
