@@ -18,8 +18,10 @@ function Complete-GitSubCommand-range-diff {
         if ($shortOpts) { return $shortOpts }
 
         if ($Current.StartsWith('--')) {
-            '--creation-factor=', '--no-dual-color' | completeList -Current $Current
-            $script:gitDiffCommonOptions | completeList -Current $Current
+            $script:gitDiffCommonOptions + [pscustomobject[]]@(
+                @{ListItemText = '--creation-factor='; }
+                @{ListItemText = '--no-dual-color'; }
+            ) | Sort-Object ListItemText | completeList -Current $Current
             return
         }
     }
