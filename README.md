@@ -55,6 +55,8 @@ This module is a PowerShell port of [git-completion.bash Commit: 8b6f19ccfc3aefb
 - Completions
   - branch: `--column`
   - config: Add [value completions](src/Complete/SubCommand/Config.ps1#L316)
+  - log: Add `--exclude=` option
   - shortlog: Use `--committer` instead of `--committer=`
+  - shortlog: Add `--exclude=` option
   - stash: Complete modified files
   - tag: `--column`
