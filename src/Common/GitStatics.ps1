@@ -393,6 +393,8 @@ $script:gitLogShortlogOptions = [pscustomobject[]]@(
     @{ListItemText = '--grep='; }
     @{ListItemText = '--all-match'; }
     @{ListItemText = '--invert-grep'; }
+    @{ListItemText = '--exclude'; }
+    @{ListItemText = '--glob='; }
 ) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
 $script:gitShortlogOptions = $gitLogCommonOptions + $gitLogShortlogOptions + [pscustomobject[]]@(

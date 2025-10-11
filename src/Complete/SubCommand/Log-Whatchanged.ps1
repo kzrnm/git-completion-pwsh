@@ -47,6 +47,7 @@ function gitCompleteLogOpts {
         '--diff-algorithm' { $script:gitDiffAlgorithms }
         '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
         '--diff-merges' { $script:gitDiffMergesOpts }
+        '--exclude' { gitCompleteLogExclude $Context $Current }
     }
 
     if ($prevCandidates) {
@@ -68,6 +69,7 @@ function gitCompleteLogOpts {
             '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
             '--no-walk' { 'sorted', 'unsorted' }
             '--diff-merges' { $script:gitDiffMergesOpts }
+            '--exclude' { gitCompleteLogExclude $Context $value }
         }
 
         if ($candidates) {
@@ -75,11 +77,46 @@ function gitCompleteLogOpts {
             return
         }
     }
-    
-    $Exclude = $null
+
+    $Merge = $null
     if (gitPseudorefExists MERGE_HEAD) {
-        $Exclude = @('--merge')
+        $Merge = @('--merge')
     }
-    $gitLogOptions | completeList -Current $Current -ResultType ParameterName -Exclude $Exclude
+    $gitLogOptions | completeList -Current $Current -ResultType ParameterName -Exclude $Merge
     return
+}
+
+function gitCompleteLogExclude {
+    [CmdletBinding(PositionalBinding = $false)]
+    param (
+        [CommandLineContext]
+        [Parameter(Position = 0, Mandatory)]$Context,
+        [string]
+        [AllowEmptyString()]
+        [Parameter(Position = 1, Mandatory)]$Current
+    )
+
+    for ($i = $Context.CurrentIndex + 1; $i -lt $Context.DoubledashIndex; $i++) {
+        $type = switch -Regex ($Context.Words[$i]) {
+            '^--branches($|=)' { 'branch' }
+            '^--tags($|=)' { 'tag' }
+            '^--remotes($|=)' { 'remote' }
+            '^--glob($|=)' { 'all' }
+            '^--all$' { 'all' }
+        }
+        if ($type) {
+            break
+        }
+    }
+
+    switch ($type) {
+        'branch' { gitHeads $Current }
+        'tag' { gitTags $Current }
+        'remote' { gitRemoteHeads $Current }
+        'all' { gitRefnames $Current }
+        Default {
+            gitRefnames $Current
+            gitRefStrip $Current
+        }
+    }
 }

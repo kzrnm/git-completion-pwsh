@@ -82,11 +82,106 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     Expected = '--binary', '--bisect' | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
+                    Line     = '--exc';
+                    Expected = '--exclude', '--exclude-first-parent-only', '--exclude-hidden' | ConvertTo-Completion -ResultType ParameterName
+                },
+                @{
                     Line     = '--no-p';
                     Expected = '--no-patch', '--no-prefix' | ConvertTo-Completion -ResultType ParameterName
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+            }
+        }
+
+        Describe 'ExcludeOption' {
+            It '<Left>(cursor)<Right>' -ForEach @(
+                @{
+                    Left     = '--exclude ';
+                    Right    = ' --tags';
+                    Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Left     = '--exclude=';
+                    Right    = ' --tags=*';
+                    Expected = 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--exclude=$_" }
+                },
+                @{
+                    Left     = '--exclude ';
+                    Right    = ' --branches';
+                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Left     = '--exclude=';
+                    Right    = ' --branches=*';
+                    Expected = 'main' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--exclude=$_" }
+                },
+                @{
+                    Left     = '--exclude ';
+                    Right    = ' --remotes';
+                    Expected = 'grm/HEAD', 'grm/develop',
+                    'ordinary/HEAD', 'ordinary/develop',
+                    'origin/HEAD', 'origin/develop' | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Left     = '--exclude=';
+                    Right    = ' --remotes=*';
+                    Expected = 'grm/HEAD', 'grm/develop',
+                    'ordinary/HEAD', 'ordinary/develop',
+                    'origin/HEAD', 'origin/develop' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--exclude=$_" }
+                },
+                @{
+                    Left     = '--exclude ';
+                    Right    = ' --glob *';
+                    Expected = 'refs/heads/main', 'refs/remotes/grm/HEAD', 'refs/remotes/grm/develop',
+                    'refs/remotes/ordinary/HEAD', 'refs/remotes/ordinary/develop',
+                    'refs/remotes/origin/HEAD', 'refs/remotes/origin/develop', 
+                    'refs/tags/initial', 'refs/tags/zeta' | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Left     = '--exclude=';
+                    Right    = ' --glob=*';
+                    Expected = 'refs/heads/main', 'refs/remotes/grm/HEAD', 'refs/remotes/grm/develop',
+                    'refs/remotes/ordinary/HEAD', 'refs/remotes/ordinary/develop',
+                    'refs/remotes/origin/HEAD', 'refs/remotes/origin/develop', 
+                    'refs/tags/initial', 'refs/tags/zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--exclude=$_" }
+                },
+                @{
+                    Left     = '--exclude ';
+                    Right    = ' --all';
+                    Expected = 'refs/heads/main', 'refs/remotes/grm/HEAD', 'refs/remotes/grm/develop',
+                    'refs/remotes/ordinary/HEAD', 'refs/remotes/ordinary/develop',
+                    'refs/remotes/origin/HEAD', 'refs/remotes/origin/develop', 
+                    'refs/tags/initial', 'refs/tags/zeta' | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Left     = '--exclude=';
+                    Right    = ' --all';
+                    Expected = 'refs/heads/main', 'refs/remotes/grm/HEAD', 'refs/remotes/grm/develop',
+                    'refs/remotes/ordinary/HEAD', 'refs/remotes/ordinary/develop',
+                    'refs/remotes/origin/HEAD', 'refs/remotes/origin/develop', 
+                    'refs/tags/initial', 'refs/tags/zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--exclude=$_" }
+                },
+                @{
+                    Left     = '--exclude ';
+                    Expected = 'refs/heads/main', 'refs/remotes/grm/HEAD', 'refs/remotes/grm/develop',
+                    'refs/remotes/ordinary/HEAD', 'refs/remotes/ordinary/develop',
+                    'refs/remotes/origin/HEAD', 'refs/remotes/origin/develop', 
+                    'refs/tags/initial', 'refs/tags/zeta',
+                    'main', 'grm/HEAD', 'grm/develop', 'ordinary/HEAD', 'ordinary/develop',
+                    'origin/HEAD', 'origin/develop', 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue
+                },
+                @{
+                    Left     = '--exclude=';
+                    Expected = 'refs/heads/main', 'refs/remotes/grm/HEAD', 'refs/remotes/grm/develop',
+                    'refs/remotes/ordinary/HEAD', 'refs/remotes/ordinary/develop',
+                    'refs/remotes/origin/HEAD', 'refs/remotes/origin/develop', 
+                    'refs/tags/initial', 'refs/tags/zeta',
+                    'main', 'grm/HEAD', 'grm/develop', 'ordinary/HEAD', 'ordinary/develop',
+                    'origin/HEAD', 'origin/develop', 'initial', 'zeta' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--exclude=$_" }
+                }
+            ) {
+                "git $Command $Left" | Complete-FromLine -Right $Right | Should -BeCompletion $Expected
             }
         }
 

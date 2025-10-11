@@ -346,6 +346,38 @@ function gitTags {
             "refs/tags/$Current*" "refs/tags/$Current*/**")
 }
 
+function gitRefnames {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+    )
+
+    $ignoreCase = $null
+    if ($script:GitCompletionSettings.IgnoreCase) {
+        $ignoreCase = '--ignore-case'
+    }
+
+    @(__git for-each-ref "--format=%(refname)" `
+            $ignoreCase `
+            "$Current*" "$Current*/**")
+}
+function gitRefStrip {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+    )
+
+    $ignoreCase = $null
+    if ($script:GitCompletionSettings.IgnoreCase) {
+        $ignoreCase = '--ignore-case'
+    }
+
+    @(__git for-each-ref "--format=%(refname:strip=2)" `
+            $ignoreCase `
+            "refs/*/$Current*" "refs/*/$Current*/**")
+}
+
+
 # List unique branches from refs/remotes used for 'git checkout' and 'git
 # switch' tracking DWIMery.
 # 1: A prefix to be added to each listed branch (optional)

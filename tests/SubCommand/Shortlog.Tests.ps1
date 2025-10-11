@@ -94,6 +94,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 Expected = '--bisect' | ConvertTo-Completion -ResultType ParameterName
             },
             @{
+                Line     = '--exc';
+                Expected = '--exclude', '--exclude-first-parent-only', '--exclude-hidden' | ConvertTo-Completion -ResultType ParameterName
+            },
+            @{
                 Line     = '--c';
                 Expected = @{
                     ListItemText = '--committer';
