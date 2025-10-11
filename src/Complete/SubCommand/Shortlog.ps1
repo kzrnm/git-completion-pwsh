@@ -16,9 +16,32 @@ function Complete-GitSubCommand-shortlog {
         $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
+        $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
+            '--exclude' { gitCompleteLogExclude $Context $Current }
+        }
+
+        if ($prevCandidates) {
+            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
+            return
+        }
+
+
         if ($Current.StartsWith('--')) {
-            ($gitLogCommonOptions + $gitLogShortlogOptions + @('--numbered', '--summary', '--email', '--no-committer', '--no-numbered', '--no-summary', '--no-email')) |
-            completeList -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.Command }
+            if ($Current -cmatch '(--[^=]+)=(.*)') {
+                $key = $Matches[1]
+                $value = $Matches[2]
+                $candidates = switch -CaseSensitive ($key) {
+                    '--exclude' { gitCompleteLogExclude $Context $value }
+                }
+
+                if ($candidates) {
+                    $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                    return
+                }
+            }
+
+
+            $gitShortlogOptions | completeList -Current $Current -DescriptionBuilder { Get-GitOptionsDescription $_ $Context.Command }
             return
         }
 

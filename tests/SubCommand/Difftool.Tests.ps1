@@ -92,13 +92,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             @{
                 Line     = '--t';
                 Expected = @{
-                    ListItemText = "--theirs";
-                },
-                @{
                     ListItemText = "--text";
                 },
                 @{
                     ListItemText = "--textconv";
+                },
+                @{
+                    ListItemText = "--theirs";
                 },
                 @{
                     ListItemText = "--tool=";
@@ -143,18 +143,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--no';
-                Expected = '--no-index',
-                '--no-color',
-                '--no-renames',
+                Expected = '--no-color',
                 '--no-color-moved',
                 '--no-color-moved-ws',
-                '--no-relative',
                 '--no-ext-diff',
-                '--no-prefix',
                 '--no-indent-heuristic',
-                '--no-textconv',
+                '--no-index',
                 '--no-patch',
+                '--no-prefix',
+                '--no-relative',
+                '--no-renames',
                 '--no-stat',
+                '--no-textconv',
                 @{
                     ListItemText = '--no-prompt';
                     ToolTip      = "do not prompt before launching a diff tool";

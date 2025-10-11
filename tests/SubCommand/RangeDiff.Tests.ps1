@@ -151,7 +151,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--r';
-                Expected = '--relative', '--raw' | ConvertTo-Completion -ResultType ParameterName
+                Expected = '--raw', '--relative' | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--cr';

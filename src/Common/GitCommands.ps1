@@ -104,6 +104,20 @@ function gitGetAlias {
     }
 }
 
+function gitStashList {
+    [OutputType([PSCustomObject[]])]
+    param()
+
+    foreach ($line in ((git stash list -z) -split '\0')) {
+        if ($line -match '^([^:]+): ?(.*?)$') {
+            @{
+                ListItemText = $Matches[1];
+                Tooltip      = $Matches[2];
+            }
+        }
+    }
+}
+
 function gitLsTreeFile {
     [OutputType([string[]])]
     param ([Parameter(Mandatory, Position = 0)][string]$treeIsh)
@@ -331,6 +345,38 @@ function gitTags {
             $ignoreCase `
             "refs/tags/$Current*" "refs/tags/$Current*/**")
 }
+
+function gitRefnames {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+    )
+
+    $ignoreCase = $null
+    if ($script:GitCompletionSettings.IgnoreCase) {
+        $ignoreCase = '--ignore-case'
+    }
+
+    @(__git for-each-ref "--format=%(refname)" `
+            $ignoreCase `
+            "$Current*" "$Current*/**")
+}
+function gitRefStrip {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+    )
+
+    $ignoreCase = $null
+    if ($script:GitCompletionSettings.IgnoreCase) {
+        $ignoreCase = '--ignore-case'
+    }
+
+    @(__git for-each-ref "--format=%(refname:strip=2)" `
+            $ignoreCase `
+            "refs/*/$Current*" "refs/*/$Current*/**")
+}
+
 
 # List unique branches from refs/remotes used for 'git checkout' and 'git
 # switch' tracking DWIMery.
@@ -577,12 +623,18 @@ function gitSupportParseoptHelper {
 # with the prefix removed.
 function gitGetConfigVariables () {
     [CmdletBinding()]
-    [OutputType([string[]])]
+    [OutputType([PSCustomObject[]])]
     param(
         [Parameter(Mandatory, Position = 0)][string]$Section
     )
-    __git config --name-only --get-regexp "^$Section\..*" | ForEach-Object {
-        $_.Substring($Section.Length + 1)
+
+    foreach ($kv in @((__git config -z --get-regexp "^$Section\..*" | Out-String) -split "`0")) {
+        if ($kv -match "^$Section\.(?<Name>\S+)\s+(?<Value>[\s\S]*)") {
+            [PSCustomObject]@{
+                ListItemText = $Matches['Name'];
+                Tooltip      = $Matches['Value'] -creplace "(`r`n|`n)", ' ';
+            }
+        }
     }
 }
 
@@ -606,14 +658,6 @@ function gitPseudorefExists {
     }
 
     return ((Get-Item "$repoPath/$ref" -ErrorAction Ignore) -is [System.IO.FileInfo])
-}
-
-# __git_pretty_aliases
-function gitPrettyAliases() {
-    [CmdletBinding()]
-    [OutputType([string[]])]
-    param()
-    gitGetConfigVariables pretty
 }
 
 function gitArchiveList {

@@ -150,11 +150,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--whitespace=';
-                Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--whitespace=$_" }
+                Expected = 'error', 'error-all', 'fix', 'nowarn', 'warn' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--whitespace=$_" }
             },
             @{
                 Line     = '--whitespace ';
-                Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'error', 'error-all', 'fix', 'nowarn', 'warn' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--whitespace=w';

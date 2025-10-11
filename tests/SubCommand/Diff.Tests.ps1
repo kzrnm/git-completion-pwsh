@@ -122,7 +122,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '--no-p';
-                Expected = '--no-prefix', '--no-patch' | ConvertTo-Completion -ResultType ParameterName
+                Expected = '--no-patch', '--no-prefix' | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -133,67 +133,229 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--color-moved-ws i';
-                Expected = 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'ignore-all-space';
+                    Tooltip      = 'Ignore whitespace when comparing lines';                },
+                @{
+                    ListItemText = 'ignore-space-at-eol';
+                    Tooltip      = 'Ignore changes in whitespace at EOL';                },
+                @{
+                    ListItemText = 'ignore-space-change';
+                    Tooltip      = 'Ignore changes in amount of whitespace';                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--color-moved-ws ';
-                Expected = 'no', 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space', 'allow-indentation-change' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'allow-indentation-change';
+                    Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line';                },
+                @{
+                    ListItemText = 'ignore-all-space';
+                    Tooltip      = 'Ignore whitespace when comparing lines';                },
+                @{
+                    ListItemText = 'ignore-space-at-eol';
+                    Tooltip      = 'Ignore changes in whitespace at EOL';                },
+                @{
+                    ListItemText = 'ignore-space-change';
+                    Tooltip      = 'Ignore changes in amount of whitespace';                },
+                @{
+                    ListItemText = 'no';
+                    Tooltip      = 'Do not ignore whitespace when performing move detection';                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--color-moved-ws=i';
-                Expected = 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
+                Expected = @{
+                    ListItemText = 'ignore-all-space';
+                    Tooltip      = 'Ignore whitespace when comparing lines';                },
+                @{
+                    ListItemText = 'ignore-space-at-eol';
+                    Tooltip      = 'Ignore changes in whitespace at EOL';                },
+                @{
+                    ListItemText = 'ignore-space-change';
+                    Tooltip      = 'Ignore changes in amount of whitespace';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
             },
             @{
                 Line     = '--color-moved-ws=';
-                Expected = 'no', 'ignore-space-at-eol', 'ignore-space-change', 'ignore-all-space', 'allow-indentation-change' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
+                Expected = @{
+                    ListItemText = 'allow-indentation-change';
+                    Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line';                },
+                @{
+                    ListItemText = 'ignore-all-space';
+                    Tooltip      = 'Ignore whitespace when comparing lines';                },
+                @{
+                    ListItemText = 'ignore-space-at-eol';
+                    Tooltip      = 'Ignore changes in whitespace at EOL';                },
+                @{
+                    ListItemText = 'ignore-space-change';
+                    Tooltip      = 'Ignore changes in amount of whitespace';                },
+                @{
+                    ListItemText = 'no';
+                    Tooltip      = 'Do not ignore whitespace when performing move detection';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
             },
             @{
                 Line     = '--color-moved=d';
-                Expected = 'default', 'dimmed-zebra'  | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
+                Expected = @{
+                    ListItemText = 'default';
+                    Tooltip      = 'A synonym for zebra';                },
+                @{
+                    ListItemText = 'dimmed-zebra';
+                    Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
             },
             @{
                 Line     = '--color-moved=';
-                Expected = 'no', 'default', 'plain', 'blocks', 'zebra', 'dimmed-zebra' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
+                Expected = @{
+                    ListItemText = 'blocks';
+                    Tooltip      = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily';                },
+                @{
+                    ListItemText = 'default';
+                    Tooltip      = 'A synonym for zebra';                },
+                @{
+                    ListItemText = 'dimmed-zebra';
+                    Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                },
+                @{
+                    ListItemText = 'no';
+                    Tooltip      = 'Moved lines are not highlighted';                },
+                @{
+                    ListItemText = 'plain';
+                    Tooltip      = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved';                },
+                @{
+                    ListItemText = 'zebra';
+                    Tooltip      = 'Blocks of moved text are detected as in blocks mode';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
             },
             @{
                 Line     = '--ws-error-highlight d';
-                Expected = 'default' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'default';
+                    Tooltip      = 'A synonym for new';                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--ws-error-highlight ';
-                Expected = 'context', 'old', 'new', 'all', 'default' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'all';
+                    Tooltip      = 'A synonym for old,new,context';                },
+                @{
+                    ListItemText = 'context';
+                    Tooltip      = 'Highlight whitespace errors in the context';                },
+                @{
+                    ListItemText = 'default';
+                    Tooltip      = 'A synonym for new';                },
+                @{
+                    ListItemText = 'new';
+                    Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                },
+                @{
+                    ListItemText = 'old';
+                    Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--ws-error-highlight=d';
-                Expected = 'default' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
+                Expected = @{
+                    ListItemText = 'default';
+                    Tooltip      = 'A synonym for new';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
             },
             @{
                 Line     = '--ws-error-highlight=';
-                Expected = 'context', 'old', 'new', 'all', 'default' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
+                Expected = @{
+                    ListItemText = 'all';
+                    Tooltip      = 'A synonym for old,new,context';                },
+                @{
+                    ListItemText = 'context';
+                    Tooltip      = 'Highlight whitespace errors in the context';                },
+                @{
+                    ListItemText = 'default';
+                    Tooltip      = 'A synonym for new';                },
+                @{
+                    ListItemText = 'new';
+                    Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                },
+                @{
+                    ListItemText = 'old';
+                    Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
             },
             @{
                 Line     = '--submodule=d';
-                Expected = 'diff' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
+                Expected = @{
+                    ListItemText = 'diff';
+                    Tooltip      = 'Shows an inline diff of the changed contents of the submodule';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
             },
             @{
                 Line     = '--submodule=';
-                Expected = 'diff', 'log', 'short' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
+                Expected = @{
+                    ListItemText = 'diff';
+                    Tooltip      = 'Shows an inline diff of the changed contents of the submodule';
+                },
+                @{
+                    ListItemText = 'log';
+                    Tooltip      = 'Lists the commits in the range like "git submodule summary" does';
+                },
+                @{
+                    ListItemText = 'short';
+                    Tooltip      = '(default) Shows the names of the commits at the beginning and end of the range';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--submodule=$_" }
             },
             @{
                 Line     = '--diff-algorithm m';
-                Expected = 'myers', 'minimal' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'minimal';
+                    ToolTip      = 'Spend extra time to make sure the smallest possible diff is produced';
+                },
+                @{
+                    ListItemText = 'myers';
+                    ToolTip      = '(default) The basic greedy diff algorithm';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--diff-algorithm ';
-                Expected = 'myers', 'minimal', 'patience', 'histogram' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'histogram';
+                    ToolTip      = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
+                },
+                @{
+                    ListItemText = 'minimal';
+                    ToolTip      = 'Spend extra time to make sure the smallest possible diff is produced';
+                },
+                @{
+                    ListItemText = 'myers';
+                    ToolTip      = '(default) The basic greedy diff algorithm';
+                },
+                @{
+                    ListItemText = 'patience';
+                    ToolTip      = 'Use "patience diff" algorithm when generating patches';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--diff-algorithm=m';
-                Expected = 'myers', 'minimal' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
+                Expected = @{
+                    CompletionText = "--diff-algorithm=minimal";
+                    ListItemText   = 'minimal';
+                    ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                },
+                @{
+                    CompletionText = "--diff-algorithm=myers";
+                    ListItemText   = 'myers';
+                    ToolTip        = '(default) The basic greedy diff algorithm';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
             },
             @{
                 Line     = '--diff-algorithm=';
-                Expected = 'myers', 'minimal', 'patience', 'histogram' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
+                Expected = @{
+                    CompletionText = "--diff-algorithm=histogram";
+                    ListItemText   = 'histogram';
+                    ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
+                },
+                @{
+                    CompletionText = "--diff-algorithm=minimal";
+                    ListItemText   = 'minimal';
+                    ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                },
+                @{
+                    CompletionText = "--diff-algorithm=myers";
+                    ListItemText   = 'myers';
+                    ToolTip        = '(default) The basic greedy diff algorithm';
+                },
+                @{
+                    CompletionText = "--diff-algorithm=patience";
+                    ListItemText   = 'patience';
+                    ToolTip        = 'Use "patience diff" algorithm when generating patches';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--diff-algorithm=$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

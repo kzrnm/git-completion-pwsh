@@ -38,5 +38,5 @@ function Complete-GitSubCommand-ls-tree {
             return
         }
     }
-    gitCompleteFile $Current
+    gitCompleteRevlist $Current
 }

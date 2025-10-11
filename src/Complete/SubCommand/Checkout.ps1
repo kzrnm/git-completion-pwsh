@@ -16,33 +16,29 @@ function Complete-GitSubCommand-checkout {
         $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
         if ($shortOpts) { return $shortOpts }
 
-        $prevCandidates = switch -CaseSensitive ($Context.PreviousWord()) {
+        switch -CaseSensitive ($Context.PreviousWord()) {
             { $_ -cmatch '^-([^-]*[bB]|-orphan)$' } {
                 gitCompleteRefs $Current -Mode heads -dwim:(checkoutDefaultDwimMode $Context)
                 return
             }
-            '--conflict' { $gitConflictSolver }
-        }
-
-        if ($prevCandidates) {
-            $prevCandidates | completeList -Current $Current -ResultType ParameterValue
-            return
+            '--conflict' {
+                $gitConflictSolver | completeList -Current $Current -ResultType ParameterValue
+                return
+            }
         }
 
         if ($Current -cmatch '(--[^=]+)=(.*)') {
             $key = $Matches[1]
             $value = $Matches[2]
-            $candidates = switch -CaseSensitive ($key) {
+            switch -CaseSensitive ($key) {
                 '--orphan' {
                     gitCompleteRefs $value -Mode heads -dwim:(checkoutDefaultDwimMode $Context) -Prefix "$key="
                     return
                 }
-                '--conflict' { $gitConflictSolver }
-            }
-
-            if ($candidates) {
-                $candidates | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
-                return
+                '--conflict' {
+                    $gitConflictSolver | completeList -Current $value -Prefix "$key=" -ResultType ParameterValue
+                    return
+                }
             }
         }
 

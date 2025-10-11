@@ -52,5 +52,5 @@ function Complete-GitSubCommand-archive {
         }
     }
 
-    gitCompleteFile $Current
+    gitCompleteRevlist $Current
 }

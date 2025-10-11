@@ -170,34 +170,35 @@ function completeConfigVariableValue {
         $remotes | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
     }
 
-    switch -Wildcard ($VarName.ToLowerInvariant()) {
-        "branch.*.remote" {
-            remote
-            return
+    $v = $VarName.ToLowerInvariant()
+    $candidates = switch -Wildcard ($v) {
+        'branch.*.remote' {
+            gitRemote
+            continue
         }
-        "branch.*.pushremote" {
-            remote
-            return
+        'branch.*.pushremote' {
+            gitRemote
+            continue
         }
-        "branch.*.pushdefault" {
-            remote
-            return
+        'branch.*.pushdefault' {
+            gitRemote
+            continue
         }
-        "branch.*.merge" {
+        'remote.pushdefault' {
+            gitRemote
+            continue
+        }
+        'branch.*.merge' {
             gitCompleteRefs -Current $Current -Prefix $Prefix
             return
         }
-        "branch.*.rebase" {
-            "false", "true", "merges", "interactive" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'branch.*.rebase' {
+            $gitPullRebaseConfig
+            continue
         }
-        "remote.pushdefault" {
-            remote
-            return
-        }
-        "remote.*.fetch" {
-            if ($Current -eq "") {
-                $result = "refs/heads"
+        'remote.*.fetch' {
+            if ($Current -eq '') {
+                $result = 'refs/heads'
                 return [CompletionResult]::new(
                     "${Prefix}$result",
                     $result,
@@ -206,7 +207,7 @@ function completeConfigVariableValue {
                 )
             }
             try {
-                $remote = ($VarName -replace "^remote\." -replace "\.fetch$")
+                $remote = ($v -replace '^remote\.' -replace '\.fetch$')
                 (__git ls-remote $remote 'refs/heads/*') -match "(\S+)\s+(\S+)" > $null
                 # $hash = $Matches[1]
                 $ref = $Matches[2]
@@ -223,127 +224,105 @@ function completeConfigVariableValue {
             }
             return
         }
-        "remote.*.push" {
-            __git for-each-ref --format='%(refname):%(refname)' refs/heads | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'remote.*.push' {
+            __git for-each-ref --format='%(refname):%(refname)' refs/heads
+            continue
         }
-        "pull.twohead" {
-            gitListMergeStrategies | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'pull.twohead' {
+            gitListMergeStrategies
+            continue
         }
-        "pull.octopus" {
-            gitListMergeStrategies | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'pull.octopus' {
+            gitListMergeStrategies
+            continue
         }
-        "color.pager" {
-            "false", "true" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'color.pager' {
+            'false', 'true'
+            continue
         }
-        "color.*.*" {
-            "normal", "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "bold", "dim", "ul", "blink", "reverse" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'color.*.*' {
+            'normal', 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'bold', 'dim', 'ul', 'blink', 'reverse'
+            continue
         }
-        "color.*" {
-            "false", "true", "always", "never", "auto" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'color.*' {
+            'false', 'true', 'always', 'never', 'auto'
+            continue
         }
-        "diff.submodule" {
-            $script:gitDiffSubmoduleFormats | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'diff.submodule' {
+            $script:gitDiffSubmoduleFormats
+            continue
         }
-        "diff.algorithm" {
-            return (
-                [CompletionResult]::new(
-                    "${Prefix}default",
-                    'default',
-                    'ParameterValue',
-                    'The basic greedy diff algorithm'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}myers",
-                    'myers',
-                    'ParameterValue',
-                    'The basic greedy diff algorithm. Currently, this is the default'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}minimal",
-                    'minimal',
-                    'ParameterValue',
-                    'Spend extra time to make sure the smallest possible diff is produced'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}patience",
-                    'patience',
-                    'ParameterValue',
-                    'Use "patience diff" algorithm when generating patches'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}histogram",
-                    'histogram',
-                    'ParameterValue',
-                    'This algorithm extends the patience algorithm to "support low-occurrence common elements"'
-                ) | filterCompletionResult $Current
-            )
+        'diff.algorithm' {
+            $script:gitDiffAlgorithms
+            continue
         }
-        "http.proxyAuthMethod" {
-            return (
-                [CompletionResult]::new(
-                    "${Prefix}anyauth",
-                    'anyauth',
-                    'ParameterValue',
-                    'Automatically pick a suitable authentication method'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}basic",
-                    'basic',
-                    'ParameterValue',
-                    'HTTP Basic authentication'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}digest",
-                    'digest',
-                    'ParameterValue',
-                    'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}negotiate",
-                    'negotiate',
-                    'ParameterValue',
-                    'GSS-Negotiate authentication (compare the --negotiate option of curl)'
-                ),
-                [CompletionResult]::new(
-                    "${Prefix}ntlm",
-                    'ntlm',
-                    'ParameterValue',
-                    'NTLM authentication (compare the --ntlm option of curl)'
-                ) | filterCompletionResult $Current
-            )
+        'http.proxyAuthMethod' {
+            $gitHttpProxyAuthMethod
+            continue
         }
-        "help.format" {
-            "man", "info", "web", "html" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'help.format' {
+            'man', 'info', 'web', 'html'
+            continue
         }
-        "log.date" {
-            $script:gitLogDateFormats | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'log.date' {
+            $script:gitLogDateFormats
+            continue
         }
-        "sendemail.aliasfiletype" {
-            "mutt", "mailrc", "pine", "elm", "gnus" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'sendemail.aliasfiletype' {
+            'mutt', 'mailrc', 'pine', 'elm', 'gnus'
+            continue
         }
-        "sendemail.confirm" {
-            $script:gitSendEmailConfirmOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'sendemail.confirm' {
+            $script:gitSendEmailConfirmOptions
+            continue
         }
-        "sendemail.suppresscc" {
-            $script:gitSendEmailSuppressccOptions | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'sendemail.suppresscc' {
+            $script:gitSendEmailSuppressccOptions
+            continue
         }
-        "sendemail.transferencoding" {
-            "7bit", "8bit", "quoted-printable", "base64" | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
-            return
+        'sendemail.transferencoding' {
+            '7bit', '8bit', 'quoted-printable', 'base64'
+            continue
+        }
+        # git-completion.bash does not complete below cases.
+        'merge.conflictStyle' {
+            $script:gitConflictSolver
+            continue
+        }
+        'push.recurseSubmodules' {
+            $script:gitPushRecurseSubmodules
+            continue
+        }
+        'fetch.recurseSubmodules' {
+            $script:gitFetchRecurseSubmodules
+            continue
+        }
+        'diff.colorMoved' {
+            $script:gitColorMovedOpts
+            continue
+        }
+        'diff.colorMovedWS' {
+            $script:gitColorMovedWsOpts
+            continue
+        }
+        'diff.wsErrorHighlight' {
+            $script:gitWsErrorHighlightOpts
+            continue
+        }
+        'column.*' {
+            if ($v.Substring(7) -cnotin @('ui', 'branch', 'clean', 'status', 'tag')) {
+                return
+            }
+            $script:gitColumnUiPatterns
+            continue
+        }
+        'pull.rebase' {
+            $gitPullRebaseConfig
+            continue
         }
     }
+
+    $candidates | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
 }
 
 # __git_complete_config_variable_name

@@ -583,11 +583,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
             It '<Line>' -ForEach @(
                 @{
                     Line     = '--bi';
-                    Expected = '--bisect', '--binary' | ConvertTo-Completion -ResultType ParameterName
+                    Expected = '--binary', '--bisect' | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = '--no-p';
-                    Expected = '--no-prefix', '--no-patch' | ConvertTo-Completion -ResultType ParameterName
+                    Expected = '--no-patch', '--no-prefix' | ConvertTo-Completion -ResultType ParameterName
                 }
             ) {
                 "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -618,7 +618,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 },
                 @{
                     Line     = '--no-p';
-                    Expected = '--no-prefix', '--no-patch' | ConvertTo-Completion -ResultType ParameterName
+                    Expected = '--no-patch', '--no-prefix' | ConvertTo-Completion -ResultType ParameterName
                 }
             ) {
                 "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected

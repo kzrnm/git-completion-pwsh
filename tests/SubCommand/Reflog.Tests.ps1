@@ -83,7 +83,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 },
                 @{
                     Line     = '--no-m';
-                    Expected = '--no-merges', '--no-min-parents' , '--no-max-parents' | ConvertTo-Completion -ResultType ParameterName
+                    Expected = '--no-max-parents', '--no-merges', '--no-min-parents' | ConvertTo-Completion -ResultType ParameterName
                 }
             ) {
                 "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected

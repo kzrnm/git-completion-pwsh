@@ -24,7 +24,7 @@ function completeList {
         [scriptblock]
         $DescriptionBuilder = $null,
         [string[]]
-        $Messages,
+        $Messages = $null,
         [CompletionResultType]
         $ResultType = [CompletionResultType]::ParameterName,
         [Parameter(ParameterSetName = 'Prefix')]
@@ -32,8 +32,7 @@ function completeList {
         $RemovePrefix,
         $Exclude = $null,
         [Parameter(ValueFromPipeline)]
-        [string]
-        $Candidate
+        $ObjectOrCandidate
     )
 
     begin {
@@ -50,13 +49,21 @@ function completeList {
     }
 
     process {
+        if ($ObjectOrCandidate -is [string]) {
+            $Candidate = $ObjectOrCandidate
+            $desc = $null
+        }
+        else {
+            $Candidate = $ObjectOrCandidate.ListItemText
+            $desc = $ObjectOrCandidate.Tooltip
+        }
+
         if ((!$Current) -or $Candidate.StartsWith($Current)) {
             $Completion = "$Prefix$Candidate$Suffix"
             if (!$ExcludeSet.Add($Candidate)) {
                 return
             }
 
-            $desc = $null
             if ($null -ne $Messages) {
                 if ($count -lt $Messages.Length) {
                     $desc = $Messages[$count]
@@ -80,23 +87,6 @@ function completeList {
                 $ResultType,
                 $desc
             )
-        }
-    }
-}
-
-function filterCompletionResult {
-    param (
-        [Parameter(ValueFromPipeline)]
-        [CompletionResult]
-        $Completion,
-        [Parameter(Position = 0)]
-        [string]
-        $Current = ''
-    )
-
-    process {
-        if ($Completion.ListItemText.StartsWith($Current)) {
-            $Completion
         }
     }
 }

@@ -21,7 +21,7 @@ function Complete-GitSubCommand-diff {
     $result = Complete-Opts-diff $Context
     if ($result) { return $result }
 
-    gitCompleteRevlistFile $Current
+    gitCompleteRevlist $Current
 }
 
 function Complete-Opts-diff {

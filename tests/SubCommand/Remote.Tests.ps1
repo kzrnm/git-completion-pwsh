@@ -1153,8 +1153,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'grm',
                     'ordinary',
                     'origin',
-                    'default',
-                    'ors' | ConvertTo-Completion -ResultType ParameterValue
+                    @{
+                        ListItemText = 'default';
+                        Tooltip      = 'origin grm';
+                    },
+                    @{
+                        ListItemText = 'ors';
+                        Tooltip      = 'origin ordinary';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
                 "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -1203,21 +1209,30 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             It '<Line>' -ForEach @(
                 @{
                     Line     = 'origin d';
-                    Expected = 'default' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = @{
+                        ListItemText = 'default';
+                        Tooltip      = 'origin grm';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'or or';
                     Expected =
                     'ordinary',
                     'origin',
-                    'ors' | ConvertTo-Completion -ResultType ParameterValue
+                    @{
+                        ListItemText = 'ors';
+                        Tooltip      = 'origin ordinary';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'or';
                     Expected =
                     'ordinary',
                     'origin',
-                    'ors' | ConvertTo-Completion -ResultType ParameterValue
+                    @{
+                        ListItemText = 'ors';
+                        Tooltip      = 'origin ordinary';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '';
@@ -1225,8 +1240,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'grm',
                     'ordinary',
                     'origin',
-                    'default',
-                    'ors' | ConvertTo-Completion -ResultType ParameterValue
+                    @{
+                        ListItemText = 'default';
+                        Tooltip      = 'origin grm';
+                    },
+                    @{
+                        ListItemText = 'ors';
+                        Tooltip      = 'origin ordinary';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 }
             ) {
                 "git $Command $Subcommand $Line" | Complete-FromLine | Should -BeCompletion $expected
