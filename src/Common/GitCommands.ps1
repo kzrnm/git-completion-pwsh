@@ -656,6 +656,11 @@ function gitRecentLog() {
         $MaxCount = 5,
         $Skip = 0
     )
+
+    if ($ref -clike '-*') {
+        return
+    }
+
     $line = [string](git log $ref --oneline -z "--max-count=$MaxCount" "--skip=$Skip" 2>$null)
     if ($line) {
         return $line.Split([char[]]@([char]0), [StringSplitOptions]::RemoveEmptyEntries)
