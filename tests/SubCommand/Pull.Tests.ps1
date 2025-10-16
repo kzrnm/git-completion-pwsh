@@ -215,35 +215,92 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 },
                 @{
                     Line     = '--strategy-option ';
-                    Expected = 
-                    'ours',
-                    'theirs',
-                    'subtree',
-                    'subtree=',
-                    'patience',
-                    'histogram',
-                    'diff-algorithm=',
-                    'ignore-space-change',
-                    'ignore-all-space',
-                    'ignore-space-at-eol',
-                    'renormalize',
-                    'no-renormalize',
-                    'no-renames',
-                    'find-renames',
-                    'find-renames=',
-                    'rename-threshold=' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = @{
+                        ListItemText = 'diff-algorithm=';
+                        Tooltip      = 'Use a different diff algorithm while merging';
+                    },
+                    @{
+                        ListItemText = 'find-renames';
+                        Tooltip      = 'Turn on rename detection';
+                    },
+                    @{
+                        ListItemText = 'find-renames=';
+                        Tooltip      = 'Turn on rename detection, optionally setting the similarity threshold';
+                    },
+                    @{
+                        ListItemText = 'histogram';
+                        Tooltip      = 'Deprecated synonym for diff-algorithm=histogram';
+                    },
+                    @{
+                        ListItemText = 'ignore-all-space';
+                        Tooltip      = 'Ignore whitespace when comparing lines';
+                    },
+                    @{
+                        ListItemText = 'ignore-space-at-eol';
+                        Tooltip      = 'Ignore changes in whitespace at EOL';
+                    },
+                    @{
+                        ListItemText = 'ignore-space-change';
+                        Tooltip      = 'Ignore changes in amount of whitespace';
+                    },
+                    @{
+                        ListItemText = 'no-renames';
+                        Tooltip      = 'Turn off rename detection';
+                    },
+                    @{
+                        ListItemText = 'no-renormalize';
+                        Tooltip      = '[NO] runs a virtual check-out and check-in of all three stages';
+                    },
+                    @{
+                        ListItemText = 'ours';
+                        Tooltip      = 'favoring our version';
+                    },
+                    @{
+                        ListItemText = 'patience';
+                        Tooltip      = 'Deprecated synonym for diff-algorithm=patience';
+                    },
+                    @{
+                        ListItemText = 'rename-threshold=';
+                        Tooltip      = 'Deprecated synonym for find-renames=';
+                    },
+                    @{
+                        ListItemText = 'renormalize';
+                        Tooltip      = 'runs a virtual check-out and check-in of all three stages';
+                    },
+                    @{
+                        ListItemText = 'subtree';
+                        Tooltip      = 'A more advanced form of subtree strategy';
+                    },
+                    @{
+                        ListItemText = 'subtree=';
+                        Tooltip      = 'A more advanced form of subtree strategy';
+                    },
+                    @{
+                        ListItemText = 'theirs';
+                        Tooltip      = 'opposite of ours';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy-option r';
-                    Expected = 
-                    'renormalize',
-                    'rename-threshold=' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = @{
+                        ListItemText = 'rename-threshold=';
+                        Tooltip      = 'Deprecated synonym for find-renames=';
+                    },
+                    @{
+                        ListItemText = 'renormalize';
+                        Tooltip      = 'runs a virtual check-out and check-in of all three stages';
+                    } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--strategy-option=r';
-                    Expected = 
-                    'renormalize',
-                    'rename-threshold=' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
+                    Expected = @{
+                        ListItemText = 'rename-threshold=';
+                        Tooltip      = 'Deprecated synonym for find-renames=';
+                    },
+                    @{
+                        ListItemText = 'renormalize';
+                        Tooltip      = 'runs a virtual check-out and check-in of all three stages';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--strategy-option=$_" }
                 }
             ) {
                 "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -253,36 +310,47 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--recurse-submodules ';
-                Expected =
-                'yes',
-                'on-demand',
-                'no' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = @{
+                    ListItemText = 'no';
+                    Tooltip      = 'no submodules are fetched';
+                },
+                @{
+                    ListItemText = 'on-demand';
+                    Tooltip      = '(default) only changed submodules are fetched';
+                },
+                @{
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--recurse-submodules y';
-                Expected = 'yes' | ConvertTo-Completion -ResultType ParameterValue -ToolTip "yes"
+                Expected = @{
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--recurse-submodules=';
                 Expected = @{
-                    CompletionText = '--recurse-submodules=yes';
-                    ListItemText   = 'yes';
+                    ListItemText = 'no';
+                    Tooltip      = 'no submodules are fetched';
                 },
                 @{
-                    CompletionText = '--recurse-submodules=on-demand';
-                    ListItemText   = 'on-demand';
+                    ListItemText = 'on-demand';
+                    Tooltip      = '(default) only changed submodules are fetched';
                 },
                 @{
-                    CompletionText = '--recurse-submodules=no';
-                    ListItemText   = 'no';
-                } | ConvertTo-Completion -ResultType ParameterValue
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--recurse-submodules=$_" }
             },
             @{
                 Line     = '--recurse-submodules=y';
                 Expected = @{
-                    CompletionText = '--recurse-submodules=yes';
-                    ListItemText   = 'yes';
-                } | ConvertTo-Completion -ResultType ParameterValue
+                    ListItemText = 'yes';
+                    Tooltip      = 'all submodules are fetched';
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--recurse-submodules=$_" }
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

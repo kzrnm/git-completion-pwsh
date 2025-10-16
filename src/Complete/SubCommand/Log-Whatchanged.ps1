@@ -20,7 +20,7 @@ function Complete-GitSubCommand-log {
 
     $result = gitCompleteLogOpts $Context
     if ($result) { return $result }
-    gitCompleteRevlistFile $Current
+    gitCompleteRevlist $Current
 }
 
 Set-Alias Complete-GitSubCommand-whatchanged Complete-GitSubCommand-log
@@ -47,6 +47,7 @@ function gitCompleteLogOpts {
         '--diff-algorithm' { $script:gitDiffAlgorithms }
         '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
         '--diff-merges' { $script:gitDiffMergesOpts }
+        '--exclude' { gitCompleteLogExclude $Context $Current }
     }
 
     if ($prevCandidates) {
@@ -60,9 +61,7 @@ function gitCompleteLogOpts {
         $key = $Matches[1]
         $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
-            { $_ -in @('--pretty', '--format') } {
-                $script:gitLogPrettyFormats + @(gitPrettyAliases)
-            }
+            { $_ -in @('--pretty', '--format') } { @(gitCompletePretty | Sort-Object) }
             '--date' { $script:gitLogDateFormats }
             '--decorate' { 'full', 'short', 'no' }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
@@ -70,6 +69,7 @@ function gitCompleteLogOpts {
             '--ws-error-highlight' { $script:gitWsErrorHighlightOpts }
             '--no-walk' { 'sorted', 'unsorted' }
             '--diff-merges' { $script:gitDiffMergesOpts }
+            '--exclude' { gitCompleteLogExclude $Context $value }
         }
 
         if ($candidates) {
@@ -78,53 +78,45 @@ function gitCompleteLogOpts {
         }
     }
 
-    gitLogOpts -Merge:(gitPseudorefExists MERGE_HEAD) | completeList -Current $Current -ResultType ParameterName
+    $Merge = $null
+    if (gitPseudorefExists MERGE_HEAD) {
+        $Merge = @('--merge')
+    }
+    $gitLogOptions | completeList -Current $Current -ResultType ParameterName -Exclude $Merge
     return
 }
 
-function gitLogOpts {
-    [OutputType([string[]])]
+function gitCompleteLogExclude {
+    [CmdletBinding(PositionalBinding = $false)]
     param (
-        [switch]$Merge
+        [CommandLineContext]
+        [Parameter(Position = 0, Mandatory)]$Context,
+        [string]
+        [AllowEmptyString()]
+        [Parameter(Position = 1, Mandatory)]$Current
     )
-    
-    $gitLogCommonOptions
-    $gitLogShortlogOptions
-    $gitLogGitkOptions
-    $gitLogShowOptions
-    '--root'
-    '--topo-order'
-    '--date-order'
-    '--reverse'
-    '--follow'
-    '--full-diff'
-    '--abbrev-commit'
-    '--no-abbrev-commit'
-    '--abbrev='
-    '--relative-date'
-    '--date='
-    '--pretty='
-    '--format='
-    '--oneline'
-    '--show-signature'
-    '--cherry-mark'
-    '--cherry-pick'
-    '--graph'
-    '--decorate'
-    '--decorate='
-    '--no-decorate'
-    '--walk-reflogs'
-    '--no-walk'
-    '--no-walk='
-    '--do-walk'
-    '--parents'
-    '--children'
-    '--expand-tabs'
-    '--expand-tabs='
-    '--no-expand-tabs'
-    '--clear-decorations'
-    '--decorate-refs='
-    '--decorate-refs-exclude='
-    if ($Merge) { '--merge' }
-    $gitDiffCommonOptions
+
+    for ($i = $Context.CurrentIndex + 1; $i -lt $Context.DoubledashIndex; $i++) {
+        $type = switch -Regex ($Context.Words[$i]) {
+            '^--branches($|=)' { 'branch' }
+            '^--tags($|=)' { 'tag' }
+            '^--remotes($|=)' { 'remote' }
+            '^--glob($|=)' { 'all' }
+            '^--all$' { 'all' }
+        }
+        if ($type) {
+            break
+        }
+    }
+
+    switch ($type) {
+        'branch' { gitHeads $Current }
+        'tag' { gitTags $Current }
+        'remote' { gitRemoteHeads $Current }
+        'all' { gitRefnames $Current }
+        Default {
+            gitRefnames $Current
+            gitRefStrip $Current
+        }
+    }
 }

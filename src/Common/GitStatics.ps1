@@ -1,109 +1,472 @@
 # Copyright (C) 2024 kzrnm
 # Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
 # Distributed under the GNU General Public License, version 2.0.
-$script:gitDiffAlgorithms = 'myers', 'minimal', 'patience', 'histogram'
-$script:gitDiffSubmoduleFormats = 'diff', 'log', 'short'
+$script:gitCherryPickInprogressOptions = '--continue', '--quit', '--abort', '--skip' | Sort-Object
+$script:gitAmInprogressOptions = '--skip', '--continue', '--resolved', '--abort', '--quit', '--show-current-patch' | Sort-Object
 
-$script:gitPushRecurseSubmodules = 'check', 'on-demand', 'only'
-$script:gitFetchRecurseSubmodules = 'yes', 'on-demand', 'no'
+$script:gitRebaseInprogressOptions = '--continue', '--skip', '--abort', '--quit', '--show-current-patch' | Sort-Object
+$script:gitRebaseInteractiveInprogressOptions = $script:gitRebaseInprogressOptions + '--edit-todo' | Sort-Object
 
-$script:gitColorMovedOpts = 'no', 'default', 'plain', 'blocks', 'zebra', 'dimmed-zebra'
+$script:gitFormatPatchExtraOptions = '--full-index', '--not', '--all', '--no-prefix', '--src-prefix=', '--dst-prefix=', '--notes' | Sort-Object
+$script:gitPullRebaseConfig = [pscustomobject[]]@(
+    @{ListItemText = 'false'; Tooltip = 'Merge branch when "git pull"'; },
+    @{ListItemText = 'true'; Tooltip = 'Rebase branch when "git pull"'; },
+    @{ListItemText = 'merges'; Tooltip = 'Rebase branch with --rebase-merges when "git pull"'; },
+    @{ListItemText = 'interactive'; Tooltip = 'Rebase in interactive mode'; }
+) | Sort-Object ListItemText
 
-$script:gitColorMovedWsOpts = 'no', 'ignore-space-at-eol', 'ignore-space-change',
-'ignore-all-space', 'allow-indentation-change'
+$script:gitHttpProxyAuthMethod = [pscustomobject[]]@(
+    @{ListItemText = 'anyauth'; Tooltip = 'Automatically pick a suitable authentication method'; },
+    @{ListItemText = 'basic'; Tooltip = 'HTTP Basic authentication'; },
+    @{ListItemText = 'digest'; Tooltip = 'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text'; },
+    @{ListItemText = 'negotiate'; Tooltip = 'GSS-Negotiate authentication (compare the --negotiate option of curl)'; },
+    @{ListItemText = 'ntlm'; Tooltip = 'NTLM authentication (compare the --ntlm option of curl)'; }
+) | Sort-Object ListItemText
 
-$script:gitWsErrorHighlightOpts = 'context', 'old', 'new', 'all', 'default'
+$script:gitColumnUiPatterns = [pscustomobject[]]@(
+    @{ListItemText = 'always'; Tooltip = 'always show in columns'; },
+    @{ListItemText = 'never'; Tooltip = 'never show in columns'; },
+    @{ListItemText = 'auto'; Tooltip = 'show in columns if the output is to the terminal'; },
+    @{ListItemText = 'column'; Tooltip = 'fill columns before rows'; },
+    @{ListItemText = 'row'; Tooltip = 'fill rows before columns'; },
+    @{ListItemText = 'plain'; Tooltip = 'show in one column'; },
+    @{ListItemText = 'dense'; Tooltip = 'make unequal size columns to utilize more space'; },
+    @{ListItemText = 'nodense'; Tooltip = 'make equal size columns'; }
+) # | Sort-Object ListItemText # Comment out to fit the classification
 
-# Options for the diff machinery (diff, log, show, stash, range-diff, ...)
-$script:gitDiffCommonOptions = '--stat', '--numstat', '--shortstat', '--summary',
-'--patch-with-stat', '--name-only', '--name-status', '--color',
-'--no-color', '--color-words', '--no-renames', '--check',
-'--color-moved', '--color-moved=', '--no-color-moved',
-'--color-moved-ws=', '--no-color-moved-ws',
-'--full-index', '--binary', '--abbrev', '--diff-filter=',
-'--find-copies', '--find-object', '--find-renames',
-'--no-relative', '--relative',
-'--find-copies-harder', '--ignore-cr-at-eol',
-'--text', '--ignore-space-at-eol', '--ignore-space-change',
-'--ignore-all-space', '--ignore-blank-lines', '--exit-code',
-'--quiet', '--ext-diff', '--no-ext-diff', '--unified=',
-'--no-prefix', '--src-prefix=', '--dst-prefix=',
-'--inter-hunk-context=', '--function-context',
-'--patience', '--histogram', '--minimal',
-'--raw', '--word-diff', '--word-diff-regex=',
-'--dirstat', '--dirstat=', '--dirstat-by-file',
-'--dirstat-by-file=', '--cumulative',
-'--diff-algorithm=', '--default-prefix',
-'--submodule', '--submodule=', '--ignore-submodules',
-'--indent-heuristic', '--no-indent-heuristic',
-'--textconv', '--no-textconv', '--break-rewrites',
-'--patch', '--no-patch', '--cc', '--combined-all-paths',
-'--anchored=', '--compact-summary', '--ignore-matching-lines=',
-'--irreversible-delete', '--line-prefix', '--no-stat',
-'--output=', '--output-indicator-context=',
-'--output-indicator-new=', '--output-indicator-old=',
-'--ws-error-highlight=',
-'--pickaxe-all', '--pickaxe-regex', '--patch-with-raw'
+$script:gitMergeStrategies = [pscustomobject[]]@(
+    @{ListItemText = 'ours'; Tooltip = 'favoring our version'; },
+    @{ListItemText = 'theirs'; Tooltip = 'opposite of ours'; },
+    @{ListItemText = 'subtree'; Tooltip = 'A more advanced form of subtree strategy'; },
+    @{ListItemText = 'subtree='; Tooltip = 'A more advanced form of subtree strategy'; },
+    @{ListItemText = 'patience'; Tooltip = 'Deprecated synonym for diff-algorithm=patience'; },
+    @{ListItemText = 'histogram'; Tooltip = 'Deprecated synonym for diff-algorithm=histogram'; },
+    @{ListItemText = 'diff-algorithm='; Tooltip = 'Use a different diff algorithm while merging'; },
+    @{ListItemText = 'ignore-space-change'; Tooltip = 'Ignore changes in amount of whitespace'; },
+    @{ListItemText = 'ignore-all-space'; Tooltip = 'Ignore whitespace when comparing lines'; },
+    @{ListItemText = 'ignore-space-at-eol'; Tooltip = 'Ignore changes in whitespace at EOL'; },
+    @{ListItemText = 'renormalize'; Tooltip = 'runs a virtual check-out and check-in of all three stages'; },
+    @{ListItemText = 'no-renormalize'; Tooltip = '[NO] runs a virtual check-out and check-in of all three stages'; },
+    @{ListItemText = 'no-renames'; Tooltip = 'Turn off rename detection'; },
+    @{ListItemText = 'find-renames'; Tooltip = 'Turn on rename detection'; },
+    @{ListItemText = 'find-renames='; Tooltip = 'Turn on rename detection, optionally setting the similarity threshold'; },
+    @{ListItemText = 'rename-threshold='; Tooltip = 'Deprecated synonym for find-renames='; }
+) | Sort-Object ListItemText
 
-# Options for diff/difftool
-$script:gitDiffDifftoolOptions = @('--cached', '--staged',
-    '--base', '--ours', '--theirs', '--no-index', '--merge-base',
-    '--ita-invisible-in-index', '--ita-visible-in-index') + $GitDiffCommonOptions
+$script:gitPushRecurseSubmodules = [pscustomobject[]]@(
+    @{ListItemText = 'check'; Tooltip = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule'; }
+    @{ListItemText = 'on-demand'; Tooltip = 'all submodules that changed in the revisions to be pushed will be pushed'; }
+    @{ListItemText = 'only'; Tooltip = 'all submodules will be pushed while the superproject is left unpushed'; }
+    @{ListItemText = 'no'; Tooltip = '(default) no submodules are pushed'; }
+) | Sort-Object ListItemText
 
-# Options that go well for log, shortlog and gitk
-$script:gitLogCommonOptions = '--not', '--all',
-'--branches', '--tags', '--remotes',
-'--first-parent', '--merges', '--no-merges',
-'--max-count=',
-'--max-age=', '--since=', '--after=',
-'--min-age=', '--until=', '--before=',
-'--min-parents=', '--max-parents=',
-'--no-min-parents', '--no-max-parents',
-'--alternate-refs', '--ancestry-path',
-'--author-date-order', '--basic-regexp',
-'--bisect', '--boundary', '--exclude-first-parent-only',
-'--exclude-hidden', '--extended-regexp',
-'--fixed-strings', '--grep-reflog',
-'--ignore-missing', '--left-only', '--perl-regexp',
-'--reflog', '--regexp-ignore-case', '--remove-empty',
-'--right-only', '--show-linear-break',
-'--show-notes-by-default', '--show-pulls',
-'--since-as-filter', '--single-worktree'
+$script:gitFetchRecurseSubmodules = [pscustomobject[]]@(
+    @{ListItemText = 'yes'; Tooltip = 'all submodules are fetched'; }
+    @{ListItemText = 'on-demand'; Tooltip = '(default) only changed submodules are fetched'; }
+    @{ListItemText = 'no'; Tooltip = 'no submodules are fetched'; }
+) | Sort-Object ListItemText
+
+$script:gitConflictSolver = [pscustomobject[]]@(
+    @{ListItemText = 'diff3'; Tooltip = "Adds the common ancestor's content, providing a three-way comparison"; }
+    @{ListItemText = 'merge'; Tooltip = '(default) Showing only current changes and the incoming changes'; }
+    @{ListItemText = 'zdiff3'; Tooltip = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block'; }
+) | Sort-Object ListItemText
+
+$script:gitDiffAlgorithms = [pscustomobject[]]@(
+    @{ListItemText = 'myers'; Tooltip = '(default) The basic greedy diff algorithm'; }
+    @{ListItemText = 'minimal'; Tooltip = 'Spend extra time to make sure the smallest possible diff is produced'; }
+    @{ListItemText = 'patience'; Tooltip = 'Use "patience diff" algorithm when generating patches'; }
+    @{ListItemText = 'histogram'; Tooltip = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"'; }
+) | Sort-Object ListItemText
+
+$script:gitDiffSubmoduleFormats = [pscustomobject[]]@(
+    @{ListItemText = 'diff'; Tooltip = 'Shows an inline diff of the changed contents of the submodule'; }
+    @{ListItemText = 'log'; Tooltip = 'Lists the commits in the range like "git submodule summary" does'; }
+    @{ListItemText = 'short'; Tooltip = '(default) Shows the names of the commits at the beginning and end of the range'; }
+) | Sort-Object ListItemText
+
+$script:gitColorMovedOpts = [pscustomobject[]]@(
+    @{ListItemText = 'no'; Tooltip = 'Moved lines are not highlighted'; }
+    @{ListItemText = 'default'; Tooltip = 'A synonym for zebra'; }
+    @{ListItemText = 'plain'; Tooltip = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved'; }
+    @{ListItemText = 'blocks'; Tooltip = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily'; }
+    @{ListItemText = 'zebra'; Tooltip = 'Blocks of moved text are detected as in blocks mode'; }
+    @{ListItemText = 'dimmed-zebra'; Tooltip = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed'; }
+) | Sort-Object ListItemText
+
+$script:gitColorMovedWsOpts = [pscustomobject[]]@(
+    @{ListItemText = 'no'; Tooltip = 'Do not ignore whitespace when performing move detection'; }
+    @{ListItemText = 'ignore-space-at-eol'; Tooltip = 'Ignore changes in whitespace at EOL'; }
+    @{ListItemText = 'ignore-space-change'; Tooltip = 'Ignore changes in amount of whitespace'; }
+    @{ListItemText = 'ignore-all-space'; Tooltip = 'Ignore whitespace when comparing lines'; }
+    @{ListItemText = 'allow-indentation-change'; Tooltip = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line'; }
+) | Sort-Object ListItemText
+
+$script:gitWsErrorHighlightOpts = [pscustomobject[]]@(
+    @{ListItemText = 'context'; Tooltip = 'Highlight whitespace errors in the context'; }
+    @{ListItemText = 'old'; Tooltip = 'Highlight whitespace errors in the old lines of the diff'; }
+    @{ListItemText = 'new'; Tooltip = 'Highlight whitespace errors in the new lines of the diff'; }
+    @{ListItemText = 'all'; Tooltip = 'A synonym for old,new,context'; }
+    @{ListItemText = 'default'; Tooltip = 'A synonym for new'; }
+) | Sort-Object ListItemText
+
+$script:gitDiffMergesOpts = [pscustomobject[]]@(
+    @{ListItemText = 'off'; }
+    @{ListItemText = 'none'; }
+    @{ListItemText = 'on'; }
+    @{ListItemText = 'first-parent'; }
+    @{ListItemText = '1'; }
+    @{ListItemText = 'separate'; }
+    @{ListItemText = 'm'; }
+    @{ListItemText = 'combined'; }
+    @{ListItemText = 'c'; }
+    @{ListItemText = 'dense-combined'; }
+    @{ListItemText = 'cc'; }
+    @{ListItemText = 'remerge'; }
+    @{ListItemText = 'r'; }
+) | Sort-Object ListItemText
+
+$script:gitLogDateFormats = [pscustomobject[]]@(
+    @{ListItemText = 'relative'; }
+    @{ListItemText = 'iso8601'; }
+    @{ListItemText = 'iso8601-strict'; }
+    @{ListItemText = 'rfc2822'; }
+    @{ListItemText = 'short'; }
+    @{ListItemText = 'local'; }
+    @{ListItemText = 'default'; }
+    @{ListItemText = 'human'; }
+    @{ListItemText = 'raw'; }
+    @{ListItemText = 'unix'; }
+    @{ListItemText = 'auto:'; }
+    @{ListItemText = 'format:'; }
+) | Sort-Object ListItemText
+
+$script:gitLogPrettyFormats = [pscustomobject[]]@(
+    @{ListItemText = 'oneline'; }
+    @{ListItemText = 'short'; }
+    @{ListItemText = 'medium'; }
+    @{ListItemText = 'full'; }
+    @{ListItemText = 'fuller'; }
+    @{ListItemText = 'reference'; }
+    @{ListItemText = 'email'; }
+    @{ListItemText = 'raw'; }
+    @{ListItemText = 'format:'; }
+    @{ListItemText = 'tformat:'; }
+    @{ListItemText = 'mboxrd'; }
+) | Sort-Object ListItemText
+
+$script:gitSendEmailConfirmOptions = [pscustomobject[]]@(
+    @{ListItemText = 'always'; }
+    @{ListItemText = 'never'; }
+    @{ListItemText = 'auto'; }
+    @{ListItemText = 'cc'; }
+    @{ListItemText = 'compose'; }
+) | Sort-Object ListItemText
+
+$script:gitSendEmailSuppressccOptions = [pscustomobject[]]@(
+    @{ListItemText = 'author'; }
+    @{ListItemText = 'self'; }
+    @{ListItemText = 'cc'; }
+    @{ListItemText = 'bodycc'; }
+    @{ListItemText = 'sob'; }
+    @{ListItemText = 'cccmd'; }
+    @{ListItemText = 'body'; }
+    @{ListItemText = 'all'; }
+) | Sort-Object ListItemText
+
+$script:gitMergetoolsCommon = [pscustomobject[]]@(
+    @{ListItemText = 'diffuse'; }
+    @{ListItemText = 'diffmerge'; }
+    @{ListItemText = 'ecmerge'; }
+    @{ListItemText = 'emerge'; }
+    @{ListItemText = 'kdiff3'; }
+    @{ListItemText = 'meld'; }
+    @{ListItemText = 'opendiff'; }
+    @{ListItemText = 'tkdiff'; }
+    @{ListItemText = 'vimdiff'; }
+    @{ListItemText = 'nvimdiff'; }
+    @{ListItemText = 'gvimdiff'; }
+    @{ListItemText = 'xxdiff'; }
+    @{ListItemText = 'araxis'; }
+    @{ListItemText = 'p4merge'; }
+    @{ListItemText = 'bc'; }
+    @{ListItemText = 'codecompare'; }
+    @{ListItemText = 'smerge'; }
+) | Sort-Object ListItemText
+
+$script:gitMergetoolsDiffTool = $gitMergetoolsCommon + @{ListItemText = 'kompare'; } | Sort-Object ListItemText
+$script:gitMergetoolsMergeTool = $gitMergetoolsCommon + @{ListItemText = 'tortoisemerge'; } | Sort-Object ListItemText
+
+$script:gitUntrackedFileModes = [pscustomobject[]]@(
+    @{ListItemText = 'all'; }
+    @{ListItemText = 'no'; }
+    @{ListItemText = 'normal'; }
+) | Sort-Object ListItemText
+
+# Options for git am
+$script:gitWhitespacelist = [pscustomobject[]]@(
+    @{ListItemText = 'nowarn'; }
+    @{ListItemText = 'warn'; }
+    @{ListItemText = 'error'; }
+    @{ListItemText = 'error-all'; }
+    @{ListItemText = 'fix'; }
+) | Sort-Object ListItemText
+
+$script:gitPatchformat = [pscustomobject[]]@(
+    @{ListItemText = 'mbox'; }
+    @{ListItemText = 'stgit'; }
+    @{ListItemText = 'stgit-series'; }
+    @{ListItemText = 'hg'; }
+    @{ListItemText = 'mboxrd'; }
+) | Sort-Object ListItemText
+
+$script:gitShowcurrentpatch = [pscustomobject[]]@(
+    @{ListItemText = 'diff'; }
+    @{ListItemText = 'raw'; }
+) | Sort-Object ListItemText
+
+$script:gitQuotedCr = [pscustomobject[]]@(
+    @{ListItemText = 'nowarn'; }
+    @{ListItemText = 'warn'; }
+    @{ListItemText = 'strip'; }
+) | Sort-Object ListItemText
 
 # Options that go well for log and gitk (not shortlog)
-$script:gitLogGitkOptions = '--dense', '--sparse', '--full-history',
-'--simplify-merges', '--simplify-by-decoration',
-'--left-right', '--notes', '--no-notes'
+$script:gitLogGitkOptions = [pscustomobject[]]@(
+    @{ListItemText = '--dense'; }
+    @{ListItemText = '--sparse'; }
+    @{ListItemText = '--full-history'; }
+    @{ListItemText = '--simplify-merges'; }
+    @{ListItemText = '--simplify-by-decoration'; }
+    @{ListItemText = '--left-right'; }
+    @{ListItemText = '--notes'; }
+    @{ListItemText = '--no-notes'; }
+) | Sort-Object ListItemText
+
+# Options for the diff machinery (diff, log, show, stash, range-diff, ...)
+$script:gitDiffCommonOptions = [pscustomobject[]]@(
+    @{ListItemText = '--stat'; }
+    @{ListItemText = '--numstat'; }
+    @{ListItemText = '--shortstat'; }
+    @{ListItemText = '--summary'; }
+    @{ListItemText = '--patch-with-stat'; }
+    @{ListItemText = '--name-only'; }
+    @{ListItemText = '--name-status'; }
+    @{ListItemText = '--color'; }
+    @{ListItemText = '--no-color'; }
+    @{ListItemText = '--color-words'; }
+    @{ListItemText = '--no-renames'; }
+    @{ListItemText = '--check'; }
+    @{ListItemText = '--color-moved'; }
+    @{ListItemText = '--color-moved='; }
+    @{ListItemText = '--no-color-moved'; }
+    @{ListItemText = '--color-moved-ws='; }
+    @{ListItemText = '--no-color-moved-ws'; }
+    @{ListItemText = '--full-index'; }
+    @{ListItemText = '--binary'; }
+    @{ListItemText = '--abbrev'; }
+    @{ListItemText = '--diff-filter='; }
+    @{ListItemText = '--find-copies'; }
+    @{ListItemText = '--find-object'; }
+    @{ListItemText = '--find-renames'; }
+    @{ListItemText = '--no-relative'; }
+    @{ListItemText = '--relative'; }
+    @{ListItemText = '--find-copies-harder'; }
+    @{ListItemText = '--ignore-cr-at-eol'; }
+    @{ListItemText = '--text'; }
+    @{ListItemText = '--ignore-space-at-eol'; }
+    @{ListItemText = '--ignore-space-change'; }
+    @{ListItemText = '--ignore-all-space'; }
+    @{ListItemText = '--ignore-blank-lines'; }
+    @{ListItemText = '--exit-code'; }
+    @{ListItemText = '--quiet'; }
+    @{ListItemText = '--ext-diff'; }
+    @{ListItemText = '--no-ext-diff'; }
+    @{ListItemText = '--unified='; }
+    @{ListItemText = '--no-prefix'; }
+    @{ListItemText = '--src-prefix='; }
+    @{ListItemText = '--dst-prefix='; }
+    @{ListItemText = '--inter-hunk-context='; }
+    @{ListItemText = '--function-context'; }
+    @{ListItemText = '--patience'; }
+    @{ListItemText = '--histogram'; }
+    @{ListItemText = '--minimal'; }
+    @{ListItemText = '--raw'; }
+    @{ListItemText = '--word-diff'; }
+    @{ListItemText = '--word-diff-regex='; }
+    @{ListItemText = '--dirstat'; }
+    @{ListItemText = '--dirstat='; }
+    @{ListItemText = '--dirstat-by-file'; }
+    @{ListItemText = '--dirstat-by-file='; }
+    @{ListItemText = '--cumulative'; }
+    @{ListItemText = '--diff-algorithm='; }
+    @{ListItemText = '--default-prefix'; }
+    @{ListItemText = '--submodule'; }
+    @{ListItemText = '--submodule='; }
+    @{ListItemText = '--ignore-submodules'; }
+    @{ListItemText = '--indent-heuristic'; }
+    @{ListItemText = '--no-indent-heuristic'; }
+    @{ListItemText = '--textconv'; }
+    @{ListItemText = '--no-textconv'; }
+    @{ListItemText = '--break-rewrites'; }
+    @{ListItemText = '--patch'; }
+    @{ListItemText = '--no-patch'; }
+    @{ListItemText = '--cc'; }
+    @{ListItemText = '--combined-all-paths'; }
+    @{ListItemText = '--anchored='; }
+    @{ListItemText = '--compact-summary'; }
+    @{ListItemText = '--ignore-matching-lines='; }
+    @{ListItemText = '--irreversible-delete'; }
+    @{ListItemText = '--line-prefix'; }
+    @{ListItemText = '--no-stat'; }
+    @{ListItemText = '--output='; }
+    @{ListItemText = '--output-indicator-context='; }
+    @{ListItemText = '--output-indicator-new='; }
+    @{ListItemText = '--output-indicator-old='; }
+    @{ListItemText = '--ws-error-highlight='; }
+    @{ListItemText = '--pickaxe-all'; }
+    @{ListItemText = '--pickaxe-regex'; }
+    @{ListItemText = '--patch-with-raw'; }
+) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
+
+# Options for diff/difftool
+$script:gitDiffDifftoolOptions = [pscustomobject[]]@(
+    @{ListItemText = '--cached'; }
+    @{ListItemText = '--staged'; }
+    @{ListItemText = '--base'; }
+    @{ListItemText = '--ours'; }
+    @{ListItemText = '--theirs'; }
+    @{ListItemText = '--no-index'; }
+    @{ListItemText = '--merge-base'; }
+    @{ListItemText = '--ita-invisible-in-index'; }
+    @{ListItemText = '--ita-visible-in-index'; }
+) + $GitDiffCommonOptions | Sort-Object { $_.ListItemText -creplace '=', ' ' }
+
+# Options that go well for log, shortlog and gitk
+$script:gitLogCommonOptions = [pscustomobject[]]@(
+    @{ListItemText = '--not'; }
+    @{ListItemText = '--all'; }
+    @{ListItemText = '--branches'; }
+    @{ListItemText = '--tags'; }
+    @{ListItemText = '--remotes'; }
+    @{ListItemText = '--first-parent'; }
+    @{ListItemText = '--merges'; }
+    @{ListItemText = '--no-merges'; }
+    @{ListItemText = '--max-count='; }
+    @{ListItemText = '--max-age='; }
+    @{ListItemText = '--since='; }
+    @{ListItemText = '--after='; }
+    @{ListItemText = '--min-age='; }
+    @{ListItemText = '--until='; }
+    @{ListItemText = '--before='; }
+    @{ListItemText = '--min-parents='; }
+    @{ListItemText = '--max-parents='; }
+    @{ListItemText = '--no-min-parents'; }
+    @{ListItemText = '--no-max-parents'; }
+    @{ListItemText = '--alternate-refs'; }
+    @{ListItemText = '--ancestry-path'; }
+    @{ListItemText = '--author-date-order'; }
+    @{ListItemText = '--basic-regexp'; }
+    @{ListItemText = '--bisect'; }
+    @{ListItemText = '--boundary'; }
+    @{ListItemText = '--exclude-first-parent-only'; }
+    @{ListItemText = '--exclude-hidden'; }
+    @{ListItemText = '--extended-regexp'; }
+    @{ListItemText = '--fixed-strings'; }
+    @{ListItemText = '--grep-reflog'; }
+    @{ListItemText = '--ignore-missing'; }
+    @{ListItemText = '--left-only'; }
+    @{ListItemText = '--perl-regexp'; }
+    @{ListItemText = '--reflog'; }
+    @{ListItemText = '--regexp-ignore-case'; }
+    @{ListItemText = '--remove-empty'; }
+    @{ListItemText = '--right-only'; }
+    @{ListItemText = '--show-linear-break'; }
+    @{ListItemText = '--show-notes-by-default'; }
+    @{ListItemText = '--show-pulls'; }
+    @{ListItemText = '--since-as-filter'; }
+    @{ListItemText = '--single-worktree'; }
+) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
 # Options that go well for log and shortlog (not gitk)
-$script:gitLogShortlogOptions = '--author=', '--committer=', '--grep=', '--all-match', '--invert-grep'
+$script:gitLogShortlogOptions = [pscustomobject[]]@(
+    @{ListItemText = '--author='; }
+    @{ListItemText = '--grep='; }
+    @{ListItemText = '--all-match'; }
+    @{ListItemText = '--invert-grep'; }
+    @{ListItemText = '--exclude'; }
+    @{ListItemText = '--glob='; }
+) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
+
+$script:gitShortlogOptions = $gitLogCommonOptions + $gitLogShortlogOptions + [pscustomobject[]]@(
+    @{ListItemText = '--committer'; }
+    @{ListItemText = '--numbered'; }
+    @{ListItemText = '--summary'; }
+    @{ListItemText = '--email'; }
+    @{ListItemText = '--no-committer'; }
+    @{ListItemText = '--no-numbered'; }
+    @{ListItemText = '--no-summary'; }
+    @{ListItemText = '--no-email'; }
+) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
 # Options accepted by log and show
-$script:gitLogShowOptions = '--diff-merges', '--diff-merges=', '--no-diff-merges',
-'--dd', '--remerge-diff', '--encoding='
+$script:gitLogShowOptions = [pscustomobject[]]@(
+    @{ListItemText = '--diff-merges'; }
+    @{ListItemText = '--diff-merges='; }
+    @{ListItemText = '--no-diff-merges'; }
+    @{ListItemText = '--dd'; }
+    @{ListItemText = '--remerge-diff'; }
+    @{ListItemText = '--encoding='; }
+) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
-$script:gitDiffMergesOpts = 'off', 'none', 'on', 'first-parent', '1', 'separate', 'm', 'combined', 'c', 'dense-combined', 'cc', 'remerge', 'r'
+$script:gitStashListOptions = $gitLogCommonOptions + $gitDiffCommonOptions | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
-$script:gitLogPrettyFormats = 'oneline', 'short', 'medium', 'full', 'fuller', 'reference', 'email', 'raw', 'format:', 'tformat:', 'mboxrd'
-$script:gitLogDateFormats = 'relative', 'iso8601', 'iso8601-strict', 'rfc2822', 'short', 'local', 'default', 'human', 'raw', 'unix', 'auto:', 'format:'
-$script:gitSendEmailConfirmOptions = 'always', 'never', 'auto', 'cc', 'compose'
-$script:gitSendEmailSuppressccOptions = 'author', 'self', 'cc', 'bodycc', 'sob', 'cccmd', 'body', 'all'
+$script:gitShowOpts = [pscustomobject[]]@(
+    @{ListItemText = '--pretty='; }
+    @{ListItemText = '--format='; }
+    @{ListItemText = '--abbrev-commit'; }
+    @{ListItemText = '--no-abbrev-commit'; }
+    @{ListItemText = '--oneline'; }
+    @{ListItemText = '--show-signature'; }
+    @{ListItemText = '--expand-tabs'; }
+    @{ListItemText = '--expand-tabs='; }
+    @{ListItemText = '--no-expand-tabs'; }
+) + $gitLogShowOptions + $gitDiffCommonOptions | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
-
-$script:gitMergetoolsCommon = 'diffuse', 'diffmerge', 'ecmerge', 'emerge', 'kdiff3', 'meld', 'opendiff',
-'tkdiff', 'vimdiff', 'nvimdiff', 'gvimdiff', 'xxdiff', 'araxis', 'p4merge', 'bc', 'codecompare', 'smerge'
-
-$script:gitWhitespacelist = 'nowarn', 'warn', 'error', 'error-all', 'fix'
-$script:gitPatchformat = 'mbox', 'stgit', 'stgit-series', 'hg', 'mboxrd'
-$script:gitShowcurrentpatch = 'diff', 'raw'
-$script:gitAmInprogressOptions = '--skip', '--continue', '--resolved', '--abort', '--quit', '--show-current-patch'
-$script:gitQuotedCr = 'nowarn', 'warn', 'strip'
-
-$script:gitCherryPickInprogressOptions = '--continue', '--quit', '--abort', '--skip'
-
-$script:gitConflictSolver = 'diff3', 'merge', 'zdiff3'
-
-$script:gitUntrackedFileModes = 'all', 'no', 'normal'
-
-$script:gitRebaseInprogressOptions = '--continue', '--skip', '--abort', '--quit', '--show-current-patch'
-$script:gitRebaseInteractiveInprogressOptions = $script:gitRebaseInprogressOptions + '--edit-todo'
+$script:gitLogOptions = $gitLogCommonOptions + $gitLogShortlogOptions + $gitLogGitkOptions + $gitLogShowOptions + $gitDiffCommonOptions + [pscustomobject[]]@(
+    @{ListItemText = '--committer='; }
+    @{ListItemText = '--root'; }
+    @{ListItemText = '--topo-order'; }
+    @{ListItemText = '--date-order'; }
+    @{ListItemText = '--reverse'; }
+    @{ListItemText = '--follow'; }
+    @{ListItemText = '--full-diff'; }
+    @{ListItemText = '--abbrev-commit'; }
+    @{ListItemText = '--no-abbrev-commit'; }
+    @{ListItemText = '--abbrev='; }
+    @{ListItemText = '--relative-date'; }
+    @{ListItemText = '--date='; }
+    @{ListItemText = '--pretty='; }
+    @{ListItemText = '--format='; }
+    @{ListItemText = '--oneline'; }
+    @{ListItemText = '--show-signature'; }
+    @{ListItemText = '--cherry-mark'; }
+    @{ListItemText = '--cherry-pick'; }
+    @{ListItemText = '--graph'; }
+    @{ListItemText = '--decorate'; }
+    @{ListItemText = '--decorate='; }
+    @{ListItemText = '--no-decorate'; }
+    @{ListItemText = '--walk-reflogs'; }
+    @{ListItemText = '--no-walk'; }
+    @{ListItemText = '--no-walk='; }
+    @{ListItemText = '--do-walk'; }
+    @{ListItemText = '--parents'; }
+    @{ListItemText = '--children'; }
+    @{ListItemText = '--expand-tabs'; }
+    @{ListItemText = '--expand-tabs='; }
+    @{ListItemText = '--no-expand-tabs'; }
+    @{ListItemText = '--clear-decorations'; }
+    @{ListItemText = '--decorate-refs='; }
+    @{ListItemText = '--decorate-refs-exclude='; }
+    @{ListItemText = '--merge'; }
+) | Sort-Object { $_.ListItemText -creplace '=', ' ' }

@@ -20,7 +20,7 @@ function Complete-GitSubCommand-show {
     $result = Complete-Opts-show $Context
     if ($result) { return $result }
 
-    gitCompleteRevlistFile $Current
+    gitCompleteRevlist $Current
 }
 
 function Complete-Opts-show {
@@ -54,9 +54,7 @@ function Complete-Opts-show {
         $key = $Matches[1]
         $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
-            { $_ -in @('--pretty', '--format') } {
-                $script:gitLogPrettyFormats + @(gitPrettyAliases)
-            }
+            { $_ -in @('--pretty', '--format') } { @(gitCompletePretty | Sort-Object) }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
             '--diff-merges' { $script:gitDiffMergesOpts }
             '--submodule' { $script:gitDiffSubmoduleFormats }
@@ -71,23 +69,6 @@ function Complete-Opts-show {
         }
     }
 
-    gitShowOpts | completeList -Current $Current
+    $script:gitShowOpts | completeList -Current $Current
     return
-}
-
-function gitShowOpts {
-    [OutputType([string[]])]
-    param ()
-    
-    "--pretty="
-    "--format="
-    "--abbrev-commit"
-    "--no-abbrev-commit"
-    "--oneline"
-    "--show-signature"
-    "--expand-tabs"
-    "--expand-tabs="
-    "--no-expand-tabs"
-    $gitLogShowOptions
-    $gitDiffCommonOptions
 }

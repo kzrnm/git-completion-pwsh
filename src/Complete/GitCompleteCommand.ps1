@@ -3,20 +3,14 @@
 # Distributed under the GNU General Public License, version 2.0.
 using namespace System.Management.Automation;
 
-function gitCompletStashList {
-    foreach ($line in ((git stash list -z) -split '\0')) {
-        if ($line -match '^([^:]+): ?(.*?)$') {
-            $Name = $Matches[1]
-            $Message = $Matches[2]
 
-            [CompletionResult]::new(
-                "'$Name'",
-                $Name,
-                'ParameterValue',
-                $Message
-            )
-        }
-    }
+function gitCompletePretty() {
+    [CmdletBinding()]
+    [OutputType([string[]])]
+    param()
+    $script:gitLogPrettyFormats
+    # __git_pretty_aliases
+    gitGetConfigVariables pretty
 }
 
 $__BuiltinDescriptionBuilder = ([scriptblock] { Get-GitOptionsDescription $_ @Command })
@@ -247,31 +241,12 @@ function gitCompleteStrategy {
         [Parameter(Mandatory)][AllowEmptyString()][string] $Prev
     )
 
-    $gitMergeStrategyOptions = @(
-        'ours',
-        'theirs',
-        'subtree',
-        'subtree=',
-        'patience',
-        'histogram',
-        'diff-algorithm=',
-        'ignore-space-change',
-        'ignore-all-space',
-        'ignore-space-at-eol',
-        'renormalize',
-        'no-renormalize',
-        'no-renames',
-        'find-renames',
-        'find-renames=',
-        'rename-threshold='
-    )
-
     if ($Prev -cmatch '^-([^-]*s|-strategy)$') {
         gitListMergeStrategies | completeList -Current $Current -ResultType ParameterValue 
         return
     }
     elseif ($Prev -cmatch '^-([^-]*X|-strategy-option)$') {
-        $gitMergeStrategyOptions | completeList -Current $Current -ResultType ParameterValue 
+        $gitMergeStrategies | completeList -Current $Current -ResultType ParameterValue 
         return
     }
 
@@ -281,7 +256,7 @@ function gitCompleteStrategy {
             return
         }
         '--strategy-option=*' {
-            $gitMergeStrategyOptions | completeList -Current $Current -ResultType ParameterValue -Prefix '--strategy-option=' -RemovePrefix
+            $gitMergeStrategies | completeList -Current $Current -ResultType ParameterValue -Prefix '--strategy-option=' -RemovePrefix
             return
         }
     }
@@ -331,7 +306,7 @@ function gitCompleteIndexFile {
 # __git_complete_revlist
 # __git_complete_file
 # __git_complete_revlist_file
-function gitCompleteRevlistFile {
+function gitCompleteRevlist {
     [OutputType([CompletionResult[]])]
     param (
         [Parameter(Mandatory, Position = 0)]
@@ -380,6 +355,3 @@ function gitCompleteRevlistFile {
         }
     }
 }
-
-Set-Alias gitCompleteFile gitCompleteRevlistFile
-Set-Alias gitCompleteRevlist gitCompleteRevlistFile

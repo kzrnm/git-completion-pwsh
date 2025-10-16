@@ -42,5 +42,3 @@ function Complete-GitSubCommand-format-patch {
 
     gitCompleteRevlist $Current
 }
-
-$gitFormatPatchExtraOptions = '--full-index', '--not', '--all', '--no-prefix', '--src-prefix=', '--dst-prefix=', '--notes'

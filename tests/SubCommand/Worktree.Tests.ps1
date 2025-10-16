@@ -126,8 +126,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     Left     = 'add --re';
                     Right    = ' --';
                     Expected = @{
-                        ListItemText = '--reason='; 
-                        ToolTip      = 'reason for locking';
+                        ListItemText = '--reason=';                        ToolTip      = 'reason for locking';
                     },
                     @{
                         ListItemText = '--relative-paths';
@@ -138,8 +137,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     Left     = 'add --re';
                     Right    = ' -- --all';
                     Expected = @{
-                        ListItemText = '--reason='; 
-                        ToolTip      = 'reason for locking';
+                        ListItemText = '--reason=';                        ToolTip      = 'reason for locking';
                     },
                     @{
                         ListItemText = '--relative-paths';
@@ -257,8 +255,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         @{
             Line     = "add --re"
             Expected = @{
-                ListItemText = '--reason='; 
-                ToolTip      = 'reason for locking';
+                ListItemText = '--reason=';                ToolTip      = 'reason for locking';
             },
             @{
                 ListItemText = '--relative-paths';

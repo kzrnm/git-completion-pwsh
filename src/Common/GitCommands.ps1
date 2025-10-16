@@ -3,6 +3,14 @@
 # Distributed under the GNU General Public License, version 2.0.
 using namespace System.Collections.Generic;
 
+# https://github.com/PowerShell/PowerShell/issues/24178
+if ($IsCoreCLR -and !$IsWindows) {
+    $script:VerbatimArgument = '--%'
+}
+else {
+    $script:VerbatimArgument = $null
+}
+
 function __git {
     [CmdletBinding(PositionalBinding = $false)]
     param(
@@ -101,6 +109,20 @@ function gitGetAlias {
     }
     catch {
         $null
+    }
+}
+
+function gitStashList {
+    [OutputType([PSCustomObject[]])]
+    param()
+
+    foreach ($line in ((git stash list -z) -split '\0')) {
+        if ($line -match '^([^:]+): ?(.*?)$') {
+            @{
+                ListItemText = $Matches[1];
+                Tooltip      = $Matches[2];
+            }
+        }
     }
 }
 
@@ -286,7 +308,7 @@ function gitHeads {
     }
 
     @(__git for-each-ref --format="%(refname:strip=2)" `
-            $ignoreCase `
+            $ignoreCase $VerbatimArgument `
             "refs/heads/$Current*" "refs/heads/$Current*/**")
 }
 
@@ -307,7 +329,7 @@ function gitRemoteHeads {
     }
 
     @(__git for-each-ref --format="%(refname:strip=2)" `
-            $ignoreCase `
+            $ignoreCase $VerbatimArgument `
             "refs/remotes/$Current*" "refs/remotes/$Current*/**")
 }
 
@@ -328,9 +350,41 @@ function gitTags {
     }
 
     @(__git for-each-ref --format="$ForeachPrefix%(refname:strip=2)$Suffix" `
-            $ignoreCase `
+            $ignoreCase $VerbatimArgument `
             "refs/tags/$Current*" "refs/tags/$Current*/**")
 }
+
+function gitRefnames {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+    )
+
+    $ignoreCase = $null
+    if ($script:GitCompletionSettings.IgnoreCase) {
+        $ignoreCase = '--ignore-case'
+    }
+
+    @(__git for-each-ref "--format=%(refname)" `
+            $ignoreCase $VerbatimArgument `
+            "$Current*" "$Current*/**")
+}
+function gitRefStrip {
+    [OutputType([string[]])]
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string] $Current
+    )
+
+    $ignoreCase = $null
+    if ($script:GitCompletionSettings.IgnoreCase) {
+        $ignoreCase = '--ignore-case'
+    }
+
+    @(__git for-each-ref "--format=%(refname:strip=2)" `
+            $ignoreCase $VerbatimArgument `
+            "refs/*/$Current*" "refs/*/$Current*/**")
+}
+
 
 # List unique branches from refs/remotes used for 'git checkout' and 'git
 # switch' tracking DWIMery.
@@ -468,7 +522,7 @@ function gitRefs {
                 "refs/remotes/$match*",
                 "refs/remotes/$match*/**")
         }
-        __git -GitDirOverride $dir for-each-ref "--format=$Prefix%($format)" $ignoreCase @refs
+        __git -GitDirOverride $dir for-each-ref "--format=$Prefix%($format)" $ignoreCase $VerbatimArgument @refs
         return
     }
 
@@ -489,7 +543,7 @@ function gitRefs {
         $strip = countPathComponents "refs/remotes/$remote"
 
         __git for-each-ref --format="%(refname:strip=$strip)" `
-            $ignoreCase `
+            $ignoreCase $VerbatimArgument `
             "refs/remotes/$remote/$match*" "refs/remotes/$remote/$match*/**"
     }
     else {
@@ -577,12 +631,18 @@ function gitSupportParseoptHelper {
 # with the prefix removed.
 function gitGetConfigVariables () {
     [CmdletBinding()]
-    [OutputType([string[]])]
+    [OutputType([PSCustomObject[]])]
     param(
         [Parameter(Mandatory, Position = 0)][string]$Section
     )
-    __git config --name-only --get-regexp "^$Section\..*" | ForEach-Object {
-        $_.Substring($Section.Length + 1)
+
+    foreach ($kv in @((__git config -z --get-regexp "^$Section\..*" | Out-String) -split "`0")) {
+        if ($kv -match "^$Section\.(?<Name>\S+)\s+(?<Value>[\s\S]*)") {
+            [PSCustomObject]@{
+                ListItemText = $Matches['Name'];
+                Tooltip      = $Matches['Value'] -creplace "(`r`n|`n)", ' ';
+            }
+        }
     }
 }
 
@@ -606,14 +666,6 @@ function gitPseudorefExists {
     }
 
     return ((Get-Item "$repoPath/$ref" -ErrorAction Ignore) -is [System.IO.FileInfo])
-}
-
-# __git_pretty_aliases
-function gitPrettyAliases() {
-    [CmdletBinding()]
-    [OutputType([string[]])]
-    param()
-    gitGetConfigVariables pretty
 }
 
 function gitArchiveList {

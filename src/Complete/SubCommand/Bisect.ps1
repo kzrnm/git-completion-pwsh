@@ -38,8 +38,7 @@ function Complete-GitSubCommand-bisect {
             $subcommands | gitcomp -Current $Current -DescriptionBuilder { 
                 switch ($_) {
                     { $_ -ceq $goodTerm } {
-                        'mark the commit as good'; 
-                        break 
+                        'mark the commit as good';                        break 
                     }
                     { $_ -ceq $badTerm } { 'mark the commit as bad'; break }
                     'reset' { 'clean up the bisection state' }

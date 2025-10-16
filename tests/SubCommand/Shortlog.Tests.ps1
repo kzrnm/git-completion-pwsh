@@ -94,22 +94,27 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 Expected = '--bisect' | ConvertTo-Completion -ResultType ParameterName
             },
             @{
+                Line     = '--exc';
+                Expected = '--exclude', '--exclude-first-parent-only', '--exclude-hidden' | ConvertTo-Completion -ResultType ParameterName
+            },
+            @{
                 Line     = '--c';
                 Expected = @{
-                    ListItemText = '--committer=';
+                    ListItemText = '--committer';
                     ToolTip      = "group by committer rather than author";
                 } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no';
-                Expected = '--not',
-                '--no-merges',
-                '--no-min-parents',
-                '--no-max-parents',
-                @{
+                Expected = @{
                     ListItemText = '--no-committer';
                     ToolTip      = "[NO] group by committer rather than author";
                 },
+                @{
+                    ListItemText = '--no-email';
+                    ToolTip      = "[NO] show the email address of each author";
+                },
+                '--no-max-parents', '--no-merges', '--no-min-parents',
                 @{
                     ListItemText = '--no-numbered';
                     ToolTip      = "[NO] sort output according to the number of commits per author";
@@ -118,10 +123,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     ListItemText = '--no-summary';
                     ToolTip      = "[NO] suppress commit descriptions, only provides commit count";
                 },
-                @{
-                    ListItemText = '--no-email';
-                    ToolTip      = "[NO] show the email address of each author";
-                } | ConvertTo-Completion -ResultType ParameterName
+                '--not' | ConvertTo-Completion -ResultType ParameterName
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected

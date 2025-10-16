@@ -126,34 +126,34 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             @{
                 Line     = '--s';
                 Expected = @{
-                    ListItemText   = '--signoff';
-                    ToolTip        = "add a Signed-off-by trailer to the commit message";
+                    ListItemText = '--signoff';
+                    ToolTip      = "add a Signed-off-by trailer to the commit message";
                 },
                 @{
-                    ListItemText   = '--scissors';
-                    ToolTip        = "strip everything before a scissors line";
+                    ListItemText = '--scissors';
+                    ToolTip      = "strip everything before a scissors line";
                 } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--q';
                 Expected = @{
-                    ListItemText   = '--quiet';
-                    ToolTip        = "be quiet";
+                    ListItemText = '--quiet';
+                    ToolTip      = "be quiet";
                 },
                 @{
-                    ListItemText   = '--quoted-cr=';
-                    ToolTip        = "pass it through git-mailinfo";
+                    ListItemText = '--quoted-cr=';
+                    ToolTip      = "pass it through git-mailinfo";
                 } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
                 Line     = '--no-s';
                 Expected = @{
-                    ListItemText   = '--no-signoff';
-                    ToolTip        = "[NO] add a Signed-off-by trailer to the commit message";
+                    ListItemText = '--no-signoff';
+                    ToolTip      = "[NO] add a Signed-off-by trailer to the commit message";
                 },
                 @{
-                    ListItemText   = '--no-scissors';
-                    ToolTip        = "[NO] strip everything before a scissors line";
+                    ListItemText = '--no-scissors';
+                    ToolTip      = "[NO] strip everything before a scissors line";
                 } | ConvertTo-Completion -ResultType ParameterName
             },
             @{
@@ -177,11 +177,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         It '<Line>' -ForEach @(
             @{
                 Line     = '--whitespace=';
-                Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--whitespace=$_" }
+                Expected = 'error', 'error-all', 'fix', 'nowarn', 'warn' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--whitespace=$_" }
             },
             @{
                 Line     = '--whitespace ';
-                Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue
+                Expected = 'error', 'error-all', 'fix', 'nowarn', 'warn' | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--whitespace=w';
@@ -268,13 +268,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Line>' -ForEach @(
                 @{
                     Line     = '--s';
-                    Expected = @{
-                        ListItemText = '--skip';
-                        ToolTip      = "skip the current patch";
-                    },
+                    Expected = 
                     @{
                         ListItemText = '--show-current-patch';
                         ToolTip      = "show the patch being applied";
+                    },
+                    @{
+                        ListItemText = '--skip';
+                        ToolTip      = "skip the current patch";
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
@@ -294,11 +295,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
             It '<Line>' -ForEach @(
                 @{
                     Line     = '--whitespace=';
-                    Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--whitespace=$_" }
+                    Expected = 'error', 'error-all', 'fix', 'nowarn', 'warn' | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--whitespace=$_" }
                 },
                 @{
                     Line     = '--whitespace ';
-                    Expected = 'nowarn', 'warn', 'error', 'error-all', 'fix' | ConvertTo-Completion -ResultType ParameterValue
+                    Expected = 'error', 'error-all', 'fix', 'nowarn', 'warn' | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = '--whitespace=w';

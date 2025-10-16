@@ -143,13 +143,29 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 },
                 @{
                     Line     = 'branch.main.rebase=';
-                    Expected = 'false', 'true', 'merges', 'interactive' |
-                    ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.rebase=$_" }
+                    Expected = @{
+                        ListItemText = 'false';
+                        Tooltip      = 'Merge branch when "git pull"'; 
+                    },
+                    @{
+                        ListItemText = 'interactive';
+                        Tooltip      = 'Rebase in interactive mode'; 
+                    },
+                    @{
+                        ListItemText = 'merges';
+                        Tooltip      = 'Rebase branch with --rebase-merges when "git pull"'; 
+                    },
+                    @{
+                        ListItemText = 'true';
+                        Tooltip      = 'Rebase branch when "git pull"'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.rebase=$_" }
                 },
                 @{
                     Line     = 'branch.main.rebase=t';
-                    Expected = 'true' |
-                    ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.rebase=$_" }
+                    Expected = @{
+                        ListItemText = 'true';
+                        Tooltip      = 'Rebase branch when "git pull"'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "branch.main.rebase=$_" }
                 },
                 @{
                     Line     = 'remote.origin.fetch=';
@@ -234,53 +250,60 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 @{
                     Line     = 'diff.algorithm=';
                     Expected = @{
-                        CompletionText = "diff.algorithm=default";
-                        ListItemText   = 'default';
-                        ToolTip        = 'The basic greedy diff algorithm';
-                    },
-                    @{
-                        CompletionText = "diff.algorithm=myers";
-                        ListItemText   = 'myers';
-                        ToolTip        = 'The basic greedy diff algorithm. Currently, this is the default';
+                        CompletionText = "diff.algorithm=histogram";
+                        ListItemText   = 'histogram';
+                        ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
                     },
                     @{
                         CompletionText = "diff.algorithm=minimal";
                         ListItemText   = 'minimal';
                         ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                    },
+                    @{
+                        CompletionText = "diff.algorithm=myers";
+                        ListItemText   = 'myers';
+                        ToolTip        = '(default) The basic greedy diff algorithm';
                     },
                     @{
                         CompletionText = "diff.algorithm=patience";
                         ListItemText   = 'patience';
                         ToolTip        = 'Use "patience diff" algorithm when generating patches';
-                    },
-                    @{
-                        CompletionText = "diff.algorithm=histogram";
-                        ListItemText   = 'histogram';
-                        ToolTip        = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"';
                     } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'diff.algorithm=m';
                     Expected = @{
-                        CompletionText = "diff.algorithm=myers";
-                        ListItemText   = 'myers';
-                        ToolTip        = 'The basic greedy diff algorithm. Currently, this is the default';
-                    },
-                    @{
                         CompletionText = "diff.algorithm=minimal";
                         ListItemText   = 'minimal';
                         ToolTip        = 'Spend extra time to make sure the smallest possible diff is produced';
+                    },
+                    @{
+                        CompletionText = "diff.algorithm=myers";
+                        ListItemText   = 'myers';
+                        ToolTip        = '(default) The basic greedy diff algorithm';
                     } | ConvertTo-Completion -ResultType ParameterValue
                 },
                 @{
                     Line     = 'diff.submodule=';
-                    Expected = 'diff', 'log', 'short' |
-                    ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.submodule=$_" }
+                    Expected = @{
+                        ListItemText = 'diff';
+                        Tooltip      = 'Shows an inline diff of the changed contents of the submodule';
+                    },
+                    @{
+                        ListItemText = 'log';
+                        Tooltip      = 'Lists the commits in the range like "git submodule summary" does';
+                    },
+                    @{
+                        ListItemText = 'short';
+                        Tooltip      = '(default) Shows the names of the commits at the beginning and end of the range';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.submodule=$_" }
                 },
                 @{
                     Line     = 'diff.submodule=d';
-                    Expected = 'diff' |
-                    ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.submodule=$_" }
+                    Expected = @{
+                        ListItemText = 'diff';
+                        Tooltip      = 'Shows an inline diff of the changed contents of the submodule';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.submodule=$_" }
                 },
                 @{
                     Line     = 'http.proxyAuthMethod=';
@@ -330,7 +353,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 },
                 @{
                     Line     = 'log.date=';
-                    Expected = 'relative', 'iso8601', 'iso8601-strict', 'rfc2822', 'short', 'local', 'default', 'human', 'raw', 'unix', 'auto:', 'format:' |
+                    Expected = 'auto:', 'default', 'format:', 'human', 'iso8601', 'iso8601-strict', 'local', 'raw', 'relative', 'rfc2822', 'short', 'unix' |
                     ConvertTo-Completion -ResultType ParameterValue -CompletionText { "log.date=$_" }
                 },
                 @{
@@ -350,7 +373,7 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 },
                 @{
                     Line     = 'sendemail.confirm=';
-                    Expected = 'always', 'never', 'auto', 'cc', 'compose' |
+                    Expected = 'always', 'auto', 'cc', 'compose', 'never' |
                     ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.confirm=$_" }
                 },
                 @{
@@ -360,12 +383,12 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 },
                 @{
                     Line     = 'sendemail.suppresscc=';
-                    Expected = 'author', 'self', 'cc', 'bodycc', 'sob', 'cccmd', 'body', 'all' |
+                    Expected = 'all', 'author', 'body', 'bodycc', 'cc', 'cccmd', 'self', 'sob' |
                     ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.suppresscc=$_" }
                 },
                 @{
                     Line     = 'sendemail.suppresscc=a';
-                    Expected = 'author', 'all' |
+                    Expected = 'all', 'author' |
                     ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.suppresscc=$_" }
                 },
                 @{
@@ -377,6 +400,440 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                     Line     = 'sendemail.transferencoding=7';
                     Expected = '7bit' |
                     ConvertTo-Completion -ResultType ParameterValue -CompletionText { "sendemail.transferencoding=$_" }
+                },
+                @{
+                    Line     = 'merge.conflictStyle=';
+                    Expected = @{
+                        ListItemText = 'diff3';
+                        Tooltip      = "Adds the common ancestor's content, providing a three-way comparison";
+                    }, @{
+                        ListItemText = 'merge';
+                        Tooltip      = '(default) Showing only current changes and the incoming changes';
+                    }, @{
+                        ListItemText = 'zdiff3';
+                        Tooltip      = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "merge.conflictStyle=$_" }
+                },
+                @{
+                    Line     = 'merge.conflictStyle=z';
+                    Expected = @{
+                        ListItemText = 'zdiff3';
+                        Tooltip      = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "merge.conflictStyle=$_" }
+                },
+                @{
+                    Line     = 'push.recurseSubmodules=';
+                    Expected = @{
+                        ListItemText = 'check';
+                        Tooltip      = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule';
+                    },
+                    @{
+                        ListItemText = 'no';
+                        Tooltip      = '(default) no submodules are pushed';
+                    },
+                    @{
+                        ListItemText = 'on-demand';
+                        Tooltip      = 'all submodules that changed in the revisions to be pushed will be pushed';
+                    },
+                    @{
+                        ListItemText = 'only';
+                        Tooltip      = 'all submodules will be pushed while the superproject is left unpushed';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "push.recurseSubmodules=$_" }
+                },
+                @{
+                    Line     = 'push.recurseSubmodules=o';
+                    Expected = @{
+                        ListItemText = 'on-demand';
+                        Tooltip      = 'all submodules that changed in the revisions to be pushed will be pushed';
+                    },
+                    @{
+                        ListItemText = 'only';
+                        Tooltip      = 'all submodules will be pushed while the superproject is left unpushed';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "push.recurseSubmodules=$_" }
+                },
+                @{
+                    Line     = 'fetch.recurseSubmodules=';
+                    Expected = @{
+                        ListItemText = 'no';
+                        Tooltip      = 'no submodules are fetched';
+                    },
+                    @{
+                        ListItemText = 'on-demand';
+                        Tooltip      = '(default) only changed submodules are fetched';
+                    },
+                    @{
+                        ListItemText = 'yes';
+                        Tooltip      = 'all submodules are fetched';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "fetch.recurseSubmodules=$_" }
+                },
+                @{
+                    Line     = 'fetch.recurseSubmodules=y';
+                    Expected = @{
+                        ListItemText = 'yes';
+                        Tooltip      = 'all submodules are fetched';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "fetch.recurseSubmodules=$_" }
+                },
+                @{
+                    Line     = 'diff.colorMoved=';
+                    Expected = @{
+                        ListItemText = 'blocks';
+                        Tooltip      = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily';                    
+                    },
+                    @{
+                        ListItemText = 'default';
+                        Tooltip      = 'A synonym for zebra';                    
+                    },
+                    @{
+                        ListItemText = 'dimmed-zebra';
+                        Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                    
+                    },
+                    @{
+                        ListItemText = 'no';
+                        Tooltip      = 'Moved lines are not highlighted';                    
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved';                    
+                    },
+                    @{
+                        ListItemText = 'zebra';
+                        Tooltip      = 'Blocks of moved text are detected as in blocks mode';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMoved=$_" }
+                },
+                @{
+                    Line     = 'diff.colorMoved=d';
+                    Expected = @{
+                        ListItemText = 'default';
+                        Tooltip      = 'A synonym for zebra';                    
+                    },
+                    @{
+                        ListItemText = 'dimmed-zebra';
+                        Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMoved=$_" }
+                },
+                @{
+                    Line     = 'diff.colorMovedWS=';
+                    Expected = @{
+                        ListItemText = 'allow-indentation-change';
+                        Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line';                    
+                    },
+                    @{
+                        ListItemText = 'ignore-all-space';
+                        Tooltip      = 'Ignore whitespace when comparing lines';                    
+                    },
+                    @{
+                        ListItemText = 'ignore-space-at-eol';
+                        Tooltip      = 'Ignore changes in whitespace at EOL';                    
+                    },
+                    @{
+                        ListItemText = 'ignore-space-change';
+                        Tooltip      = 'Ignore changes in amount of whitespace';                    
+                    },
+                    @{
+                        ListItemText = 'no';
+                        Tooltip      = 'Do not ignore whitespace when performing move detection';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMovedWS=$_" }
+                },
+                @{
+                    Line     = 'diff.colorMovedWS=i';
+                    Expected = @{
+                        ListItemText = 'ignore-all-space';
+                        Tooltip      = 'Ignore whitespace when comparing lines';                    
+                    },
+                    @{
+                        ListItemText = 'ignore-space-at-eol';
+                        Tooltip      = 'Ignore changes in whitespace at EOL';                    
+                    },
+                    @{
+                        ListItemText = 'ignore-space-change';
+                        Tooltip      = 'Ignore changes in amount of whitespace';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.colorMovedWS=$_" }
+                },
+                @{
+                    Line     = 'diff.wsErrorHighlight=';
+                    Expected = @{
+                        ListItemText = 'all';
+                        Tooltip      = 'A synonym for old,new,context';                    
+                    },
+                    @{
+                        ListItemText = 'context';
+                        Tooltip      = 'Highlight whitespace errors in the context';                    
+                    },
+                    @{
+                        ListItemText = 'default';
+                        Tooltip      = 'A synonym for new';                    
+                    },
+                    @{
+                        ListItemText = 'new';
+                        Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                    
+                    },
+                    @{
+                        ListItemText = 'old';
+                        Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                    
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.wsErrorHighlight=$_" }
+                },
+                @{
+                    Line     = 'diff.wsErrorHighlight=d';
+                    Expected = @{
+                        ListItemText = 'default';
+                        Tooltip      = 'A synonym for new';
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "diff.wsErrorHighlight=$_" }
+                },
+                @{
+                    Line     = 'column.ui=';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'never';
+                        Tooltip      = 'never show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    },
+                    @{
+                        ListItemText = 'column';
+                        Tooltip      = 'fill columns before rows'; 
+                    },
+                    @{
+                        ListItemText = 'row';
+                        Tooltip      = 'fill rows before columns'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'show in one column'; 
+                    },
+                    @{
+                        ListItemText = 'dense';
+                        Tooltip      = 'make unequal size columns to utilize more space'; 
+                    },
+                    @{
+                        ListItemText = 'nodense';
+                        Tooltip      = 'make equal size columns'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.ui=$_" }
+                },
+                @{
+                    Line     = 'column.ui=a';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.ui=$_" }
+                },
+                @{
+                    Line     = 'column.branch=';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'never';
+                        Tooltip      = 'never show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    },
+                    @{
+                        ListItemText = 'column';
+                        Tooltip      = 'fill columns before rows'; 
+                    },
+                    @{
+                        ListItemText = 'row';
+                        Tooltip      = 'fill rows before columns'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'show in one column'; 
+                    },
+                    @{
+                        ListItemText = 'dense';
+                        Tooltip      = 'make unequal size columns to utilize more space'; 
+                    },
+                    @{
+                        ListItemText = 'nodense';
+                        Tooltip      = 'make equal size columns'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.branch=$_" }
+                },
+                @{
+                    Line     = 'column.branch=a';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.branch=$_" }
+                },
+                @{
+                    Line     = 'column.clean=';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'never';
+                        Tooltip      = 'never show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    },
+                    @{
+                        ListItemText = 'column';
+                        Tooltip      = 'fill columns before rows'; 
+                    },
+                    @{
+                        ListItemText = 'row';
+                        Tooltip      = 'fill rows before columns'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'show in one column'; 
+                    },
+                    @{
+                        ListItemText = 'dense';
+                        Tooltip      = 'make unequal size columns to utilize more space'; 
+                    },
+                    @{
+                        ListItemText = 'nodense';
+                        Tooltip      = 'make equal size columns'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.clean=$_" }
+                },
+                @{
+                    Line     = 'column.clean=a';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.clean=$_" }
+                },
+                @{
+                    Line     = 'column.status=';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'never';
+                        Tooltip      = 'never show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    },
+                    @{
+                        ListItemText = 'column';
+                        Tooltip      = 'fill columns before rows'; 
+                    },
+                    @{
+                        ListItemText = 'row';
+                        Tooltip      = 'fill rows before columns'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'show in one column'; 
+                    },
+                    @{
+                        ListItemText = 'dense';
+                        Tooltip      = 'make unequal size columns to utilize more space'; 
+                    },
+                    @{
+                        ListItemText = 'nodense';
+                        Tooltip      = 'make equal size columns'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.status=$_" }
+                },
+                @{
+                    Line     = 'column.status=a';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.status=$_" }
+                },
+                @{
+                    Line     = 'column.tag=';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'never';
+                        Tooltip      = 'never show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    },
+                    @{
+                        ListItemText = 'column';
+                        Tooltip      = 'fill columns before rows'; 
+                    },
+                    @{
+                        ListItemText = 'row';
+                        Tooltip      = 'fill rows before columns'; 
+                    },
+                    @{
+                        ListItemText = 'plain';
+                        Tooltip      = 'show in one column'; 
+                    },
+                    @{
+                        ListItemText = 'dense';
+                        Tooltip      = 'make unequal size columns to utilize more space'; 
+                    },
+                    @{
+                        ListItemText = 'nodense';
+                        Tooltip      = 'make equal size columns'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.tag=$_" }
+                },
+                @{
+                    Line     = 'column.tag=a';
+                    Expected = @{
+                        ListItemText = 'always';
+                        Tooltip      = 'always show in columns'; 
+                    },
+                    @{
+                        ListItemText = 'auto';
+                        Tooltip      = 'show in columns if the output is to the terminal'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "column.tag=$_" }
+                },
+                @{
+                    Line     = 'pull.rebase=';
+                    Expected = @{
+                        ListItemText = 'false';
+                        Tooltip      = 'Merge branch when "git pull"'; 
+                    },
+                    @{
+                        ListItemText = 'interactive';
+                        Tooltip      = 'Rebase in interactive mode'; 
+                    },
+                    @{
+                        ListItemText = 'merges';
+                        Tooltip      = 'Rebase branch with --rebase-merges when "git pull"'; 
+                    },
+                    @{
+                        ListItemText = 'true';
+                        Tooltip      = 'Rebase branch when "git pull"'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "pull.rebase=$_" }
+                },
+                @{
+                    Line     = 'pull.rebase=t';
+                    Expected = @{
+                        ListItemText = 'true';
+                        Tooltip      = 'Rebase branch when "git pull"'; 
+                    } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "pull.rebase=$_" }
                 },
                 @{
                     Line     = 'branch.main.notmatch=';

@@ -470,7 +470,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 @{
                     Line     = '';
                     Path     = '';
-                    Expected = if ($IsWindows -or ($PSVersionTable.PSEdition -eq 'Desktop')) {
+                    Expected = if (!$IsCoreCLR -or $IsWindows) {
                         '/.gitignore',
                         @{
                             CompletionText = '/Aquarion` Evol/Ancient/Soler';
