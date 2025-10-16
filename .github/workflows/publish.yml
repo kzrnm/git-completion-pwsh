@@ -57,11 +57,13 @@ jobs:
           echo "new-tag=$TAG" | tee -a "$GITHUB_OUTPUT"
   test:
     uses: ./.github/workflows/test.yml
+    with:
+      continue-on-error: ${{ inputs.force-publish }}
 
   new-version-only:
     runs-on: ubuntu-latest
     needs: [get-version, test]
-    if: ${{ needs.get-version.outputs.new-tag != '' }}
+    if: ${{ needs.get-version.outputs.new-tag != '' && (! failure() || inputs.force-publish) }}
     steps:
       - run: echo "new-version"
 

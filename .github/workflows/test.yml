@@ -2,18 +2,25 @@ name: Test
 
 on:
   pull_request:
-    paths: 
-      - 'src/**'
-      - 'tests/**'
-      - 'testtools/**'
-      - '.github/workflows/**'
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "testtools/**"
+      - ".github/workflows/**"
   workflow_dispatch:
   workflow_call:
+    inputs:
+      continue-on-error:
+        description: Continue on error
+        required: false
+        type: boolean
+        default: false
 env:
   Module: git-completion
 jobs:
   test:
     strategy:
+      fail-fast: ${{ github.event_name != 'pull_request' }}
       matrix:
         shell: [pwsh]
         # After git 2.52.0 is released, uncomment the install command below.
@@ -31,8 +38,10 @@ jobs:
       - name: Run Pester
         if: matrix.shell == 'pwsh'
         shell: pwsh
+        continue-on-error: ${{ inputs.continue-on-error }}
         run: Invoke-Pester -CI
       - name: Run Pester(Windows PowerShell)
         if: matrix.shell == 'powershell'
         shell: powershell
+        continue-on-error: ${{ inputs.continue-on-error }}
         run: Invoke-Pester -CI
