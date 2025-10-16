@@ -3,6 +3,14 @@
 # Distributed under the GNU General Public License, version 2.0.
 using namespace System.Collections.Generic;
 
+# https://github.com/PowerShell/PowerShell/issues/24178
+if ($IsCoreCLR -and !$IsWindows) {
+    $script:VerbatimArgument = '--%'
+}
+else {
+    $script:VerbatimArgument = $null
+}
+
 function __git {
     [CmdletBinding(PositionalBinding = $false)]
     param(
@@ -300,7 +308,7 @@ function gitHeads {
     }
 
     @(__git for-each-ref --format="%(refname:strip=2)" `
-            $ignoreCase `
+            $ignoreCase $VerbatimArgument `
             "refs/heads/$Current*" "refs/heads/$Current*/**")
 }
 
@@ -321,7 +329,7 @@ function gitRemoteHeads {
     }
 
     @(__git for-each-ref --format="%(refname:strip=2)" `
-            $ignoreCase `
+            $ignoreCase $VerbatimArgument `
             "refs/remotes/$Current*" "refs/remotes/$Current*/**")
 }
 
@@ -342,7 +350,7 @@ function gitTags {
     }
 
     @(__git for-each-ref --format="$ForeachPrefix%(refname:strip=2)$Suffix" `
-            $ignoreCase `
+            $ignoreCase $VerbatimArgument `
             "refs/tags/$Current*" "refs/tags/$Current*/**")
 }
 
@@ -358,7 +366,7 @@ function gitRefnames {
     }
 
     @(__git for-each-ref "--format=%(refname)" `
-            $ignoreCase `
+            $ignoreCase $VerbatimArgument `
             "$Current*" "$Current*/**")
 }
 function gitRefStrip {
@@ -373,7 +381,7 @@ function gitRefStrip {
     }
 
     @(__git for-each-ref "--format=%(refname:strip=2)" `
-            $ignoreCase `
+            $ignoreCase $VerbatimArgument `
             "refs/*/$Current*" "refs/*/$Current*/**")
 }
 
@@ -514,7 +522,7 @@ function gitRefs {
                 "refs/remotes/$match*",
                 "refs/remotes/$match*/**")
         }
-        __git -GitDirOverride $dir for-each-ref "--format=$Prefix%($format)" $ignoreCase @refs
+        __git -GitDirOverride $dir for-each-ref "--format=$Prefix%($format)" $ignoreCase $VerbatimArgument @refs
         return
     }
 
@@ -535,7 +543,7 @@ function gitRefs {
         $strip = countPathComponents "refs/remotes/$remote"
 
         __git for-each-ref --format="%(refname:strip=$strip)" `
-            $ignoreCase `
+            $ignoreCase $VerbatimArgument `
             "refs/remotes/$remote/$match*" "refs/remotes/$remote/$match*/**"
     }
     else {

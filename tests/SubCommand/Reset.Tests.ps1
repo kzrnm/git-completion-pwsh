@@ -80,7 +80,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 ListItemText = '-U';
                 ToolTip      = "generate diffs with <n> lines context";
             }
-            if ($IsWindows -or ($PSVersionTable.PSEdition -eq 'Desktop')) {
+            if (!$IsCoreCLR -or $IsWindows) {
                 @{
                     ListItemText = '-z';
                     ToolTip      = "DEPRECATED (use --pathspec-file-nul instead): paths are separated with NUL character";

@@ -253,7 +253,7 @@ function Describe-Revlist {
                 It '<Line>' -ForEach @(
                     @{
                         Line     = "brn..main:";
-                        Expected = if ($IsWindows -or ($PSVersionTable.PSEdition -eq 'Desktop')) {
+                        Expected = if (!$IsCoreCLR -or $IsWindows) {
                             'Pwsh/', '.gitignore', 'hello.sh', 'initial.txt' | ForEach-Object {
                                 @{
                                     File           = $_
