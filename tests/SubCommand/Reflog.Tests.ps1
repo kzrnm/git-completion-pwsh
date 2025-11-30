@@ -106,8 +106,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                             IsSubcommand = $true;
                         },
                         @{
-                            ListItemText = 'expire';
-                            ToolTip      = "prunes older reflog entries";
+                            ListItemText = 'exists';
+                            ToolTip      = "checks whether a ref has a reflog";
+                            IsSubcommand = $true;
+                        },
+                        @{
+                            ListItemText = 'write';
+                            ToolTip      = "writes a single entry to the reflog of a given reference";
                             IsSubcommand = $true;
                         },
                         @{
@@ -116,13 +121,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                             IsSubcommand = $true;
                         },
                         @{
-                            ListItemText = 'exists';
-                            ToolTip      = "checks whether a ref has a reflog";
+                            ListItemText = 'drop';
+                            ToolTip      = "removes the reflog for the specified references";
                             IsSubcommand = $true;
                         },
                         @{
-                            ListItemText = 'drop';
-                            ToolTip      = "removes the reflog for the specified references";
+                            ListItemText = 'expire';
+                            ToolTip      = "prunes older reflog entries";
                             IsSubcommand = $true;
                         } | ConvertTo-Completion -ResultType ParameterName
                     ) + @(
@@ -143,13 +148,13 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                     Line     = ' e';
                     Expected = @(
                         @{
-                            ListItemText = 'expire';
-                            ToolTip      = "prunes older reflog entries";
+                            ListItemText = 'exists';
+                            ToolTip      = "checks whether a ref has a reflog";
                             IsSubcommand = $true;
                         },
                         @{
-                            ListItemText = 'exists';
-                            ToolTip      = "checks whether a ref has a reflog";
+                            ListItemText = 'expire';
+                            ToolTip      = "prunes older reflog entries";
                             IsSubcommand = $true;
                         } | ConvertTo-Completion -ResultType ParameterName
                     )
