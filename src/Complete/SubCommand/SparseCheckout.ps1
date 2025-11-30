@@ -31,6 +31,7 @@ function Complete-GitSubCommand-sparse-checkout {
                         'reapply' { 'reapply the sparsity pattern rules to paths in the working tree' }
                         'disable' { 'disable the core.sparseCheckout config setting' }
                         'check-rules' { 'check whether sparsity rules match one or more paths' }
+                        'clean' { 'opportunistically remove files outside of the sparse-checkout definition' }
                     }
                 }
             }

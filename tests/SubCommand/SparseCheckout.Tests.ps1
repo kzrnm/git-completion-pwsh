@@ -57,6 +57,10 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                     ToolTip      = "reapply the sparsity pattern rules to paths in the working tree";
                 },
                 @{
+                    ListItemText = 'clean';
+                    ToolTip      = "opportunistically remove files outside of the sparse-checkout definition";
+                },
+                @{
                     ListItemText = 'disable';
                     ToolTip      = "disable the core.sparseCheckout config setting";
                 },
