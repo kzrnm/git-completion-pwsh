@@ -47,7 +47,7 @@ When selecting a branch, commit messages are displayed, and option descriptions 
 
 ## Original
 
-This module is a PowerShell port of [git-completion.bash Commit: 8b6f19ccfc3aefbd0f22f6b7d56ad6a3fc5e4f37](https://github.com/git/git/blob/8b6f19ccfc3aefbd0f22f6b7d56ad6a3fc5e4f37/contrib/completion/git-completion.bash).
+This module is a PowerShell port of [git-completion.bash Commit: c568fa8e1c740c19f8b1cc7efeeef2c6c52961dd](https://github.com/git/git/blob/c568fa8e1c740c19f8b1cc7efeeef2c6c52961dd/contrib/completion/git-completion.bash).
 
 ### Changes from **git-completion.bash**
 - Add completion information in tooltips
@@ -55,8 +55,5 @@ This module is a PowerShell port of [git-completion.bash Commit: 8b6f19ccfc3aefb
 - Completions
   - branch: `--column`
   - config: Add [value completions](src/Complete/SubCommand/Config.ps1#L316)
-  - log: Add `--exclude=` option
-  - shortlog: Use `--committer` instead of `--committer=`
-  - shortlog: Add `--exclude=` option
   - stash: Complete modified files
   - tag: `--column`
