@@ -58,12 +58,12 @@ jobs:
   test:
     uses: ./.github/workflows/test.yml
     with:
-      continue-on-error: ${{ inputs.force-publish }}
+      continue-on-error: ${{ inputs.force-publish || false }}
 
   new-version-only:
     runs-on: ubuntu-latest
     needs: [get-version, test]
-    if: ${{ needs.get-version.outputs.new-tag != '' && (! failure() || inputs.force-publish) }}
+    if: ${{ needs.get-version.outputs.new-tag != '' && (inputs.force-publish || ! failure()) }}
     steps:
       - run: echo "new-version"
 
@@ -90,7 +90,7 @@ jobs:
         with:
           tag: ${{ needs.get-version.outputs.new-tag }}
           name: Version ${{ needs.get-version.outputs.version }}
-          body: ${{ github.server_url }}/${{ github.repository }}/blob/${{ steps.tag-version.outputs.new_tag }}/CHANGELOG.md
+          body: ${{ github.server_url }}/${{ github.repository }}/blob/${{ needs.get-version.outputs.new-tag }}/CHANGELOG.md
           prerelease: ${{ needs.get-version.outputs.is-prerelease }}
 
       - name: Install-Module PowerShellGet
