@@ -54,7 +54,7 @@ function Complete-Opts-show {
         $key = $Matches[1]
         $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
-            { $_ -in @('--pretty', '--format') } { @(gitCompletePretty | Sort-Object) }
+            { $_ -in @('--pretty', '--format') } { @(gitCompletePretty | Sort-Object ListItemText) }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
             '--diff-merges' { $script:gitDiffMergesOpts }
             '--submodule' { $script:gitDiffSubmoduleFormats }

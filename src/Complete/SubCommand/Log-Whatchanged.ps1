@@ -61,7 +61,7 @@ function gitCompleteLogOpts {
         $key = $Matches[1]
         $value = $Matches[2]
         $candidates = switch -CaseSensitive ($key) {
-            { $_ -in @('--pretty', '--format') } { @(gitCompletePretty | Sort-Object) }
+            { $_ -in @('--pretty', '--format') } { @(gitCompletePretty | Sort-Object ListItemText) }
             '--date' { $script:gitLogDateFormats }
             '--decorate' { 'full', 'short', 'no' }
             '--diff-algorithm' { $script:gitDiffAlgorithms }
