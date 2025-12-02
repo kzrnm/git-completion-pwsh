@@ -12,10 +12,10 @@ runs:
       run: brew update && brew upgrade git
       shell: bash
 
-    - name: Windows - Install latest git
-      if: runner.os == 'Windows'
-      run: choco upgrade git -y
-      shell: bash
+    # - name: Windows - Install latest git
+    #   if: runner.os == 'Windows'
+    #   run: choco upgrade git -y
+    #   shell: bash
 
     - name: Linux - Install latest git
       if: runner.os == 'Linux'
