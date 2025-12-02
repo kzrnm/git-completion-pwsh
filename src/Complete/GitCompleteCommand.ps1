@@ -6,7 +6,7 @@ using namespace System.Management.Automation;
 
 function gitCompletePretty() {
     [CmdletBinding()]
-    [OutputType([string[]])]
+    [OutputType([PSCustomObject[]])]
     param()
     $script:gitLogPrettyFormats
     # __git_pretty_aliases

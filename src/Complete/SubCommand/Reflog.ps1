@@ -23,6 +23,7 @@ function Complete-GitSubCommand-reflog {
                 "delete" { 'deletes single entries' }
                 "exists" { 'checks whether a ref has a reflog' }
                 "drop" { 'removes the reflog for the specified references' }
+                "write" { 'writes a single entry to the reflog of a given reference' }
             }
         }
 

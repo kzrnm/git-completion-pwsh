@@ -8,465 +8,465 @@ $script:gitRebaseInprogressOptions = '--continue', '--skip', '--abort', '--quit'
 $script:gitRebaseInteractiveInprogressOptions = $script:gitRebaseInprogressOptions + '--edit-todo' | Sort-Object
 
 $script:gitFormatPatchExtraOptions = '--full-index', '--not', '--all', '--no-prefix', '--src-prefix=', '--dst-prefix=', '--notes' | Sort-Object
-$script:gitPullRebaseConfig = [pscustomobject[]]@(
-    @{ListItemText = 'false'; Tooltip = 'Merge branch when "git pull"'; },
-    @{ListItemText = 'true'; Tooltip = 'Rebase branch when "git pull"'; },
-    @{ListItemText = 'merges'; Tooltip = 'Rebase branch with --rebase-merges when "git pull"'; },
-    @{ListItemText = 'interactive'; Tooltip = 'Rebase in interactive mode'; }
+$script:gitPullRebaseConfig = @(
+    [pscustomobject]@{ListItemText = 'false'; Tooltip = 'Merge branch when "git pull"'; },
+    [pscustomobject]@{ListItemText = 'true'; Tooltip = 'Rebase branch when "git pull"'; },
+    [pscustomobject]@{ListItemText = 'merges'; Tooltip = 'Rebase branch with --rebase-merges when "git pull"'; },
+    [pscustomobject]@{ListItemText = 'interactive'; Tooltip = 'Rebase in interactive mode'; }
 ) | Sort-Object ListItemText
 
-$script:gitHttpProxyAuthMethod = [pscustomobject[]]@(
-    @{ListItemText = 'anyauth'; Tooltip = 'Automatically pick a suitable authentication method'; },
-    @{ListItemText = 'basic'; Tooltip = 'HTTP Basic authentication'; },
-    @{ListItemText = 'digest'; Tooltip = 'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text'; },
-    @{ListItemText = 'negotiate'; Tooltip = 'GSS-Negotiate authentication (compare the --negotiate option of curl)'; },
-    @{ListItemText = 'ntlm'; Tooltip = 'NTLM authentication (compare the --ntlm option of curl)'; }
+$script:gitHttpProxyAuthMethod = @(
+    [pscustomobject]@{ListItemText = 'anyauth'; Tooltip = 'Automatically pick a suitable authentication method'; },
+    [pscustomobject]@{ListItemText = 'basic'; Tooltip = 'HTTP Basic authentication'; },
+    [pscustomobject]@{ListItemText = 'digest'; Tooltip = 'HTTP Digest authentication; this prevents the password from being transmitted to the proxy in clear text'; },
+    [pscustomobject]@{ListItemText = 'negotiate'; Tooltip = 'GSS-Negotiate authentication (compare the --negotiate option of curl)'; },
+    [pscustomobject]@{ListItemText = 'ntlm'; Tooltip = 'NTLM authentication (compare the --ntlm option of curl)'; }
 ) | Sort-Object ListItemText
 
-$script:gitColumnUiPatterns = [pscustomobject[]]@(
-    @{ListItemText = 'always'; Tooltip = 'always show in columns'; },
-    @{ListItemText = 'never'; Tooltip = 'never show in columns'; },
-    @{ListItemText = 'auto'; Tooltip = 'show in columns if the output is to the terminal'; },
-    @{ListItemText = 'column'; Tooltip = 'fill columns before rows'; },
-    @{ListItemText = 'row'; Tooltip = 'fill rows before columns'; },
-    @{ListItemText = 'plain'; Tooltip = 'show in one column'; },
-    @{ListItemText = 'dense'; Tooltip = 'make unequal size columns to utilize more space'; },
-    @{ListItemText = 'nodense'; Tooltip = 'make equal size columns'; }
+$script:gitColumnUiPatterns = @(
+    [pscustomobject]@{ListItemText = 'always'; Tooltip = 'always show in columns'; },
+    [pscustomobject]@{ListItemText = 'never'; Tooltip = 'never show in columns'; },
+    [pscustomobject]@{ListItemText = 'auto'; Tooltip = 'show in columns if the output is to the terminal'; },
+    [pscustomobject]@{ListItemText = 'column'; Tooltip = 'fill columns before rows'; },
+    [pscustomobject]@{ListItemText = 'row'; Tooltip = 'fill rows before columns'; },
+    [pscustomobject]@{ListItemText = 'plain'; Tooltip = 'show in one column'; },
+    [pscustomobject]@{ListItemText = 'dense'; Tooltip = 'make unequal size columns to utilize more space'; },
+    [pscustomobject]@{ListItemText = 'nodense'; Tooltip = 'make equal size columns'; }
 ) # | Sort-Object ListItemText # Comment out to fit the classification
 
-$script:gitMergeStrategies = [pscustomobject[]]@(
-    @{ListItemText = 'ours'; Tooltip = 'favoring our version'; },
-    @{ListItemText = 'theirs'; Tooltip = 'opposite of ours'; },
-    @{ListItemText = 'subtree'; Tooltip = 'A more advanced form of subtree strategy'; },
-    @{ListItemText = 'subtree='; Tooltip = 'A more advanced form of subtree strategy'; },
-    @{ListItemText = 'patience'; Tooltip = 'Deprecated synonym for diff-algorithm=patience'; },
-    @{ListItemText = 'histogram'; Tooltip = 'Deprecated synonym for diff-algorithm=histogram'; },
-    @{ListItemText = 'diff-algorithm='; Tooltip = 'Use a different diff algorithm while merging'; },
-    @{ListItemText = 'ignore-space-change'; Tooltip = 'Ignore changes in amount of whitespace'; },
-    @{ListItemText = 'ignore-all-space'; Tooltip = 'Ignore whitespace when comparing lines'; },
-    @{ListItemText = 'ignore-space-at-eol'; Tooltip = 'Ignore changes in whitespace at EOL'; },
-    @{ListItemText = 'renormalize'; Tooltip = 'runs a virtual check-out and check-in of all three stages'; },
-    @{ListItemText = 'no-renormalize'; Tooltip = '[NO] runs a virtual check-out and check-in of all three stages'; },
-    @{ListItemText = 'no-renames'; Tooltip = 'Turn off rename detection'; },
-    @{ListItemText = 'find-renames'; Tooltip = 'Turn on rename detection'; },
-    @{ListItemText = 'find-renames='; Tooltip = 'Turn on rename detection, optionally setting the similarity threshold'; },
-    @{ListItemText = 'rename-threshold='; Tooltip = 'Deprecated synonym for find-renames='; }
+$script:gitMergeStrategies = @(
+    [pscustomobject]@{ListItemText = 'ours'; Tooltip = 'favoring our version'; },
+    [pscustomobject]@{ListItemText = 'theirs'; Tooltip = 'opposite of ours'; },
+    [pscustomobject]@{ListItemText = 'subtree'; Tooltip = 'A more advanced form of subtree strategy'; },
+    [pscustomobject]@{ListItemText = 'subtree='; Tooltip = 'A more advanced form of subtree strategy'; },
+    [pscustomobject]@{ListItemText = 'patience'; Tooltip = 'Deprecated synonym for diff-algorithm=patience'; },
+    [pscustomobject]@{ListItemText = 'histogram'; Tooltip = 'Deprecated synonym for diff-algorithm=histogram'; },
+    [pscustomobject]@{ListItemText = 'diff-algorithm='; Tooltip = 'Use a different diff algorithm while merging'; },
+    [pscustomobject]@{ListItemText = 'ignore-space-change'; Tooltip = 'Ignore changes in amount of whitespace'; },
+    [pscustomobject]@{ListItemText = 'ignore-all-space'; Tooltip = 'Ignore whitespace when comparing lines'; },
+    [pscustomobject]@{ListItemText = 'ignore-space-at-eol'; Tooltip = 'Ignore changes in whitespace at EOL'; },
+    [pscustomobject]@{ListItemText = 'renormalize'; Tooltip = 'runs a virtual check-out and check-in of all three stages'; },
+    [pscustomobject]@{ListItemText = 'no-renormalize'; Tooltip = '[NO] runs a virtual check-out and check-in of all three stages'; },
+    [pscustomobject]@{ListItemText = 'no-renames'; Tooltip = 'Turn off rename detection'; },
+    [pscustomobject]@{ListItemText = 'find-renames'; Tooltip = 'Turn on rename detection'; },
+    [pscustomobject]@{ListItemText = 'find-renames='; Tooltip = 'Turn on rename detection, optionally setting the similarity threshold'; },
+    [pscustomobject]@{ListItemText = 'rename-threshold='; Tooltip = 'Deprecated synonym for find-renames='; }
 ) | Sort-Object ListItemText
 
-$script:gitPushRecurseSubmodules = [pscustomobject[]]@(
-    @{ListItemText = 'check'; Tooltip = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule'; }
-    @{ListItemText = 'on-demand'; Tooltip = 'all submodules that changed in the revisions to be pushed will be pushed'; }
-    @{ListItemText = 'only'; Tooltip = 'all submodules will be pushed while the superproject is left unpushed'; }
-    @{ListItemText = 'no'; Tooltip = '(default) no submodules are pushed'; }
+$script:gitPushRecurseSubmodules = @(
+    [pscustomobject]@{ListItemText = 'check'; Tooltip = 'verify that all submodule commits that changed in the revisions to be pushed are available on at least one remote of the submodule'; }
+    [pscustomobject]@{ListItemText = 'on-demand'; Tooltip = 'all submodules that changed in the revisions to be pushed will be pushed'; }
+    [pscustomobject]@{ListItemText = 'only'; Tooltip = 'all submodules will be pushed while the superproject is left unpushed'; }
+    [pscustomobject]@{ListItemText = 'no'; Tooltip = '(default) no submodules are pushed'; }
 ) | Sort-Object ListItemText
 
-$script:gitFetchRecurseSubmodules = [pscustomobject[]]@(
-    @{ListItemText = 'yes'; Tooltip = 'all submodules are fetched'; }
-    @{ListItemText = 'on-demand'; Tooltip = '(default) only changed submodules are fetched'; }
-    @{ListItemText = 'no'; Tooltip = 'no submodules are fetched'; }
+$script:gitFetchRecurseSubmodules = @(
+    [pscustomobject]@{ListItemText = 'yes'; Tooltip = 'all submodules are fetched'; }
+    [pscustomobject]@{ListItemText = 'on-demand'; Tooltip = '(default) only changed submodules are fetched'; }
+    [pscustomobject]@{ListItemText = 'no'; Tooltip = 'no submodules are fetched'; }
 ) | Sort-Object ListItemText
 
-$script:gitConflictSolver = [pscustomobject[]]@(
-    @{ListItemText = 'diff3'; Tooltip = "Adds the common ancestor's content, providing a three-way comparison"; }
-    @{ListItemText = 'merge'; Tooltip = '(default) Showing only current changes and the incoming changes'; }
-    @{ListItemText = 'zdiff3'; Tooltip = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block'; }
+$script:gitConflictSolver = @(
+    [pscustomobject]@{ListItemText = 'diff3'; Tooltip = "Adds the common ancestor's content, providing a three-way comparison"; }
+    [pscustomobject]@{ListItemText = 'merge'; Tooltip = '(default) Showing only current changes and the incoming changes'; }
+    [pscustomobject]@{ListItemText = 'zdiff3'; Tooltip = 'Similar to diff3 but minimizes the conflict markers by moving common surrounding lines outside the conflicted block'; }
 ) | Sort-Object ListItemText
 
-$script:gitDiffAlgorithms = [pscustomobject[]]@(
-    @{ListItemText = 'myers'; Tooltip = '(default) The basic greedy diff algorithm'; }
-    @{ListItemText = 'minimal'; Tooltip = 'Spend extra time to make sure the smallest possible diff is produced'; }
-    @{ListItemText = 'patience'; Tooltip = 'Use "patience diff" algorithm when generating patches'; }
-    @{ListItemText = 'histogram'; Tooltip = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"'; }
+$script:gitDiffAlgorithms = @(
+    [pscustomobject]@{ListItemText = 'myers'; Tooltip = '(default) The basic greedy diff algorithm'; }
+    [pscustomobject]@{ListItemText = 'minimal'; Tooltip = 'Spend extra time to make sure the smallest possible diff is produced'; }
+    [pscustomobject]@{ListItemText = 'patience'; Tooltip = 'Use "patience diff" algorithm when generating patches'; }
+    [pscustomobject]@{ListItemText = 'histogram'; Tooltip = 'This algorithm extends the patience algorithm to "support low-occurrence common elements"'; }
 ) | Sort-Object ListItemText
 
-$script:gitDiffSubmoduleFormats = [pscustomobject[]]@(
-    @{ListItemText = 'diff'; Tooltip = 'Shows an inline diff of the changed contents of the submodule'; }
-    @{ListItemText = 'log'; Tooltip = 'Lists the commits in the range like "git submodule summary" does'; }
-    @{ListItemText = 'short'; Tooltip = '(default) Shows the names of the commits at the beginning and end of the range'; }
+$script:gitDiffSubmoduleFormats = @(
+    [pscustomobject]@{ListItemText = 'diff'; Tooltip = 'Shows an inline diff of the changed contents of the submodule'; }
+    [pscustomobject]@{ListItemText = 'log'; Tooltip = 'Lists the commits in the range like "git submodule summary" does'; }
+    [pscustomobject]@{ListItemText = 'short'; Tooltip = '(default) Shows the names of the commits at the beginning and end of the range'; }
 ) | Sort-Object ListItemText
 
-$script:gitColorMovedOpts = [pscustomobject[]]@(
-    @{ListItemText = 'no'; Tooltip = 'Moved lines are not highlighted'; }
-    @{ListItemText = 'default'; Tooltip = 'A synonym for zebra'; }
-    @{ListItemText = 'plain'; Tooltip = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved'; }
-    @{ListItemText = 'blocks'; Tooltip = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily'; }
-    @{ListItemText = 'zebra'; Tooltip = 'Blocks of moved text are detected as in blocks mode'; }
-    @{ListItemText = 'dimmed-zebra'; Tooltip = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed'; }
+$script:gitColorMovedOpts = @(
+    [pscustomobject]@{ListItemText = 'no'; Tooltip = 'Moved lines are not highlighted'; }
+    [pscustomobject]@{ListItemText = 'default'; Tooltip = 'A synonym for zebra'; }
+    [pscustomobject]@{ListItemText = 'plain'; Tooltip = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved'; }
+    [pscustomobject]@{ListItemText = 'blocks'; Tooltip = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily'; }
+    [pscustomobject]@{ListItemText = 'zebra'; Tooltip = 'Blocks of moved text are detected as in blocks mode'; }
+    [pscustomobject]@{ListItemText = 'dimmed-zebra'; Tooltip = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed'; }
 ) | Sort-Object ListItemText
 
-$script:gitColorMovedWsOpts = [pscustomobject[]]@(
-    @{ListItemText = 'no'; Tooltip = 'Do not ignore whitespace when performing move detection'; }
-    @{ListItemText = 'ignore-space-at-eol'; Tooltip = 'Ignore changes in whitespace at EOL'; }
-    @{ListItemText = 'ignore-space-change'; Tooltip = 'Ignore changes in amount of whitespace'; }
-    @{ListItemText = 'ignore-all-space'; Tooltip = 'Ignore whitespace when comparing lines'; }
-    @{ListItemText = 'allow-indentation-change'; Tooltip = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line'; }
+$script:gitColorMovedWsOpts = @(
+    [pscustomobject]@{ListItemText = 'no'; Tooltip = 'Do not ignore whitespace when performing move detection'; }
+    [pscustomobject]@{ListItemText = 'ignore-space-at-eol'; Tooltip = 'Ignore changes in whitespace at EOL'; }
+    [pscustomobject]@{ListItemText = 'ignore-space-change'; Tooltip = 'Ignore changes in amount of whitespace'; }
+    [pscustomobject]@{ListItemText = 'ignore-all-space'; Tooltip = 'Ignore whitespace when comparing lines'; }
+    [pscustomobject]@{ListItemText = 'allow-indentation-change'; Tooltip = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line'; }
 ) | Sort-Object ListItemText
 
-$script:gitWsErrorHighlightOpts = [pscustomobject[]]@(
-    @{ListItemText = 'context'; Tooltip = 'Highlight whitespace errors in the context'; }
-    @{ListItemText = 'old'; Tooltip = 'Highlight whitespace errors in the old lines of the diff'; }
-    @{ListItemText = 'new'; Tooltip = 'Highlight whitespace errors in the new lines of the diff'; }
-    @{ListItemText = 'all'; Tooltip = 'A synonym for old,new,context'; }
-    @{ListItemText = 'default'; Tooltip = 'A synonym for new'; }
+$script:gitWsErrorHighlightOpts = @(
+    [pscustomobject]@{ListItemText = 'context'; Tooltip = 'Highlight whitespace errors in the context'; }
+    [pscustomobject]@{ListItemText = 'old'; Tooltip = 'Highlight whitespace errors in the old lines of the diff'; }
+    [pscustomobject]@{ListItemText = 'new'; Tooltip = 'Highlight whitespace errors in the new lines of the diff'; }
+    [pscustomobject]@{ListItemText = 'all'; Tooltip = 'A synonym for old,new,context'; }
+    [pscustomobject]@{ListItemText = 'default'; Tooltip = 'A synonym for new'; }
 ) | Sort-Object ListItemText
 
-$script:gitDiffMergesOpts = [pscustomobject[]]@(
-    @{ListItemText = 'off'; }
-    @{ListItemText = 'none'; }
-    @{ListItemText = 'on'; }
-    @{ListItemText = 'first-parent'; }
-    @{ListItemText = '1'; }
-    @{ListItemText = 'separate'; }
-    @{ListItemText = 'm'; }
-    @{ListItemText = 'combined'; }
-    @{ListItemText = 'c'; }
-    @{ListItemText = 'dense-combined'; }
-    @{ListItemText = 'cc'; }
-    @{ListItemText = 'remerge'; }
-    @{ListItemText = 'r'; }
+$script:gitDiffMergesOpts = @(
+    [pscustomobject]@{ListItemText = 'off'; }
+    [pscustomobject]@{ListItemText = 'none'; }
+    [pscustomobject]@{ListItemText = 'on'; }
+    [pscustomobject]@{ListItemText = 'first-parent'; }
+    [pscustomobject]@{ListItemText = '1'; }
+    [pscustomobject]@{ListItemText = 'separate'; }
+    [pscustomobject]@{ListItemText = 'm'; }
+    [pscustomobject]@{ListItemText = 'combined'; }
+    [pscustomobject]@{ListItemText = 'c'; }
+    [pscustomobject]@{ListItemText = 'dense-combined'; }
+    [pscustomobject]@{ListItemText = 'cc'; }
+    [pscustomobject]@{ListItemText = 'remerge'; }
+    [pscustomobject]@{ListItemText = 'r'; }
 ) | Sort-Object ListItemText
 
-$script:gitLogDateFormats = [pscustomobject[]]@(
-    @{ListItemText = 'relative'; }
-    @{ListItemText = 'iso8601'; }
-    @{ListItemText = 'iso8601-strict'; }
-    @{ListItemText = 'rfc2822'; }
-    @{ListItemText = 'short'; }
-    @{ListItemText = 'local'; }
-    @{ListItemText = 'default'; }
-    @{ListItemText = 'human'; }
-    @{ListItemText = 'raw'; }
-    @{ListItemText = 'unix'; }
-    @{ListItemText = 'auto:'; }
-    @{ListItemText = 'format:'; }
+$script:gitLogDateFormats = @(
+    [pscustomobject]@{ListItemText = 'relative'; }
+    [pscustomobject]@{ListItemText = 'iso8601'; }
+    [pscustomobject]@{ListItemText = 'iso8601-strict'; }
+    [pscustomobject]@{ListItemText = 'rfc2822'; }
+    [pscustomobject]@{ListItemText = 'short'; }
+    [pscustomobject]@{ListItemText = 'local'; }
+    [pscustomobject]@{ListItemText = 'default'; }
+    [pscustomobject]@{ListItemText = 'human'; }
+    [pscustomobject]@{ListItemText = 'raw'; }
+    [pscustomobject]@{ListItemText = 'unix'; }
+    [pscustomobject]@{ListItemText = 'auto:'; }
+    [pscustomobject]@{ListItemText = 'format:'; }
 ) | Sort-Object ListItemText
 
-$script:gitLogPrettyFormats = [pscustomobject[]]@(
-    @{ListItemText = 'oneline'; }
-    @{ListItemText = 'short'; }
-    @{ListItemText = 'medium'; }
-    @{ListItemText = 'full'; }
-    @{ListItemText = 'fuller'; }
-    @{ListItemText = 'reference'; }
-    @{ListItemText = 'email'; }
-    @{ListItemText = 'raw'; }
-    @{ListItemText = 'format:'; }
-    @{ListItemText = 'tformat:'; }
-    @{ListItemText = 'mboxrd'; }
+$script:gitLogPrettyFormats = @(
+    [pscustomobject]@{ListItemText = 'oneline'; }
+    [pscustomobject]@{ListItemText = 'short'; }
+    [pscustomobject]@{ListItemText = 'medium'; }
+    [pscustomobject]@{ListItemText = 'full'; }
+    [pscustomobject]@{ListItemText = 'fuller'; }
+    [pscustomobject]@{ListItemText = 'reference'; }
+    [pscustomobject]@{ListItemText = 'email'; }
+    [pscustomobject]@{ListItemText = 'raw'; }
+    [pscustomobject]@{ListItemText = 'format:'; }
+    [pscustomobject]@{ListItemText = 'tformat:'; }
+    [pscustomobject]@{ListItemText = 'mboxrd'; }
 ) | Sort-Object ListItemText
 
-$script:gitSendEmailConfirmOptions = [pscustomobject[]]@(
-    @{ListItemText = 'always'; }
-    @{ListItemText = 'never'; }
-    @{ListItemText = 'auto'; }
-    @{ListItemText = 'cc'; }
-    @{ListItemText = 'compose'; }
+$script:gitSendEmailConfirmOptions = @(
+    [pscustomobject]@{ListItemText = 'always'; }
+    [pscustomobject]@{ListItemText = 'never'; }
+    [pscustomobject]@{ListItemText = 'auto'; }
+    [pscustomobject]@{ListItemText = 'cc'; }
+    [pscustomobject]@{ListItemText = 'compose'; }
 ) | Sort-Object ListItemText
 
-$script:gitSendEmailSuppressccOptions = [pscustomobject[]]@(
-    @{ListItemText = 'author'; }
-    @{ListItemText = 'self'; }
-    @{ListItemText = 'cc'; }
-    @{ListItemText = 'bodycc'; }
-    @{ListItemText = 'sob'; }
-    @{ListItemText = 'cccmd'; }
-    @{ListItemText = 'body'; }
-    @{ListItemText = 'all'; }
+$script:gitSendEmailSuppressccOptions = @(
+    [pscustomobject]@{ListItemText = 'author'; }
+    [pscustomobject]@{ListItemText = 'self'; }
+    [pscustomobject]@{ListItemText = 'cc'; }
+    [pscustomobject]@{ListItemText = 'bodycc'; }
+    [pscustomobject]@{ListItemText = 'sob'; }
+    [pscustomobject]@{ListItemText = 'cccmd'; }
+    [pscustomobject]@{ListItemText = 'body'; }
+    [pscustomobject]@{ListItemText = 'all'; }
 ) | Sort-Object ListItemText
 
-$script:gitMergetoolsCommon = [pscustomobject[]]@(
-    @{ListItemText = 'diffuse'; }
-    @{ListItemText = 'diffmerge'; }
-    @{ListItemText = 'ecmerge'; }
-    @{ListItemText = 'emerge'; }
-    @{ListItemText = 'kdiff3'; }
-    @{ListItemText = 'meld'; }
-    @{ListItemText = 'opendiff'; }
-    @{ListItemText = 'tkdiff'; }
-    @{ListItemText = 'vimdiff'; }
-    @{ListItemText = 'nvimdiff'; }
-    @{ListItemText = 'gvimdiff'; }
-    @{ListItemText = 'xxdiff'; }
-    @{ListItemText = 'araxis'; }
-    @{ListItemText = 'p4merge'; }
-    @{ListItemText = 'bc'; }
-    @{ListItemText = 'codecompare'; }
-    @{ListItemText = 'smerge'; }
+$script:gitMergetoolsCommon = @(
+    [pscustomobject]@{ListItemText = 'diffuse'; }
+    [pscustomobject]@{ListItemText = 'diffmerge'; }
+    [pscustomobject]@{ListItemText = 'ecmerge'; }
+    [pscustomobject]@{ListItemText = 'emerge'; }
+    [pscustomobject]@{ListItemText = 'kdiff3'; }
+    [pscustomobject]@{ListItemText = 'meld'; }
+    [pscustomobject]@{ListItemText = 'opendiff'; }
+    [pscustomobject]@{ListItemText = 'tkdiff'; }
+    [pscustomobject]@{ListItemText = 'vimdiff'; }
+    [pscustomobject]@{ListItemText = 'nvimdiff'; }
+    [pscustomobject]@{ListItemText = 'gvimdiff'; }
+    [pscustomobject]@{ListItemText = 'xxdiff'; }
+    [pscustomobject]@{ListItemText = 'araxis'; }
+    [pscustomobject]@{ListItemText = 'p4merge'; }
+    [pscustomobject]@{ListItemText = 'bc'; }
+    [pscustomobject]@{ListItemText = 'codecompare'; }
+    [pscustomobject]@{ListItemText = 'smerge'; }
 ) | Sort-Object ListItemText
 
-$script:gitMergetoolsDiffTool = $gitMergetoolsCommon + @{ListItemText = 'kompare'; } | Sort-Object ListItemText
-$script:gitMergetoolsMergeTool = $gitMergetoolsCommon + @{ListItemText = 'tortoisemerge'; } | Sort-Object ListItemText
+$script:gitMergetoolsDiffTool = $gitMergetoolsCommon + [pscustomobject]@{ListItemText = 'kompare'; } | Sort-Object ListItemText
+$script:gitMergetoolsMergeTool = $gitMergetoolsCommon + [pscustomobject]@{ListItemText = 'tortoisemerge'; } | Sort-Object ListItemText
 
-$script:gitUntrackedFileModes = [pscustomobject[]]@(
-    @{ListItemText = 'all'; }
-    @{ListItemText = 'no'; }
-    @{ListItemText = 'normal'; }
+$script:gitUntrackedFileModes = @(
+    [pscustomobject]@{ListItemText = 'all'; }
+    [pscustomobject]@{ListItemText = 'no'; }
+    [pscustomobject]@{ListItemText = 'normal'; }
 ) | Sort-Object ListItemText
 
 # Options for git am
-$script:gitWhitespacelist = [pscustomobject[]]@(
-    @{ListItemText = 'nowarn'; }
-    @{ListItemText = 'warn'; }
-    @{ListItemText = 'error'; }
-    @{ListItemText = 'error-all'; }
-    @{ListItemText = 'fix'; }
+$script:gitWhitespacelist = @(
+    [pscustomobject]@{ListItemText = 'nowarn'; }
+    [pscustomobject]@{ListItemText = 'warn'; }
+    [pscustomobject]@{ListItemText = 'error'; }
+    [pscustomobject]@{ListItemText = 'error-all'; }
+    [pscustomobject]@{ListItemText = 'fix'; }
 ) | Sort-Object ListItemText
 
-$script:gitPatchformat = [pscustomobject[]]@(
-    @{ListItemText = 'mbox'; }
-    @{ListItemText = 'stgit'; }
-    @{ListItemText = 'stgit-series'; }
-    @{ListItemText = 'hg'; }
-    @{ListItemText = 'mboxrd'; }
+$script:gitPatchformat = @(
+    [pscustomobject]@{ListItemText = 'mbox'; }
+    [pscustomobject]@{ListItemText = 'stgit'; }
+    [pscustomobject]@{ListItemText = 'stgit-series'; }
+    [pscustomobject]@{ListItemText = 'hg'; }
+    [pscustomobject]@{ListItemText = 'mboxrd'; }
 ) | Sort-Object ListItemText
 
-$script:gitShowcurrentpatch = [pscustomobject[]]@(
-    @{ListItemText = 'diff'; }
-    @{ListItemText = 'raw'; }
+$script:gitShowcurrentpatch = @(
+    [pscustomobject]@{ListItemText = 'diff'; }
+    [pscustomobject]@{ListItemText = 'raw'; }
 ) | Sort-Object ListItemText
 
-$script:gitQuotedCr = [pscustomobject[]]@(
-    @{ListItemText = 'nowarn'; }
-    @{ListItemText = 'warn'; }
-    @{ListItemText = 'strip'; }
+$script:gitQuotedCr = @(
+    [pscustomobject]@{ListItemText = 'nowarn'; }
+    [pscustomobject]@{ListItemText = 'warn'; }
+    [pscustomobject]@{ListItemText = 'strip'; }
 ) | Sort-Object ListItemText
 
 # Options that go well for log and gitk (not shortlog)
-$script:gitLogGitkOptions = [pscustomobject[]]@(
-    @{ListItemText = '--dense'; }
-    @{ListItemText = '--sparse'; }
-    @{ListItemText = '--full-history'; }
-    @{ListItemText = '--simplify-merges'; }
-    @{ListItemText = '--simplify-by-decoration'; }
-    @{ListItemText = '--left-right'; }
-    @{ListItemText = '--notes'; }
-    @{ListItemText = '--no-notes'; }
+$script:gitLogGitkOptions = @(
+    [pscustomobject]@{ListItemText = '--dense'; }
+    [pscustomobject]@{ListItemText = '--sparse'; }
+    [pscustomobject]@{ListItemText = '--full-history'; }
+    [pscustomobject]@{ListItemText = '--simplify-merges'; }
+    [pscustomobject]@{ListItemText = '--simplify-by-decoration'; }
+    [pscustomobject]@{ListItemText = '--left-right'; }
+    [pscustomobject]@{ListItemText = '--notes'; }
+    [pscustomobject]@{ListItemText = '--no-notes'; }
 ) | Sort-Object ListItemText
 
 # Options for the diff machinery (diff, log, show, stash, range-diff, ...)
-$script:gitDiffCommonOptions = [pscustomobject[]]@(
-    @{ListItemText = '--stat'; }
-    @{ListItemText = '--numstat'; }
-    @{ListItemText = '--shortstat'; }
-    @{ListItemText = '--summary'; }
-    @{ListItemText = '--patch-with-stat'; }
-    @{ListItemText = '--name-only'; }
-    @{ListItemText = '--name-status'; }
-    @{ListItemText = '--color'; }
-    @{ListItemText = '--no-color'; }
-    @{ListItemText = '--color-words'; }
-    @{ListItemText = '--no-renames'; }
-    @{ListItemText = '--check'; }
-    @{ListItemText = '--color-moved'; }
-    @{ListItemText = '--color-moved='; }
-    @{ListItemText = '--no-color-moved'; }
-    @{ListItemText = '--color-moved-ws='; }
-    @{ListItemText = '--no-color-moved-ws'; }
-    @{ListItemText = '--full-index'; }
-    @{ListItemText = '--binary'; }
-    @{ListItemText = '--abbrev'; }
-    @{ListItemText = '--diff-filter='; }
-    @{ListItemText = '--find-copies'; }
-    @{ListItemText = '--find-object'; }
-    @{ListItemText = '--find-renames'; }
-    @{ListItemText = '--no-relative'; }
-    @{ListItemText = '--relative'; }
-    @{ListItemText = '--find-copies-harder'; }
-    @{ListItemText = '--ignore-cr-at-eol'; }
-    @{ListItemText = '--text'; }
-    @{ListItemText = '--ignore-space-at-eol'; }
-    @{ListItemText = '--ignore-space-change'; }
-    @{ListItemText = '--ignore-all-space'; }
-    @{ListItemText = '--ignore-blank-lines'; }
-    @{ListItemText = '--exit-code'; }
-    @{ListItemText = '--quiet'; }
-    @{ListItemText = '--ext-diff'; }
-    @{ListItemText = '--no-ext-diff'; }
-    @{ListItemText = '--unified='; }
-    @{ListItemText = '--no-prefix'; }
-    @{ListItemText = '--src-prefix='; }
-    @{ListItemText = '--dst-prefix='; }
-    @{ListItemText = '--inter-hunk-context='; }
-    @{ListItemText = '--function-context'; }
-    @{ListItemText = '--patience'; }
-    @{ListItemText = '--histogram'; }
-    @{ListItemText = '--minimal'; }
-    @{ListItemText = '--raw'; }
-    @{ListItemText = '--word-diff'; }
-    @{ListItemText = '--word-diff-regex='; }
-    @{ListItemText = '--dirstat'; }
-    @{ListItemText = '--dirstat='; }
-    @{ListItemText = '--dirstat-by-file'; }
-    @{ListItemText = '--dirstat-by-file='; }
-    @{ListItemText = '--cumulative'; }
-    @{ListItemText = '--diff-algorithm='; }
-    @{ListItemText = '--default-prefix'; }
-    @{ListItemText = '--submodule'; }
-    @{ListItemText = '--submodule='; }
-    @{ListItemText = '--ignore-submodules'; }
-    @{ListItemText = '--indent-heuristic'; }
-    @{ListItemText = '--no-indent-heuristic'; }
-    @{ListItemText = '--textconv'; }
-    @{ListItemText = '--no-textconv'; }
-    @{ListItemText = '--break-rewrites'; }
-    @{ListItemText = '--patch'; }
-    @{ListItemText = '--no-patch'; }
-    @{ListItemText = '--cc'; }
-    @{ListItemText = '--combined-all-paths'; }
-    @{ListItemText = '--anchored='; }
-    @{ListItemText = '--compact-summary'; }
-    @{ListItemText = '--ignore-matching-lines='; }
-    @{ListItemText = '--irreversible-delete'; }
-    @{ListItemText = '--line-prefix'; }
-    @{ListItemText = '--no-stat'; }
-    @{ListItemText = '--output='; }
-    @{ListItemText = '--output-indicator-context='; }
-    @{ListItemText = '--output-indicator-new='; }
-    @{ListItemText = '--output-indicator-old='; }
-    @{ListItemText = '--ws-error-highlight='; }
-    @{ListItemText = '--pickaxe-all'; }
-    @{ListItemText = '--pickaxe-regex'; }
-    @{ListItemText = '--patch-with-raw'; }
+$script:gitDiffCommonOptions = @(
+    [pscustomobject]@{ListItemText = '--stat'; }
+    [pscustomobject]@{ListItemText = '--numstat'; }
+    [pscustomobject]@{ListItemText = '--shortstat'; }
+    [pscustomobject]@{ListItemText = '--summary'; }
+    [pscustomobject]@{ListItemText = '--patch-with-stat'; }
+    [pscustomobject]@{ListItemText = '--name-only'; }
+    [pscustomobject]@{ListItemText = '--name-status'; }
+    [pscustomobject]@{ListItemText = '--color'; }
+    [pscustomobject]@{ListItemText = '--no-color'; }
+    [pscustomobject]@{ListItemText = '--color-words'; }
+    [pscustomobject]@{ListItemText = '--no-renames'; }
+    [pscustomobject]@{ListItemText = '--check'; }
+    [pscustomobject]@{ListItemText = '--color-moved'; }
+    [pscustomobject]@{ListItemText = '--color-moved='; }
+    [pscustomobject]@{ListItemText = '--no-color-moved'; }
+    [pscustomobject]@{ListItemText = '--color-moved-ws='; }
+    [pscustomobject]@{ListItemText = '--no-color-moved-ws'; }
+    [pscustomobject]@{ListItemText = '--full-index'; }
+    [pscustomobject]@{ListItemText = '--binary'; }
+    [pscustomobject]@{ListItemText = '--abbrev'; }
+    [pscustomobject]@{ListItemText = '--diff-filter='; }
+    [pscustomobject]@{ListItemText = '--find-copies'; }
+    [pscustomobject]@{ListItemText = '--find-object'; }
+    [pscustomobject]@{ListItemText = '--find-renames'; }
+    [pscustomobject]@{ListItemText = '--no-relative'; }
+    [pscustomobject]@{ListItemText = '--relative'; }
+    [pscustomobject]@{ListItemText = '--find-copies-harder'; }
+    [pscustomobject]@{ListItemText = '--ignore-cr-at-eol'; }
+    [pscustomobject]@{ListItemText = '--text'; }
+    [pscustomobject]@{ListItemText = '--ignore-space-at-eol'; }
+    [pscustomobject]@{ListItemText = '--ignore-space-change'; }
+    [pscustomobject]@{ListItemText = '--ignore-all-space'; }
+    [pscustomobject]@{ListItemText = '--ignore-blank-lines'; }
+    [pscustomobject]@{ListItemText = '--exit-code'; }
+    [pscustomobject]@{ListItemText = '--quiet'; }
+    [pscustomobject]@{ListItemText = '--ext-diff'; }
+    [pscustomobject]@{ListItemText = '--no-ext-diff'; }
+    [pscustomobject]@{ListItemText = '--unified='; }
+    [pscustomobject]@{ListItemText = '--no-prefix'; }
+    [pscustomobject]@{ListItemText = '--src-prefix='; }
+    [pscustomobject]@{ListItemText = '--dst-prefix='; }
+    [pscustomobject]@{ListItemText = '--inter-hunk-context='; }
+    [pscustomobject]@{ListItemText = '--function-context'; }
+    [pscustomobject]@{ListItemText = '--patience'; }
+    [pscustomobject]@{ListItemText = '--histogram'; }
+    [pscustomobject]@{ListItemText = '--minimal'; }
+    [pscustomobject]@{ListItemText = '--raw'; }
+    [pscustomobject]@{ListItemText = '--word-diff'; }
+    [pscustomobject]@{ListItemText = '--word-diff-regex='; }
+    [pscustomobject]@{ListItemText = '--dirstat'; }
+    [pscustomobject]@{ListItemText = '--dirstat='; }
+    [pscustomobject]@{ListItemText = '--dirstat-by-file'; }
+    [pscustomobject]@{ListItemText = '--dirstat-by-file='; }
+    [pscustomobject]@{ListItemText = '--cumulative'; }
+    [pscustomobject]@{ListItemText = '--diff-algorithm='; }
+    [pscustomobject]@{ListItemText = '--default-prefix'; }
+    [pscustomobject]@{ListItemText = '--submodule'; }
+    [pscustomobject]@{ListItemText = '--submodule='; }
+    [pscustomobject]@{ListItemText = '--ignore-submodules'; }
+    [pscustomobject]@{ListItemText = '--indent-heuristic'; }
+    [pscustomobject]@{ListItemText = '--no-indent-heuristic'; }
+    [pscustomobject]@{ListItemText = '--textconv'; }
+    [pscustomobject]@{ListItemText = '--no-textconv'; }
+    [pscustomobject]@{ListItemText = '--break-rewrites'; }
+    [pscustomobject]@{ListItemText = '--patch'; }
+    [pscustomobject]@{ListItemText = '--no-patch'; }
+    [pscustomobject]@{ListItemText = '--cc'; }
+    [pscustomobject]@{ListItemText = '--combined-all-paths'; }
+    [pscustomobject]@{ListItemText = '--anchored='; }
+    [pscustomobject]@{ListItemText = '--compact-summary'; }
+    [pscustomobject]@{ListItemText = '--ignore-matching-lines='; }
+    [pscustomobject]@{ListItemText = '--irreversible-delete'; }
+    [pscustomobject]@{ListItemText = '--line-prefix'; }
+    [pscustomobject]@{ListItemText = '--no-stat'; }
+    [pscustomobject]@{ListItemText = '--output='; }
+    [pscustomobject]@{ListItemText = '--output-indicator-context='; }
+    [pscustomobject]@{ListItemText = '--output-indicator-new='; }
+    [pscustomobject]@{ListItemText = '--output-indicator-old='; }
+    [pscustomobject]@{ListItemText = '--ws-error-highlight='; }
+    [pscustomobject]@{ListItemText = '--pickaxe-all'; }
+    [pscustomobject]@{ListItemText = '--pickaxe-regex'; }
+    [pscustomobject]@{ListItemText = '--patch-with-raw'; }
 ) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
 # Options for diff/difftool
-$script:gitDiffDifftoolOptions = [pscustomobject[]]@(
-    @{ListItemText = '--cached'; }
-    @{ListItemText = '--staged'; }
-    @{ListItemText = '--base'; }
-    @{ListItemText = '--ours'; }
-    @{ListItemText = '--theirs'; }
-    @{ListItemText = '--no-index'; }
-    @{ListItemText = '--merge-base'; }
-    @{ListItemText = '--ita-invisible-in-index'; }
-    @{ListItemText = '--ita-visible-in-index'; }
+$script:gitDiffDifftoolOptions = @(
+    [pscustomobject]@{ListItemText = '--cached'; }
+    [pscustomobject]@{ListItemText = '--staged'; }
+    [pscustomobject]@{ListItemText = '--base'; }
+    [pscustomobject]@{ListItemText = '--ours'; }
+    [pscustomobject]@{ListItemText = '--theirs'; }
+    [pscustomobject]@{ListItemText = '--no-index'; }
+    [pscustomobject]@{ListItemText = '--merge-base'; }
+    [pscustomobject]@{ListItemText = '--ita-invisible-in-index'; }
+    [pscustomobject]@{ListItemText = '--ita-visible-in-index'; }
 ) + $GitDiffCommonOptions | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
 # Options that go well for log, shortlog and gitk
-$script:gitLogCommonOptions = [pscustomobject[]]@(
-    @{ListItemText = '--not'; }
-    @{ListItemText = '--all'; }
-    @{ListItemText = '--branches'; }
-    @{ListItemText = '--tags'; }
-    @{ListItemText = '--remotes'; }
-    @{ListItemText = '--first-parent'; }
-    @{ListItemText = '--merges'; }
-    @{ListItemText = '--no-merges'; }
-    @{ListItemText = '--max-count='; }
-    @{ListItemText = '--max-age='; }
-    @{ListItemText = '--since='; }
-    @{ListItemText = '--after='; }
-    @{ListItemText = '--min-age='; }
-    @{ListItemText = '--until='; }
-    @{ListItemText = '--before='; }
-    @{ListItemText = '--min-parents='; }
-    @{ListItemText = '--max-parents='; }
-    @{ListItemText = '--no-min-parents'; }
-    @{ListItemText = '--no-max-parents'; }
-    @{ListItemText = '--alternate-refs'; }
-    @{ListItemText = '--ancestry-path'; }
-    @{ListItemText = '--author-date-order'; }
-    @{ListItemText = '--basic-regexp'; }
-    @{ListItemText = '--bisect'; }
-    @{ListItemText = '--boundary'; }
-    @{ListItemText = '--exclude-first-parent-only'; }
-    @{ListItemText = '--exclude-hidden'; }
-    @{ListItemText = '--extended-regexp'; }
-    @{ListItemText = '--fixed-strings'; }
-    @{ListItemText = '--grep-reflog'; }
-    @{ListItemText = '--ignore-missing'; }
-    @{ListItemText = '--left-only'; }
-    @{ListItemText = '--perl-regexp'; }
-    @{ListItemText = '--reflog'; }
-    @{ListItemText = '--regexp-ignore-case'; }
-    @{ListItemText = '--remove-empty'; }
-    @{ListItemText = '--right-only'; }
-    @{ListItemText = '--show-linear-break'; }
-    @{ListItemText = '--show-notes-by-default'; }
-    @{ListItemText = '--show-pulls'; }
-    @{ListItemText = '--since-as-filter'; }
-    @{ListItemText = '--single-worktree'; }
+$script:gitLogCommonOptions = @(
+    [pscustomobject]@{ListItemText = '--not'; }
+    [pscustomobject]@{ListItemText = '--all'; }
+    [pscustomobject]@{ListItemText = '--branches'; }
+    [pscustomobject]@{ListItemText = '--tags'; }
+    [pscustomobject]@{ListItemText = '--remotes'; }
+    [pscustomobject]@{ListItemText = '--first-parent'; }
+    [pscustomobject]@{ListItemText = '--merges'; }
+    [pscustomobject]@{ListItemText = '--no-merges'; }
+    [pscustomobject]@{ListItemText = '--max-count='; }
+    [pscustomobject]@{ListItemText = '--max-age='; }
+    [pscustomobject]@{ListItemText = '--since='; }
+    [pscustomobject]@{ListItemText = '--after='; }
+    [pscustomobject]@{ListItemText = '--min-age='; }
+    [pscustomobject]@{ListItemText = '--until='; }
+    [pscustomobject]@{ListItemText = '--before='; }
+    [pscustomobject]@{ListItemText = '--min-parents='; }
+    [pscustomobject]@{ListItemText = '--max-parents='; }
+    [pscustomobject]@{ListItemText = '--no-min-parents'; }
+    [pscustomobject]@{ListItemText = '--no-max-parents'; }
+    [pscustomobject]@{ListItemText = '--alternate-refs'; }
+    [pscustomobject]@{ListItemText = '--ancestry-path'; }
+    [pscustomobject]@{ListItemText = '--author-date-order'; }
+    [pscustomobject]@{ListItemText = '--basic-regexp'; }
+    [pscustomobject]@{ListItemText = '--bisect'; }
+    [pscustomobject]@{ListItemText = '--boundary'; }
+    [pscustomobject]@{ListItemText = '--exclude-first-parent-only'; }
+    [pscustomobject]@{ListItemText = '--exclude-hidden'; }
+    [pscustomobject]@{ListItemText = '--extended-regexp'; }
+    [pscustomobject]@{ListItemText = '--fixed-strings'; }
+    [pscustomobject]@{ListItemText = '--grep-reflog'; }
+    [pscustomobject]@{ListItemText = '--ignore-missing'; }
+    [pscustomobject]@{ListItemText = '--left-only'; }
+    [pscustomobject]@{ListItemText = '--perl-regexp'; }
+    [pscustomobject]@{ListItemText = '--reflog'; }
+    [pscustomobject]@{ListItemText = '--regexp-ignore-case'; }
+    [pscustomobject]@{ListItemText = '--remove-empty'; }
+    [pscustomobject]@{ListItemText = '--right-only'; }
+    [pscustomobject]@{ListItemText = '--show-linear-break'; }
+    [pscustomobject]@{ListItemText = '--show-notes-by-default'; }
+    [pscustomobject]@{ListItemText = '--show-pulls'; }
+    [pscustomobject]@{ListItemText = '--since-as-filter'; }
+    [pscustomobject]@{ListItemText = '--single-worktree'; }
 ) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
 # Options that go well for log and shortlog (not gitk)
-$script:gitLogShortlogOptions = [pscustomobject[]]@(
-    @{ListItemText = '--author='; }
-    @{ListItemText = '--grep='; }
-    @{ListItemText = '--all-match'; }
-    @{ListItemText = '--invert-grep'; }
-    @{ListItemText = '--exclude'; }
-    @{ListItemText = '--glob='; }
+$script:gitLogShortlogOptions = @(
+    [pscustomobject]@{ListItemText = '--author='; }
+    [pscustomobject]@{ListItemText = '--grep='; }
+    [pscustomobject]@{ListItemText = '--all-match'; }
+    [pscustomobject]@{ListItemText = '--invert-grep'; }
+    [pscustomobject]@{ListItemText = '--exclude'; }
+    [pscustomobject]@{ListItemText = '--glob='; }
 ) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
-$script:gitShortlogOptions = $gitLogCommonOptions + $gitLogShortlogOptions + [pscustomobject[]]@(
-    @{ListItemText = '--committer'; }
-    @{ListItemText = '--numbered'; }
-    @{ListItemText = '--summary'; }
-    @{ListItemText = '--email'; }
-    @{ListItemText = '--no-committer'; }
-    @{ListItemText = '--no-numbered'; }
-    @{ListItemText = '--no-summary'; }
-    @{ListItemText = '--no-email'; }
+$script:gitShortlogOptions = $gitLogCommonOptions + $gitLogShortlogOptions + @(
+    [pscustomobject]@{ListItemText = '--committer'; }
+    [pscustomobject]@{ListItemText = '--numbered'; }
+    [pscustomobject]@{ListItemText = '--summary'; }
+    [pscustomobject]@{ListItemText = '--email'; }
+    [pscustomobject]@{ListItemText = '--no-committer'; }
+    [pscustomobject]@{ListItemText = '--no-numbered'; }
+    [pscustomobject]@{ListItemText = '--no-summary'; }
+    [pscustomobject]@{ListItemText = '--no-email'; }
 ) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
 # Options accepted by log and show
-$script:gitLogShowOptions = [pscustomobject[]]@(
-    @{ListItemText = '--diff-merges'; }
-    @{ListItemText = '--diff-merges='; }
-    @{ListItemText = '--no-diff-merges'; }
-    @{ListItemText = '--dd'; }
-    @{ListItemText = '--remerge-diff'; }
-    @{ListItemText = '--encoding='; }
+$script:gitLogShowOptions = @(
+    [pscustomobject]@{ListItemText = '--diff-merges'; }
+    [pscustomobject]@{ListItemText = '--diff-merges='; }
+    [pscustomobject]@{ListItemText = '--no-diff-merges'; }
+    [pscustomobject]@{ListItemText = '--dd'; }
+    [pscustomobject]@{ListItemText = '--remerge-diff'; }
+    [pscustomobject]@{ListItemText = '--encoding='; }
 ) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
 $script:gitStashListOptions = $gitLogCommonOptions + $gitDiffCommonOptions | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
-$script:gitShowOpts = [pscustomobject[]]@(
-    @{ListItemText = '--pretty='; }
-    @{ListItemText = '--format='; }
-    @{ListItemText = '--abbrev-commit'; }
-    @{ListItemText = '--no-abbrev-commit'; }
-    @{ListItemText = '--oneline'; }
-    @{ListItemText = '--show-signature'; }
-    @{ListItemText = '--expand-tabs'; }
-    @{ListItemText = '--expand-tabs='; }
-    @{ListItemText = '--no-expand-tabs'; }
+$script:gitShowOpts = @(
+    [pscustomobject]@{ListItemText = '--pretty='; }
+    [pscustomobject]@{ListItemText = '--format='; }
+    [pscustomobject]@{ListItemText = '--abbrev-commit'; }
+    [pscustomobject]@{ListItemText = '--no-abbrev-commit'; }
+    [pscustomobject]@{ListItemText = '--oneline'; }
+    [pscustomobject]@{ListItemText = '--show-signature'; }
+    [pscustomobject]@{ListItemText = '--expand-tabs'; }
+    [pscustomobject]@{ListItemText = '--expand-tabs='; }
+    [pscustomobject]@{ListItemText = '--no-expand-tabs'; }
 ) + $gitLogShowOptions + $gitDiffCommonOptions | Sort-Object { $_.ListItemText -creplace '=', ' ' }
 
-$script:gitLogOptions = $gitLogCommonOptions + $gitLogShortlogOptions + $gitLogGitkOptions + $gitLogShowOptions + $gitDiffCommonOptions + [pscustomobject[]]@(
-    @{ListItemText = '--committer='; }
-    @{ListItemText = '--root'; }
-    @{ListItemText = '--topo-order'; }
-    @{ListItemText = '--date-order'; }
-    @{ListItemText = '--reverse'; }
-    @{ListItemText = '--follow'; }
-    @{ListItemText = '--full-diff'; }
-    @{ListItemText = '--abbrev-commit'; }
-    @{ListItemText = '--no-abbrev-commit'; }
-    @{ListItemText = '--abbrev='; }
-    @{ListItemText = '--relative-date'; }
-    @{ListItemText = '--date='; }
-    @{ListItemText = '--pretty='; }
-    @{ListItemText = '--format='; }
-    @{ListItemText = '--oneline'; }
-    @{ListItemText = '--show-signature'; }
-    @{ListItemText = '--cherry-mark'; }
-    @{ListItemText = '--cherry-pick'; }
-    @{ListItemText = '--graph'; }
-    @{ListItemText = '--decorate'; }
-    @{ListItemText = '--decorate='; }
-    @{ListItemText = '--no-decorate'; }
-    @{ListItemText = '--walk-reflogs'; }
-    @{ListItemText = '--no-walk'; }
-    @{ListItemText = '--no-walk='; }
-    @{ListItemText = '--do-walk'; }
-    @{ListItemText = '--parents'; }
-    @{ListItemText = '--children'; }
-    @{ListItemText = '--expand-tabs'; }
-    @{ListItemText = '--expand-tabs='; }
-    @{ListItemText = '--no-expand-tabs'; }
-    @{ListItemText = '--clear-decorations'; }
-    @{ListItemText = '--decorate-refs='; }
-    @{ListItemText = '--decorate-refs-exclude='; }
-    @{ListItemText = '--merge'; }
+$script:gitLogOptions = $gitLogCommonOptions + $gitLogShortlogOptions + $gitLogGitkOptions + $gitLogShowOptions + $gitDiffCommonOptions + @(
+    [pscustomobject]@{ListItemText = '--committer='; }
+    [pscustomobject]@{ListItemText = '--root'; }
+    [pscustomobject]@{ListItemText = '--topo-order'; }
+    [pscustomobject]@{ListItemText = '--date-order'; }
+    [pscustomobject]@{ListItemText = '--reverse'; }
+    [pscustomobject]@{ListItemText = '--follow'; }
+    [pscustomobject]@{ListItemText = '--full-diff'; }
+    [pscustomobject]@{ListItemText = '--abbrev-commit'; }
+    [pscustomobject]@{ListItemText = '--no-abbrev-commit'; }
+    [pscustomobject]@{ListItemText = '--abbrev='; }
+    [pscustomobject]@{ListItemText = '--relative-date'; }
+    [pscustomobject]@{ListItemText = '--date='; }
+    [pscustomobject]@{ListItemText = '--pretty='; }
+    [pscustomobject]@{ListItemText = '--format='; }
+    [pscustomobject]@{ListItemText = '--oneline'; }
+    [pscustomobject]@{ListItemText = '--show-signature'; }
+    [pscustomobject]@{ListItemText = '--cherry-mark'; }
+    [pscustomobject]@{ListItemText = '--cherry-pick'; }
+    [pscustomobject]@{ListItemText = '--graph'; }
+    [pscustomobject]@{ListItemText = '--decorate'; }
+    [pscustomobject]@{ListItemText = '--decorate='; }
+    [pscustomobject]@{ListItemText = '--no-decorate'; }
+    [pscustomobject]@{ListItemText = '--walk-reflogs'; }
+    [pscustomobject]@{ListItemText = '--no-walk'; }
+    [pscustomobject]@{ListItemText = '--no-walk='; }
+    [pscustomobject]@{ListItemText = '--do-walk'; }
+    [pscustomobject]@{ListItemText = '--parents'; }
+    [pscustomobject]@{ListItemText = '--children'; }
+    [pscustomobject]@{ListItemText = '--expand-tabs'; }
+    [pscustomobject]@{ListItemText = '--expand-tabs='; }
+    [pscustomobject]@{ListItemText = '--no-expand-tabs'; }
+    [pscustomobject]@{ListItemText = '--clear-decorations'; }
+    [pscustomobject]@{ListItemText = '--decorate-refs='; }
+    [pscustomobject]@{ListItemText = '--decorate-refs-exclude='; }
+    [pscustomobject]@{ListItemText = '--merge'; }
 ) | Sort-Object { $_.ListItemText -creplace '=', ' ' }
