@@ -16,6 +16,12 @@ Run the command below. This module works on both Windows PowerShell and the late
 Install-Module git-completion
 ```
 
+In your `$PROPFILE` add the following line:
+
+```powershell
+Import-Module git-completion
+```
+
 ## Usage
 
 ![image](https://github.com/user-attachments/assets/6d702fe0-5084-4dbf-8b62-3e7c99a6b087)
