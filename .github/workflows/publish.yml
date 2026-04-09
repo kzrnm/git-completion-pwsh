@@ -21,9 +21,10 @@ jobs:
       is-prerelease: ${{ steps.get-version.outputs.is-prerelease }}
       new-tag: ${{ steps.is-new-version.outputs.new-tag }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Update git command
         uses: ./.github/actions/latest-git
+        continue-on-error: true
       - name: Get Module Version
         id: get-version
         shell: pwsh
@@ -41,7 +42,7 @@ jobs:
           Write-Output "version=$version$prerelease" | Tee-Object "$env:GITHUB_OUTPUT" -Append
 
       - name: Check tag
-        uses: mukunku/tag-exists-action@v1.6.0
+        uses: mukunku/tag-exists-action@v1.7.0
         id: check-tag
         with:
           tag: v${{ steps.get-version.outputs.version }}
