@@ -288,10 +288,6 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                     'origin/develop',
                     'initial',
                     'zeta',
-                    @{
-                        ListItemText = 'HEAD';
-                        ToolTip      = 'HEAD';
-                    },
                     'develop' | ForEach-Object {
                         switch ($_) {
                             { $_ -isnot [string] } { $_ }
@@ -369,10 +365,6 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 'origin/develop',
                 'initial',
                 'zeta',
-                @{
-                    ListItemText = 'HEAD';
-                    ToolTip      = 'HEAD';
-                },
                 'develop' | ForEach-Object {
                     switch ($_) {
                         { $_ -isnot [string] } { $_ }

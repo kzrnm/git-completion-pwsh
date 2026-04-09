@@ -200,7 +200,7 @@ function buildFailedMessage {
             ($a.CompletionText -ne $e.CompletionText) -or 
             ($a.ListItemText -ne $e.ListItemText) -or 
             ($a.ToolTip -ne $e.ToolTip) -or 
-            ($a.ResultType -ne [System.Management.Automation.CompletionResultType]$e.ResultType)
+            ($a.ResultType -ne [CompletionResultType]$e.ResultType)
         ) {
             $head = "At index:$i,expected "
             $second = "but actual "
