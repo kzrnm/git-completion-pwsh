@@ -150,6 +150,10 @@ function gitCompleteRemoteOrRefspec {
     }
 }
 
+$Script:ListItemTextFunc = [Func[System.Object, string]] {
+    param($c) return $c.ListItemText
+}
+
 function gitCompleteRefs {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'matchRef')]
     [CmdletBinding(PositionalBinding = $false)]
@@ -165,7 +169,7 @@ function gitCompleteRefs {
         $ResultType = [CompletionResultType]::ParameterValue
     )
 
-    switch ($Mode) {
+    [CompletionResult[]]$results = switch ($Mode) {
         'refs' {
             $matchRef = $false
             $refs = foreach ($r in @(gitRefs -Current $Current -Remote $Remote)) {
@@ -211,8 +215,13 @@ function gitCompleteRefs {
         }
     }
 
+    $exclude = $null
+    if ($null -ne $results) {
+        $results
+        $exclude = [System.Linq.Enumerable]::Select($results, $Script:ListItemTextFunc)
+    }
     if ($dwim) {
-        gitDwimRemoteHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType
+        gitDwimRemoteHeads -Current $Current | completeList -Prefix $Prefix -Suffix $Suffix -ResultType $ResultType -Exclude $exclude
     }
 }
 

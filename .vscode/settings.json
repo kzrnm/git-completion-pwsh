@@ -1,5 +1,5 @@
 {
-    "powershell.powerShellDefaultVersion": "Windows PowerShell (x64)",
+    // "powershell.powerShellDefaultVersion": "Windows PowerShell (x64)",
     "terminal.integrated.env.linux": {
         "GIT_COMPLETION_SHOW_ALL_COMMANDS": "1"
     },

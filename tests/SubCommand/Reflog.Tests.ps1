@@ -146,18 +146,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 },
                 @{
                     Line     = ' e';
-                    Expected = @(
-                        @{
-                            ListItemText = 'exists';
-                            ToolTip      = "checks whether a ref has a reflog";
-                            IsSubcommand = $true;
-                        },
-                        @{
-                            ListItemText = 'expire';
-                            ToolTip      = "prunes older reflog entries";
-                            IsSubcommand = $true;
-                        } | ConvertTo-Completion -ResultType ParameterName
-                    )
+                    Expected = @{
+                        ListItemText = 'exists';
+                        ToolTip      = "checks whether a ref has a reflog";
+                        IsSubcommand = $true;
+                    },
+                    @{
+                        ListItemText = 'expire';
+                        ToolTip      = "prunes older reflog entries";
+                        IsSubcommand = $true;
+                    } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{
                     Line     = ' o';
