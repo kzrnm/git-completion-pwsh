@@ -16,7 +16,7 @@ Run the command below. This module works on both Windows PowerShell and the late
 Install-Module git-completion
 ```
 
-In your `$PROPFILE` add the following line:
+In your `$PROFILE` add the following line:
 
 ```powershell
 Import-Module git-completion
