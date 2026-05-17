@@ -13,7 +13,8 @@ Register-ArgumentCompleter -CommandName gitk -Native -ScriptBlock {
     return (Complete-Gitk -CommandAst $CommandAst -CursorPosition $CursorPosition)
 }
 
-Register-ArgumentCompleter -CommandName git -Native -ScriptBlock {
+$gitNames = @('git') + (Get-Alias -Definition git, git.exe -ErrorAction SilentlyContinue).Name | Select-Object -Unique
+Register-ArgumentCompleter -CommandName $gitNames -Native -ScriptBlock {
     param($wordToComplete, $CommandAst, $CursorPosition)
     return (Complete-Git -CommandAst $CommandAst -CursorPosition $CursorPosition)
 }
