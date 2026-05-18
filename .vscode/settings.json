@@ -66,5 +66,6 @@
             "color": "terminal.ansiGreen",
             "icon": "terminal-ubuntu"
         }
-    }
+    },
+    "terminal.integrated.enablePersistentSessions": false
 }
