@@ -763,6 +763,7 @@
         "submodule.*.branch" { 'The remote branch name for a submodule, used by git submodule update --remote' }
         "submodule.*.fetchRecurseSubmodules" { 'This option can be used to control recursive fetching of this submodule' }
         "submodule.*.ignore" { 'Defines under what circumstances "git status" and the diff family show a submodule as modified' }
+        # TODO: "submodule.*.gitdir" { }
         "submodule.*.active" { 'Boolean value indicating if the submodule is of interest to git commands' }
         "submodule.active" { "A repeated field which contains a pathspec used to match against a submodule’s path to determine if the submodule is of interest to git commands" }
         "submodule.recurse" { 'A boolean indicating if commands should enable the --recurse-submodules option by default' }

@@ -1146,6 +1146,10 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                         ToolTip        = "This option can be used to control recursive fetching of this submodule";
                     },
                     @{
+                        CompletionText = "submodule.posh.gitdir=";
+                        ListItemText   = "submodule.posh.gitdir";
+                    },
+                    @{
                         CompletionText = "submodule.posh.ignore=";
                         ListItemText   = "submodule.posh.ignore";
                         ToolTip        = 'Defines under what circumstances "git status" and the diff family show a submodule as modified';
