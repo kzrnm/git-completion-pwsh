@@ -2,7 +2,7 @@ name: Update latest git command
 description: Update git command to the latest version
 branding:
   icon: git-branch
-  color: black
+  color: gray-dark
 author: kzrnm
 runs:
   using: composite

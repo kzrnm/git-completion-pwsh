@@ -21,7 +21,7 @@ jobs:
       is-prerelease: ${{ steps.get-version.outputs.is-prerelease }}
       new-tag: ${{ steps.is-new-version.outputs.new-tag }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Update git command
         uses: ./.github/actions/latest-git
         continue-on-error: true
@@ -77,7 +77,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Push tag
         id: tag-version
         run: |
@@ -99,7 +99,6 @@ jobs:
         run: |
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           Install-Module PowerShellGet -MinimumVersion " 3.0.23-beta23" -AllowPrerelease -Repository PSGallery -AllowClobber -Force
-          Get-PSResourceRepository PSGallery # https://github.com/PowerShell/PSResourceGet/issues/1806
 
       - name: Publish
         shell: pwsh
