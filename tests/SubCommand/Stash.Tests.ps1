@@ -288,6 +288,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         ToolTip      = "attempt to recreate the index";
                     },
                     @{
+                        ListItemText = '--label-ours=';
+                        ToolTip      = "label for the upstream side in conflict markers";
+                    },
+                    @{
+                        ListItemText = '--label-theirs=';
+                        ToolTip      = "label for the stashed side in conflict markers";
+                    },
+                    @{
+                        ListItemText = '--label-base=';
+                        ToolTip      = "label for the base in diff3 conflict markers";
+                    },
+                    @{
                         ListItemText = '--no-quiet';
                         ToolTip      = "[NO] be quiet, only report errors";
                     },
@@ -313,6 +325,18 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                     @{
                         ListItemText = '--no-index';
                         ToolTip      = "[NO] attempt to recreate the index";
+                    },
+                    @{
+                        ListItemText = '--no-label-ours';
+                        ToolTip      = "[NO] label for the upstream side in conflict markers";
+                    },
+                    @{
+                        ListItemText = '--no-label-theirs';
+                        ToolTip      = "[NO] label for the stashed side in conflict markers";
+                    },
+                    @{
+                        ListItemText = '--no-label-base';
+                        ToolTip      = "[NO] label for the base in diff3 conflict markers";
                     } | ConvertTo-Completion -ResultType ParameterName
                 },
                 @{

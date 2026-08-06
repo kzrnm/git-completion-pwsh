@@ -200,10 +200,6 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
         BeforeAll {
             New-Item '.git/rebase-apply' -ItemType Directory
         }
-        BeforeAll {
-            New-Item '.git/rebase-apply' -ItemType Directory
-        }
-
         It 'ShortOptions' {
             $expected = @{
                 ListItemText = '-3';

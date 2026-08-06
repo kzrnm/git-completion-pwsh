@@ -353,6 +353,7 @@ $script:gitLogCommonOptions = @(
     [pscustomobject]@{ListItemText = '--merges'; }
     [pscustomobject]@{ListItemText = '--no-merges'; }
     [pscustomobject]@{ListItemText = '--max-count='; }
+    [pscustomobject]@{ListItemText = '--max-count-oldest='; }
     [pscustomobject]@{ListItemText = '--max-age='; }
     [pscustomobject]@{ListItemText = '--since='; }
     [pscustomobject]@{ListItemText = '--after='; }
