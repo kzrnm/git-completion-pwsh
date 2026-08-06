@@ -100,10 +100,29 @@ jobs:
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           Install-Module PowerShellGet -MinimumVersion " 3.0.23-beta23" -AllowPrerelease -Repository PSGallery -AllowClobber -Force
 
+      - name: Merge scripts
+        shell: pwsh
+        run: |
+          tools/dist.ps1 -TagName "v${{ needs.get-version.outputs.version }}"
+          if(Complete-Git -Words @("git","clone","--b") | Where-Object CompletionText -EQ '--bare') {
+            echo 'Success!'
+          } else {
+            throw 'Failed to dist.ps1'
+          }
+
+      - name: Test packed module
+        shell: pwsh
+        run: |
+          Invoke-Pester -CI
+          if ((Get-Item git-completion/git-completion.psd1).FullName -ne (Get-Module git-completion).Path) {
+            throw 'The test target is not packed module'
+          }
+        env:
+          TestPackedModule: 1
+
       - name: Publish
         shell: pwsh
         run: |
           $NUGET_KEY = "${{ secrets.PWSH_NUGET_KEY  }}"
-          tools/dist.ps1 -TagName "v${{ needs.get-version.outputs.version }}"
           Import-Module PowerShellGet
           Publish-PSResource -Path "./$env:Module" -APIKey "$NUGET_KEY" -Repository PSGallery
