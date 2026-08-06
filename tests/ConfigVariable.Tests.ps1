@@ -1035,6 +1035,16 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                         ToolTip        = "If true, pushing to this remote will automatically behave as if the --mirror option was given on the command line";
                     },
                     @{
+                        CompletionText = "remote.pwsh.negotiationInclude=";
+                        ListItemText   = "remote.pwsh.negotiationInclude";
+                        ToolTip        = 'The client advertises a list of commits that exist locally when `git fetch`';
+                    },
+                    @{
+                        CompletionText = "remote.pwsh.negotiationRestrict=";
+                        ListItemText   = "remote.pwsh.negotiationRestrict";
+                        ToolTip        = 'Restrict the commits advertised as "have" lines when `git fetch`';
+                    },
+                    @{
                         CompletionText = "remote.pwsh.partialclonefilter=";
                         ListItemText   = "remote.pwsh.partialclonefilter";
                         ToolTip        = "The filter that will be applied when fetching from this promisor remote";

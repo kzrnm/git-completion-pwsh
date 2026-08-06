@@ -661,6 +661,8 @@
         "remote.*.fetch" { 'The default set of "refspec" for git-fetch' }
         "remote.*.followRemoteHEAD" { 'How git-fetch should handle updates to remotes/<name>/HEAD' }
         "remote.*.push" { 'The default set of "refspec" for git-push' }
+        "remote.*.negotiationInclude" { 'The client advertises a list of commits that exist locally when `git fetch`' }
+        "remote.*.negotiationRestrict" { 'Restrict the commits advertised as "have" lines when `git fetch`' }
         "remote.*.mirror" { "If true, pushing to this remote will automatically behave as if the --mirror option was given on the command line" }
         "remote.*.serverOption" { 'The default set of server options used when fetching from this remote' }
         "remote.*.skipDefaultUpdate" { "If true, this remote will be skipped by default when updating using git-fetch or the update subcommand of git-remote" }
