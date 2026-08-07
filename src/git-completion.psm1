@@ -6,7 +6,7 @@ foreach ($f in (Get-ChildItem -Recurse "$PSScriptRoot")) {
     }
 }
 
-Export-ModuleMember -Variable 'GitCompletionSettings'
+#### Lines above this point are for development only and are not included in releases. ####
 
 Register-ArgumentCompleter -CommandName gitk -Native -ScriptBlock {
     param($wordToComplete, $CommandAst, $CursorPosition)
@@ -18,3 +18,5 @@ Register-ArgumentCompleter -CommandName $gitNames -Native -ScriptBlock {
     param($wordToComplete, $CommandAst, $CursorPosition)
     return (Complete-Git -CommandAst $CommandAst -CursorPosition $CursorPosition)
 }
+
+Export-ModuleMember -Variable 'GitCompletionSettings'

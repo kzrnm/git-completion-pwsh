@@ -20,6 +20,11 @@ Import-Module "$PSScriptRoot/TestModule.psm1" -DisableNameChecking -Force
 
 BeforeAll {
     Get-Module git-completion, TestModule | Remove-Module
-    Import-Module "$PSScriptRoot/../src/git-completion.psd1" -Force
+    if ($env:TestPackedModule) {
+        Import-Module "$PSScriptRoot/../${env:Module}/${env:Module}.psd1" -Force
+    }
+    else {
+        Import-Module "$PSScriptRoot/../src/git-completion.psd1" -Force
+    }
     Import-Module "$PSScriptRoot/TestModule.psm1" -DisableNameChecking -Force
 }
