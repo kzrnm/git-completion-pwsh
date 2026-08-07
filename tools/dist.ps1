@@ -14,7 +14,7 @@ if (!$env:Module) {
 
 $Module = $env:Module
 
-mkdir $Module -Force
+New-Item $Module -ItemType Directory -Force
 
 Get-ChildItem * -File -Exclude .gitignore | Copy-Item -Destination $Module
 (Get-Content "./src/git-completion.psd1" -Raw).Replace('blob/naub', "blob/$TagName") | Out-File -Encoding utf8NoBOM -FilePath "./$module/$module.psd1"
