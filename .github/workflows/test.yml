@@ -15,10 +15,28 @@ on:
         required: false
         type: boolean
         default: false
+    outputs:
+      ubuntu:
+        description: Test result of ubuntu
+        value: ${{ jobs.test.outputs.ubuntu}}
+      macos:
+        description: Test result of macos
+        value: ${{ jobs.test.outputs.macos}}
+      windows:
+        description: Test result of windows
+        value: ${{ jobs.test.outputs.windows}}
+      windows-powershell:
+        description: Test result of Windows PowerShell
+        value: ${{ jobs.test.outputs.windows-powershell }}
 env:
   Module: git-completion
 jobs:
   test:
+    outputs:
+      ubuntu: ${{ steps.result.outputs.ubuntu }}
+      macos: ${{ steps.result.outputs.macos }}
+      windows: ${{ steps.result.outputs.windows }}
+      windows-powershell: ${{ steps.result.outputs.windows-powershell }}
     strategy:
       fail-fast: ${{ github.event_name != 'pull_request' }}
       matrix:
@@ -35,12 +53,28 @@ jobs:
         uses: ./.github/actions/latest-git
         continue-on-error: true
       - name: Run Pester
+        id: pwsh
         if: matrix.shell == 'pwsh'
         shell: pwsh
         continue-on-error: ${{ inputs.continue-on-error }}
         run: Invoke-Pester -CI
       - name: Run Pester(Windows PowerShell)
+        id: powershell
         if: matrix.shell == 'powershell'
         shell: powershell
         continue-on-error: ${{ inputs.continue-on-error }}
         run: Invoke-Pester -CI
+      - name: Write output
+        shell: bash
+        id: result
+        run: |
+          echo "${MATRIX}=${{steps.pwsh.outcome}}" | tee -a "$GITHUB_OUTPUT"
+        env:
+          MATRIX: |-
+            ${{ case(
+              matrix.shell == 'powershell', 'windows-powershell',
+              startsWith(matrix.os, 'ubuntu'), 'ubuntu',
+              startsWith(matrix.os, 'macos'), 'macos',
+              startsWith(matrix.os, 'windows'), 'windows',
+              'unknown'
+            ) }}
