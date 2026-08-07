@@ -78,21 +78,16 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v7
-      - name: Push tag
-        id: tag-version
-        run: |
-          tag="${{ needs.get-version.outputs.new-tag }}"
-          git tag "$tag"
-          git push origin "$tag"
-
       - name: Create release
         uses: ncipollo/release-action@v1
         id: create-release
         with:
+          commit: ${{ github.sha }}
           tag: ${{ needs.get-version.outputs.new-tag }}
           name: Version ${{ needs.get-version.outputs.version }}
           body: ${{ github.server_url }}/${{ github.repository }}/blob/${{ needs.get-version.outputs.new-tag }}/CHANGELOG.md
           prerelease: ${{ needs.get-version.outputs.is-prerelease }}
+          generateReleaseNotes: true
 
       - name: Install-Module PowerShellGet
         shell: pwsh
