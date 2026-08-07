@@ -13,7 +13,7 @@ class GitCompletionSettings {
     [string[]] $ExcludeCommands;
 }
 
-[GitCompletionSettings]$script:GitCompletionSettings = @{
+$GitCompletionSettingsDefault = @{
     ShowAllOptions     = ($env:GIT_COMPLETION_SHOW_ALL -and ($env:GIT_COMPLETION_SHOW_ALL -ne '0'));
     ShowAllCommand     = ($env:GIT_COMPLETION_SHOW_ALL_COMMANDS -and ($env:GIT_COMPLETION_SHOW_ALL_COMMANDS -ne '0'));
     IgnoreCase         = ($env:GIT_COMPLETION_IGNORE_CASE -and ($env:GIT_COMPLETION_IGNORE_CASE -ne '0'));
@@ -22,6 +22,15 @@ class GitCompletionSettings {
     AdditionalCommands = [string[]]@()
     ExcludeCommands    = [string[]]@()
 }
+if ($GitCompletionSettings) {
+    foreach ($key in @($GitCompletionSettingsDefault.Keys)) {
+        if ($null -ne $GitCompletionSettings."$key") {
+            $GitCompletionSettingsDefault."$key" = $GitCompletionSettings."$key"
+        }
+    }
+}
+
+[GitCompletionSettings]$script:GitCompletionSettings = $GitCompletionSettingsDefault
 
 function listCommands {
     param()
