@@ -19,6 +19,9 @@ jobs:
       - name: Update git command
         uses: ./.github/actions/latest-git
         continue-on-error: true
+      - name: Install Pester
+        shell: pwsh
+        run: Install-Module -Name Pester -Force -SkipPublisherCheck -AllowClobber -MinimumVersion 6.0.0
       - name: Get Module Version
         id: get-version
         shell: pwsh
