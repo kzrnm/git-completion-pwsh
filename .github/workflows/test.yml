@@ -52,6 +52,14 @@ jobs:
       - name: Update git command
         uses: ./.github/actions/latest-git
         continue-on-error: true
+      - name: Install Pester
+        shell: pwsh
+        if: matrix.shell == 'pwsh'
+        run: Install-Module -Name Pester -Force -SkipPublisherCheck -AllowClobber -MinimumVersion 6.0.0
+      - name: Install Pester(Windows PowerShell)
+        shell: powershell
+        if: matrix.shell == 'powershell'
+        run: Install-Module -Name Pester -Force -SkipPublisherCheck -AllowClobber -MinimumVersion 6.0.0
       - name: Run Pester
         id: pwsh
         if: matrix.shell == 'pwsh'

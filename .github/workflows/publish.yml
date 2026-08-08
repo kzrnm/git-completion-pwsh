@@ -19,6 +19,9 @@ jobs:
       - name: Update git command
         uses: ./.github/actions/latest-git
         continue-on-error: true
+      - name: Install Pester
+        shell: pwsh
+        run: Install-Module -Name Pester -Force -SkipPublisherCheck -AllowClobber -MinimumVersion 6.0.0
       - name: Get Module Version
         id: get-version
         shell: pwsh
@@ -89,6 +92,11 @@ jobs:
       - name: Test packed module
         shell: pwsh
         run: |
+          Register-ArgumentCompleter -CommandName git -Native -ScriptBlock {
+              param($wordToComplete, $CommandAst, $CursorPosition)
+              return (Complete-Git -CommandAst $CommandAst -CursorPosition $CursorPosition)
+          }
+
           $result = Invoke-Pester -PassThru -ErrorAction SilentlyContinue
           $failedRatio = ($result.FailedCount / $result.TotalCount)
           if ($failedRatio -gt 0.01) {

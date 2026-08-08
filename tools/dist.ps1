@@ -44,13 +44,4 @@ foreach ($f in $files) {
     $f.EndBlock.ToString() >> "$psm1"
 }
 
-$skip = $true
-foreach ($line in (Get-Content "./src/git-completion.psm1")) {
-    if ($skip) {
-        if ($line -like '*Lines above this point are for development only*') {
-            $skip = $false
-        }
-        continue 
-    }
-    $line >> "$psm1"
-}
+Get-Content ./src/git-completion.psm1 | Select-String Export >> "$psm1"

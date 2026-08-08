@@ -16,9 +16,53 @@ Run the command below. This module works on both Windows PowerShell and the late
 Install-Module git-completion
 ```
 
-In your `$PROFILE` add the following line:
+In your `$PROFILE` add the following code:
 
 ```powershell
+Register-ArgumentCompleter -CommandName gitk -Native -ScriptBlock {
+    param($wordToComplete, $CommandAst, $CursorPosition)
+    return (Complete-Gitk -CommandAst $CommandAst -CursorPosition $CursorPosition)
+}
+Register-ArgumentCompleter -CommandName git -Native -ScriptBlock {
+    param($wordToComplete, $CommandAst, $CursorPosition)
+    return (Complete-Git -CommandAst $CommandAst -CursorPosition $CursorPosition)
+}
+```
+
+### ⚠ Notes for upgrading from git-completion v1 to v2
+
+In git-completion v1, importing the module automatically enabled Git completion:
+
+```powershell
+Import-Module git-completion
+```
+
+Starting with v2, you must explicitly register the argument completer by calling `Register-ArgumentCompleter` yourself.
+
+This change was made to improve performance.
+
+### Setup Settings
+
+Values defined in `$GitCompletionSettings` before `Import-Module` are respected.
+
+```powershell
+$env:GIT_COMPLETION_IGNORE_CASE = '1'
+$GitCompletionSettings = @{ ExcludeCommands = @('send-email'); ShowAllCommand = 1 }
+Import-Module git-completion
+Write-Output $GitCompletionSettings
+# ShowAllOptions     : False
+# ShowAllCommand     : True
+# IgnoreCase         : True
+# CheckoutNoGuess    : False
+# AdditionalCommands : {}
+# ExcludeCommands    : {send-email}
+```
+
+However, note that `$GitCompletionSettings` is not defined before `Import-Module`.
+
+```powershell
+# Does not work
+$GitCompletionSettings.ShowAllOptions = $true
 Import-Module git-completion
 ```
 
