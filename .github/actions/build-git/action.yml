@@ -1,0 +1,66 @@
+name: Update latest git command
+description: Update git command to the latest version
+branding:
+  icon: activity
+  color: gray-dark
+author: kzrnm
+runs:
+  using: composite
+  steps:
+    - name: Resolve latest git tag
+      id: git-tag
+      shell: bash
+      run: echo "tag=$(gh api repos/git/git/tags --jq '.[].name' | grep -v -- - | head -n 1)" | tee -a "$GITHUB_OUTPUT"
+      env:
+        GH_TOKEN: ${{ github.token }}
+    - uses: actions/checkout@v7
+      with:
+        repository: git/git
+        ref: ${{ steps.git-tag.outputs.tag }}
+        path: .git.dev
+
+    - name: MacOS - Setup build tools
+      if: runner.os == 'macOS'
+      run: echo 'Do nothing'
+      shell: bash
+
+    - name: Windows - Setup build tools
+      if: runner.os == 'Windows'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: true
+        install: >-
+          git
+          make
+          mingw-w64-x86_64-pcre2
+          mingw-w64-x86_64-diffutils
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-openssl
+          mingw-w64-x86_64-curl
+          mingw-w64-x86_64-expat
+
+    - name: Linux - Setup build tools
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcurl4-openssl-dev libssl-dev libexpat1-dev gettext -y
+      shell: bash
+
+    - name: Build Git (Windows)
+      shell: msys2 {0}
+      if: runner.os == 'Windows'
+      working-directory: .git.dev
+      run: |
+        make
+        make install
+        echo "$HOME/bin" >> "$GITHUB_PATH"
+
+    - name: Build Git
+      if: runner.os != 'Windows'
+      shell: bash
+      working-directory: .git.dev
+      run: |
+        make
+        make install
+        echo "$HOME/bin" >> "$GITHUB_PATH"
