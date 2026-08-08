@@ -28,6 +28,7 @@ if ($GitCompletionSettings) {
             $GitCompletionSettingsDefault."$key" = $GitCompletionSettings."$key"
         }
     }
+    Remove-Variable 'GitCompletionSettings' -Scope Global -Force -ErrorAction SilentlyContinue
 }
 
 [GitCompletionSettings]$script:GitCompletionSettings = $GitCompletionSettingsDefault
