@@ -14,16 +14,12 @@ runs:
 
     - name: Windows - Install latest git
       if: runner.os == 'Windows'
-      run: choco upgrade git -y
+      run: winget install --id Git.Git -e --source winget --silent --disable-interactivity --accept-source-agreements --accept-package-agreements || true
       shell: bash
 
     - name: Linux - Install latest git
+      uses: ./.github/actions/build-git
       if: runner.os == 'Linux'
-      run: |
-        sudo add-apt-repository ppa:git-core/ppa -y
-        sudo apt-get update
-        sudo apt-get install git -y
-      shell: bash
 
     - name: Check git version
       run: git --version | tee $GITHUB_STEP_SUMMARY

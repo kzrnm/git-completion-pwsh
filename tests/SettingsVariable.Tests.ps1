@@ -2,14 +2,11 @@ Describe 'GitCompletionSettings' {
     BeforeAll {
         Get-ChildItem Env:\GIT_COMPLETION* | Rename-Item -NewName { "Back" + $_.Name }
 
-        function Import-GitCompletion {
-            param ([switch]$Packed)
-            if ($Packed) {
-                Import-Module "$PSScriptRoot/../${env:Module}/${env:Module}.psd1" -Force
-            }
-            else {
-                Import-Module "$PSScriptRoot/../src/git-completion.psd1" -Force
-            }
+        if ($Packed) {
+            $script:GitCompletionModule = "$PSScriptRoot/../${env:Module}/${env:Module}.psd1"
+        }
+        else {
+            $script:GitCompletionModule = "$PSScriptRoot/../src/git-completion.psd1"
         }
     }
     AfterAll {
@@ -24,7 +21,7 @@ Describe 'GitCompletionSettings' {
         (Get-Variable GitCompletionSettings0 -ErrorAction SilentlyContinue) | Should-BeNull
     }
     It 'Default' {
-        Import-GitCompletion -Packed:([bool]$env:TestPackedModule)
+        Import-Module "$GitCompletionModule" -Force
         $GitCompletionSettings.psobject.Properties | ForEach-Object { Set-Variable 'h' @{} } { $h[$_.name] = $_.Value } { 
             $h
         } | Should-BeEquivalent @{
@@ -42,7 +39,7 @@ Describe 'GitCompletionSettings' {
         $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = 1
         $env:GIT_COMPLETION_IGNORE_CASE = 1
         $env:GIT_COMPLETION_CHECKOUT_NO_GUESS = 1
-        Import-GitCompletion -Packed:([bool]$env:TestPackedModule)
+        Import-Module "$GitCompletionModule" -Force
         $GitCompletionSettings.psobject.Properties | ForEach-Object { Set-Variable 'h' @{} } { $h[$_.name] = $_.Value } { 
             $h
         } | Should-BeEquivalent @{
@@ -60,7 +57,7 @@ Describe 'GitCompletionSettings' {
         $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = 0
         $env:GIT_COMPLETION_IGNORE_CASE = 0
         $env:GIT_COMPLETION_CHECKOUT_NO_GUESS = 0
-        Import-GitCompletion -Packed:([bool]$env:TestPackedModule)
+        Import-Module "$GitCompletionModule" -Force
         $GitCompletionSettings.psobject.Properties | ForEach-Object { Set-Variable 'h' @{} } { $h[$_.name] = $_.Value } { 
             $h
         } | Should-BeEquivalent @{
@@ -84,7 +81,7 @@ Describe 'GitCompletionSettings' {
         $env:GIT_COMPLETION_SHOW_ALL_COMMANDS = 1
         $env:GIT_COMPLETION_IGNORE_CASE = 1
         $env:GIT_COMPLETION_CHECKOUT_NO_GUESS = 1
-        Import-GitCompletion -Packed:([bool]$env:TestPackedModule)
+        Import-Module "$GitCompletionModule" -Force
         $GitCompletionSettings.psobject.Properties | ForEach-Object { Set-Variable 'h' @{} } { $h[$_.name] = $_.Value } { 
             $h
         } | Should-BeEquivalent @{

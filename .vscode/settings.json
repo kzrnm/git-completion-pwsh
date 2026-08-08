@@ -17,7 +17,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$false; Get-Module git-completion | Remove-Module; $GitCompletionSettings=@{ExcludeCommands=@('commit-graph')}; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$false; Get-Module git-completion | Remove-Module; $GitCompletionSettings=@{ExcludeCommands=@('commit-tree', 'commit-graph')}; Import-Module ./src/git-completion.psd1 -Force"
             ]
         }
     },
@@ -29,7 +29,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$false; Get-Module git-completion | Remove-Module; $GitCompletionSettings=@{ExcludeCommands=@('commit-graph')}; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$false; Get-Module git-completion | Remove-Module; $GitCompletionSettings=@{ExcludeCommands=@('commit-tree', 'commit-graph')}; Import-Module ./src/git-completion.psd1 -Force"
             ]
         }
     },
@@ -40,7 +40,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$false; Get-Module git-completion | Remove-Module; $GitCompletionSettings=@{ExcludeCommands=@('commit-graph')}; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; $SkipHeavyTest=$false; Get-Module git-completion | Remove-Module; $GitCompletionSettings=@{ExcludeCommands=@('commit-tree', 'commit-graph')}; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "icon": "terminal-powershell"
         },
@@ -49,7 +49,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$ErrorActionPreference = 'Stop'; Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Get-Module git-completion | Remove-Module; $GitCompletionSettings=@{ExcludeCommands=@('commit-graph')}; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Get-Module git-completion | Remove-Module; $GitCompletionSettings=@{ExcludeCommands=@('commit-tree', 'commit-graph')}; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "color": "terminal.ansiCyan",
             "icon": "terminal-powershell"
@@ -61,7 +61,7 @@
                 "pwsh",
                 "-NoExit",
                 "-Command",
-                "$ErrorActionPreference = 'Stop'; Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Get-Module git-completion | Remove-Module; $GitCompletionSettings=@{ExcludeCommands=@('commit-graph')}; Import-Module ./src/git-completion.psd1 -Force"
+                "$ErrorActionPreference = 'Stop'; Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete; Get-Module git-completion | Remove-Module; $GitCompletionSettings=@{ExcludeCommands=@('commit-tree', 'commit-graph')}; Import-Module ./src/git-completion.psd1 -Force"
             ],
             "color": "terminal.ansiGreen",
             "icon": "terminal-ubuntu"
