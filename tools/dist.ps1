@@ -23,7 +23,7 @@ $psm1 = "./$module/$module.psm1"
 
 '# Copyright (C) 2024 kzrnm
 # Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
-# Distributed under the GNU General Public License, version 2.0.' > "$psm1"
+# Distributed under the GNU General Public License, version 2.0.' | Out-File -Encoding utf8BOM -FilePath "$psm1"
 
 $files = Get-ChildItem -Recurse "./src/" | Where-Object Extension -EQ '.ps1' | ForEach-Object {
     [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$null, [ref]$null) 
@@ -36,12 +36,12 @@ if ($files.UsingStatements.Name.StringConstantType -ne ([System.Management.Autom
     throw '`using namespace {Name}` must be BareWord'
 }
 
-$files.UsingStatements.Name.Value | Sort-Object -Unique | ForEach-Object { "using namespace $_;" } >> "$psm1"
+$files.UsingStatements.Name.Value | Sort-Object -Unique | ForEach-Object { "using namespace $_;" } | Out-File -Append -FilePath "$psm1"
 
-'$ErrorActionPreference = ''Continue''' >> "$psm1"
+'$ErrorActionPreference = ''Continue''' | Out-File -Append -FilePath "$psm1"
 
 foreach ($f in $files) {
-    $f.EndBlock.ToString() >> "$psm1"
+    $f.EndBlock.ToString() | Out-File -Append -FilePath "$psm1"
 }
 
-Get-Content ./src/git-completion.psm1 | Select-String Export >> "$psm1"
+Get-Content ./src/git-completion.psm1 | Select-String Export | Out-File -Append -FilePath "$psm1"
