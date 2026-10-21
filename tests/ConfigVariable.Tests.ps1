@@ -1021,6 +1021,10 @@ Describe 'ConfigVariable' -Skip:$SkipHeavyTest -Tag Config {
                 @{
                     Line     = "remote.pwsh.";
                     Expected = @{
+                        CompletionText = "remote.pwsh.advertisedAs=";
+                        ListItemText   = "remote.pwsh.advertisedAs";
+                        ToolTip        = 'For the promisor-remote protocol (Users should not typically modify or create such configuration entries)';
+                    }, @{
                         CompletionText = "remote.pwsh.fetch=";
                         ListItemText   = "remote.pwsh.fetch";
                         ToolTip        = 'The default set of "refspec" for git-fetch';
