@@ -90,7 +90,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
         },
         @{
             ListItemText = '-l';
-            ToolTip      = "prevent rename/copy detection if the number of rename/copy targets exceeds given limit";
+            ToolTip      = "limit to cheap rename/copy detection if the number of rename/copy targets exceeds this value";
         },
         @{
             ListItemText = '-M';

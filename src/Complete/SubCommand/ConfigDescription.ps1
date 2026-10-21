@@ -655,6 +655,7 @@
         "receive.shallowUpdate" { 'If set to true, .git/shallow can be updated when new refs require new shallow roots' }
         "remote.pushDefault" { 'The remote to push to by default' }
         "remote.<name>.url" { 'The URL of a remote repository' }
+        "remote.*.advertisedAs" { 'For the promisor-remote protocol (Users should not typically modify or create such configuration entries)' }
         "remote.*.pushurl" { 'The push URL of a remote repository' }
         "remote.*.proxy" { 'For remotes that require curl (http, https and ftp), the URL to the proxy to use for that remote' }
         "remote.*.proxyAuthMethod" { 'For remotes that require curl (http, https and ftp), the method to use for authenticating against the proxy in use (probably set in remote.<name>.proxy)' }
