@@ -245,6 +245,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                 }, '漢字/' | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
+                Line     = 'Aquarion` Evol/Evol Aquarion` Evol/Gepada B';
+                Expected =
+                'BigInteger/' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = 'Aquarion` Evol/Evol Aquarion` Evol/Gepada BigInteger/';
+                Expected =
+                'BigInteger/BigInteger.cs', 'BigInteger/BigInteger.csproj', 'BigInteger/BigInteger.csx' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
                 Line     = 'Aquarion` Evol/Evol Aquarion` Evol/Gepada Aquarion` Evol/Gepard ';
                 Expected =
                 '.gitignore',

@@ -1045,6 +1045,10 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                 @{
                     Line     = '-u Pwsh/';
                     Expected = 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '-u BigInteger/';
+                    Expected = 'BigInteger/BigInteger.cs', 'BigInteger/BigInteger.csproj', 'BigInteger/BigInteger.csx' | ConvertTo-Completion -ResultType ProviderItem
                 }
             ) {
                 "git stash $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -1104,6 +1108,10 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                 @{
                     Line     = '-u Pwsh/';
                     Expected = 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '-u BigInteger/';
+                    Expected = 'BigInteger/BigInteger.cs', 'BigInteger/BigInteger.csproj', 'BigInteger/BigInteger.csx' | ConvertTo-Completion -ResultType ProviderItem
                 }
             ) {
                 "git stash push $Line" | Complete-FromLine | Should -BeCompletion $expected
