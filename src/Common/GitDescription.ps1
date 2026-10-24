@@ -262,7 +262,7 @@ function Get-GitHelp {
 
     $Options = [List[GitHelpOptions]]::new()
 
-    [GitHelpOptions]$opt = Convert-ToGitHelpOptions (Invoke-Expression "git $Command -h 2>&1" -ErrorAction Ignore) -ShowParser:$ShowParser
+    [GitHelpOptions]$opt = Convert-ToGitHelpOptions (__git $Command -h 2>&1) -ShowParser:$ShowParser
     if ($Command -ceq 'grep') {
         $v = $null
         if ($opt.Long.TryGetValue('--and', [ref]$v)) {
@@ -274,8 +274,8 @@ function Get-GitHelp {
 
     $Subcommands = @(__git $Command --git-completion-helper-all 2>$null) -split '\s+'
     foreach ($Subcommand in $Subcommands) {
-        if ($Subcommand.StartsWith('-')) { continue }
-        [GitHelpOptions]$opt = Convert-ToGitHelpOptions (Invoke-Expression "git $Command $Subcommand -h 2>&1" -ErrorAction Ignore) -ShowParser:$ShowParser
+        if (!$Subcommand -or $Subcommand.StartsWith('-')) { continue }
+        [GitHelpOptions]$opt = Convert-ToGitHelpOptions (__git $Command $Subcommand -h 2>&1) -ShowParser:$ShowParser
         $opt.Subcommand = $Subcommand
         $Options.Add($opt)
     }
