@@ -27,4 +27,6 @@ BeforeAll {
     else {
         Import-Module "$PSScriptRoot/../src/git-completion.psd1" -Force
     }
+
+    $env:LANG = 'C'
 }
