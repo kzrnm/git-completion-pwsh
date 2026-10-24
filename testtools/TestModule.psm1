@@ -102,27 +102,27 @@ function Initialize-FilesRepo {
     }
 
     Push-Location $rootPath
-    New-Item "$TestDrive/gitRoot/Pwsh/OptionLike/-foo.ps1" -ItemType File -Force
-    New-Item "$TestDrive/gitRoot/Dr.Wily" -ItemType File
-    New-Item "$TestDrive/gitRoot/Aquarion Evol" -ItemType Directory
-    New-Item "$TestDrive/gitRoot/Aquarion Evol/Evol" -ItemType File
-    New-Item "$TestDrive/gitRoot/Aquarion Evol/Ancient" -ItemType Directory
-    New-Item "$TestDrive/gitRoot/Aquarion Evol/Ancient/Soler" -ItemType File
-    git add "$TestDrive/gitRoot/Dr.Wily" "$TestDrive/gitRoot/Aquarion Evol/" "$TestDrive/gitRoot/Pwsh/OptionLike/-foo.ps1"
+    New-Item "$rootPath/Pwsh/OptionLike/-foo.ps1" -ItemType File -Force
+    New-Item "$rootPath/Dr.Wily" -ItemType File
+    New-Item "$rootPath/Aquarion Evol" -ItemType Directory
+    New-Item "$rootPath/Aquarion Evol/Evol" -ItemType File
+    New-Item "$rootPath/Aquarion Evol/Ancient" -ItemType Directory
+    New-Item "$rootPath/Aquarion Evol/Ancient/Soler" -ItemType File
+    git add "$rootPath/Dr.Wily" "$rootPath/Aquarion Evol/" "$rootPath/Pwsh/OptionLike/-foo.ps1"
     git commit -m "Start"
-    'X' > "$TestDrive/gitRoot/Dr.Wily"
-    'LOVE' > "$TestDrive/gitRoot/Aquarion Evol/Evol"
-    '-bar' > "$TestDrive/gitRoot/Pwsh/OptionLike/-foo.ps1"
+    'X' > "$rootPath/Dr.Wily"
+    'LOVE' > "$rootPath/Aquarion Evol/Evol"
+    '-bar' > "$rootPath/Pwsh/OptionLike/-foo.ps1"
 
-    New-Item "$TestDrive/gitRoot/Pwsh/L1/L2/🏪.ps1" -ItemType File -Force
-    New-Item "$TestDrive/gitRoot/漢字" -ItemType Directory
-    New-Item "$TestDrive/gitRoot/漢``'帝　国'" -ItemType File
-    New-Item "$TestDrive/gitRoot/Deava" -ItemType File
-    New-Item "$TestDrive/gitRoot/Aquarion Evol/Gepard" -ItemType File
-    New-Item "$TestDrive/gitRoot/Aquarion Evol/Gepada" -ItemType File
-    New-Item "$TestDrive/gitRoot/BigInteger/BigInteger.cs" -ItemType File -Force
-    New-Item "$TestDrive/gitRoot/BigInteger/BigInteger.csproj" -ItemType File
-    New-Item "$TestDrive/gitRoot/BigInteger/BigInteger.csx" -ItemType File
+    New-Item "$rootPath/Pwsh/L1/L2/🏪.ps1" -ItemType File -Force
+    New-Item "$rootPath/漢字" -ItemType Directory
+    New-Item "$rootPath/漢``'帝　国'" -ItemType File
+    New-Item "$rootPath/Deava" -ItemType File
+    New-Item "$rootPath/Aquarion Evol/Gepard" -ItemType File
+    New-Item "$rootPath/Aquarion Evol/Gepada" -ItemType File
+    New-Item "$rootPath/BigInteger/BigInteger.cs" -ItemType File -Force
+    New-Item "$rootPath/BigInteger/BigInteger.csproj" -ItemType File
+    New-Item "$rootPath/BigInteger/BigInteger.csx" -ItemType File
     Pop-Location
 }
 
