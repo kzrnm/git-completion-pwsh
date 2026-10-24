@@ -10,18 +10,33 @@ function Complete-GitSubCommand-diff {
         [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
-    
-    if ($Context.HasDoubledash()) { return }
+    $result = completeDiff $Context
 
-    [string] $Current = $Context.CurrentWord()
+    if (!$result) {
+        $result = gitCompleteIndexFileNoneOrUntracked $Context
+    }
 
-    $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
-    if ($shortOpts) { return $shortOpts }
+    return $result
+}
+function completeDiff {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([CompletionResult[]])]
+    param(
+        [CommandLineContext]
+        [Parameter(Position = 0, Mandatory)]$Context
+    )
 
-    $result = Complete-Opts-diff $Context
-    if ($result) { return $result }
+    if (!$Context.HasDoubledash()) {
+        [string] $Current = $Context.CurrentWord()
 
-    gitCompleteRevlist $Current
+        $shortOpts = Get-GitShortOptions $Context.Command -Current $Current
+        if ($shortOpts) { return $shortOpts }
+
+        $result = Complete-Opts-diff $Context
+        if ($result) { return $result }
+
+        gitCompleteRevlist $Current
+    }
 }
 
 function Complete-Opts-diff {

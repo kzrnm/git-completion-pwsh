@@ -10,6 +10,21 @@ function Complete-GitSubCommand-checkout {
         [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
+    $result = completeCheckout $Context
+
+    if (!$result) {
+        $result = gitCompleteIndexFileNoneOrUntracked $Context
+    }
+
+    return $result
+}
+function completeCheckout {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([CompletionResult[]])]
+    param(
+        [CommandLineContext]
+        [Parameter(Position = 0, Mandatory)]$Context
+    )
 
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {

@@ -6,6 +6,7 @@ using namespace System.IO;
 
 . "$($script:RepoRoot = $PSScriptRoot.Substring(0, $PSScriptRoot.LastIndexOf('tests')).Replace('\', '/'))testtools/TestInitialize.ps1"
 
+
 Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
     BeforeAll {
         Set-Variable Command ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') | ConvertTo-KebabCase)
@@ -51,11 +52,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = 'src -- ';
-                Expected = @()
+                Expected = '.gitignore', 'hello.sh', 'initial.txt', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
                 Line     = '-- ';
-                Expected = @()
+                Expected = '.gitignore', 'hello.sh', 'initial.txt', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -135,139 +136,175 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
                 Line     = '--color-moved-ws i';
                 Expected = @{
                     ListItemText = 'ignore-all-space';
-                    Tooltip      = 'Ignore whitespace when comparing lines';                },
+                    Tooltip      = 'Ignore whitespace when comparing lines';                
+                },
                 @{
                     ListItemText = 'ignore-space-at-eol';
-                    Tooltip      = 'Ignore changes in whitespace at EOL';                },
+                    Tooltip      = 'Ignore changes in whitespace at EOL';                
+                },
                 @{
                     ListItemText = 'ignore-space-change';
-                    Tooltip      = 'Ignore changes in amount of whitespace';                } | ConvertTo-Completion -ResultType ParameterValue
+                    Tooltip      = 'Ignore changes in amount of whitespace';                
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--color-moved-ws ';
                 Expected = @{
                     ListItemText = 'allow-indentation-change';
-                    Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line';                },
+                    Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line';                
+                },
                 @{
                     ListItemText = 'ignore-all-space';
-                    Tooltip      = 'Ignore whitespace when comparing lines';                },
+                    Tooltip      = 'Ignore whitespace when comparing lines';                
+                },
                 @{
                     ListItemText = 'ignore-space-at-eol';
-                    Tooltip      = 'Ignore changes in whitespace at EOL';                },
+                    Tooltip      = 'Ignore changes in whitespace at EOL';                
+                },
                 @{
                     ListItemText = 'ignore-space-change';
-                    Tooltip      = 'Ignore changes in amount of whitespace';                },
+                    Tooltip      = 'Ignore changes in amount of whitespace';                
+                },
                 @{
                     ListItemText = 'no';
-                    Tooltip      = 'Do not ignore whitespace when performing move detection';                } | ConvertTo-Completion -ResultType ParameterValue
+                    Tooltip      = 'Do not ignore whitespace when performing move detection';                
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--color-moved-ws=i';
                 Expected = @{
                     ListItemText = 'ignore-all-space';
-                    Tooltip      = 'Ignore whitespace when comparing lines';                },
+                    Tooltip      = 'Ignore whitespace when comparing lines';                
+                },
                 @{
                     ListItemText = 'ignore-space-at-eol';
-                    Tooltip      = 'Ignore changes in whitespace at EOL';                },
+                    Tooltip      = 'Ignore changes in whitespace at EOL';                
+                },
                 @{
                     ListItemText = 'ignore-space-change';
-                    Tooltip      = 'Ignore changes in amount of whitespace';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
+                    Tooltip      = 'Ignore changes in amount of whitespace';                
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
             },
             @{
                 Line     = '--color-moved-ws=';
                 Expected = @{
                     ListItemText = 'allow-indentation-change';
-                    Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line';                },
+                    Tooltip      = 'Initially ignore any whitespace in the move detection, then group the moved code blocks only into a block if the change in whitespace is the same per line';                
+                },
                 @{
                     ListItemText = 'ignore-all-space';
-                    Tooltip      = 'Ignore whitespace when comparing lines';                },
+                    Tooltip      = 'Ignore whitespace when comparing lines';                
+                },
                 @{
                     ListItemText = 'ignore-space-at-eol';
-                    Tooltip      = 'Ignore changes in whitespace at EOL';                },
+                    Tooltip      = 'Ignore changes in whitespace at EOL';                
+                },
                 @{
                     ListItemText = 'ignore-space-change';
-                    Tooltip      = 'Ignore changes in amount of whitespace';                },
+                    Tooltip      = 'Ignore changes in amount of whitespace';                
+                },
                 @{
                     ListItemText = 'no';
-                    Tooltip      = 'Do not ignore whitespace when performing move detection';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
+                    Tooltip      = 'Do not ignore whitespace when performing move detection';                
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved-ws=$_" }
             },
             @{
                 Line     = '--color-moved=d';
                 Expected = @{
                     ListItemText = 'default';
-                    Tooltip      = 'A synonym for zebra';                },
+                    Tooltip      = 'A synonym for zebra';                
+                },
                 @{
                     ListItemText = 'dimmed-zebra';
-                    Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
+                    Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
             },
             @{
                 Line     = '--color-moved=';
                 Expected = @{
                     ListItemText = 'blocks';
-                    Tooltip      = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily';                },
+                    Tooltip      = 'Blocks of moved text of at least 20 alphanumeric characters are detected greedily';                
+                },
                 @{
                     ListItemText = 'default';
-                    Tooltip      = 'A synonym for zebra';                },
+                    Tooltip      = 'A synonym for zebra';                
+                },
                 @{
                     ListItemText = 'dimmed-zebra';
-                    Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                },
+                    Tooltip      = 'Similar to zebra, but additional dimming of uninteresting parts of moved code is performed';                
+                },
                 @{
                     ListItemText = 'no';
-                    Tooltip      = 'Moved lines are not highlighted';                },
+                    Tooltip      = 'Moved lines are not highlighted';                
+                },
                 @{
                     ListItemText = 'plain';
-                    Tooltip      = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved';                },
+                    Tooltip      = 'Any line that is added in one location and was removed in another location will be colored with color.diff.newMoved';                
+                },
                 @{
                     ListItemText = 'zebra';
-                    Tooltip      = 'Blocks of moved text are detected as in blocks mode';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
+                    Tooltip      = 'Blocks of moved text are detected as in blocks mode';                
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--color-moved=$_" }
             },
             @{
                 Line     = '--ws-error-highlight d';
                 Expected = @{
                     ListItemText = 'default';
-                    Tooltip      = 'A synonym for new';                } | ConvertTo-Completion -ResultType ParameterValue
+                    Tooltip      = 'A synonym for new';                
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--ws-error-highlight ';
                 Expected = @{
                     ListItemText = 'all';
-                    Tooltip      = 'A synonym for old,new,context';                },
+                    Tooltip      = 'A synonym for old,new,context';                
+                },
                 @{
                     ListItemText = 'context';
-                    Tooltip      = 'Highlight whitespace errors in the context';                },
+                    Tooltip      = 'Highlight whitespace errors in the context';                
+                },
                 @{
                     ListItemText = 'default';
-                    Tooltip      = 'A synonym for new';                },
+                    Tooltip      = 'A synonym for new';                
+                },
                 @{
                     ListItemText = 'new';
-                    Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                },
+                    Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                
+                },
                 @{
                     ListItemText = 'old';
-                    Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                } | ConvertTo-Completion -ResultType ParameterValue
+                    Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                
+                } | ConvertTo-Completion -ResultType ParameterValue
             },
             @{
                 Line     = '--ws-error-highlight=d';
                 Expected = @{
                     ListItemText = 'default';
-                    Tooltip      = 'A synonym for new';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
+                    Tooltip      = 'A synonym for new';                
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
             },
             @{
                 Line     = '--ws-error-highlight=';
                 Expected = @{
                     ListItemText = 'all';
-                    Tooltip      = 'A synonym for old,new,context';                },
+                    Tooltip      = 'A synonym for old,new,context';                
+                },
                 @{
                     ListItemText = 'context';
-                    Tooltip      = 'Highlight whitespace errors in the context';                },
+                    Tooltip      = 'Highlight whitespace errors in the context';                
+                },
                 @{
                     ListItemText = 'default';
-                    Tooltip      = 'A synonym for new';                },
+                    Tooltip      = 'A synonym for new';                
+                },
                 @{
                     ListItemText = 'new';
-                    Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                },
+                    Tooltip      = 'Highlight whitespace errors in the new lines of the diff';                
+                },
                 @{
                     ListItemText = 'old';
-                    Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
+                    Tooltip      = 'Highlight whitespace errors in the old lines of the diff';                
+                } | ConvertTo-Completion -ResultType ParameterValue -CompletionText { "--ws-error-highlight=$_" }
             },
             @{
                 Line     = '--submodule=d';
@@ -363,4 +400,49 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
     }
 
     Describe-Revlist
+
+    Describe 'UntrackedFile' {
+        BeforeAll {
+            New-Item hole -ItemType Directory -Force
+            New-Item hole/foo -Force
+            New-Item hole/bar -Force
+        }
+
+        AfterAll {
+            Remove-Item hole -Recurse
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'in';
+                Expected = @{ListItemText = 'initial'; Tooltip = '0b399df World' } | ConvertTo-Completion -ResultType ParameterValue
+            },
+            @{
+                Line     = '-- h';
+                Expected = 'hello.sh' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = '-- ho';
+                Expected = 'hole/' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = '-- hole/';
+                Expected = 'hole/bar', 'hole/foo' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = 'h';
+                Expected = 'hello.sh' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = 'ho';
+                Expected = 'hole/' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = 'hole/';
+                Expected = 'hole/bar', 'hole/foo' | ConvertTo-Completion -ResultType ProviderItem
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
+        }
+    }
 }
