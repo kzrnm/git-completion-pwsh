@@ -50,7 +50,7 @@ function Complete-GitSubCommand-worktree {
     }
 
     switch ($subcommand) {
-        { $_ -cin 'lock', 'remove', 'unlock' } { return gitCompleteWorktreePaths $Current }
+        { $_ -cin 'lock', 'remove', 'repair', 'unlock' } { return gitCompleteWorktreePaths $Current }
         'move' {
             if ($Context.DoubledashIndex -lt ($Context.CurrentIndex - 1)) {
                 return @()

@@ -231,14 +231,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
     }
 
     Describe 'Files' {
-        It '<_>' -ForEach @('prune', 'list', 'repair') {
+        It '<_>' -ForEach @('prune', 'list') {
             $expected = @()
             "git $Command $_ " | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 
     Describe 'WorktreePaths' {
-        Describe '<Subcommand>' -ForEach @('lock', 'remove', 'unlock', 'move' | ForEach-Object { @{Subcommand = $_ } }) {
+        Describe '<Subcommand>' -ForEach @('lock', 'remove', 'unlock', 'repair', 'move' | ForEach-Object { @{Subcommand = $_ } }) {
             It 'DoubleDash' {
                 $expected = @("$workTreePath1", "$workTreePath2") | ConvertTo-Completion -ResultType ParameterValue
                 "git $Command $Subcommand -- " | Complete-FromLine | Should -BeCompletion $expected
