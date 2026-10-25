@@ -27,7 +27,15 @@ function Complete-Git {
     }
 
     if ($CurrentIndex -lt 0) { $CurrentIndex = $Words.Length - 1 }
-    return Complete-GitCommandLine ([CommandLineContext]::new($Words, $CurrentIndex))
+
+    $OutputEncodingBak = [Console]::OutputEncoding
+    try {
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+        return Complete-GitCommandLine ([CommandLineContext]::new($Words, $CurrentIndex))
+    }
+    finally {
+        [Console]::OutputEncoding = $OutputEncodingBak
+    }
 }
 
 class CommandOption {

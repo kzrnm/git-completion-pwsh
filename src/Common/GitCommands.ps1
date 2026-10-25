@@ -19,8 +19,19 @@ function __git {
     )
 
     $Context = Get-Variable 'Context' -ValueOnly -Scope 'Script' -ErrorAction Ignore
+    $gitArgs = @(gitArgs -Context $Context -GitDirOverride $GitDirOverride)
+
+    git @gitArgs @OrdinaryArgs
+}
+
+function gitArgs {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([string[]])]
+    param(
+        [Parameter(Position = 0)]$Context,
+        [Parameter()][string]$GitDirOverride = $null
+    )
     $gitDir = $Context.gitDir
-    $gitArgs = $Context.gitCArgs
 
     if ($GitDirOverride) {
         $gitArgs = @("--git-dir=$GitDirOverride") + $Context.gitCArgs
@@ -31,15 +42,7 @@ function __git {
     else {
         $gitArgs = $Context.gitCArgs
     }
-
-    $OutputEncodingBak = [Console]::OutputEncoding
-    try {
-        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-        git @gitArgs @OrdinaryArgs
-    }
-    finally {
-        [Console]::OutputEncoding = $OutputEncodingBak
-    }
+    return $gitArgs
 }
 
 $script:__gitVersion = $null
