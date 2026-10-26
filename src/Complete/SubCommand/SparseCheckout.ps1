@@ -77,7 +77,7 @@ function sparseCheckoutDirectories {
         $dir = './'
     }
 
-    foreach ($line in (@(__git ls-tree -z '-d' --name-only HEAD "$dir") -split '\0')) {
+    foreach ($line in (@(git @(__gitArgs) ls-tree -z '-d' --name-only HEAD "$dir") -split '\0')) {
         if ($line -and "$line".StartsWith($Current)) {
             [CompletionResult]::new(
                 (escapeSpecialChar "$line/"),
@@ -103,7 +103,7 @@ function sparseCheckoutSlashLeadingPaths {
     # Since we are dealing with a sparse-checkout, subdirectories may not
     # exist in the local working copy.  Therefore, we want to run all
     # ls-files commands relative to the repository toplevel.
-    $toplevel = "$(__git rev-parse --show-toplevel)/"
+    $toplevel = "$(git @(__gitArgs) rev-parse --show-toplevel)/"
 
     # If the paths provided by the user already start with '/', then
     # they are considered relative to the toplevel of the repository
@@ -114,7 +114,7 @@ function sparseCheckoutSlashLeadingPaths {
         $Prefix = ''
     }
     else {
-        [string]$Prefix = (__git rev-parse --show-prefix)
+        [string]$Prefix = (git @(__gitArgs) rev-parse --show-prefix)
     }
 
     # Since sparse-index is limited to cone-mode, in non-cone-mode the
@@ -132,7 +132,7 @@ function sparseCheckoutSlashLeadingPaths {
     #      literal path character.
     # Since there are two types of quoting here, this might get really
     # complex.  For now, just punt on all of this...
-    foreach ($line in (@(__git -C "$toplevel" ls-files -z --cached -- "${Prefix}${Current}*") -split '\0')) {
+    foreach ($line in (@(git @(__gitArgs) -C "$toplevel" ls-files -z --cached -- "${Prefix}${Current}*") -split '\0')) {
         if ($line) {
             [CompletionResult]::new(
                 (escapeSpecialChar "/$line"),
@@ -162,7 +162,7 @@ function usingCone {
     }
 
     if (
-        ((__git config get core.sparseCheckout) -ceq 'true') -and ((__git config core.sparseCheckoutCone) -ceq 'false') -and !$hasConeOption
+        ((git @(__gitArgs) config get core.sparseCheckout) -ceq 'true') -and ((git @(__gitArgs) config core.sparseCheckoutCone) -ceq 'false') -and !$hasConeOption
     ) {
         return $false
     }

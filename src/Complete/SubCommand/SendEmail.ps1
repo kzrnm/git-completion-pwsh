@@ -17,7 +17,7 @@ function Complete-GitSubCommand-send-email {
         if ($shortOpts) { return $shortOpts }
 
         $prevCandidates = switch -CaseSensitive -Regex ($Context.PreviousWord()) {
-            '^--(to|cc|bcc|from)$' { @(__git send-email --dump-aliases) }
+            '^--(to|cc|bcc|from)$' { @(git @(__gitArgs) send-email --dump-aliases) }
             '^--smtp-encryption$' { 'ssl', 'tls' }
             '^--suppress-cc$' { $gitSendEmailSuppressccOptions }
             '^--confirm$' { $gitSendEmailConfirmOptions }
@@ -33,7 +33,7 @@ function Complete-GitSubCommand-send-email {
             $value = $Matches[2]
             $candidates = switch -CaseSensitive -Regex ($key) {
                 '^--thread$' { 'deep', 'shallow' }
-                '^--(to|cc|bcc|from)$' { @(__git send-email --dump-aliases) }
+                '^--(to|cc|bcc|from)$' { @(git @(__gitArgs) send-email --dump-aliases) }
                 '^--smtp-encryption$' { 'ssl', 'tls' }
                 '^--suppress-cc$' { $gitSendEmailSuppressccOptions }
                 '^--confirm$' { $gitSendEmailConfirmOptions }

@@ -11,26 +11,12 @@ else {
     $script:VerbatimArgument = $null
 }
 
-function __git {
+function __gitArgs {
     [CmdletBinding(PositionalBinding = $false)]
     param(
-        [Parameter()][string]$GitDirOverride = $null,
-        [Parameter(ValueFromRemainingArguments)]$OrdinaryArgs
-    )
-
-    $Context = Get-Variable 'Context' -ValueOnly -Scope 'Script' -ErrorAction Ignore
-    $gitArgs = @(gitArgs -Context $Context -GitDirOverride $GitDirOverride)
-
-    git @gitArgs @OrdinaryArgs
-}
-
-function gitArgs {
-    [CmdletBinding(PositionalBinding = $false)]
-    [OutputType([string[]])]
-    param(
-        [Parameter(Position = 0)]$Context,
         [Parameter()][string]$GitDirOverride = $null
     )
+    $Context = Get-Variable 'Context' -ValueOnly -Scope 'Script' -ErrorAction Ignore
     $gitDir = $Context.gitDir
 
     if ($GitDirOverride) {
@@ -71,14 +57,14 @@ function gitRemote {
     [OutputType([string[]])]
     param ()
 
-    return @(__git remote)
+    return @(git @(__gitArgs) remote)
 }
 
 function gitListAliases {
     [OutputType([PSCustomObject[]])]
     param()
 
-    foreach ($kv in @((__git config -z --get-regexp "^alias\." | Out-String) -split "`0")) {
+    foreach ($kv in @((git @(__gitArgs) config -z --get-regexp "^alias\." | Out-String) -split "`0")) {
         if ($kv -match "^alias\.(?<Name>\S+)\s+(?<Value>[\s\S]*)") {
             [PSCustomObject]@{
                 Name  = $Matches['Name'];
@@ -108,7 +94,7 @@ function gitGetAlias {
 
     $ErrorActionPreference = 'SilentlyContinue'
     try {
-        __git config --get "alias.$Alias" 2>$null
+        git @(__gitArgs) config --get "alias.$Alias" 2>$null
     }
     catch {
         $null
@@ -133,7 +119,7 @@ function gitLsTreeFile {
     [OutputType([string[]])]
     param ([Parameter(Mandatory, Position = 0)][string]$treeIsh)
 
-    $lsTree = @(__git ls-tree "$treeIsh" -z) -split "`0"
+    $lsTree = @(git @(__gitArgs) ls-tree "$treeIsh" -z) -split "`0"
     foreach ($line in $lsTree) {
         if ($line -cmatch '(?<mode>\S+) (?<type>\S+) (?<name>\S+)\t(?<path>.+)') {
             $path = $Matches['path']
@@ -263,7 +249,7 @@ function gitAllCommands {
         $Categories
     )
     $list = ($Categories -join ",")
-    return @(__git "--list-cmds=$list")
+    return @(git @(__gitArgs) "--list-cmds=$list")
 }
 
 # __git_find_repo_path, gitFindRepoPath
@@ -278,7 +264,7 @@ function gitRepoPath {
     $gitCArgs = $Context.gitCArgs
 
     if ($gitCArgs) {
-        return [string](__git rev-parse --absolute-git-dir 2>$null)
+        return [string](git @(__gitArgs) rev-parse --absolute-git-dir 2>$null)
     }
     elseif ($gitDir) {
         return "$gitDir"
@@ -310,9 +296,8 @@ function gitHeads {
         $ignoreCase = '--ignore-case'
     }
 
-    @(__git for-each-ref --format="%(refname:strip=2)" `
-            $ignoreCase $VerbatimArgument `
-            "refs/heads/$Current*" "refs/heads/$Current*/**")
+    @(git @(__gitArgs) for-each-ref --format="%(refname:strip=2)" `
+            $ignoreCase "refs/heads/$Current*" "refs/heads/$Current*/**")
 }
 
 # Lists branches from remote repositories.
@@ -331,9 +316,8 @@ function gitRemoteHeads {
         $ignoreCase = '--ignore-case'
     }
 
-    @(__git for-each-ref --format="%(refname:strip=2)" `
-            $ignoreCase $VerbatimArgument `
-            "refs/remotes/$Current*" "refs/remotes/$Current*/**")
+    @(git @(__gitArgs) for-each-ref --format="%(refname:strip=2)" `
+            $ignoreCase "refs/remotes/$Current*" "refs/remotes/$Current*/**")
 }
 
 # Lists tags from the local repository.
@@ -352,9 +336,8 @@ function gitTags {
         $ignoreCase = '--ignore-case'
     }
 
-    @(__git for-each-ref --format="$ForeachPrefix%(refname:strip=2)$Suffix" `
-            $ignoreCase $VerbatimArgument `
-            "refs/tags/$Current*" "refs/tags/$Current*/**")
+    @(git @(__gitArgs) for-each-ref --format="$ForeachPrefix%(refname:strip=2)$Suffix" `
+            $ignoreCase "refs/tags/$Current*" "refs/tags/$Current*/**")
 }
 
 function gitRefnames {
@@ -368,9 +351,8 @@ function gitRefnames {
         $ignoreCase = '--ignore-case'
     }
 
-    @(__git for-each-ref "--format=%(refname)" `
-            $ignoreCase $VerbatimArgument `
-            "$Current*" "$Current*/**")
+    @(git @(__gitArgs) for-each-ref "--format=%(refname)" `
+            $ignoreCase "$Current*" "$Current*/**")
 }
 function gitRefStrip {
     [OutputType([string[]])]
@@ -383,9 +365,8 @@ function gitRefStrip {
         $ignoreCase = '--ignore-case'
     }
 
-    @(__git for-each-ref "--format=%(refname:strip=2)" `
-            $ignoreCase $VerbatimArgument `
-            "refs/*/$Current*" "refs/*/$Current*/**")
+    @(git @(__gitArgs) for-each-ref "--format=%(refname:strip=2)" `
+            $ignoreCase "refs/*/$Current*" "refs/*/$Current*/**")
 }
 
 
@@ -420,7 +401,7 @@ function gitDwimRemoteHeads {
     $remotes = foreach ($r in @(gitRemote | Sort-Object -Descending -Unique)) {
         "refs/remotes/$(casemap $r)"
     }
-    foreach ($ref in @(__git for-each-ref --format='%(refname)' refs/remotes/)) {
+    foreach ($ref in @(git @(__gitArgs) for-each-ref --format='%(refname)' refs/remotes/)) {
         foreach ($r in $remotes) {
             if ((casemap $ref).StartsWith("$r/$Current")) {
                 $dict[$ref.Substring(1 + $r.Length)] = 0
@@ -525,12 +506,12 @@ function gitRefs {
                 "refs/remotes/$match*",
                 "refs/remotes/$match*/**")
         }
-        __git -GitDirOverride $dir for-each-ref "--format=$Prefix%($format)" $ignoreCase $VerbatimArgument @refs
+        git @(__gitArgs -GitDirOverride $dir) for-each-ref "--format=$Prefix%($format)" $ignoreCase @refs
         return
     }
 
     if ($Current -match "refs(/.*)?") {
-        foreach ($r in @(__git ls-remote "$Remote" "$Match*")) {
+        foreach ($r in @(git @(__gitArgs) ls-remote "$Remote" "$Match*")) {
             if ($r -match "(\S+)\s+(\S+)") {
                 $i = $Matches[2]
                 if ($i -notlike "*^{}") {
@@ -545,9 +526,8 @@ function gitRefs {
         }
         $strip = countPathComponents "refs/remotes/$remote"
 
-        __git for-each-ref --format="%(refname:strip=$strip)" `
-            $ignoreCase $VerbatimArgument `
-            "refs/remotes/$remote/$match*" "refs/remotes/$remote/$match*/**"
+        git @(__gitArgs) for-each-ref --format="%(refname:strip=$strip)" `
+            $ignoreCase "refs/remotes/$remote/$match*" "refs/remotes/$remote/$match*/**"
     }
     else {
         $querySymref = $null
@@ -555,7 +535,7 @@ function gitRefs {
             $querySymref = 'HEAD'
         }
 
-        foreach ($r in @(__git ls-remote "$Remote" $querySymref "refs/tags/$match*" "refs/heads/$match*" "refs/remotes/$match*")) {
+        foreach ($r in @(git @(__gitArgs) ls-remote "$Remote" $querySymref "refs/tags/$match*" "refs/heads/$match*" "refs/remotes/$match*")) {
             if ($r -match "(\S+)\s+(\S+)") {
                 $i = $Matches[2]
                 if ($i -notlike "*^{}") {
@@ -639,7 +619,7 @@ function gitGetConfigVariables () {
         [Parameter(Mandatory, Position = 0)][string]$Section
     )
 
-    foreach ($kv in @((__git config -z --get-regexp "^$Section\..*" | Out-String) -split "`0")) {
+    foreach ($kv in @((git @(__gitArgs) config -z --get-regexp "^$Section\..*" | Out-String) -split "`0")) {
         if ($kv -match "^$Section\.(?<Name>\S+)\s+(?<Value>[\s\S]*)") {
             [PSCustomObject]@{
                 ListItemText = $Matches['Name'];
@@ -664,7 +644,7 @@ function gitPseudorefExists {
     # Bash builtins since executing Git commands are expensive on some
     # platforms.
     if ($head -eq 'ref: refs/heads/.invalid') {
-        __git show-ref --exists "$ref" 1>$null 2>$null
+        git @(__gitArgs) show-ref --exists "$ref" 1>$null 2>$null
         return $LASTEXITCODE -eq 0
     }
 
@@ -676,7 +656,7 @@ function gitArchiveList {
     [OutputType([string[]])]
     param ()
 
-    __git archive --list
+    git @(__gitArgs) archive --list
 }
 
 function gitCommitMessage() {
@@ -690,14 +670,14 @@ function gitCommitMessage() {
     )
     $keyLength = 0
     $msgTable = @{}
-    foreach ($line in (__git show -s @refs --oneline --no-decorate 2>$null)) {
+    foreach ($line in (git @(__gitArgs) show -s @refs --oneline --no-decorate 2>$null)) {
         if ($line -cmatch '^(?<msg>(?<key>[0-9a-fA-F]+) .*)$') {
             $msgTable[$Matches['key']] = $Matches['msg']
             $keyLength = $Matches['key'].Length
         }
     }
 
-    foreach ($line in (__git rev-parse @refs 2>$null)) {
+    foreach ($line in (git @(__gitArgs) rev-parse @refs 2>$null)) {
         $msgTable[$line.Substring(0, $keyLength)]
     }
 }

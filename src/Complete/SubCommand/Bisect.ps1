@@ -18,8 +18,8 @@ function Complete-GitSubCommand-bisect {
     $repoPath = (gitRepoPath)
 
     if (Test-Path "$repoPath/BISECT_TERMS" -PathType Leaf) {
-        $goodTerm = [string](__git bisect terms --term-good)
-        $badTerm = [string](__git bisect terms --term-bad)
+        $goodTerm = [string](git @(__gitArgs) bisect terms --term-good)
+        $badTerm = [string](git @(__gitArgs) bisect terms --term-bad)
     }
     else {
         $goodTerm = 'good'

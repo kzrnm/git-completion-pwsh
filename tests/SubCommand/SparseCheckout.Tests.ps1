@@ -474,29 +474,16 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') {
                 @{
                     Line     = '';
                     Path     = '';
-                    Expected = if (!$IsCoreCLR -or $IsWindows) {
-                        '/.gitignore',
-                        @{
-                            CompletionText = '/Aquarion` Evol/Ancient/Soler';
-                            ListItemText   = '/Aquarion Evol/Ancient/Soler';
-                        },
-                        @{
-                            CompletionText = '/Aquarion` Evol/Evol';
-                            ListItemText   = '/Aquarion Evol/Evol';
-                        },
-                        '/Dr.Wily', '/Pwsh/OptionLike/-foo.ps1', '/Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
-                    }
-                    else {
-                        @{
-                            CompletionText = '/Aquarion` Evol/Ancient/Soler';
-                            ListItemText   = '/Aquarion Evol/Ancient/Soler';
-                        },
-                        @{
-                            CompletionText = '/Aquarion` Evol/Evol';
-                            ListItemText   = '/Aquarion Evol/Evol';
-                        },
-                        '/Dr.Wily', '/Pwsh/OptionLike/-foo.ps1', '/Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
-                    }
+                    Expected = '/.gitignore',
+                    @{
+                        CompletionText = '/Aquarion` Evol/Ancient/Soler';
+                        ListItemText   = '/Aquarion Evol/Ancient/Soler';
+                    },
+                    @{
+                        CompletionText = '/Aquarion` Evol/Evol';
+                        ListItemText   = '/Aquarion Evol/Evol';
+                    },
+                    '/Dr.Wily', '/Pwsh/OptionLike/-foo.ps1', '/Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
                 },
                 @{
                     Line     = '';

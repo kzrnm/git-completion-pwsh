@@ -998,26 +998,12 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                 },
                 @{
                     Line     = 'a';
-                    Expected = if ($IsLinux -or $IsMacOS) {
-                        @{
-                            ListItemText = "apply";
-                            ResultType   = 'ParameterName';
-                            ToolTip      = "apply a single stashed state but do not remove the state";
-                        },
-                        @{
-                            CompletionText = "Aquarion`` Evol/Evol";
-                            ListItemText   = "Aquarion Evol/Evol"
-                        },
-                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
-                    }
-                    else {
-                        @{
-                            ListItemText = "apply";
-                            ResultType   = 'ParameterName';
-                            ToolTip      = "apply a single stashed state but do not remove the state";
-                        },
-                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
-                    }
+                    Expected = @{
+                        ListItemText = "apply";
+                        ResultType   = 'ParameterName';
+                        ToolTip      = "apply a single stashed state but do not remove the state";
+                    },
+                    'ax' | ConvertTo-Completion -ResultType ProviderItem
                 },
                 @{
                     Line     = 'Pwsh';
@@ -1071,16 +1057,7 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                 },
                 @{
                     Line     = 'a';
-                    Expected = if ($IsLinux -or $IsMacOS) {
-                        @{
-                            CompletionText = "Aquarion`` Evol/Evol";
-                            ListItemText   = "Aquarion Evol/Evol"
-                        },
-                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
-                    }
-                    else {
-                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
-                    }
+                    Expected = 'ax' | ConvertTo-Completion -ResultType ProviderItem
                 },
                 @{
                     Line     = 'Pwsh';

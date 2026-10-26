@@ -126,7 +126,7 @@ function checkoutDefaultDwimMode {
 
     # checkout.guess = false disables DWIM, but with lower priority than
     # --guess/--no-guess
-    if ((__git config --type=bool checkout.guess) -ceq 'false') {
+    if ((git @(__gitArgs) config --type=bool checkout.guess) -ceq 'false') {
         return $false
     }
 

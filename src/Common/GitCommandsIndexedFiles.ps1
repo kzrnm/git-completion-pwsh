@@ -59,16 +59,16 @@ function gitIndexFiles {
         All { '--cached', '--directory', '--no-empty-directory', '--others' }
         AllWithIgnored { '--cached', '--no-empty-directory', '--others', '--ignored', '--exclude=*' }
         Staged {
-            $results = __git @BaseDirOpts diff --staged -z --name-only --relative '--' "$Pattern"
+            $results = git @(__gitArgs) @BaseDirOpts diff --staged -z --name-only --relative '--' "$Pattern"
         }
         Committable {
-            $results = __git @BaseDirOpts diff-index -z --name-only --relative HEAD '--' "$Pattern"
+            $results = git @(__gitArgs) @BaseDirOpts diff-index -z --name-only --relative HEAD '--' "$Pattern"
         }
     }
 
     if ($null -eq $results) {
         $lsFilesOptions = @($lsFilesOptions)
-        $results = __git @BaseDirOpts ls-files -z --exclude-standard @lsFilesOptions '--' "$Pattern"
+        $results = git @(__gitArgs) @BaseDirOpts ls-files -z --exclude-standard @lsFilesOptions '--' "$Pattern"
     }
 
     foreach ($file in "$results".Split("`0")) {
