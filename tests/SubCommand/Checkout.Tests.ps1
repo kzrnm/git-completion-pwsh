@@ -51,11 +51,11 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             },
             @{
                 Line     = '-- ';
-                Expected = @()
+                Expected = '.gitignore', 'hello.sh', 'initial.txt', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
             },
             @{
                 Line     = 'src -- ';
-                Expected = @()
+                Expected = '.gitignore', 'hello.sh', 'initial.txt', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
             }
         ) {
             "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -490,6 +490,51 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote {
             It '--guess:force' {
                 "git -c checkout.guess=false $Command --no-track --guess -2 " | Complete-FromLine | Should -BeCompletion $guessCase
             }
+        }
+    }
+
+    Describe 'UntrackedFile' {
+        BeforeAll {
+            New-Item hole -ItemType Directory -Force
+            New-Item hole/foo -Force
+            New-Item hole/bar -Force
+        }
+
+        AfterAll {
+            Remove-Item hole -Recurse
+        }
+
+        It '<Line>' -ForEach @(
+            @{
+                Line     = 'in';
+                Expected = @{ListItemText = 'initial'; Tooltip = '0b399df World' } | ConvertTo-Completion -ResultType ParameterValue
+            },
+            @{
+                Line     = '-- h';
+                Expected = 'hello.sh' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = '-- ho';
+                Expected = 'hole/' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = '-- hole/';
+                Expected = 'hole/bar', 'hole/foo' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = 'h';
+                Expected = 'hello.sh' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = 'ho';
+                Expected = 'hole/' | ConvertTo-Completion -ResultType ProviderItem
+            },
+            @{
+                Line     = 'hole/';
+                Expected = 'hole/bar', 'hole/foo' | ConvertTo-Completion -ResultType ProviderItem
+            }
+        ) {
+            "git $Command $Line" | Complete-FromLine | Should -BeCompletion $expected
         }
     }
 }

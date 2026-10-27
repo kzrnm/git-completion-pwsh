@@ -68,7 +68,7 @@ function Complete-GitSubCommand-commit {
         }
     }
 
-    __git rev-parse --verify --quiet HEAD > $null
+    git @(__gitArgs) rev-parse --verify --quiet HEAD > $null
     $completeOpt = if ($LASTEXITCODE -eq 0) {
         [IndexFilesOptions]::Committable
     }
@@ -84,7 +84,7 @@ function gitTrailerTokens {
     param ()
 
     $regex = '^trailer\.(.*)\.key$'
-    foreach ($line in @(__git config --name-only --get-regexp $regex)) {
+    foreach ($line in @(git @(__gitArgs) config --name-only --get-regexp $regex)) {
         if ($line -cmatch $regex) {
             $Matches[1]
         }

@@ -134,7 +134,7 @@ function gitConfigGetSetVariables {
         }
         $prev = $word
     }
-    __git config @file --name-only --list
+    git @(__gitArgs) config @file --name-only --list
 }
 
 
@@ -166,7 +166,7 @@ function completeConfigVariableValue {
     )
 
     function remote {
-        $remotes = [string[]](__git remote)
+        $remotes = [string[]](git @(__gitArgs) remote)
         $remotes | completeList -Current $Current -Prefix $Prefix -ResultType ParameterValue
     }
 
@@ -208,7 +208,7 @@ function completeConfigVariableValue {
             }
             try {
                 $remote = ($v -replace '^remote\.' -replace '\.fetch$')
-                (__git ls-remote $remote 'refs/heads/*') -match "(\S+)\s+(\S+)" > $null
+                (git @(__gitArgs) ls-remote $remote 'refs/heads/*') -match "(\S+)\s+(\S+)" > $null
                 # $hash = $Matches[1]
                 $ref = $Matches[2]
                 $result = "${ref}:refs/remotes/$remote/$($ref -replace '^refs/heads/')"
@@ -225,7 +225,7 @@ function completeConfigVariableValue {
             return
         }
         'remote.*.push' {
-            __git for-each-ref --format='%(refname):%(refname)' refs/heads
+            git @(__gitArgs) for-each-ref --format='%(refname):%(refname)' refs/heads
             continue
         }
         'pull.twohead' {
@@ -367,7 +367,7 @@ function completeConfigVariableName {
         $section = 'remote'
         $second = $Matches[1]
         
-        __git remote | Where-Object {
+        git @(__gitArgs) remote | Where-Object {
             $_.StartsWith($second) 
         } | ForEach-Object {
             "$section.$_."
@@ -381,9 +381,9 @@ function completeConfigVariableName {
     if ($Current -match "submodule\.(.*)") {
         $section = 'submodule'
         $second = $Matches[1]
-        $gitTopPath = (__git rev-parse --show-toplevel)
+        $gitTopPath = (git @(__gitArgs) rev-parse --show-toplevel)
 
-        __git config -f "$gitTopPath/.gitmodules" --name-only --list 2>$null |
+        git @(__gitArgs) config -f "$gitTopPath/.gitmodules" --name-only --list 2>$null |
         ForEach-Object {
             if ($_ -match 'submodule\.(.*)\.path') {
                 $sub = $Matches[1]

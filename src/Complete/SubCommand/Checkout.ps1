@@ -10,6 +10,21 @@ function Complete-GitSubCommand-checkout {
         [CommandLineContext]
         [Parameter(Position = 0, Mandatory)]$Context
     )
+    $result = completeCheckout $Context
+
+    if (!$result) {
+        $result = gitCompleteIndexFileNoneOrUntracked $Context
+    }
+
+    return $result
+}
+function completeCheckout {
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([CompletionResult[]])]
+    param(
+        [CommandLineContext]
+        [Parameter(Position = 0, Mandatory)]$Context
+    )
 
     [string] $Current = $Context.CurrentWord()
     if (!$Context.HasDoubledash()) {
@@ -111,7 +126,7 @@ function checkoutDefaultDwimMode {
 
     # checkout.guess = false disables DWIM, but with lower priority than
     # --guess/--no-guess
-    if ((__git config --type=bool checkout.guess) -ceq 'false') {
+    if ((git @(__gitArgs) config --type=bool checkout.guess) -ceq 'false') {
         return $false
     }
 

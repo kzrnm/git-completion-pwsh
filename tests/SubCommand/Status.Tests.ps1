@@ -264,6 +264,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         } | ConvertTo-Completion -ResultType ProviderItem
                     },
                     @{
+                        Line     = 'BigInteger';
+                        Expected = 'BigInteger/' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
+                        Line     = 'BigInteger/';
+                        Expected = 'BigInteger/BigInteger.cs', 'BigInteger/BigInteger.csproj', 'BigInteger/BigInteger.csx' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
                         Line     = 'Pwsh';
                         Expected = 'Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
                     },
@@ -341,6 +349,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         } | ConvertTo-Completion -ResultType ProviderItem
                     },
                     @{
+                        Line     = 'BigInteger';
+                        Expected = 'BigInteger/' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
+                        Line     = 'BigInteger/';
+                        Expected = 'BigInteger/BigInteger.cs', 'BigInteger/BigInteger.csproj', 'BigInteger/BigInteger.csx' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
                         Line     = 'Pwsh';
                         Expected = 'Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
                     },
@@ -348,7 +364,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         Line     = 'Pwsh/';
                         Expected =
                         'Pwsh/ignored',
-                        'Pwsh/L1/',
+                        'Pwsh/L1/L2/🏪.ps1',
                         'Pwsh/OptionLike/-foo.ps1',
                         'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
                     }
@@ -383,6 +399,14 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         } | ConvertTo-Completion -ResultType ProviderItem
                     },
                     @{
+                        Line     = 'BigInteger';
+                        Expected = 'BigInteger/' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
+                        Line     = 'BigInteger/';
+                        Expected = 'BigInteger/BigInteger.cs', 'BigInteger/BigInteger.csproj', 'BigInteger/BigInteger.csx' | ConvertTo-Completion -ResultType ProviderItem
+                    },
+                    @{
                         Line     = 'Pwsh';
                         Expected = 'Pwsh/' | ConvertTo-Completion -ResultType ProviderItem
                     },
@@ -390,7 +414,7 @@ Describe (Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') -Tag Remote, F
                         Line     = 'Pwsh/';
                         Expected =
                         'Pwsh/ignored',
-                        'Pwsh/L1/',
+                        'Pwsh/L1/L2/🏪.ps1',
                         'Pwsh/OptionLike/-foo.ps1',
                         'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
                     }

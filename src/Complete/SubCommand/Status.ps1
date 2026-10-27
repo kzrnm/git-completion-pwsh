@@ -74,7 +74,7 @@ function Complete-GitSubCommand-status {
     }
 
     if ($null -eq $untrackedState) {
-        $untrackedState = __git config get 'status.showUntrackedFiles'
+        $untrackedState = git @(__gitArgs) config get 'status.showUntrackedFiles'
     }
 
     $completeOpt = if ($untrackedState -ceq 'no') {

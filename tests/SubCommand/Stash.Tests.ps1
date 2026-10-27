@@ -998,26 +998,12 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                 },
                 @{
                     Line     = 'a';
-                    Expected = if ($IsLinux -or $IsMacOS) {
-                        @{
-                            ListItemText = "apply";
-                            ResultType   = 'ParameterName';
-                            ToolTip      = "apply a single stashed state but do not remove the state";
-                        },
-                        @{
-                            CompletionText = "Aquarion`` Evol/Evol";
-                            ListItemText   = "Aquarion Evol/Evol"
-                        },
-                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
-                    }
-                    else {
-                        @{
-                            ListItemText = "apply";
-                            ResultType   = 'ParameterName';
-                            ToolTip      = "apply a single stashed state but do not remove the state";
-                        },
-                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
-                    }
+                    Expected = @{
+                        ListItemText = "apply";
+                        ResultType   = 'ParameterName';
+                        ToolTip      = "apply a single stashed state but do not remove the state";
+                    },
+                    'ax' | ConvertTo-Completion -ResultType ProviderItem
                 },
                 @{
                     Line     = 'Pwsh';
@@ -1045,6 +1031,10 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                 @{
                     Line     = '-u Pwsh/';
                     Expected = 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '-u BigInteger/';
+                    Expected = 'BigInteger/BigInteger.cs', 'BigInteger/BigInteger.csproj', 'BigInteger/BigInteger.csx' | ConvertTo-Completion -ResultType ProviderItem
                 }
             ) {
                 "git stash $Line" | Complete-FromLine | Should -BeCompletion $expected
@@ -1067,16 +1057,7 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                 },
                 @{
                     Line     = 'a';
-                    Expected = if ($IsLinux -or $IsMacOS) {
-                        @{
-                            CompletionText = "Aquarion`` Evol/Evol";
-                            ListItemText   = "Aquarion Evol/Evol"
-                        },
-                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
-                    }
-                    else {
-                        'ax' | ConvertTo-Completion -ResultType ProviderItem 
-                    }
+                    Expected = 'ax' | ConvertTo-Completion -ResultType ProviderItem
                 },
                 @{
                     Line     = 'Pwsh';
@@ -1104,6 +1085,10 @@ Describe ((Get-Item $PSCommandPath).BaseName.Replace('.Tests', '') + '-Push') -T
                 @{
                     Line     = '-u Pwsh/';
                     Expected = 'Pwsh/L1/L2/🏪.ps1', 'Pwsh/OptionLike/-foo.ps1', 'Pwsh/world.ps1' | ConvertTo-Completion -ResultType ProviderItem
+                },
+                @{
+                    Line     = '-u BigInteger/';
+                    Expected = 'BigInteger/BigInteger.cs', 'BigInteger/BigInteger.csproj', 'BigInteger/BigInteger.csx' | ConvertTo-Completion -ResultType ProviderItem
                 }
             ) {
                 "git stash push $Line" | Complete-FromLine | Should -BeCompletion $expected

@@ -1,6 +1,7 @@
 # Copyright (C) 2024 kzrnm
 # Based on git-completion.bash (https://github.com/git/git/blob/HEAD/contrib/completion/git-completion.bash).
 # Distributed under the GNU General Public License, version 2.0.
+using namespace System.Collections.Generic;
 using namespace System.Management.Automation;
 
 
@@ -363,4 +364,44 @@ function gitCompleteRevlist {
             return
         }
     }
+}
+
+
+function gitCompleteIndexFileNoneOrUntracked {
+    [OutputType([CompletionResult[]])]
+    param(
+        [Parameter(Position = 0, Mandatory)]
+        [CommandLineContext]
+        $Context,
+        $StartIndex = $null
+    )
+
+    [string] $Current = $Context.CurrentWord()
+    if ($StartIndex -isnot [int]) {
+        $StartIndex = $Context.CommandIndex + 1
+    }
+
+    $skipOptions = [HashSet[string]]::new()
+    foreach ($opt in (gitResolveBuiltins $Context.Command -All)) {
+        if ($opt.EndsWith('=')) {
+            $skipOptions.Add($opt) > $null
+        }
+    }
+    $UsedPaths = [List[string]]::new($Context.Words.Length)
+    for ($i = $StartIndex; $i -lt $Context.Words.Length; $i++) {
+        if ($i -eq $Context.CurrentIndex) { continue }
+        $w = $Context.Words[$i]
+        if ($skipOptions.Contains($w)) { $i++ }
+        elseif (!$w.StartsWith('-') -or ($i -gt $Context.DoubledashIndex)) {
+            $UsedPaths.Add($w)
+        }
+    }
+
+    $LeadingDash = $Context.HasDoubledash()
+    $result = gitCompleteIndexFile -Current $Current -Options None -Exclude $UsedPaths -LeadingDash:$LeadingDash
+    if ($result) {
+        return $result
+    }
+    $result = gitCompleteIndexFile -Current $Current -Options Untracked -Exclude $UsedPaths -LeadingDash:$LeadingDash
+    return $result
 }

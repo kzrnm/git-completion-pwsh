@@ -100,7 +100,7 @@ function gitCompleteWorktreePaths {
         [Parameter(Mandatory, Position = 0)][AllowEmptyString()][string]$Current
     )
 
-    __git worktree list --porcelain |
+    git @(__gitArgs) worktree list --porcelain |
     Select-Object -Skip 2 |
     Where-Object { $_.StartsWith('worktree ') } |
     ForEach-Object { $_.Substring('worktree '.Length) } |

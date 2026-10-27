@@ -24,7 +24,6 @@ function Complete-Gitk {
         [int]
         $CursorPosition
     )
-
     if ($PSCmdlet.ParameterSetName -eq 'Ast') {
         $Words, $CurrentIndex = buildWords $CommandAst $CursorPosition
     }
@@ -44,5 +43,11 @@ function Complete-Gitk {
         return
     }
 
-    gitCompleteRevlist $Current
+    $OutputEncodingBak = [Console]::OutputEncoding
+    try {
+        gitCompleteRevlist $Current
+    }
+    finally {
+        [Console]::OutputEncoding = $OutputEncodingBak
+    }
 }
